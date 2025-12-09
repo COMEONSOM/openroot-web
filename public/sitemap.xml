@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+
+  <!-- ROOT DOMAIN -->
+  <url>
+    <loc>https://openroot.in/</loc>
+    <priority>1.0</priority>
+  </url>
+
+  <!-- EXTERNAL TOOL PAGES -->
+  <url>
+    <loc>https://openroot.in/stock-averaging/</loc>
+    <priority>0.90</priority>
+  </url>
+
+  <url>
+    <loc>https://openroot.in/return-analyzer/</loc>
+    <priority>0.90</priority>
+  </url>
+
+  <url>
+    <loc>https://openroot.in/gold-jewel-price-indicator/</loc>
+    <priority>0.90</priority>
+  </url>
+
+  <url>
+    <loc>https://openroot.in/credit-card-emi-calculator/</loc>
+    <priority>0.90</priority>
+  </url>
+
+  <url>
+    <loc>https://openroot.in/travel-expense-manager/</loc>
+    <priority>0.90</priority>
+  </url>
+
+  <url>
+    <loc>https://openroot.in/makaut-grade-calculator/</loc>
+    <priority>0.90</priority>
+  </url>
+
+  <url>
+    <loc>https://openroot.in/openroot-helping-hand/</loc>
+    <priority>0.90</priority>
+  </url>
+
+</urlset>

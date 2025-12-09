@@ -1,0 +1,189 @@
+/* ============================================================
+   GLOBAL DESIGN TOKENS (Header Scope)
+   ============================================================ */
+:root {
+  /* BRAND COLORS */
+  --color-primary: #2563eb;        /* Blue (premium) */
+  --color-primary-hover: #1e40af;  /* Darker blue */
+  --color-white: #ffffff;
+  --color-bg-header: rgba(0, 0, 0, 0.85);
+  --color-border: rgba(255, 255, 255, 0.2);
+  --color-text: #ffffff;
+
+  /* SPACING */
+  --space-xs: 0.35rem;
+  --space-sm: 0.65rem;
+  --space-md: 1rem;
+  --space-lg: 1.5rem;
+
+  /* TYPOGRAPHY */
+  --font-size-xs: 0.75rem;
+  --font-size-sm: 0.9rem;
+  --font-size-md: 1rem;
+  --font-size-lg: 1.15rem;
+  --font-weight-medium: 500;
+  --font-weight-bold: 600;
+
+  /* RADII */
+  --radius-md: 0.5rem;
+  --radius-round: 50%;
+
+  /* TRANSITIONS */
+  --transition-fast: 0.2s ease;
+  --transition-normal: 0.3s ease;
+
+  /* RESPONSIVE LOGO SIZES */
+  --logo-width-mobile: 70px;
+  --logo-width-tablet: 90px;
+  --logo-width-laptop: 110px;
+  --logo-width-desktop: 140px;
+  --logo-width-tv: 170px;
+}
+
+/* ============================================================
+   HEADER WRAPPER
+   ============================================================ */
+.header {
+  width: 100%;
+  padding: 0.4rem var(--space-lg);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  background: var(--color-bg-header);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--color-border);
+
+  position: sticky;
+  top: 0;
+  z-index: 200;
+}
+
+/* ============================================================
+   LOGO
+   ============================================================ */
+.logo {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+}
+
+.logo-img {
+  width: var(--logo-width-laptop);
+  height: auto;
+  object-fit: contain;
+  transition: transform var(--transition-normal);
+  user-select: none;
+}
+
+.logo-img:hover {
+  transform: scale(1.03);
+}
+
+/* RESPONSIVE LOGO SIZES */
+@media (max-width: 480px) { .logo-img { width: var(--logo-width-mobile); } }
+@media (min-width: 481px) and (max-width: 767px) { .logo-img { width: var(--logo-width-tablet); } }
+@media (min-width: 768px) and (max-width: 1023px) { .logo-img { width: var(--logo-width-laptop); } }
+@media (min-width: 1024px) and (max-width: 1440px) { .logo-img { width: var(--logo-width-desktop); } }
+@media (min-width: 1441px) { .logo-img { width: var(--logo-width-tv); } }
+
+/* ============================================================
+   AUTH AREA (Buttons on the right)
+   ============================================================ */
+.auth-area {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+}
+
+/* ============================================================
+   LOGIN BUTTON WITH LOTTIE
+   ============================================================ */
+.login-animation {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: transparent;
+  border: none;
+  cursor: pointer;
+
+  padding: 0;
+  gap: 0.3rem;
+}
+
+.login-lottie {
+  width: 52px;
+  height: 52px;
+}
+
+.login-hint {
+  color: var(--color-white);
+  font-size: var(--font-size-xs);
+  font-weight: 500;
+  user-select: none;
+}
+
+/* ============================================================
+   PROFILE BUTTON / AVATAR
+   ============================================================ */
+.profile-button {
+  background: transparent;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 42px;
+  height: 42px;
+  border-radius: var(--radius-round);
+  transition: transform var(--transition-fast);
+}
+
+.profile-button:hover {
+  transform: scale(1.05);
+}
+
+.profile-button:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+/* Avatar Image */
+.avatar {
+  width: 100%;
+  height: 100%;
+  border-radius: var(--radius-round);
+  object-fit: cover;
+  background-color: #e5e7eb;
+}
+
+/* Fallback Initial */
+.avatar-fallback {
+  width: 100%;
+  height: 100%;
+  border-radius: var(--radius-round);
+
+  background: var(--color-primary);
+  color: white;
+
+  font-weight: var(--font-weight-bold);
+  font-size: var(--font-size-sm);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ============================================================
+   REDUCED MOTION SUPPORT
+   ============================================================ */
+@media (prefers-reduced-motion: reduce) {
+  .logo-img,
+  .login-animation {
+    transition: none;
+  }
+}

@@ -1,0 +1,90 @@
+/* ============================================================
+   OPENROOT — WHO WE ARE SECTION (GLASS CARD • MATCH MISSION)
+   ============================================================ */
+
+/* CARD WRAPPER */
+.whoWeAreContainer {
+  --os-text: #ffffff;
+  --os-glass-bg: rgba(255, 255, 255, 0.08);
+  --os-glass-border: rgba(255, 255, 255, 0.22);
+
+  position: relative;
+  width: 100%;
+  box-sizing: border-box;
+  color: var(--os-text);
+  background: #00000085;
+  overflow: hidden;
+  isolation: isolate;
+
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+  text-align: left;
+  border-radius: 18px;
+  padding: 1.7rem 1.2rem;
+  border: 1px solid var(--os-glass-border);
+  box-shadow: 0 14px 42px rgba(0, 0, 0, 0.55);
+}
+
+/* Hover Motion */
+@media (hover: hover) and (pointer: fine) {
+  .whoWeAreContainer:hover {
+    transform: translateY(-6px);
+    box-shadow:
+      inset 0 0 1px rgba(255,255,255,0.18),
+      0 28px 56px rgba(0,0,0,0.6);
+  }
+}
+
+/* Eyebrow */
+.whoWeAreEyebrow {
+  font-size: 0.85rem;
+  letter-spacing: 1px;
+  font-weight: 600;
+  color: #00ff88;
+  margin-bottom: -0.25rem;
+}
+
+/* Title (gradient like MissionTitle) */
+.whoWeAreTitle {
+  font-size: 1.4rem;
+  font-weight: 800;
+  letter-spacing: .5px;
+  margin-bottom: 0.4rem;
+
+  background: linear-gradient(90deg, #ffffff, #b4e4ff);
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+
+  text-shadow: 0 0 12px rgba(255,255,255,0.20);
+}
+
+@media (max-width: 768px) {
+  .whoWeAreTitle {
+    font-size: 1.25rem;
+  }
+}
+
+/* Text Block — match MissionTextBlock */
+.whoWeAreTextBlock {
+  font-size: 1rem;
+  color: #e0edff;
+  line-height: 1.6;
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+}
+
+.whoWeAreTextBlock strong {
+  color: #00ff88;
+  font-weight: 700;
+}
+
+/* Responsive Padding — match Mission */
+@media (max-width: 420px) {
+  .whoWeAreContainer {
+    padding: 1.4rem 1.2rem;
+  }
+}

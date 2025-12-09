@@ -1,0 +1,74 @@
+.whyChooseContainer {
+  text-align: center;
+}
+
+.whyChooseTitle {
+  font-size: 2rem;
+  font-weight: 800;
+  text-align: center;
+  background: linear-gradient(90deg, #ffffff, #cce8ff);
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 0 0 12px rgba(255,255,255,0.25);
+}
+
+.whyChooseGrid {
+  width: 100%;
+  display: grid;
+  gap: 1.6rem;
+  grid-template-columns: repeat(2, 1fr); /* 2 per row on larger screens */
+}
+
+@media (max-width: 768px) {
+  .whyChooseGrid {
+    grid-template-columns: 1fr; /* 1 per row on tablets & phones */
+  }
+  .whyChooseTitle{
+    font-size: 1.8rem;
+  }
+}
+
+
+.whyChooseCard {
+  display: flex;
+  gap: 0.55rem;
+  background: #00000085;
+  border: 1px solid rgba(148, 163, 184, 0.4);
+  border-radius: 18px;
+  padding: 0.9rem 0.8rem;
+  box-shadow: 0 14px 32px rgba(0, 0, 0, 0.55);
+  text-align: left;
+}
+
+.whyChooseIcon {
+  width: 36px;
+  height: 36px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+   background: #00ff88;
+  border-radius: 999px;
+}
+
+.whyChooseIcon span {
+  color: #000000;
+}
+
+.whyChooseText h3 {
+  margin: 0;
+  font-size: 0.96rem;
+  background: linear-gradient(90deg, #ffffff, #b4e4ff);
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+}
+
+.whyChooseText p {
+  margin: 0;
+  font-size: 0.88rem;
+  color: #cbd5e1;
+  line-height: 1.55;
+}
