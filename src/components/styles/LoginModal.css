@@ -1,0 +1,405 @@
+/* ============================================================
+   LOGIN MODAL — OPENROOT 2026 ULTRA BUILD (MATCHED TO TSX)
+   ============================================================ */
+
+/* THEME TOKENS */
+:root {
+  --lm-bg: rgb(255, 255, 255);
+  --lm-overlay: rgba(10,10,10,0.65);
+  --lm-text: #111;
+  --lm-subtext: #666;
+  --lm-white: #ffffff;
+  --lm-primary: #1d4ed8;
+  --lm-primary-hover: #2563eb;
+  --lm-success: #2e7d32;
+  --lm-danger: #e53935;
+  --lm-danger-hover: #c62828;
+
+  --lm-radius-card: 20px;
+  --lm-shadow-1: 0 2px 8px rgba(0,0,0,0.08);
+  --lm-shadow-2: 0 6px 20px rgba(0,0,0,0.12);
+  --lm-shadow-3: 0 0 40px rgba(0,0,0,0.25);
+
+  --lm-font: Inter, system-ui, sans-serif;
+}
+
+/* ============================================================
+   OVERLAY
+   ============================================================ */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  background: var(--lm-overlay);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(8px);
+  z-index: 2000;
+}
+
+/* ============================================================
+   MODAL CONTAINER
+   ============================================================ */
+.modal-container {
+  position: relative;
+  width: 100%;
+  max-width: 440px;
+  background: var(--lm-bg);
+  border-radius: var(--lm-radius-card);
+  padding: 2.4rem 2.2rem;
+  text-align: center;
+  font-family: var(--lm-font);
+  box-shadow: var(--lm-shadow-3);
+  backdrop-filter: blur(12px);
+  animation: fadeIn 0.35s ease-out;
+}
+
+/* Loader state */
+.modal-loader {
+  min-height: 150px;
+  display: grid;
+  place-items: center;
+}
+
+/* ============================================================
+   CLOSE BUTTON (USED IN INITIAL / PROFILE / CONFIRM)
+   ============================================================ */
+.modal-close {
+  position: absolute;
+  top: -18px;
+  right: -18px;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: none;
+  background: var(--lm-primary);
+  color: var(--lm-white);
+  font-size: 1.4rem;
+  font-weight: 800;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  box-shadow: var(--lm-shadow-2);
+  transition: transform 0.2s ease;
+}
+
+.modal-close:hover {
+  transform: scale(1.12);
+}
+
+/* ============================================================
+   TYPOGRAPHY INSIDE MODAL
+   ============================================================ */
+.modal-container h2,
+.modal-container h3 {
+  margin: 0 0 0.6rem;
+  font-weight: 700;
+}
+
+.modal-container h2 {
+  font-size: 1.7rem;
+}
+
+.modal-container h3 {
+  font-size: 1.3rem;
+}
+
+.modal-container p {
+  margin: 0.25rem 0;
+  color: var(--lm-text);
+}
+
+/* ============================================================
+   INITIAL LOGIN CONTENT
+   ============================================================ */
+.modal-content p {
+  margin-bottom: 1rem;
+}
+
+/* OAuth button group */
+.oauth-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+}
+
+/* Three buttons inside oauth-buttons (Google, Facebook, GitHub) */
+.oauth-buttons button {
+  width: 100%;
+  padding: 0.8rem 1rem;
+  border-radius: 12px;
+  border: none;
+  font-weight: 700;
+  font-size: 1rem;
+  color: var(--lm-white);
+  cursor: pointer;
+  transition: transform 0.18s ease, box-shadow 0.18s ease;
+  box-shadow: var(--lm-shadow-1);
+}
+
+.oauth-buttons button:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--lm-shadow-2);
+}
+
+/* Color per provider (based on order in TSX) */
+.oauth-buttons button:nth-child(1) { background: #db4437; } /* Google */
+.oauth-buttons button:nth-child(2) { background: #4267b2; } /* Facebook */
+.oauth-buttons button:nth-child(3) { background: #24292e; } /* GitHub */
+
+/* ============================================================
+   SUCCESS / ERROR STATES (BOTH USE .success-container)
+   ============================================================ */
+.success-container {
+  display: grid;
+  place-items: center;
+  gap: 0.5rem;
+  text-align: center;
+}
+
+/* First paragraph = main message */
+.success-container p:first-of-type {
+  font-size: 1.3rem;
+  font-weight: 800;
+  color: var(--lm-success);
+}
+
+/* Second paragraph = subtext / countdown or error */
+.success-container p:last-of-type {
+  font-size: 1rem;
+  color: var(--lm-subtext);
+}
+
+/* "Try Again" button (only appears in error state in TSX) */
+.success-container button {
+  margin-top: 0.6rem;
+  padding: 0.55rem 1.3rem;
+  border-radius: 10px;
+  border: none;
+  font-weight: 700;
+  font-size: 0.95rem;
+  background: var(--lm-primary);
+  color: #fff;
+  cursor: pointer;
+  box-shadow: var(--lm-shadow-1);
+  transition: background 0.18s ease, transform 0.18s ease;
+}
+
+.success-container button:hover {
+  background: var(--lm-primary-hover);
+  transform: translateY(-2px);
+}
+
+/* ============================================================
+   PROFILE SUMMARY (NON-DETAIL VIEW)
+   ============================================================ */
+.profile-summary {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  grid-template-rows: auto auto;
+  column-gap: 1rem;
+  row-gap: 0.2rem;
+
+  align-items: center;
+  padding: 1rem;
+  border-radius: 14px;
+  background: rgba(255,255,255,0.6);
+  box-shadow: var(--lm-shadow-1);
+  cursor: pointer;
+  transition: box-shadow 0.18s ease, transform 0.18s ease;
+}
+
+.profile-summary:hover {
+  box-shadow: var(--lm-shadow-2);
+  transform: translateY(-2px);
+}
+
+/* Avatar cell (first item) */
+.profile-summary .avatar,
+.profile-summary .avatar-fallback {
+  grid-row: 1 / span 2;
+}
+
+/* Name (p) + username (small) */
+.profile-summary p {
+  margin: 0;
+  font-weight: 700;
+  font-size: 1.05rem;
+}
+.profile-summary small {
+  margin: 0;
+  font-size: 0.85rem;
+  color: var(--lm-subtext);
+}
+
+/* ============================================================
+   AVATAR STYLES
+   ============================================================ */
+.avatar {
+  width: 62px;
+  height: 62px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #fff;
+  box-shadow: var(--lm-shadow-1);
+}
+
+.avatar-lg {
+  width: 104px;
+  height: 104px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid #fff;
+  box-shadow: var(--lm-shadow-2);
+  margin-bottom: 0.6rem;
+}
+.avatar-fallback {
+  width: 62px;
+  height: 62px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: linear-gradient(135deg, #6366f1, #4338ca);
+  color: #fff;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.avatar-fallback-lg {
+  width: 104px;
+  height: 104px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: linear-gradient(135deg, #6366f1, #4338ca);
+  color: #fff;
+  font-weight: 700;
+  font-size: 2rem;
+  text-transform: uppercase;
+  margin-bottom: 0.6rem;
+}
+
+/* ============================================================
+   PROFILE DETAILS VIEW
+   ============================================================ */
+.profile-details {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  align-items: center;
+}
+
+/* Each p in profile details shown as a pill */
+.profile-details p {
+  width: 92%;
+  text-align: left;
+  padding: 0.7rem 0.9rem;
+  margin: 0;
+  background: #ffffff;
+  border-radius: 10px;
+  box-shadow: var(--lm-shadow-1);
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+/* "Log out" button inside profile-details */
+.profile-details button {
+  margin-top: 0.5rem;
+  padding: 0.6rem 1.4rem;
+  border-radius: 10px;
+  border: none;
+  font-weight: 800;
+  font-size: 0.95rem;
+  cursor: pointer;
+  background: var(--lm-danger);
+  color: #fff;
+  box-shadow: var(--lm-shadow-1);
+  transition: background 0.18s ease, transform 0.18s ease;
+}
+
+.profile-details button:hover {
+  background: var(--lm-danger-hover);
+  transform: translateY(-2px);
+}
+
+/* ============================================================
+   LOGOUT CONFIRMATION (YES / CANCEL)
+   ============================================================ */
+.logout-confirmation {
+  background: #ffffff;
+  padding: 1.6rem;
+  border-radius: 14px;
+  box-shadow: var(--lm-shadow-2);
+}
+
+.logout-confirmation h3 {
+  margin-bottom: 0.9rem;
+}
+
+/* The two buttons inside */
+.logout-confirmation button {
+  min-width: 110px;
+  padding: 0.6rem 1rem;
+  border-radius: 10px;
+  border: none;
+  font-weight: 800;
+  font-size: 0.95rem;
+  cursor: pointer;
+  margin: 0 0.4rem;
+}
+
+/* First button = "Yes, Logout" */
+.logout-confirmation button:first-of-type {
+  background: var(--lm-danger);
+  color: #fff;
+}
+
+/* Second button = "Cancel" */
+.logout-confirmation button:last-of-type {
+  background: #e5e5e5;
+  color: #111;
+}
+
+.logout-confirmation button:first-of-type:hover {
+  background: var(--lm-danger-hover);
+}
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+@media (max-width: 480px) {
+  .modal-container {
+    max-width: 360px;
+    padding: 1.7rem 1.4rem;
+  }
+
+  .avatar,
+  .avatar-fallback {
+    width: 54px;
+    height: 54px;
+  }
+}
+
+/* ============================================================
+   REDUCED MOTION
+   ============================================================ */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  .modal-container,
+  .oauth-buttons button,
+  .profile-details button,
+  .logout-confirmation button {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+/* ============================================================
+   ANIMATION
+   ============================================================ */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(12px) scale(0.97); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}

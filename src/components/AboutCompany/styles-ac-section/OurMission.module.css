@@ -1,0 +1,139 @@
+/* ============================================================
+   OPENROOT — OUR MISSION SECTION (AURORA / GLASS / HARD ISO)
+   VISUAL MATCH TO WhoWeAre Styling
+   ============================================================ */
+
+/* CARD WRAPPER */
+.missionContainer {
+  --os-text: #ffffff;
+  --os-glass-bg: rgba(255, 255, 255, 0.08);
+  --os-glass-border: rgba(255, 255, 255, 0.22);
+
+  position: relative;
+  width: 100%;
+  box-sizing: border-box;
+  color: var(--os-text);
+  background: #00000085;
+  overflow: hidden;
+  isolation: isolate;
+
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+  text-align: left;
+  border-radius: 18px;
+  padding: 1.7rem 1.2rem;
+  border: 1px solid var(--os-glass-border);
+  box-shadow: 0 14px 42px rgba(0, 0, 0, 0.55);
+}
+
+/* Hover Motion */
+@media (hover: hover) and (pointer: fine) {
+  .missionContainer:hover {
+    transform: translateY(-6px);
+    box-shadow:
+      inset 0 0 1px rgba(255,255,255,0.18),
+      0 28px 56px rgba(0,0,0,0.6);
+  }
+}
+
+/* CONTENT WRAPPER (stagger area) */
+.missionContent {
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+}
+
+/* Title — Same Gradient as WhoWeAre */
+.missionTitle {
+  font-size: 1.4rem;
+  font-weight: 800;
+  letter-spacing: .5px;
+  margin-bottom: 0.4rem;
+
+  background: linear-gradient(90deg, #ffffff, #b4e4ff);
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+
+  text-shadow: 0 0 12px rgba(255,255,255,0.20);
+}
+
+@media (max-width: 768px) {
+  .missionTitle {
+    font-size: 1.25rem;
+  }
+}
+
+/* Text Block — From WhoWeAreTextBlock */
+.missionTextBlock {
+  font-size: 1rem;
+  color: #e0edff;
+  line-height: 1.6;
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+}
+
+.missionTextBlock strong {
+  color: #ffffff;
+  font-weight: 700;
+}
+
+/* ------------------------------------------------------------
+   CTA AREA – kept same behavior but visually aligned
+   ------------------------------------------------------------ */
+.missionCTA {
+  margin-top: 0.6rem;
+  display: flex;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+}
+
+.ctaPrimary,
+.ctaGhost {
+  padding: 0.5rem 1.05rem;
+  font-size: 0.88rem;
+  border-radius: 999px;
+  font-weight: 700;
+  text-decoration: none;
+  transition: 0.25s ease;
+}
+
+/* Primary Button */
+.ctaPrimary {
+  background: transparent;
+  border: 1px solid #cbd5e1;
+  color: #ffffff;
+}
+
+.ctaPrimary:hover {
+  background: rgba(255,255,255,0.12);
+}
+
+/* Ghost Button */
+.ctaGhost {
+  background: #00ff88;
+  color: #000000;
+}
+
+.ctaGhost:hover {
+  transform: translateY(-2px);
+}
+
+/* Small screens */
+@media (max-width: 420px) {
+  .missionContainer {
+    padding: 1.4rem 1.2rem;
+  }
+  .missionCTA {
+    flex-direction: column;
+  }
+  .ctaPrimary,
+  .ctaGhost {
+    width: 100%;
+    text-align: center;
+  }
+}

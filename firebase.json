@@ -1,0 +1,27 @@
+{
+  "hosting": {
+    "public": "dist",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ],
+    "redirects": [
+      {
+        "source": "/openroot-helping-hand/**",
+        "destination": "https://comeonsom.github.io/openroot-helping-hand/",
+        "type": 301
+      },
+      {
+        "source": "/openroot-travel-expense-manager/**",
+        "destination": "https://comeonsom.github.io/openroot-travel-expense-manager/",
+        "type": 301
+      },
+      {
+        "source": "/openroot-makaut_grade_and_percentage-calculator//**",
+        "destination": "https://comeonsom.github.io/openroot-makaut_grade_and_percentage-calculator/",
+        "type": 301
+      }
+    ]
+  }
+}

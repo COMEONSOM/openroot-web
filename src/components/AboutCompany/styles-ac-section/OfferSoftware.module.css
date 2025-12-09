@@ -1,0 +1,153 @@
+/* ============================================================
+   OPENROOT — OFFER SOFTWARE SECTION (AURORA / GLASS / HARD ISO)
+   REFACTORED FOR: OfferSoftware.jsx
+   TOKENS SCOPED — NO GLOBAL LEAK — FULL AURORA MOTION
+   ============================================================ */
+
+/* ------------------------------------------------------------
+   CARD WRAPPER — DESIGN TOKENS
+   ------------------------------------------------------------ */
+.offerSoftwareCard {
+  --os-text: #ffffff;
+  --os-bg-radial-a: rgba(0, 0, 0, 0.548);
+  --os-bg-radial-b: rgba(0, 0, 0, 0.477);
+
+  --os-glass-bg: rgba(255, 255, 255, 0.08);
+  --os-glass-border: rgba(255, 255, 255, 0.22);
+
+  /* AURORA COLORS */
+  --os-aurora-1: #000000;
+  --os-aurora-2: #680aff;
+  --os-aurora-3: #000000;
+
+  /* SPACING + SIZING */
+  --os-card-radius: 20px;
+  --os-gap-lg: 1.2rem;
+
+  /* MOTION */
+  --os-transition: 0.35s cubic-bezier(.21,1.02,.73,1);
+  --os-aurora-blur: 110px;
+  --os-aurora-blur-sm: 44px;
+  --os-aurora-duration: 18s;
+
+  position: relative;
+  width: 100%;
+  box-sizing: border-box;
+  color: var(--os-text);
+  background: #00000085;
+  overflow: hidden;
+  isolation: isolate;
+  clip-path: inset(0);
+
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+  text-align: left;
+  background: #00000085;
+  border-radius: 18px;
+  padding: 1.7rem 1.2rem;
+  border: 1px solid rgba(148, 163, 184, 0.32);
+  box-shadow: 0 14px 42px rgba(0, 0, 0, 0.55);
+  color: #ffffff;}
+
+/* HOVER */
+@media (hover: hover) and (pointer: fine) {
+  .offerSoftwareCard:hover {
+    transform: translateY(-6px);
+    box-shadow:
+      inset 0 0 1px rgba(255,255,255,0.18),
+      0 28px 56px rgba(0,0,0,0.6);
+  }
+}
+
+/* ------------------------------------------------------------
+   TAG — SAME AS OFFER CLASSES
+   ------------------------------------------------------------ */
+.offerSoftwareTag {
+  align-self: flex-start;
+  display: inline-flex;
+  background: #00ff88;
+  color: #021b10;
+  padding: 6px 14px;
+  font-size: 0.8rem;
+  font-weight: 900;
+  border-radius: 999px;
+  letter-spacing: 0.5px;
+}
+
+/* ------------------------------------------------------------
+   TITLE — EXACT GRADIENT MATCH
+   ------------------------------------------------------------ */
+.offerSoftwareTitle {
+  font-size: 1.4rem;
+  font-weight: 800;
+  margin-bottom: 0.4rem;
+  letter-spacing: .5px;
+
+  background: linear-gradient(90deg, #ffffff, #b4e4ff);
+
+  /* ✅ Standard + Webkit */
+  background-clip: text;
+  -webkit-background-clip: text;
+
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+
+  text-shadow: 0 0 12px rgba(255,255,255,0.2);
+}
+
+@media (max-width: 768px) {
+  .offerSoftwareTitle {
+    font-size: 1.25rem;
+  }
+}
+
+/* ------------------------------------------------------------
+   INTRO PARAGRAPHS
+   ------------------------------------------------------------ */
+.offerSoftwareIntro {
+  font-size: 1rem;
+  color: #e0edff;
+  line-height: 1.6;
+}
+
+/* ------------------------------------------------------------
+   SUB-HEADING
+   ------------------------------------------------------------ */
+.offerSoftwareSubheading {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #ffffff;
+  margin-top: 0.6rem;
+}
+
+/* ------------------------------------------------------------
+   LIST
+   ------------------------------------------------------------ */
+.offerSoftwareList {
+  margin: 0;
+  padding-left: 1.2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  color: #d9eaff;
+  line-height: 1.6;
+}
+
+/* ------------------------------------------------------------
+   NOTE
+   ------------------------------------------------------------ */
+.offerSoftwareNote {
+  font-size: 1rem;
+  color: #cfe2ff;
+  margin-top: 1rem;
+}
+
+/* ------------------------------------------------------------
+   SMALL SCREEN OPTIMIZATION
+   ------------------------------------------------------------ */
+@media (max-width: 420px) {
+  .offerSoftwareCard {
+    padding: 1.4rem 1.2rem;
+  }
+}
