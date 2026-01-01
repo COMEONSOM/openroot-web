@@ -1,0 +1,26 @@
+/* ============================================================
+   FOOTER CONTAINER
+   ============================================================ */
+
+.footer-container {
+  width: 100%;
+  background: #00000059;
+  color: #ffffff;
+  padding: 3.5rem 1.2rem 1.5rem;
+  box-sizing: border-box;
+  border-top: 1px solid rgba(15, 23, 42, 0.08);
+}
+
+/* Center content but allow wide desktop */
+.footer-container > * {
+  max-width: 1200px;
+  margin-inline: auto;
+}
+
+/* Smooth entry already handled by GSAP */
+.footer-license {
+  margin-top: 2.5rem;
+  font-size: 0.75rem;
+  color: #64748b;
+  text-align: left;
+}

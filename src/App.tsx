@@ -13,8 +13,7 @@ import Header from "./components/Header";
 import Advertisement from "./components/Advertisement";
 import Navbar from "./components/Navbar";
 import AboutCompany from "./components/AboutCompany/AboutCompany";
-import ContactFollow from "./components/ContactFollow";
-import Footer from "./components/Footer";
+import Footer from "./components/Footer/Footer";
 
 // ⚡ Lazy-loaded background animation for performance
 const BackgroundAnimation = React.lazy(() =>
@@ -94,7 +93,6 @@ export default function App() {
       <Advertisement />
       <Navbar />
       <AboutCompany /> {/* ⭐ Now uses new modular structure */}
-      <ContactFollow />
       <Footer />
     </div>
   );
