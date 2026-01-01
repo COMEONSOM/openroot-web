@@ -1,0 +1,63 @@
+/* ================================
+   ADVERTISEMENT BAND — FIXED
+================================ */
+.advertisement-band {
+  position: relative;
+  width: 100%;
+  height: 64px;
+
+  background-image: linear-gradient(
+    90deg,
+    #4f46e5,
+    #7c3aed,
+    #9333ea
+  );
+
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-color: transparent;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+  overflow: hidden;
+}
+
+
+/* Centered text */
+.advertisement-text {
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 600;
+  text-transform: uppercase;
+  white-space: nowrap;
+  user-select: none;
+}
+
+/* Mobile tweak */
+@media (max-width: 640px) {
+  .advertisement-band {
+    height: 56px;
+  }
+
+  .advertisement-text {
+    font-size: 12px;
+    letter-spacing: 0.12em;
+  }
+}
+/* Text movement container */
+.advertisement-track {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  white-space: nowrap;
+}
+/* Glow effect */
+.advertisement-glow {
+  text-shadow:
+    0 0 6px rgb(255, 255, 255),
+    0 0 12px rgba(255, 255, 255, 0),
+    0 0 18px rgba(48, 17, 142, 0);
+}

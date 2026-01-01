@@ -82,9 +82,10 @@ p {
 }
 
 /* ===================== Layout ===================== */
-section {
-  background: transparent !important;
+.app-wrapper > section {
+  background-color: transparent;
 }
+
 
 .app-wrapper {
   position: relative;
@@ -117,3 +118,4 @@ section {
     padding: 1.5rem;
   }
 }
+
