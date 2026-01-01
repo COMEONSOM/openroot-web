@@ -40,7 +40,7 @@
   --cf-heart-radius: 28px;
 
   /* SPACING TOKENS */
-  --cf-gap-xl: 4.5rem;
+  --cf-gap-xl: 3rem;
   --cf-gap-lg: 3rem;
   --cf-gap-md: 2rem;
   --cf-gap-sm: 1.2rem;
@@ -65,7 +65,7 @@
 
 .elements-section {
   width: 100%;
-  padding: 2rem 1.5rem;
+  padding: 1rem 1rem;
   position: relative;
   overflow: hidden;
   display: flex;
@@ -226,7 +226,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: var(--cf-gap-lg);
+  gap: var(--cf-gap-md);
 }
 
 /* CARD BLOCK */
@@ -268,8 +268,8 @@
    ============================================================ */
 
 .cf-icon {
-  width: var(--cf-box-size-lg);
-  height: var(--cf-box-size-lg);
+  width: var(--cf-box-size-md);
+  height: var(--cf-box-size-md);
   border-radius: var(--cf-card-radius);
   background: var(--cf-color-glass-bg);
   border: 1px solid var(--cf-color-glass-border);
@@ -311,8 +311,8 @@
 
 /* ICON SVG BASE */
 .cf-svg {
-  width: var(--cf-icon-size-lg);
-  height: var(--cf-icon-size-lg);
+  width: var(--cf-icon-size-md);
+  height: var(--cf-icon-size-md);
   object-fit: contain;
   filter: brightness(0.85);
   transition: transform var(--cf-transition-main);

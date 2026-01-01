@@ -10,6 +10,7 @@ import React, { Suspense } from "react";
 
 // COMPONENTS
 import Header from "./components/Header";
+import Advertisement from "./components/Advertisement";
 import Navbar from "./components/Navbar";
 import AboutCompany from "./components/AboutCompany/AboutCompany";
 import ContactFollow from "./components/ContactFollow";
@@ -90,6 +91,7 @@ export default function App() {
 
       {/* PAGE CONTENT */}
       <Header />
+      <Advertisement />
       <Navbar />
       <AboutCompany /> {/* ⭐ Now uses new modular structure */}
       <ContactFollow />
