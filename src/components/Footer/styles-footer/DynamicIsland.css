@@ -234,11 +234,11 @@
 }
 
 /* ========================================================================== */
-/* SECTION 2 — FOOTER DETAILS (UNCHANGED VISUALS) */
+/* SECTION 2 — FOOTER DETAILS */
 /* ========================================================================== */
 .footer-details {
-  --fd-bg-primary: #00ff88;
-  --fd-bg-secondary: #00ff88;
+  --fd-bg-primary: #a3e87b;
+  --fd-bg-secondary: #a3e87b;
   --fd-bg-accent: #198754;
   --fd-text-primary: #000000;
   --fd-text-muted: #000000;
@@ -401,7 +401,7 @@
     z-index: 30;
     margin: 0;
     padding: 0;
-    transform: translateY(-32px);
+    transform: translateY(-33px);
   }
   .dynamic-island-heart::before {
     content: "";
@@ -428,5 +428,129 @@
 @media (prefers-reduced-motion: reduce) {
   * {
     transition: none !important;
+  }
+}
+
+@media (max-width: 899px) {
+
+  /* -----------------------------
+     RESET HEART POSITION (TOP BAR)
+     ----------------------------- */
+  .dynamic-island-heart {
+    position: relative;
+    width: 100%;
+    pointer-events: auto;
+    z-index: 5;
+    margin-top: 2rem;
+  }
+
+  .dynamic-island-heart .elements-section {
+    padding: 0;
+    background: none;
+  }
+
+  /* Heart bar stays visible */
+  .heart-band {
+    width: 100%;
+    justify-content: space-between;
+    background: #0000007e;
+    border-radius: 18px;
+    padding: 1rem 1.4rem;
+  }
+
+  .heart-band-text {
+    font-size: 0.95rem;
+    font-weight: 600;
+  }
+
+  .heart-band-chevron {
+    font-size: 1.1rem;
+    opacity: 0.9;
+  }
+
+  /* Panel expands UPWARD */
+  .heart-panel {
+    display: block;
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
+    transform-origin: bottom;
+    transition:
+      max-height 0.45s cubic-bezier(.21,1.02,.73,1),
+      opacity 0.35s ease;
+  }
+  .heart-panel--open {
+    max-height: 1400px;
+    opacity: 1;
+    margin-bottom: 1.2rem;
+  }
+  /* -----------------------------
+     FOOTER LAYOUT
+     ----------------------------- */
+  .footer-details {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+    padding-top: 1.8rem;
+  }
+
+  /* Links → two-column clean list */
+  .footer-links {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    row-gap: 1rem;
+    text-align: left;
+    column-gap: 2.2rem;
+  }
+
+  .footer-links a {
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: #000;
+  }
+
+  /* -----------------------------
+     CONTACT + FOLLOW CARDS
+     ----------------------------- */
+  .cf-block {
+    width: 100%;
+    align-items: center;
+    text-align: center;
+    padding: 1.6rem 1.2rem;
+    border-radius: 22px;
+    background: rgba(255, 255, 255, 0.08);
+  }
+
+  .cf-heading {
+    font-size: 1rem;
+    letter-spacing: 1.4px;
+  }
+
+  .cf-icons-row {
+    justify-content: center;
+    gap: 1.4rem;
+  }
+
+  /* Place Contact & Follow side-by-side */
+  .footer-details > .cf-block {
+    margin-top: 0.5rem;
+  }
+
+  .footer-details {
+    display: grid;
+    grid-template-areas:
+      "links links"
+      "contact follow";
+  }
+
+  .footer-links {
+    grid-area: links;
+  }
+
+  .footer-details > .cf-block:nth-of-type(1) {
+    grid-area: contact;
+  }
+
+  .footer-details > .cf-block:nth-of-type(2) {
+    grid-area: follow;
   }
 }
