@@ -5,7 +5,7 @@ import "./styles-footer/Footer.css";
 export default function License() {
   return (
     <div className="footer-license">
-      © {new Date().getFullYear()} OPENROOT. All rights reserved.
+      © 2024-2026 OPENROOT. All rights reserved.
     </div>
   );
 }

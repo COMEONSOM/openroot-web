@@ -4,9 +4,9 @@
 
 .footer-container {
   width: 100%;
-  background: #00000059;
+  background: #00ff88;
   color: #ffffff;
-  padding: 3.5rem 1.2rem 1.5rem;
+  padding: 3.2rem 1rem 1.2rem;
   box-sizing: border-box;
   border-top: 1px solid rgba(15, 23, 42, 0.08);
 }
@@ -19,8 +19,19 @@
 
 /* Smooth entry already handled by GSAP */
 .footer-license {
-  margin-top: 2.5rem;
+  margin-top: 1.5rem;
   font-size: 0.75rem;
   color: #64748b;
-  text-align: left;
+  text-align: center;
+}
+@media (max-width: 899px) {
+  .footer-container {
+    width: 100vw;
+    max-width: 100vw;
+
+    /* BREAK OUT OF ALL PARENTS */
+    margin-left: calc(50% - 50vw);
+    margin-right: calc(50% - 50vw);
+    margin-bottom: calc(50% - 50vw);
+  }
 }
