@@ -151,3 +151,16 @@
     padding: 1.4rem 1.2rem;
   }
 }
+
+.offerSoftwareNote strong {
+  color: #a3e87b;
+}
+.offerSoftwareList strong {
+  color: #a3e87b;
+}
+.offerSoftwareSubheading strong {
+  color: #a3e87b;
+}
+.offerSoftwareIntro strong {
+  color: #a3e87b;
+}

@@ -1,7 +1,6 @@
-// src/components/AboutCompany/Sections/WhyChooseOpenroot.jsx
-import React, { memo } from "react";
-import { motion } from "framer-motion";
-import { createSmallStagger } from "../data";
+// src/components/AboutCompany/Sections/WhyChooseOpenroot.tsx
+import { memo } from "react";
+import { motion, Variants } from "framer-motion";
 import styles from "../styles-ac-section/WhyChooseOpenroot.module.css";
 
 const reasonItems = [
@@ -23,39 +22,55 @@ const reasonItems = [
   },
 ];
 
+const cardTech: Variants = {
+  hidden: { opacity: 0, scale: 0.985 },
+  visible: {
+    opacity: 1,
+    scale: 1,
+    transition: { duration: 0.45, ease: "easeOut" },
+  },
+};
+
 function WhyChooseOpenroot() {
   return (
     <motion.section
       className={styles.whyChooseContainer}
-      initial={{ opacity: 0, y: 24 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, amount: 0.22 }}
-      transition={{ duration: 0.6 }}
+      initial={{ opacity: 0 }}
+      whileInView={{ opacity: 1 }}
+      viewport={{ once: false, amount: 0.25 }}
+      transition={{ duration: 0.6, ease: "easeOut" }}
     >
-      <h2 className={styles.whyChooseTitle}>Why Choose Openroot?</h2>
+      {/* ✅ Title now visible */}
+      <motion.h2
+        className={styles.whyChooseTitle}
+        initial={{ opacity: 0 }}
+        whileInView={{ opacity: 1 }}
+        viewport={{ once: false, amount: 0.3 }}
+        transition={{ duration: 0.5, ease: "easeOut" }}
+      >
+        Why Choose Openroot?
+      </motion.h2>
 
       <div className={styles.whyChooseGrid}>
-        {reasonItems.map((item, index) => {
-          const stagger = createSmallStagger(index);
-          return (
-            <motion.article
-              key={item.title}
-              className={styles.whyChooseCard}
-              initial={stagger.initial}
-              whileInView={stagger.whileInView}
-              viewport={stagger.viewport}
-              transition={stagger.transition}
-            >
-              <div className={styles.whyChooseIcon}>
-                <span>✔</span>
-              </div>
-              <div className={styles.whyChooseText}>
-                <h3>{item.title}</h3>
-                <p>{item.body}</p>
-              </div>
-            </motion.article>
-          );
-        })}
+        {reasonItems.map((item) => (
+          <motion.article
+            key={item.title}
+            className={styles.whyChooseCard}
+            variants={cardTech}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: false, amount: 0.35 }}
+          >
+            <div className={styles.whyChooseIcon}>
+              <span>✔</span>
+            </div>
+
+            <div className={styles.whyChooseText}>
+              <h3>{item.title}</h3>
+              <p>{item.body}</p>
+            </div>
+          </motion.article>
+        ))}
       </div>
     </motion.section>
   );
