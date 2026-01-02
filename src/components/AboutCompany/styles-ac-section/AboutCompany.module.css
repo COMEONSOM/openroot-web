@@ -1,7 +1,7 @@
 .aboutCompanyRoot {
   position: relative;
   width: 100%;
-  padding: 1rem 0.5rem;
+  padding: 0.5rem 0.25rem;
   background:
     radial-gradient(circle at 12% 6%, rgba(0, 0, 0, 0) 0%, transparent 55%),
     radial-gradient(circle at 88% 100%, rgba(17, 24, 39, 0) 0%, #02061700 52%);
@@ -12,8 +12,19 @@
 }
 
 .innerWrapper {
-  width: min(1120px, 96%);
+  width: 100%;
   display: flex;
   flex-direction: column;
   gap: 3.3rem;
+}
+@media (max-width: 899px) {
+  .innerWrapper {
+    width: 100%;
+  }
+}
+
+@media (min-width: 900px) {
+  .innerWrapper {
+    width: 96%;
+  }
 }

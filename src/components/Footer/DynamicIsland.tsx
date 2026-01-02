@@ -34,12 +34,53 @@ export default function DynamicIsland() {
               Founder Details
             </a>
 
-            <a href="#">Feedback Form</a>
-            <a href="#">Watch Content</a>
-            <a href="#">Openroot Classes</a>
-            <a href="#">Nior AI</a>
-            <a href="#">Travel Expense Manager</a>
-            <a href="#">Job Updates</a>
+            <a
+              href="#"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Feedback Form
+            </a>
+
+            <a
+              href="https://youtube.com/@knowledge.openroot?si=9QyqR0bMkKmY8HPq"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Watch Content
+            </a>
+
+            <a
+              href="https://openroot-classes-firebase.web.app/"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Openroot Classes
+            </a>
+
+            <a
+              href="https://comeonsom.github.io/openroot-helping-hand/"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Job Updates
+            </a>
+
+            <a
+              href="https://comeonsom.github.io/openroot-travel-expense-manager/"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Expense Manager
+            </a>
+
+            <a
+              href="https://openroot-time-ai-module.web.app/"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Nior AI
+            </a>
           </div>
 
           {/* 📞 CONTACT */}

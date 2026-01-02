@@ -124,7 +124,7 @@ const releasedSoftwares = Object.freeze([
   { name: "Helping Hand (Job Updates)", href: "https://openroot.in/openroot-helping-hand/", icon: Icons.helpingHand },
   { name: "Openroot Classes", href: "https://openroot-classes-firebase.web.app/", icon: Icons.Classes },
   { name: "Travel Expense Manager", href: "https://openroot.in/openroot-travel-expense-manager/", icon: Icons.travelExpense },
-  { name: "Openroot AI Module", href: "https://openroot-time-ai-module.web.app/", icon: Icons.timeAI },
+  { name: "NIOR Module", href: "https://openroot-time-ai-module.web.app/", icon: Icons.timeAI },
 ]);
 
 // ============================================================
