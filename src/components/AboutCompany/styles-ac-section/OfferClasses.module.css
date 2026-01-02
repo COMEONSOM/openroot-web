@@ -169,3 +169,16 @@
     font-size: 0.94rem;
   }
 }
+
+.offerClassNote strong {
+  color: #a3e87b;
+}
+.offerClassList strong {
+  color: #a3e87b;
+}
+.offerClassIntro strong {
+  color: #a3e87b;
+}
+.offerClassSubheading strong {
+  color: #a3e87b;
+}

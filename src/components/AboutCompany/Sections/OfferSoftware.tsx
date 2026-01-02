@@ -1,40 +1,89 @@
-// src/components/AboutCompany/Sections/OfferSoftware.jsx
-import React, { memo } from "react";
-import { motion } from "framer-motion";
-import { createSmallStagger } from "../data";
+// src/components/AboutCompany/Sections/OfferSoftware.tsx
+import { memo } from "react";
+import { motion, Variants } from "framer-motion";
 import styles from "../styles-ac-section/OfferSoftware.module.css";
 
-function OfferSoftware() {
-  const stagger = createSmallStagger(1);
+/* -------------------------------------------------
+   Same motion system as WhoWeAre
+-------------------------------------------------- */
+const cardTech: Variants = {
+  hidden: {
+    opacity: 0,
+    scale: 0.985,
+  },
+  visible: {
+    opacity: 1,
+    scale: 1,
+    transition: {
+      duration: 0.6,
+      ease: "easeOut",
+    },
+  },
+};
 
+const softFade: Variants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      duration: 0.5,
+      ease: "easeOut",
+    },
+  },
+};
+
+function OfferSoftware() {
   return (
     <motion.article
       className={styles.offerSoftwareCard}
-      initial={stagger.initial}
-      whileInView={stagger.whileInView}
-      viewport={stagger.viewport}
-      transition={stagger.transition}
+      variants={cardTech}
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once: false, margin: "-120px" }}
     >
-      <div className={styles.offerSoftwareTag}>Software Solutions</div>
-      <h3 className={styles.offerSoftwareTitle}>
-        Software Built for Real-World Businesses
-      </h3>
+      {/* Tag */}
+      <motion.div
+        className={styles.offerSoftwareTag}
+        variants={softFade}
+      >
+        Software Solutions
+      </motion.div>
 
-      <p className={styles.offerSoftwareIntro}>
+      {/* Title */}
+      <motion.h3
+        className={styles.offerSoftwareTitle}
+        variants={softFade}
+      >
+        Software Built for Real-World Businesses
+      </motion.h3>
+
+      {/* Intro paragraph */}
+      <motion.p
+        className={styles.offerSoftwareIntro}
+        variants={softFade}
+      >
         Under <strong>Software Solutions</strong>, we design and build{" "}
         <strong>custom digital tools, web apps, and automation systems</strong>{" "}
         for micro and small enterprises that need strong online systems at
-        practical, sustainable pricing.
-        Our work is focused on enabling businesses that often don’t have access
-        to expensive software, in-house tech teams, or complex tools — but still
-        need <strong>reliable, long-term digital systems</strong> to grow.
-      </p>
+        practical, sustainable pricing. Our work is focused on enabling
+        businesses that often don’t have access to expensive software,
+        in-house tech teams, or complex tools — but still need{" "}
+        <strong>reliable, long-term digital systems</strong> to grow.
+      </motion.p>
 
-      <div className={styles.offerSoftwareSubheading}>
-        We help MSMEs with:
-      </div>
+      {/* Subheading */}
+      <motion.div
+        className={styles.offerSoftwareSubheading}
+        variants={softFade}
+      >
+        <strong>We help MSMEs with:</strong>
+      </motion.div>
 
-      <ul className={styles.offerSoftwareList}>
+      {/* List */}
+      <motion.ul
+        className={styles.offerSoftwareList}
+        variants={softFade}
+      >
         <li>
           <strong>Business automation</strong> to reduce repetitive manual tasks
           and save time.
@@ -47,13 +96,17 @@ function OfferSoftware() {
           <strong>Practical, scalable architectures</strong> designed to grow
           with the business without unnecessary complexity.
         </li>
-      </ul>
+      </motion.ul>
 
-      <p className={styles.offerSoftwareNote}>
+      {/* Closing note */}
+      <motion.p
+        className={styles.offerSoftwareNote}
+        variants={softFade}
+      >
         Every solution is meant to be{" "}
         <strong>understandable, maintainable, and truly helpful</strong> — not
         just impressive on paper.
-      </p>
+      </motion.p>
     </motion.article>
   );
 }

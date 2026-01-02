@@ -1,12 +1,52 @@
 // ============================================================
-// OUR MISSION — OPENROOT ENTERPRISE EDITION
-// Elements-style structure + CTA Left-Aligned
+// OUR MISSION — OPENROOT
+// Same motion system as WhoWeAre (calm, modern, enterprise)
 // ============================================================
 
-import React, { memo } from "react";
-import { motion } from "framer-motion";
-import { SECTION_FADE } from "../data";
+import { memo } from "react";
+import { motion, Variants } from "framer-motion";
 import styles from "../styles-ac-section/OurMission.module.css";
+
+/* -------------------------------------------------
+   Same variants as WhoWeAre
+-------------------------------------------------- */
+const softFade: Variants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      duration: 0.5,
+      ease: "easeOut",
+    },
+  },
+};
+
+const titleTech: Variants = {
+  hidden: {
+    opacity: 0,
+    scale: 0.985,
+  },
+  visible: {
+    opacity: 1,
+    scale: 1,
+    transition: {
+      duration: 0.6,
+      ease: "easeOut",
+    },
+  },
+};
+
+const contentBlock: Variants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      duration: 0.6,
+      ease: "easeOut",
+      delay: 0.05,
+    },
+  },
+};
 
 function OurMission() {
   return (
@@ -14,26 +54,34 @@ function OurMission() {
       <div className={styles.missionContainer}>
         <motion.div
           className={styles.missionContent}
-          initial={SECTION_FADE.initial}
-          whileInView={SECTION_FADE.whileInView}
-          viewport={{ once: true, margin: "-80px" }}
-          transition={SECTION_FADE.transition}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: false, margin: "-120px" }}
           aria-labelledby="mission-heading"
         >
           <div className={styles.textGroup}>
-            <h2 id="mission-heading" className={styles.missionTitle}>
+            {/* Title — same as WhoWeAre */}
+            <motion.h2
+              id="mission-heading"
+              className={styles.missionTitle}
+              variants={titleTech}
+            >
               Our Mission
-            </h2>
+            </motion.h2>
 
-            <div className={styles.missionTextBlock}>
+            {/* Text block — single calm reveal */}
+            <motion.div
+              className={styles.missionTextBlock}
+              variants={contentBlock}
+            >
               <p>
                 Our mission is to{" "}
                 <strong>
                   open new roots of innovation, opportunity, and digital
                   independence
                 </strong>{" "}
-                for people and small businesses.
-                We believe that everyone deserves access to{" "}
+                for people and small businesses. We believe that everyone
+                deserves access to{" "}
                 <strong>
                   smart technology, financial knowledge, and future-ready skills
                 </strong>{" "}
@@ -45,14 +93,19 @@ function OurMission() {
                 workflow, or an in-depth class,{" "}
                 <strong>Openroot exists to remove barriers</strong> and make
                 growth more achievable. Let’s grow together,{" "}
-                <strong>Let's choose Openroot.</strong>
+                <strong>Let&apos;s choose Openroot.</strong>
               </p>
-            </div>
+            </motion.div>
 
-            <div className={styles.missionCTA}>
+            {/* CTA — fades in with content (no separate animation) */}
+            <motion.div
+              className={styles.missionCTA}
+              variants={softFade}
+            >
               <a href="/tools" className={styles.ctaPrimary}>
                 Explore Our Tools
               </a>
+
               <a
                 href="https://openroot-classes-firebase.web.app/"
                 target="_blank"
@@ -61,7 +114,7 @@ function OurMission() {
               >
                 Learn with Openroot Classes
               </a>
-            </div>
+            </motion.div>
           </div>
         </motion.div>
       </div>

@@ -336,23 +336,7 @@
 .cf-icon img { width: clamp(18px, 3.5vw, 24px); height: auto; filter: brightness(0.95); } 
 .cf-icon:hover { transform: translateY(-6px); background: rgba(255,255,255,0.22); box-shadow: 0 14px 32px rgba(0,0,0,0.45); } /*
 
-/* Footer responsive */
-@media (max-width: 900px) {
-  .footer-details {
-    grid-template-columns: 1fr;
-    gap: var(--fd-gap-lg);
-  }
-  .footer-links {
-    grid-template-columns: 1fr;
-  }
-  .cf-block {
-    align-items: center;
-    text-align: center;
-  }
-  .cf-icons-row {
-    justify-content: center;
-  }
-}
+
 
 /* ========================================================================== */
 /* SECTION 3 — DYNAMIC ISLAND STRUCTURE (FINAL, CLEAN) */
