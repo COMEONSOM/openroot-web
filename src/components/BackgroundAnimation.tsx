@@ -226,7 +226,7 @@ export default function CalmPremiumCore() {
 
       hudCtx.fillStyle = "rgba(170,230,255,0.95)";
       hudCtx.font = "700 20px Inter, system-ui";
-      hudCtx.fillText("OPEN CORE", 20, 36);
+      hudCtx.fillText("Openroot Heart", 20, 36);
 
       hudCtx.fillStyle = "rgba(140,200,255,0.95)";
       hudCtx.font = "600 16px Inter, system-ui";
