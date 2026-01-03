@@ -1,6 +1,4 @@
-/* ================================
-   ADVERTISEMENT BAND — FIXED
-================================ */
+/* ADVERTISEMENT BAND */
 .advertisement-band {position: relative;width: 100vw;left: 50%;right: 50%;margin-left: -50vw;margin-right: -50vw;height: 64px;background-image: linear-gradient(90deg,#4f46e5,#7c3aed,#9333ea);display: flex;align-items: center;align-items: center;justify-content: center;z-index: 999;overflow: hidden;}
 .advertisement-text {color: #ffffff;font-size: 14px;font-weight: 600;text-transform: uppercase;white-space: nowrap;user-select: none;}
 

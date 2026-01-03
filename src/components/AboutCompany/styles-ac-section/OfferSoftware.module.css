@@ -1,12 +1,8 @@
 /* ============================================================
-   OPENROOT — OFFER SOFTWARE SECTION (AURORA / GLASS / HARD ISO)
-   REFACTORED FOR: OfferSoftware.jsx
-   TOKENS SCOPED — NO GLOBAL LEAK — FULL AURORA MOTION
+   OPENROOT — OFFER SOFTWARE SECTION 
+   TOKENS SCOPED — NO GLOBAL LEAK - 2026.1
    ============================================================ */
 
-/* ------------------------------------------------------------
-   CARD WRAPPER — DESIGN TOKENS
-   ------------------------------------------------------------ */
 .offerSoftwareCard {
   --os-text: #ffffff;
   --os-bg-radial-a: rgba(0, 0, 0, 0.548);
@@ -15,16 +11,9 @@
   --os-glass-bg: rgba(255, 255, 255, 0.08);
   --os-glass-border: rgba(255, 255, 255, 0.22);
 
-  /* AURORA COLORS */
-  --os-aurora-1: #000000;
-  --os-aurora-2: #680aff;
-  --os-aurora-3: #000000;
-
-  /* SPACING + SIZING */
   --os-card-radius: 20px;
   --os-gap-lg: 1.2rem;
 
-  /* MOTION */
   --os-transition: 0.35s cubic-bezier(.21,1.02,.73,1);
   --os-aurora-blur: 110px;
   --os-aurora-blur-sm: 44px;
@@ -50,117 +39,23 @@
   box-shadow: 0 14px 42px rgba(0, 0, 0, 0.55);
   color: #ffffff;}
 
-/* HOVER */
 @media (hover: hover) and (pointer: fine) {
-  .offerSoftwareCard:hover {
-    transform: translateY(-6px);
-    box-shadow:
-      inset 0 0 1px rgba(255,255,255,0.18),
-      0 28px 56px rgba(0,0,0,0.6);
-  }
+  .offerSoftwareCard:hover {transform: translateY(-6px);box-shadow:inset 0 0 1px rgba(255,255,255,0.18),0 28px 56px rgba(0,0,0,0.6);}
 }
 
-/* ------------------------------------------------------------
-   TAG — SAME AS OFFER CLASSES
-   ------------------------------------------------------------ */
-.offerSoftwareTag {
-  align-self: flex-start;
-  display: inline-flex;
-  background: #a3e87b;
-  color: #021b10;
-  padding: 6px 14px;
-  font-size: 0.8rem;
-  font-weight: 900;
-  border-radius: 999px;
-  letter-spacing: 0.5px;
-}
+.offerSoftwareTag {align-self: flex-start;display: inline-flex;background: #a3e87b;color: #021b10;padding: 6px 14px;font-size: 0.8rem;font-weight: 900;border-radius: 999px;letter-spacing: 0.5px;}
+.offerSoftwareTitle {font-size: 1.4rem;font-weight: 800;margin-bottom: 0.4rem;letter-spacing: 0.5px;background: linear-gradient(90deg, #ffffff, #b4e4ff);background-clip: text;-webkit-background-clip: text;color: transparent;-webkit-text-fill-color: transparent;text-shadow: 0 0 12px rgba(255,255,255,0.2);}
 
-/* ------------------------------------------------------------
-   TITLE — EXACT GRADIENT MATCH
-   ------------------------------------------------------------ */
-.offerSoftwareTitle {
-  font-size: 1.4rem;
-  font-weight: 800;
-  margin-bottom: 0.4rem;
-  letter-spacing: .5px;
+@media (max-width: 768px) {.offerSoftwareTitle {font-size: 1.25rem;}}
 
-  background: linear-gradient(90deg, #ffffff, #b4e4ff);
-
-  /* ✅ Standard + Webkit */
-  background-clip: text;
-  -webkit-background-clip: text;
-
-  color: transparent;
-  -webkit-text-fill-color: transparent;
-
-  text-shadow: 0 0 12px rgba(255,255,255,0.2);
-}
-
-@media (max-width: 768px) {
-  .offerSoftwareTitle {
-    font-size: 1.25rem;
-  }
-}
-
-/* ------------------------------------------------------------
-   INTRO PARAGRAPHS
-   ------------------------------------------------------------ */
-.offerSoftwareIntro {
-  font-size: 1rem;
-  color: #e0edff;
-  line-height: 1.6;
-}
-
-/* ------------------------------------------------------------
-   SUB-HEADING
-   ------------------------------------------------------------ */
-.offerSoftwareSubheading {
-  font-size: 1.05rem;
-  font-weight: 700;
-  color: #ffffff;
-  margin-top: 0.6rem;
-}
-
-/* ------------------------------------------------------------
-   LIST
-   ------------------------------------------------------------ */
-.offerSoftwareList {
-  margin: 0;
-  padding-left: 1.2rem;
-  display: flex;
-  flex-direction: column;
-  gap: 0.6rem;
-  color: #d9eaff;
-  line-height: 1.6;
-}
-
-/* ------------------------------------------------------------
-   NOTE
-   ------------------------------------------------------------ */
-.offerSoftwareNote {
-  font-size: 1rem;
-  color: #cfe2ff;
-  margin-top: 1rem;
-}
-
-/* ------------------------------------------------------------
-   SMALL SCREEN OPTIMIZATION
-   ------------------------------------------------------------ */
-@media (max-width: 420px) {
-  .offerSoftwareCard {
-    padding: 1.4rem 1.2rem;
-  }
-}
-
-.offerSoftwareNote strong {
-  color: #a3e87b;
-}
-.offerSoftwareList strong {
-  color: #a3e87b;
-}
-.offerSoftwareSubheading strong {
-  color: #a3e87b;
-}
+.offerSoftwareIntro {font-size: 1rem;color: #e0edff;line-height: 1.6;}
+.offerSoftwareSubheading {font-size: 1.05rem;font-weight: 700;color: #ffffff;margin-top: 0.6rem;}
+.offerSoftwareList {margin: 0;padding-left: 1.2rem;display: flex;flex-direction: column;gap: 0.6rem;color: #d9eaff;line-height: 1.6;}
+.offerSoftwareNote {font-size: 1rem;color: #cfe2ff;margin-top: 1rem;}
+.offerSoftwareNote strong,
+.offerSoftwareList strong,
+.offerSoftwareSubheading strong,
 .offerSoftwareIntro strong {
   color: #a3e87b;
 }
+@media (max-width: 420px) {.offerSoftwareCard {padding: 1.4rem 1.2rem;}}
