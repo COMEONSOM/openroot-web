@@ -1,16 +1,10 @@
 /* ==========================================================================
-   OPENROOT — DYNAMIC ISLAND (HEART + FOOTER)
+   OPENROOT — DYNAMIC ISLAND
    PRODUCTION CONSOLIDATED STYLESHEET
-   VERSION: 2026.1 (CLEAN, STABLE, NO VISUAL CHANGE)
+   VERSION: 2026.1
    ========================================================================== */
 
-/* ========================================================================== */
-/* SECTION 1 — HEART MODULE (ISOLATE) */
-/* ========================================================================== */
-
-/* ===============================
-   1. TOKEN SCOPE — HEART DESIGN
-   =============================== */
+/* -------- SECTION 1 — HEART MODULE (FULLY ISOLATED) -------- */
 .elements-section {
   --cf-color-text: #ffffff;
   --cf-color-muted: #dcdcff;
@@ -19,253 +13,100 @@
   --cf-color-heart-cta-start: #680aff;
   --cf-color-heart-cta-end: #2900a5;
   --cf-color-heading-gradient-start: #260062;
-  --cf-color-heading-gradient-end: #cf1fff;
-  --cf-color-aurora-1: #00000000;
-  --cf-color-aurora-2: #00000000;
-  --cf-color-aurora-3: #00000000;
-  --cf-aurora-blur-desktop: 110px;
-  --cf-aurora-opacity-desktop: 0.6;
+
   --cf-heart-radius: 28px;
   --cf-backdrop-blur: 14px;
+
   --cf-transition-main: 0.35s cubic-bezier(.21, 1.02, .73, 1);
+
   --cf-font-size-heart-title: 1.4rem;
   --cf-max-width-desktop: 1100px;
 }
 
-/* ===============================
-   2. HEART SECTION + AURORA
-   =============================== */
-.elements-section {
-  width: 100%;
-  padding: 2px 0;
-  margin-top: 20px;
-  position: relative;
-  overflow: hidden;
-  display: flex;
-  justify-content: center;
-  color: var(--cf-color-text);
-  isolation: isolate;
-  background: radial-gradient(
-    circle at 18% 20%,
-    rgba(9, 22, 38, 0.12) 0%,
-    rgba(2, 9, 18, 0.09) 70%
-  );
-}
-.elements-section::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  z-index: 0;
-  pointer-events: none;
+/* HEART SECTION CONTAINER + AURORA LAYER */
+.elements-section {position: relative;width: 100%;margin-top: 20px;padding: 2px 0;display: flex;justify-content: center;color: var(--cf-color-text);isolation: isolate;overflow: hidden;background: radial-gradient(circle at 18% 20%,rgba(9, 22, 38, 0.12),rgba(2, 9, 18, 0.09) 70%);}
+.elements-section::before {content: "";position: absolute;inset: 0;z-index: 0;pointer-events: none;
   background:
-    radial-gradient(circle at 10% 80%, var(--cf-color-aurora-1) 0%, transparent 55%),
-    radial-gradient(circle at 80% 20%, var(--cf-color-aurora-2) 0%, transparent 55%),
-    radial-gradient(circle at 50% 50%, var(--cf-color-aurora-3) 0%, transparent 60%);
-  filter: blur(var(--cf-aurora-blur-desktop));
-  opacity: var(--cf-aurora-opacity-desktop);
-  animation: cf-aurora-move 18s infinite alternate ease-in-out;
+    radial-gradient(circle at 10% 80%, transparent 55%),
+    radial-gradient(circle at 80% 20%, transparent 55%),
+    radial-gradient(circle at 50% 50%, transparent 60%);
+  filter: blur(110px);opacity: 0.6;animation: cf-aurora-move 18s infinite alternate ease-in-out;
 }
 
 @keyframes cf-aurora-move {
-  from {
-    transform: translateX(-12%) translateY(-10%) scale(1.1);
-  }
-  to {
-    transform: translateX(12%) translateY(6%) scale(1);
-  }
+  from { transform: translate(-12%, -10%) scale(1.1); }
+  to   { transform: translate(12%, 6%) scale(1); }
 }
 
-/* ===============================
-   3. HEART LAYOUT
-   =============================== */
-.elements-main {
-  position: relative;
-  z-index: 3;
-  width: min(var(--cf-max-width-desktop), 96%);
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 3rem;
-}
+/* HEART LAYOUT WRAPPER */
+.elements-main {position: relative;z-index: 3;width: min(var(--cf-max-width-desktop), 96%);display: grid;grid-template-columns: 1fr;gap: 3rem;}
 
-/* ===============================
-   4. HEART PANEL + CARD
-   =============================== */
-.heart-panel {
-  transition: transform 0.7s cubic-bezier(.16, .84, .44, 1);
-}
-.heart-card {
-  background: var(--cf-color-glass-bg);
-  border: 1px solid var(--cf-color-glass-border);
-  border-radius: var(--cf-heart-radius);
-  padding: 2rem 1.6rem;
-  backdrop-filter: blur(var(--cf-backdrop-blur));
-  -webkit-backdrop-filter: blur(var(--cf-backdrop-blur));
-}
+/* HEART PANEL + CARD */
+.heart-panel {transition: transform 0.7s cubic-bezier(.16, .84, .44, 1);}
+.heart-card {padding: 2rem 1.6rem;border-radius: var(--cf-heart-radius);background: var(--cf-color-glass-bg);border: 1px solid var(--cf-color-glass-border);backdrop-filter: blur(var(--cf-backdrop-blur));-webkit-backdrop-filter: blur(var(--cf-backdrop-blur));}
 
-/* ===============================
-   5. HEART TYPOGRAPHY
-   =============================== */
-.heart-title {
-  font-size: var(--cf-font-size-heart-title);
-  font-weight: 800;
-  margin-bottom: 1.4rem;
-  background: linear-gradient(
-    90deg,
-    var(--cf-color-heading-gradient-start),
-    #cdadff
-  );
-  background-clip: text;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
+/* HEART TYPOGRAPHY */
+.heart-title {font-size: var(--cf-font-size-heart-title);font-weight: 800;margin-bottom: 1.4rem;background: linear-gradient(90deg, var(--cf-color-heading-gradient-start), #cdadff);background-clip: text;-webkit-background-clip: text;-webkit-text-fill-color: transparent;}
 .heart-body p,
-.heart-body li {
-  background: linear-gradient(
-    90deg,
-    var(--cf-color-heading-gradient-start),
-    #41168a
-  );
-  background-clip: text;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  line-height: 1.5;
-}
-.heart-body ul {
-  padding-left: 1.2rem;
-  margin: 1.2rem 0;
-}
+.heart-body li {line-height: 1.5;background: linear-gradient(90deg, var(--cf-color-heading-gradient-start), #41168a);background-clip: text;-webkit-background-clip: text;-webkit-text-fill-color: transparent;}
+.heart-body ul {margin: 1.2rem 0;padding-left: 1.2rem;}
 
-/* ===============================
-   6. HEART CTA
-   =============================== */
-.heart-cta {
-  margin-top: 1.2rem;
-  padding: 0.9rem 1.8rem;
-  border-radius: 999px;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  background: linear-gradient(
-    135deg,
-    var(--cf-color-heart-cta-start),
-    var(--cf-color-heart-cta-end)
-  );
-  color: #ffffff;
-  font-weight: 600;
-  cursor: pointer;
+/* HEART CTA BUTTON */
+.heart-cta {margin-top: 1.2rem;padding: 0.9rem 1.8rem;border-radius: 999px;border: 1px solid rgba(255, 255, 255, 0.2);background: linear-gradient(135deg,var(--cf-color-heart-cta-start),var(--cf-color-heart-cta-end));color: #ffffff;font-weight: 600;cursor: pointer;
   transition:
     transform var(--cf-transition-main),
     box-shadow var(--cf-transition-main),
     border-color var(--cf-transition-main);
 }
-.heart-cta:hover {
-  transform: translateY(-4px);
-  border-color: rgba(255, 255, 255, 0.35);
-}
+.heart-cta:hover {transform: translateY(-4px);border-color: rgba(255, 255, 255, 0.35);}
 
-/* ===============================
-   7. HEART BAND
-   =============================== */
-.heart-band {
-  display: flex;
-  align-items: center;
-  gap: 0.6rem;
-  padding: 1rem 1.25rem;
-  border-radius: 14px;
-  background: rgba(0, 0, 0, 0.52);
-  border: 1px solid rgba(0, 0, 0, 0.365);
-  color: #fefefe;
-  cursor: pointer;
-}
-.heart-band-text {
-  white-space: nowrap;
-  margin-left: 8px;
-  display: inline-flex;
-}
-.heart-band-chevron {
-  font-size: 1.25rem;
-  opacity: 0.85;
-  transition: transform .35s ease, opacity .35s ease;
-}
+/* HEART BAND (TOGGLE BAR) */
+.heart-band {display: flex;align-items: center;gap: 0.6rem;padding: 1rem 1.25rem;border-radius: 14px;background: rgba(0, 0, 0, 0.52);border: 1px solid rgba(0, 0, 0, 0.365);color: #fefefe;cursor: pointer;}
+.heart-band-text {display: inline-flex;margin-left: 8px;white-space: nowrap;}
+.heart-band-chevron {font-size: 1.25rem;opacity: 0.85;transition: transform .35s ease, opacity .35s ease;}
 
-/* ===============================
-   8. HEART RESPONSIVE
-   =============================== */
 @media (max-width: 899px) {
-  .elements-main {
-    display: flex;
-    flex-direction: column;
-    gap: 1.4rem;
-    width: 100%;
-  }
-  .heart-panel {
-    max-height: 0;
-    opacity: 0;
-    overflow: hidden;
-    transition:
-      max-height .45s cubic-bezier(.21,1.02,.73,1),
-      opacity .35s ease;
-  }
-  .heart-panel--open {
-    max-height: 1500px;
-    opacity: 1;
-    padding-top: 0.5rem;
-  }
-  .heart-band--open .heart-band-chevron {
-    transform: rotate(180deg);
-  }
+  .elements-main {width: 100%;display: flex;flex-direction: column;gap: 1.4rem;}
+  .heart-panel {max-height: 0;opacity: 0;overflow: hidden;transition:max-height .45s cubic-bezier(.21,1.02,.73,1),opacity .35s ease;}
+  .heart-panel--open {max-height: 1500px;opacity: 1;padding-top: 0.5rem;}
+  .heart-band--open .heart-band-chevron {transform: rotate(180deg);}
 }
-
 @media (min-width: 900px) {
-  .heart-band {
-    writing-mode: sideways-lr;
-    position: absolute;
-    left: -48px;
-    top: 50%;
-    translate: 0 -50%;
-  }
-  .heart-panel {
-    transform: translateX(-120%);
-  }
-  .heart-panel--open {
-    transform: translateX(0);
-  }
-  .heart-band-chevron {
-    display: none;
-  }
+  .heart-band {position: absolute;left: -48px;top: 50%;translate: 0 -50%;writing-mode: sideways-lr;}
+  .heart-panel {transform: translateX(-120%);}
+  .heart-panel--open {transform: translateX(0);}
+  .heart-band-chevron {display: none;}
 }
 
-/* ========================================================================== */
-/* SECTION 2 — FOOTER DETAILS */
-/* ========================================================================== */
+/* ------- SECTION 2 — FOOTER DETAILS MODULE ------- */
 .footer-details {
   --fd-bg-primary: #a3e87b;
   --fd-bg-secondary: #a3e87b;
   --fd-bg-accent: #198754;
+
   --fd-text-primary: #000000;
   --fd-text-muted: #000000;
   --fd-link-hover: #210056;
+
   --fd-glass-bg: rgba(255, 255, 255, 0.06);
   --fd-glass-border: rgba(0, 0, 0, 0.18);
+
   --fd-font-main: "Inter", "IBM Plex Sans", system-ui, sans-serif;
+
   --fd-radius-lg: 18px;
   --fd-radius-md: 14px;
+
   --fd-gap-xl: clamp(2.5rem, 5vw, 4rem);
   --fd-gap-lg: clamp(1.8rem, 4vw, 3rem);
   --fd-gap-md: 1.2rem;
   --fd-gap-sm: 0.6rem;
+
   --fd-blur: 14px;
   --fd-transition: 0.35s cubic-bezier(.21, 1.02, .73, 1);
 }
 
-/* Main footer container */
-.footer-details {
-  position: relative;
-  width: 100%;
-  padding: clamp(3rem, 6vw, 5rem) clamp(1.5rem, 4vw, 3rem);
-  display: grid;
-  grid-template-columns: 1.2fr 1fr 1fr;
-  gap: var(--fd-gap-xl);
-  font-family: var(--fd-font-main);
-  color: var(--fd-text-primary);
+/* FOOTER LAYOUT */
+.footer-details {position: relative;width: 100%;padding: clamp(3rem, 6vw, 5rem) clamp(1.5rem, 4vw, 3rem);display: grid;grid-template-columns: 1.2fr 1fr 1fr;gap: var(--fd-gap-xl);font-family: var(--fd-font-main);color: var(--fd-text-primary);
   background:
     linear-gradient(135deg, var(--fd-bg-primary), var(--fd-bg-secondary)),
     repeating-linear-gradient(
@@ -275,266 +116,69 @@
       transparent 1px,
       transparent 12px
     );
-  overflow: hidden;
-  isolation: isolate;
+  overflow: hidden;isolation: isolate;
 }
-/* Overlay */
-.footer-details::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  z-index: 0;
-  pointer-events: none;
+.footer-details::before {content: "";position: absolute;inset: 0;z-index: 0;pointer-events: none;
   background:
-    radial-gradient(circle at 15% 20%, rgba(25, 135, 84, 0), transparent 55%),
-    radial-gradient(circle at 85% 80%, rgba(32, 201, 150, 0), transparent 60%);
-  filter: blur(90px);
-  opacity: 0.55;
-}
-/* Links */
-.footer-links {
-  position: relative;
-  z-index: 1;
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: var(--fd-gap-sm) var(--fd-gap-lg);
-}
-.footer-links a {
-  font-size: 0.95rem;
-  font-weight: 500;
-  text-decoration: none;
-  color: var(--fd-text-muted);
-  transition: color var(--fd-transition), transform var(--fd-transition);
-}
-.footer-links a:hover {
-  color: var(--fd-link-hover);
-  transform: translateX(4px);
+    radial-gradient(circle at 15% 20%, rgba(25,135,84,0), transparent 55%),
+    radial-gradient(circle at 85% 80%, rgba(32,201,150,0), transparent 60%);
+  filter: blur(90px);opacity: 0.55;
 }
 
-/* Contact / Follow blocks */
-.cf-block {
-  position: relative;
-  z-index: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: var(--fd-gap-md);
-  padding: 1.6rem;
-  border-radius: var(--fd-radius-lg);
-  background: var(--fd-glass-bg);
-  border: 1px solid var(--fd-glass-border);
-  backdrop-filter: blur(var(--fd-blur));
-}
-.cf-heading {
-  font-size: 1.2rem;
-  font-weight: 700;
-  letter-spacing: 1.2px;
-  text-transform: uppercase;
-}
-.cf-icons-row { display: flex; gap: clamp(0.8rem, 2vw, 1.4rem); } 
-.cf-icon { width: clamp(40px, 6vw, 54px); height: clamp(40px, 6vw, 54px); display: grid; place-items: center; border-radius: var(--fd-radius-md); background: rgba(255,255,255,0.12); border: 1px solid var(--fd-glass-border); transition: transform var(--fd-transition), box-shadow var(--fd-transition), background var(--fd-transition); } 
-.cf-icon img { width: clamp(18px, 3.5vw, 24px); height: auto; filter: brightness(0.95); } 
-.cf-icon:hover { transform: translateY(-6px); background: rgba(255,255,255,0.22); box-shadow: 0 14px 32px rgba(0,0,0,0.45); } /*
+/* FOOTER LINKS */
+.footer-links {position: relative;z-index: 1;display: grid;grid-template-columns: repeat(2, 1fr);gap: var(--fd-gap-sm) var(--fd-gap-lg);}
+.footer-links a {font-size: 0.95rem;font-weight: 500;text-decoration: none;color: var(--fd-text-muted);transition: color var(--fd-transition), transform var(--fd-transition);}
+.footer-links a:hover {color: var(--fd-link-hover);transform: translateX(4px);}
 
+/* CONTACT / FOLLOW BLOCKS */
+.cf-block {position: relative;z-index: 1;display: flex;flex-direction: column;align-items: flex-start;gap: var(--fd-gap-md);padding: 1.6rem;border-radius: var(--fd-radius-lg);background: var(--fd-glass-bg);border: 1px solid var(--fd-glass-border);backdrop-filter: blur(var(--fd-blur));}
+.cf-heading {font-size: 1.2rem;font-weight: 700;letter-spacing: 1.2px;text-transform: uppercase;}
+.cf-icons-row {display: flex;gap: clamp(0.8rem, 2vw, 1.4rem);}
+.cf-icon {width: clamp(40px, 6vw, 54px);height: clamp(40px, 6vw, 54px);display: grid;place-items: center;border-radius: var(--fd-radius-md);background: rgba(255,255,255,0.12);border: 1px solid var(--fd-glass-border);transition: transform var(--fd-transition), box-shadow var(--fd-transition), background var(--fd-transition);}
+.cf-icon img {width: clamp(18px, 3.5vw, 24px);filter: brightness(0.95);}
+.cf-icon:hover {transform: translateY(-6px);background: rgba(255,255,255,0.22);box-shadow: 0 14px 32px rgba(0,0,0,0.45);}
 
+/* DYNAMIC ISLAND STRUCTURE */
+.dynamic-island {position: relative;width: 100%;}
+.dynamic-island-shell {position: relative;}
+.dynamic-island-heart {position: absolute;left: 0;top: 50%;transform: translateY(-50%);z-index: 10;pointer-events: none;}
 
-/* ========================================================================== */
-/* SECTION 3 — DYNAMIC ISLAND STRUCTURE (FINAL, CLEAN) */
-/* ========================================================================== */
-.dynamic-island {
-  position: relative;
-  width: 100%;
-}
-.dynamic-island-shell {
-  position: relative;
-}
-/* Desktop heart anchoring */
-.dynamic-island-heart {
-  position: absolute;
-  left: 0;
-  top: 50%;
-  transform: translateY(-50%);
-  z-index: 10;
-  pointer-events: none;
-}
-/* Allow interaction only where needed */
+/* INTERACTION ONLY WHERE REQUIRED */
 .dynamic-island-heart .heart-band,
-.dynamic-island-heart .heart-panel--open {
-  pointer-events: auto;
-}
-/* Prevent layout pollution */
-.dynamic-island-heart .elements-section {
-  margin: 0;
-  padding: 0;
-  background: none;
-}
+.dynamic-island-heart .heart-panel--open {pointer-events: auto;}
 
-/* ==========================================================
-   MOBILE OVERLAY FIX — HEART FLOATS ABOVE FOOTER
-   ========================================================== */
-@media (max-width: 899px) {
-  .dynamic-island-shell {
-    position: relative;
-    overflow: visible;
-  }
-  .dynamic-island-heart {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    z-index: 30;
-    margin: 0;
-    padding: 0;
-    transform: translateY(-33px);
-  }
-  .dynamic-island-heart::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background: rgba(0, 0, 0, 0.35);
-    backdrop-filter: blur(6px);
-    opacity: 0;
-    transition: opacity 0.35s ease;
-    pointer-events: none;
-  }
-  .dynamic-island-heart:has(.heart-panel--open)::before {
-    opacity: 0;
-  }
-  .dynamic-island-heart .elements-section {
-    width: 100%;
-  }
-  .heart-panel {
-    transform-origin: top;
-  }
-}
+/* PREVENT LAYOUT CONTAMINATION */
+.dynamic-island-heart .elements-section {margin: 0;padding: 0;background: none;}
 
-/* Accessibility */
+/* ACCESSIBILITY */
 @media (prefers-reduced-motion: reduce) {
-  * {
-    transition: none !important;
-  }
+  * {transition: none !important;}
 }
-
-@media (max-width: 899px) {
-
-  /* -----------------------------
-     RESET HEART POSITION (TOP BAR)
-     ----------------------------- */
-  .dynamic-island-heart {
-    position: relative;
-    width: 100%;
-    pointer-events: auto;
-    z-index: 5;
-    margin-top: 2rem;
-  }
-
-  .dynamic-island-heart .elements-section {
-    padding: 0;
-    background: none;
-  }
-
-  /* Heart bar stays visible */
-  .heart-band {
-    width: 100%;
-    justify-content: space-between;
-    background: #0000007e;
-    border-radius: 18px;
-    padding: 1rem 1.4rem;
-  }
-
-  .heart-band-text {
-    font-size: 0.95rem;
-    font-weight: 600;
-  }
-
-  .heart-band-chevron {
-    font-size: 1.1rem;
-    opacity: 0.9;
-  }
-
-  /* Panel expands UPWARD */
-  .heart-panel {
-    display: block;
-    max-height: 0;
-    overflow: hidden;
-    opacity: 0;
-    transform-origin: bottom;
-    transition:
-      max-height 0.45s cubic-bezier(.21,1.02,.73,1),
-      opacity 0.35s ease;
-  }
-  .heart-panel--open {
-    max-height: 1400px;
-    opacity: 1;
-    margin-bottom: 1.2rem;
-  }
-  /* -----------------------------
-     FOOTER LAYOUT
-     ----------------------------- */
-  .footer-details {
-    grid-template-columns: 1fr;
-    gap: 2rem;
-    padding-top: 1.8rem;
-  }
-
-  /* Links → two-column clean list */
-  .footer-links {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    row-gap: 1rem;
-    text-align: left;
-    column-gap: 2.2rem;
-  }
-
-  .footer-links a {
-    font-size: 0.95rem;
-    font-weight: 500;
-    color: #000;
-  }
-
-  /* -----------------------------
-     CONTACT + FOLLOW CARDS
-     ----------------------------- */
-  .cf-block {
-    width: 100%;
-    align-items: center;
-    text-align: center;
-    padding: 1.6rem 1.2rem;
-    border-radius: 22px;
-    background: rgba(255, 255, 255, 0.08);
-  }
-
-  .cf-heading {
-    font-size: 1rem;
-    letter-spacing: 1.4px;
-  }
-
-  .cf-icons-row {
-    justify-content: center;
-    gap: 1.4rem;
-  }
-
-  /* Place Contact & Follow side-by-side */
-  .footer-details > .cf-block {
-    margin-top: 0.5rem;
-  }
-
-  .footer-details {
-    display: grid;
-    grid-template-areas:
-      "links links"
-      "contact follow";
-  }
-
-  .footer-links {
-    grid-area: links;
-  }
-
-  .footer-details > .cf-block:nth-of-type(1) {
-    grid-area: contact;
-  }
-
-  .footer-details > .cf-block:nth-of-type(2) {
-    grid-area: follow;
-  }
-}
+@media (max-width: 899px) { 
+  .dynamic-island-shell { position: relative; overflow: visible; } 
+  .dynamic-island-heart { position: absolute; top: 0; left: 0; width: 100%; z-index: 30; margin: 0; padding: 0; transform: translateY(-33px); } 
+  .dynamic-island-heart::before { content: ""; position: absolute; inset: 0; background: rgba(0, 0, 0, 0.35); backdrop-filter: blur(6px); opacity: 0; transition: opacity 0.35s ease; pointer-events: none; } 
+  .dynamic-island-heart:has(.heart-panel--open)::before { opacity: 0; } .dynamic-island-heart .elements-section { width: 100%; } .heart-panel { transform-origin: top; } }
+@media (max-width: 899px) { 
+  /* ----------------------------- RESET HEART POSITION (TOP BAR) ----------------------------- */ 
+  .dynamic-island-heart { position: relative; width: 100%; pointer-events: auto; z-index: 5; margin-top: 2rem; } 
+  .dynamic-island-heart .elements-section { padding: 0; background: none; } /* Heart bar stays visible */ 
+  .heart-band { width: 100%; justify-content: space-between; background: #0000007e; border-radius: 18px; padding: 1rem 1.4rem; } 
+  .heart-band-text { font-size: 0.95rem; font-weight: 600; } 
+  .heart-band-chevron { font-size: 1.1rem; opacity: 0.9; } /* Panel expands UPWARD */ 
+  .heart-panel { display: block; max-height: 0; overflow: hidden; opacity: 0; transform-origin: bottom; transition: max-height 0.45s cubic-bezier(.21,1.02,.73,1), opacity 0.35s ease; } 
+  .heart-panel--open { max-height: 1400px; opacity: 1; margin-bottom: 1.2rem; } 
+  /* ----------------------------- FOOTER LAYOUT ----------------------------- */ 
+  .footer-details { grid-template-columns: 1fr; gap: 2rem; padding-top: 1.8rem; } /* Links → two-column clean list */ 
+  .footer-links { display: grid; grid-template-columns: 1fr 1fr; row-gap: 1rem; text-align: left; column-gap: 2.2rem; } 
+  .footer-links a { font-size: 0.95rem; font-weight: 500; color: #000; } 
+  /* ----------------------------- CONTACT + FOLLOW CARDS ----------------------------- */ 
+  .cf-block { width: 100%; align-items: center; text-align: center; padding: 1.6rem 1.2rem; border-radius: 22px; background: rgba(255, 255, 255, 0.08); } 
+  .cf-heading { font-size: 1rem; letter-spacing: 1.4px; } 
+  .cf-icons-row { justify-content: center; gap: 1.4rem; } 
+  /* Place Contact & Follow side-by-side */ 
+  .footer-details > .cf-block { margin-top: 0.5rem; } 
+  .footer-details { display: grid; grid-template-areas: "links links" "contact follow"; } 
+  .footer-links { grid-area: links; } 
+  .footer-details > .cf-block:nth-of-type(1) { grid-area: contact; } 
+  .footer-details > .cf-block:nth-of-type(2) { grid-area: follow; } }

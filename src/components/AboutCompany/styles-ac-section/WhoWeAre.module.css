@@ -1,7 +1,3 @@
-/* ============================================================
-   OPENROOT — WHO WE ARE SECTION (GLASS CARD • MATCH MISSION)
-   ============================================================ */
-
 /* CARD WRAPPER */
 .whoWeAreContainer {
   --os-text: #ffffff;
@@ -27,64 +23,22 @@
 }
 
 /* Hover Motion */
-@media (hover: hover) and (pointer: fine) {
-  .whoWeAreContainer:hover {
-    transform: translateY(-6px);
-    box-shadow:
-      inset 0 0 1px rgba(255,255,255,0.18),
-      0 28px 56px rgba(0,0,0,0.6);
-  }
-}
+@media (hover: hover) and (pointer: fine) {.whoWeAreContainer:hover {transform: translateY(-6px);box-shadow:inset 0 0 1px rgba(255,255,255,0.18),0 28px 56px rgba(0,0,0,0.6);}}
 
 /* Eyebrow */
-.whoWeAreEyebrow {
-  font-size: 0.85rem;
-  letter-spacing: 1px;
-  font-weight: 600;
-  color: #a3e87b;
-  margin-bottom: -0.25rem;
-}
+.whoWeAreEyebrow {font-size: 0.85rem;letter-spacing: 1px;font-weight: 600;color: #a3e87b;margin-bottom: -0.25rem;}
 
 /* Title (gradient like MissionTitle) */
-.whoWeAreTitle {
-  font-size: 1.4rem;
-  font-weight: 800;
-  letter-spacing: .5px;
-  margin-bottom: 0.4rem;
-
-  background: linear-gradient(90deg, #ffffff, #b4e4ff);
-  background-clip: text;
-  -webkit-background-clip: text;
-  color: transparent;
-  -webkit-text-fill-color: transparent;
-
-  text-shadow: 0 0 12px rgba(255,255,255,0.20);
+.whoWeAreTitle {font-size: 1.4rem;font-weight: 800;letter-spacing: .5px;margin-bottom: 0.4rem;background: linear-gradient(90deg, #ffffff, #b4e4ff);background-clip: text;-webkit-background-clip: text;color: transparent;-webkit-text-fill-color: transparent;text-shadow: 0 0 12px rgba(255,255,255,0.20);
 }
 
 @media (max-width: 768px) {
-  .whoWeAreTitle {
-    font-size: 1.25rem;
-  }
+  .whoWeAreTitle {font-size: 1.25rem;}
 }
 
 /* Text Block — match MissionTextBlock */
-.whoWeAreTextBlock {
-  font-size: 1rem;
-  color: #e0edff;
-  line-height: 1.6;
-  display: flex;
-  flex-direction: column;
-  gap: 0.9rem;
-}
-
-.whoWeAreTextBlock strong {
-  color: #a3e87b;
-  font-weight: 700;
-}
+.whoWeAreTextBlock {font-size: 1rem;color: #e0edff;line-height: 1.6;display: flex;flex-direction: column;gap: 0.9rem;}
+.whoWeAreTextBlock strong {color: #a3e87b;font-weight: 700;}
 
 /* Responsive Padding — match Mission */
-@media (max-width: 420px) {
-  .whoWeAreContainer {
-    padding: 1.4rem 1.2rem;
-  }
-}
+@media (max-width: 420px) {.whoWeAreContainer {padding: 1.4rem 1.2rem;}}
