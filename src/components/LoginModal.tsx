@@ -1,8 +1,7 @@
 // ============================================================
-// HANDLES OAUTH (GOOGLE/FACEBOOK/GITHUB), PROFILE VIEW, LOGOUT
-// ALWAYS RETURNS RAW FIREBASE USER VIA onLogin(user)
-// VERSION: 2025.8 — FULL TYPESCRIPT + REACT 19 COMPATIBLE
-// src/components/LoginModal.tsx
+// LOGIN MODAL — OPENROOT PREMIUM SPLIT PANEL
+// LOGIC PRESERVED FROM MAIN SITE
+// UI MATCHED WITH PRICE TRACKER EXPERIENCE
 // ============================================================
 
 import { useState, useEffect, useRef } from "react";
@@ -11,12 +10,14 @@ import gsap from "gsap";
 import Lottie from "lottie-react";
 import successAnimation from "../animations/successfullogin.json";
 import failedAnimation from "../animations/failedlogin.json";
+
 import {
   auth,
   googleProvider,
   facebookProvider,
   githubProvider,
 } from "../lib/firebase";
+
 import {
   signInWithPopup,
   signOut,
@@ -25,28 +26,44 @@ import {
   AuthProvider,
 } from "firebase/auth";
 
-// TS Props
+// ============================================================
+// TYPES
+// ============================================================
+
 interface LoginModalProps {
   onClose?: () => void;
   onLogin?: (user: User) => void;
   onLogout?: () => void;
 }
 
+type Step =
+  | "loading"
+  | "initial"
+  | "profile"
+  | "success"
+  | "error"
+  | "confirmLogout";
+
+// ============================================================
+// COMPONENT
+// ============================================================
+
 export default function LoginModal({
   onClose,
   onLogin,
   onLogout,
 }: LoginModalProps) {
-  const [step, setStep] = useState<
-    "loading" | "initial" | "profile" | "success" | "error" | "confirmLogout"
-  >("loading");
+  const [step, setStep] = useState<Step>("loading");
   const [userData, setUserData] = useState<User | null>(null);
   const [username, setUsername] = useState("guest@openroot");
-  const [showDetails, setShowDetails] = useState(false);
   const [countdown, setCountdown] = useState(5);
   const [errorMessage, setErrorMessage] = useState("");
 
   const modalRef = useRef<HTMLDivElement | null>(null);
+
+  // ============================================================
+  // HELPERS
+  // ============================================================
 
   const getUsername = (user: User) => {
     if (user?.email) return user.email.split("@")[0] + "@openroot";
@@ -61,7 +78,10 @@ export default function LoginModal({
   const safe = (value: string | null | undefined, fb = "Not specified") =>
     value || fb;
 
-  // GSAP ENTRY ANIMATION
+  // ============================================================
+  // GSAP ENTRY
+  // ============================================================
+
   useEffect(() => {
     if (step !== "loading" && modalRef.current) {
       gsap.fromTo(
@@ -72,7 +92,10 @@ export default function LoginModal({
     }
   }, [step]);
 
-  // AUTH SUBSCRIBE
+  // ============================================================
+  // AUTH SUBSCRIPTION
+  // ============================================================
+
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       const wantDetails =
@@ -80,8 +103,9 @@ export default function LoginModal({
         sessionStorage.getItem("openrootOpenProfileDetails") === "1";
 
       if (user) {
-        setUserData(user);
         const uName = getUsername(user);
+
+        setUserData(user);
         setUsername(uName);
 
         localStorage.setItem("isLoggedIn", "true");
@@ -92,16 +116,15 @@ export default function LoginModal({
         setStep((prev) =>
           prev === "success" || prev === "error" ? prev : "profile"
         );
-        setShowDetails(wantDetails);
 
-        if (wantDetails)
+        if (wantDetails) {
           sessionStorage.removeItem("openrootOpenProfileDetails");
+        }
 
         onLogin?.(user);
       } else {
         setUserData(null);
         setUsername("guest@openroot");
-        setShowDetails(false);
 
         localStorage.removeItem("isLoggedIn");
         localStorage.removeItem("openrootUserUID");
@@ -113,14 +136,21 @@ export default function LoginModal({
         );
       }
     });
+
     return unsubscribe;
   }, [onLogin]);
 
-  // SUCCESS COUNTDOWN
+  // ============================================================
+  // SUCCESS REDIRECT COUNTDOWN
+  // ============================================================
+
   useEffect(() => {
     if (step === "success") {
       setCountdown(5);
-      const interval = setInterval(() => setCountdown((s) => s - 1), 1000);
+
+      const interval = setInterval(() => {
+        setCountdown((s) => s - 1);
+      }, 1000);
 
       const timeout = setTimeout(() => {
         onClose?.();
@@ -134,15 +164,20 @@ export default function LoginModal({
     }
   }, [step, onClose]);
 
+  // ============================================================
   // LOGIN HANDLER
+  // ============================================================
+
   const handleOAuthLogin = async (provider: AuthProvider) => {
     try {
       const result = await signInWithPopup(auth, provider);
       const user = result.user;
+
       const uName = getUsername(user);
 
       setUserData(user);
       setUsername(uName);
+
       sessionStorage.setItem("openrootUser", uName);
       localStorage.setItem("isLoggedIn", "true");
       localStorage.setItem("openrootUserUID", user.uid);
@@ -154,25 +189,29 @@ export default function LoginModal({
       console.error("LOGIN ERROR:", error);
 
       let msg = "Login failed. Please try again.";
-      if (error?.code === "auth/popup-closed-by-user") msg = "Login cancelled.";
+
+      if (error?.code === "auth/popup-closed-by-user")
+        msg = "Login cancelled.";
       else if (
         error?.code === "auth/account-exists-with-different-credential"
       )
-        msg =
-          "This email is already registered with a different provider. Use that provider.";
+        msg = "This email is already registered with a different provider.";
 
       setErrorMessage(msg);
       setStep("error");
     }
   };
 
+  // ============================================================
   // LOGOUT HANDLER
+  // ============================================================
+
   const handleLogout = async () => {
     try {
       await signOut(auth);
+
       setUserData(null);
       setUsername("guest@openroot");
-      setShowDetails(false);
       setStep("initial");
 
       localStorage.removeItem("isLoggedIn");
@@ -187,138 +226,170 @@ export default function LoginModal({
     }
   };
 
-  // LOADING UI
+  // ============================================================
+  // LOADING STATE
+  // ============================================================
+
   if (step === "loading") {
     return (
-      <div className="modal-overlay">
-        <div className="modal-container modal-loader" ref={modalRef}>
+      <div className="auth-overlay">
+        <div className="auth-card auth-center" ref={modalRef}>
           <p>Authenticating…</p>
         </div>
       </div>
     );
   }
 
+  // ============================================================
+  // RENDER
+  // ============================================================
+
   return (
     <div
-      className="modal-overlay"
+      className="auth-overlay"
       onMouseDown={(e) => {
         const target = e.target as HTMLElement | null;
-        if (target?.classList?.contains("modal-overlay")) onClose?.();
+        if (target?.classList?.contains("auth-overlay")) onClose?.();
       }}
     >
-      <div className="modal-container" ref={modalRef} tabIndex={-1}>
-        {/* CLOSE BUTTON */}
-        {step !== "success" && step !== "error" && (
-          <button
-            className="modal-close"
-            onClick={() => (showDetails ? setShowDetails(false) : onClose?.())}
-          >
-            &times;
-          </button>
-        )}
+      <div className="auth-card" ref={modalRef}>
+        {/* ======================================================
+            LEFT PANEL
+        ======================================================= */}
+        <div className="auth-left">
 
-        {/* LOGIN OPTIONS */}
-        {step === "initial" && (
-          <div className="modal-content">
-            <h2>Welcome Back</h2>
-            <p>Continue with your preferred account:</p>
-
-            <div className="oauth-buttons">
-              <button onClick={() => handleOAuthLogin(googleProvider)}>
-                Continue with Google
-              </button>
-              <button onClick={() => handleOAuthLogin(facebookProvider)}>
-                Continue with Facebook
-              </button>
-              <button onClick={() => handleOAuthLogin(githubProvider)}>
-                Continue with GitHub
-              </button>
-            </div>
+          {/* ✅ BRAND — ALWAYS VISIBLE */}
+          <div className="auth-brand">
+            <img src="./logo-nobg.png" alt="Openroot" />
           </div>
-        )}
 
-        {/* SUCCESS */}
-        {step === "success" && (
-          <div className="success-container">
-            <Lottie animationData={successAnimation} loop={false} autoplay />
-            <p>Login successful!</p>
-            <p>
-              Redirecting in <strong>{Math.max(countdown, 0)}s</strong>…
-            </p>
-          </div>
-        )}
+          {/* CLOSE */}
+          {step !== "success" && step !== "error" && (
+            <button className="modal-close" onClick={onClose}>
+              ×
+            </button>
+          )}
 
-        {/* ERROR */}
-        {step === "error" && (
-          <div className="success-container">
-            <Lottie animationData={failedAnimation} loop={false} autoplay />
-            <p>{errorMessage}</p>
-            <button onClick={() => setStep("initial")}>Try Again</button>
-          </div>
-        )}
+          {/* LOGIN */}
+          {step === "initial" && (
+            <div className="auth-content">
+              <h2>Welcome to the World of Smart People</h2>
+              <p>Begin your journey by completing your profile.</p>
 
-        {/* PROFILE */}
-        {step === "profile" && userData && (
-          <div>
-            {!showDetails ? (
-              <div
-                className="profile-summary"
-                role="button"
-                aria-hidden="true"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  setShowDetails(true);
-                }}
-              >
-                {userData.photoURL ? (
-                  <img
-                    src={userData.photoURL}
-                    className="avatar"
-                    alt="User avatar"
-                  />
-                ) : (
-                  <div className="avatar-fallback" aria-hidden="true">
-                    {getInitial(userData.displayName)}
-                  </div>
-                )}
-                <p>{safe(userData.displayName, "Guest")}</p>
-                <small>Username: {username}</small>
-              </div>
-            ) : (
-              <div className="profile-details">
-                {/* ✅ BIG AVATAR IN DETAILS VIEW */}
-                {userData.photoURL ? (
-                  <img
-                    src={userData.photoURL}
-                    className="avatar-lg"
-                    alt="User avatar"
-                  />
-                ) : (
-                  <div className="avatar-fallback-lg" aria-hidden="true">
-                    {getInitial(userData.displayName)}
-                  </div>
-                )}
+              <div className="auth-buttons">
+                <button
+                  className="btn google"
+                  onClick={() => handleOAuthLogin(googleProvider)}
+                >
+                  Continue with Google
+                </button>
 
-                <p>Name: {safe(userData.displayName)}</p>
-                <p>Email: {safe(userData.email)}</p>
-                <p>Phone: {safe(userData.phoneNumber)}</p>
+                <button
+                  className="btn facebook"
+                  onClick={() => handleOAuthLogin(facebookProvider)}
+                >
+                  Continue with Facebook
+                </button>
 
-                <button onClick={() => setStep("confirmLogout")}>
-                  Log out
+                <button
+                  className="btn github"
+                  onClick={() => handleOAuthLogin(githubProvider)}
+                >
+                  Continue with GitHub
                 </button>
               </div>
-            )}
-          </div>
-        )}
 
-        {/* CONFIRM LOGOUT */}
-        {step === "confirmLogout" && (
-          <div className="logout-confirmation">
-            <h3>Confirm Logout</h3>
-            <button onClick={handleLogout}>Yes, Logout</button>
-            <button onClick={() => setStep("profile")}>Cancel</button>
-          </div>
-        )}
+              <div className="auth-terms">
+                By continuing you agree to our Terms & Privacy Policy
+              </div>
+            </div>
+          )}
+
+          {/* SUCCESS */}
+          {step === "success" && (
+            <div className="auth-center">
+              <Lottie animationData={successAnimation} loop={false} autoplay />
+              <p>Login successful!</p>
+              <p>
+                Redirecting in <strong>{Math.max(countdown, 0)}s</strong>
+              </p>
+            </div>
+          )}
+
+          {/* ERROR */}
+          {step === "error" && (
+            <div className="auth-center">
+              <Lottie animationData={failedAnimation} loop={false} autoplay />
+              <p>{errorMessage}</p>
+              <button className="btn retry" onClick={() => setStep("initial")}>
+                Try Again
+              </button>
+            </div>
+          )}
+
+          {/* PROFILE */}
+          {step === "profile" && userData && (
+            <div className="auth-profile">
+              {userData.photoURL ? (
+                <img
+                  src={userData.photoURL}
+                  className="profile-avatar-lg"
+                  alt="User avatar"
+                />
+              ) : (
+                <div className="avatar-fallback-lg">
+                  {getInitial(userData.displayName)}
+                </div>
+              )}
+
+              <h3>{safe(userData.displayName, "Guest")}</h3>
+
+              <p className="profile-row">
+                📩 {safe(userData.email, "No email linked")}
+              </p>
+
+              <p className="profile-row">
+                👤 Username: <strong>{username}</strong>
+              </p>
+
+              {userData.phoneNumber && (
+                <p className="profile-row">
+                  📱 Phone: {safe(userData.phoneNumber)}
+                </p>
+              )}
+
+              <button
+                className="btn logout"
+                onClick={() => setStep("confirmLogout")}
+              >
+                Logout
+              </button>
+            </div>
+          )}
+
+          {/* CONFIRM LOGOUT */}
+          {step === "confirmLogout" && (
+            <div className="auth-center">
+              <h3>Confirm Logout</h3>
+              <button className="btn logout" onClick={handleLogout}>
+                Yes, Logout
+              </button>
+              <button
+                className="btn retry"
+                onClick={() => setStep("profile")}
+              >
+                Cancel
+              </button>
+            </div>
+          )}
+        </div>
+
+        {/* ======================================================
+            RIGHT PANEL (ILLUSTRATION)
+        ======================================================= */}
+        <div className="auth-right">
+          <div className="auth-illustration" />
+        </div>
       </div>
     </div>
   );
