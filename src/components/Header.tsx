@@ -1,7 +1,7 @@
 /**
  * ============================================================
- * HEADER COMPONENT — OPENROOT (2025.10 • TS VERSION)
- * SEO + PERFORMANCE OPTIMIZED + PROFESSIONAL STRUCTURE
+ * HEADER COMPONENT — OPENROOT (PRODUCTION READY)
+ * LOGIN → PROFILE → LOGOUT FLOW + LOTTIE LOGIN ANIMATION
  * ============================================================
  */
 
@@ -19,7 +19,7 @@ import { auth } from "../lib/firebase";
 import LoginModal from "./LoginModal";
 import "./styles/Header.css";
 
-// ⭐ Lazy-load Lottie (massive performance boost)
+/* ⭐ Lazy-load Lottie for performance */
 const Lottie = lazy(() => import("lottie-react"));
 import loginAnimation from "../animations/login.json";
 
@@ -63,10 +63,12 @@ const UserAvatar = memo(({ user }: UserAvatarProps) => {
       <img
         src={user.photoURL}
         alt="User avatar"
-        className="avatar"
-        draggable="false"
+        className="profile-avatar"
+        draggable={false}
         loading="lazy"
-        onError={(e) => (e.currentTarget.style.display = "none")}
+        onError={(e) => {
+          e.currentTarget.style.display = "none";
+        }}
       />
     );
   }
@@ -77,6 +79,8 @@ const UserAvatar = memo(({ user }: UserAvatarProps) => {
     </div>
   );
 });
+
+UserAvatar.displayName = "UserAvatar";
 
 /**
  * ============================================================
@@ -89,62 +93,90 @@ const Header = () => {
 
   useSafeAuthListener(setUser);
 
+  /**
+   * When login succeeds
+   */
   const handleLoginSuccess = useCallback(
     (firebaseUser: User) => {
-      if (firebaseUser) setUser(firebaseUser);
+      if (firebaseUser) {
+        setUser(firebaseUser);
+      }
     },
     []
   );
 
+  /**
+   * Open profile inside LoginModal
+   * (same behavior as your other project)
+   */
   const openProfile = useCallback(() => {
     sessionStorage.setItem("openrootOpenProfileDetails", "1");
     setIsLoginOpen(true);
   }, []);
 
-  const openLogin = useCallback(() => setIsLoginOpen(true), []);
+  /**
+   * Open login modal normally
+   */
+  const openLogin = useCallback(() => {
+    setIsLoginOpen(true);
+  }, []);
 
   return (
-    <header className="header" role="banner">
-      {/* LOGO */}
-      <a href="/" className="logo" aria-label="Openroot Homepage">
-        <img
-          src="/assets/openroot-white-nobg.png"
-          alt="Openroot Logo"
-          className="logo-img"
-          draggable="false"
-          loading="eager"
-        />
-      </a>
+    <>
+      <header className="header" role="banner">
+        {/* LOGO */}
+        <div className="header-logo">
+          <img
+            src="/assets/openroot-white-nobg.png"
+            alt="Openroot Logo"
+            className="header-logo-img"
+            draggable={false}
+            loading="eager"
+          />
+        </div>
 
-      {/* AUTH Actions */}
-      <nav className="auth-area" aria-label="User navigation">
-        {!user ? (
-          <button
-            className="login-animation"
-            onClick={openLogin}
-            aria-label="Open login modal"
-          >
-            <Suspense fallback={<span className="login-hint">Login</span>}>
-              <Lottie
-                animationData={loginAnimation}
-                loop
-                autoplay
-                className="login-lottie"
-              />
-            </Suspense>
+        {/* RIGHT SIDE */}
+        <div className="header-right">
+          {!user ? (
+            /* LOGIN WITH LOTTIE */
+            <button
+              className="login-animation"
+              onClick={openLogin}
+              aria-label="Open login modal"
+              type="button"
+            >
+              <Suspense
+                fallback={
+                  <span className="login-hint">
+                    Sign In
+                  </span>
+                }
+              >
+                <Lottie
+                  animationData={loginAnimation}
+                  loop
+                  autoplay
+                  className="login-lottie"
+                />
+              </Suspense>
 
-            <span className="login-hint">LOGIN HERE →</span>
-          </button>
-        ) : (
-          <button
-            className="profile-button"
-            onClick={openProfile}
-            aria-label="Open profile menu"
-          >
-            <UserAvatar user={user} />
-          </button>
-        )}
-      </nav>
+              <span className="login-hint">
+                SIGN IN →
+              </span>
+            </button>
+          ) : (
+            /* PROFILE AVATAR */
+            <button
+              className="profile-button"
+              onClick={openProfile}
+              aria-label="Open profile"
+              type="button"
+            >
+              <UserAvatar user={user} />
+            </button>
+          )}
+        </div>
+      </header>
 
       {/* LOGIN MODAL */}
       {isLoginOpen && (
@@ -153,7 +185,7 @@ const Header = () => {
           onLogin={handleLoginSuccess}
         />
       )}
-    </header>
+    </>
   );
 };
 

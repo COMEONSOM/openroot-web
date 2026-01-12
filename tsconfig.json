@@ -19,7 +19,6 @@
     "paths": {
       "@/*": ["src/*"]
     },
-    "ignoreDeprecations": "6.0", // 👈 NEW LINE — Silences warning safely
   },
   "include": ["src"],
   "references": [

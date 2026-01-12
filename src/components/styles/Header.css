@@ -1,81 +1,221 @@
 /* ============================================================
-   GLOBAL DESIGN TOKENS (Header Scope)
-   ============================================================ */
+   🎯 HEADER — OPENROOT PREMIUM UI (SYNCED WITH TSX + LOTTIE)
+============================================================ */
+
+/* ===============================
+   DESIGN TOKENS (Header Scope)
+================================ */
 :root {
-  /* BRAND COLORS */
-  --color-primary: #2563eb;        /* Blue (premium) */
-  --color-primary-hover: #1e40af;  /* Darker blue */
+  --color-primary: #2563eb;
+  --color-primary-hover: #1e40af;
   --color-white: #ffffff;
-  --color-bg-header: rgba(0, 0, 0, 0.85);
-  --color-border: rgba(255, 255, 255, 0.2);
+  --color-bg-header: rgba(0, 0, 0, 0.88);
+  --color-border: rgba(255, 255, 255, 0.16);
   --color-text: #ffffff;
-  
-  /* SPACING */
+
   --space-xs: 0.35rem;
   --space-sm: 0.65rem;
   --space-md: 1rem;
   --space-lg: 1.5rem;
-  
-  /* TYPOGRAPHY */
+
   --font-size-xs: 0.75rem;
   --font-size-sm: 0.9rem;
   --font-size-md: 1rem;
-  --font-size-lg: 1.15rem;
-  --font-weight-medium: 500;
-  --font-weight-bold: 600;
-  
-  /* RADII */
+
   --radius-md: 0.5rem;
   --radius-round: 50%;
-  
-  /* TRANSITIONS */
-  --transition-fast: 0.2s ease;
-  --transition-normal: 0.3s ease;
-  
-  /* RESPONSIVE LOGO SIZES */
-  --logo-width-mobile: 70px;
-  --logo-width-tablet: 90px;
-  --logo-width-laptop: 110px;
-  --logo-width-desktop: 140px;
-  --logo-width-tv: 170px;
+
+  --transition-fast: 0.18s ease;
+  --transition-normal: 0.28s ease;
+
+  /* Logo sizes */
+  --logo-mobile: 78px;
+  --logo-tablet: 100px;
+  --logo-desktop: 128px;
 }
 
-/* HEADER WRAPPER */
+/* ===============================
+   HEADER WRAPPER
+================================ */
 .header {width: 100%;padding: 0.4rem var(--space-lg);display: flex;justify-content: space-between;align-items: center;background: var(--color-bg-header);backdrop-filter: blur(8px);border-bottom: 1px solid var(--color-border);position: sticky;top: 0;z-index: 200;}
 
-/* LOGO */
-.logo {display: flex;align-items: center;text-decoration: none;}
-.logo-img {width: var(--logo-width-laptop);height: auto;object-fit: contain;transition: transform var(--transition-normal);user-select: none;}
-.logo-img:hover {transform: scale(1.03);}
+/* ===============================
+   LOGO AREA
+================================ */
+.header-logo {display: flex;align-items: center;text-decoration: none;}
+.header-logo-img {width: 110px;height: auto;object-fit: contain;transition: transform var(--transition-normal);user-select: none;margin-bottom: 10px;margin-top: 10px;}
+.header-logo-img:hover {
+  transform: scale(1.04);
+  opacity: 0.9;
+}
 
-/* RESPONSIVE LOGO SIZES */
-@media (max-width: 480px) { .logo-img { width: var(--logo-width-mobile); } }
-@media (min-width: 481px) and (max-width: 767px) { .logo-img { width: var(--logo-width-tablet); } }
-@media (min-width: 768px) and (max-width: 1023px) { .logo-img { width: var(--logo-width-laptop); } }
-@media (min-width: 1024px) and (max-width: 1440px) { .logo-img { width: var(--logo-width-desktop); } }
-@media (min-width: 1441px) { .logo-img { width: var(--logo-width-tv); } }
+@media (max-width: 480px) { .header-logo-img { width: 70px; } }
+@media (min-width: 481px) and (max-width: 767px) { .header-logo-img { width: 90px; } }
+@media (min-width: 768px) and (max-width: 1023px) { .header-logo-img { width: 110px; } }
+@media (min-width: 1024px) and (max-width: 1440px) { .header-logo-img { width: 140px; } }
+@media (min-width: 1441px) { .header-logo-img { width: 170px; } }
 @media (max-width: 899px) {.header {width: 100vw;max-width: 100vw;margin-left: calc(50% - 50vw);margin-right: calc(50% - 50vw);margin-top: calc(50% - 50vw);}}
-/* AUTH AREA */
-.auth-area {display: flex;align-items: center;gap: var(--space-md);}
 
-/* LOGIN BUTTON WITH LOTTIE */
-.login-animation {display: flex;align-items: center;justify-content: center;background: transparent;border: none;cursor: pointer;padding: 0;gap: 0.3rem;}
-.login-lottie {width: 52px;height: 52px;}
-.login-hint {color: var(--color-white);font-size: var(--font-size-xs);font-weight: 500;user-select: none;}
 
-/* PROFILE BUTTON / AVATAR */
-.profile-button {background: transparent;border: none;padding: 0;cursor: pointer;display: flex;align-items: center;justify-content: center;width: 42px;height: 42px;border-radius: var(--radius-round);transition: transform var(--transition-fast);}
-.profile-button:hover {transform: scale(1.05);}
-.profile-button:focus-visible {outline: 2px solid var(--color-primary);outline-offset: 2px;}
+/* ===============================
+   RIGHT SIDE ACTIONS
+================================ */
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+}
 
-/* AVATAR IMAGE */
-.avatar {width: 100%;height: 100%;border-radius: var(--radius-round);object-fit: cover;background-color: #e5e7eb;}
+/* ============================================================
+   🔑 LOGIN BUTTON WITH LOTTIE
+============================================================ */
 
-/* FALLBACK INITIALS */
-.avatar-fallback {width: 100%;height: 100%;border-radius: var(--radius-round);background: var(--color-primary);color: white;font-weight: var(--font-weight-bold);font-size: var(--font-size-sm);display: flex;align-items: center;justify-content: center;}
+.login-animation {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  color: var(--color-white);
+  transition: transform var(--transition-fast),
+    filter var(--transition-fast);
+}
 
-/* REDUCED MOTION SUPPORT */
+.login-animation:hover {
+  transform: translateY(-1px) scale(1.05);
+  filter: brightness(1.08);
+}
+
+.login-animation:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 3px;
+}
+
+/* Lottie icon */
+.login-lottie {
+  width: 48px;
+  height: 48px;
+  pointer-events: none;
+}
+
+/* Text hint */
+.login-hint {
+  font-size: var(--font-size-xs);
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  white-space: nowrap;
+  user-select: none;
+  opacity: 0.9;
+}
+
+/* Smaller on mobile */
+@media (max-width: 480px) {
+  .login-lottie {
+    width: 40px;
+    height: 40px;
+  }
+
+  .login-hint {
+    display: none;
+  }
+}
+
+/* ============================================================
+   👤 PROFILE BUTTON
+============================================================ */
+
+.profile-button {
+  background: transparent;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  transition: transform var(--transition-fast);
+  width: 42px;height: 42px;
+}
+
+.profile-button:hover {
+  transform: scale(1.08);
+}
+
+.profile-button:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 3px;
+}
+
+/* ============================================================
+   PROFILE AVATAR
+============================================================ */
+
+.profile-avatar {
+  display: block;
+  object-fit: cover;
+  border-radius: 50%;
+  background: #111;
+  border: 2px solid rgba(255,255,255,0.35);
+  transition: border-color var(--transition-fast),
+    box-shadow var(--transition-fast);
+}
+
+.profile-button:hover .profile-avatar {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(37,99,235,0.35);
+}
+
+/* Fallback initials */
+.avatar-fallback {
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #6366f1, #4338ca);
+  color: #fff;
+  font-weight: 700;
+}
+
+/* ===============================
+   RESPONSIVE AVATAR SIZES
+================================ */
+
+/* Mobile */
+@media (max-width: 768px) {
+  .profile-avatar,
+  .avatar-fallback {
+    width: 32px;
+    height: 32px;
+    font-size: 0.8rem;
+  }
+}
+
+/* Tablet */
+@media (min-width: 769px) and (max-width: 899px) {
+  .profile-avatar,
+  .avatar-fallback {
+    width: 38px;
+    height: 38px;
+    font-size: 0.9rem;
+  }
+}
+
+/* Desktop */
+@media (min-width: 900px) {
+  .profile-avatar,
+  .avatar-fallback {
+    width: 46px;
+    height: 46px;
+    font-size: 1rem;
+  }
+}
+
+/* ===============================
+   ACCESSIBILITY
+================================ */
 @media (prefers-reduced-motion: reduce) {
-  .logo-img,
-  .login-animation {transition: none;}
+  * {
+    transition: none !important;
+    animation: none !important;
+  }
 }
