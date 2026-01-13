@@ -5,7 +5,7 @@ import {
   FacebookAuthProvider,
   GithubAuthProvider,
 } from "firebase/auth";
-
+// aryansom
 const firebaseConfig = {
   apiKey: "AIzaSyC2dfIAMpvdWlPbhUdF2-63C10wKDIBSBk",
   authDomain: "openroot-hypersite.firebaseapp.com",
@@ -23,5 +23,3 @@ export const auth = getAuth(app);
 export const googleProvider = new GoogleAuthProvider();
 export const facebookProvider = new FacebookAuthProvider();
 export const githubProvider = new GithubAuthProvider();
-
-//used firebase accout is: aryansom80@gmail.com
