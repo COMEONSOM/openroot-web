@@ -369,7 +369,7 @@ export default function LoginModal({
               <h3>{safe(userData.displayName, "Guest")}</h3>
 
               <p className="profile-row">
-                📩 {safe(userData.email, "No email linked")}
+                📩 Email Id: {safe(userData.email, "No email linked")}
               </p>
 
               <p className="profile-row">

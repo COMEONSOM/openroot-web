@@ -245,101 +245,126 @@
 /* ============================================================
    PROFILE VIEW
 ============================================================ */
+/* ============================================================
+   PROFILE VIEW — COMPACT PREMIUM CARD
+============================================================ */
+
 /* Info rows */
 .profile-row {
   width: 100%;
-  font-size: 0.92rem;
+  font-size: 0.85rem;
   color: #475569;
-  background: linear-gradient(180deg, #f3f6fb, #eef2f7);
-  padding: 0.42rem 0.7rem;
+  background: linear-gradient(
+    180deg,
+    rgba(248, 250, 255, 0.96),
+    rgba(238, 242, 247, 0.96)
+  );
+  padding: 0.38rem 0.6rem;
   border-radius: 10px;
   text-align: center;
   margin-bottom: 4px;
-  box-shadow: inset 0 0 0 1px rgba(0,0,0,0.04);
+  backdrop-filter: blur(4px);
+  box-shadow:
+    inset 0 0 0 1px rgba(0,0,0,0.05),
+    0 3px 8px rgba(0,0,0,0.05);
 }
 
-/* Email emphasis */
-.profile-row strong {
-  font-weight: 700;
-  color: #1e293b;
-}
-
+/* Main card */
 .auth-profile {
   position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
   text-align: center;
-  gap: 0.9rem;
-  padding: 2.2rem 2.4rem;
+  gap: 0.65rem;
+  padding: 1.6rem 1.7rem;
   border-radius: 18px;
+
   background:
-    linear-gradient(180deg, rgba(255,255,255,0.9), rgba(245,248,255,0.95));
+    linear-gradient(
+      180deg,
+      rgba(255,255,255,0.94),
+      rgba(245,248,255,0.98)
+    );
+
+  backdrop-filter: blur(10px);
   box-shadow:
-    0 18px 40px rgba(0,0,0,0.12),
-    inset 0 0 0 1px rgba(0,0,0,0.04);
+    0 18px 42px rgba(0,0,0,0.16),
+    inset 0 0 0 1px rgba(255,255,255,0.45);
+
+  overflow: hidden;
+  animation: profileEnter 0.35s ease;
 }
 
-/* Decorative glow */
+/* Soft glow */
 .auth-profile::before {
   content: "";
   position: absolute;
-  inset: -2px;
-  border-radius: inherit;
-  background: linear-gradient(
-    120deg,
-    rgba(99,102,241,0.25),
-    rgba(14,165,233,0.15),
-    transparent 60%
-  );
-  filter: blur(20px);
+  inset: -40%;
+  background:
+    radial-gradient(circle at 30% 30%, rgba(99,102,241,0.22), transparent 40%),
+    radial-gradient(circle at 70% 60%, rgba(14,165,233,0.18), transparent 45%);
+  filter: blur(60px);
   z-index: -1;
 }
 
+/* Avatar */
 .profile-avatar-lg,
 .avatar-fallback-lg {
-  width: 128px;
-  height: 128px;
+  width: 92px;
+  height: 92px;
   border-radius: 50%;
   object-fit: cover;
-  margin-bottom: 0.6rem;
-  position: relative;
-  z-index: 1;
+  margin-bottom: 0.25rem;
 }
 
 /* Image avatar */
 .profile-avatar-lg {
-  border: 4px solid #ffffff;
+  border: 3px solid rgba(255,255,255,0.95);
   box-shadow:
-    0 12px 28px rgba(0,0,0,0.25),
-    0 0 0 6px rgba(99,102,241,0.12);
+    0 10px 24px rgba(0,0,0,0.28),
+    0 0 0 5px rgba(99,102,241,0.18);
   background: #fff;
 }
+
 /* Initial fallback avatar */
 .avatar-fallback-lg {
   display: grid;
   place-items: center;
-  font-size: 2.6rem;
+  font-size: 1.9rem;
   font-weight: 800;
   color: #fff;
   background: linear-gradient(135deg, #6366f1, #4338ca);
   box-shadow:
-    0 12px 28px rgba(0,0,0,0.25),
-    0 0 0 6px rgba(99,102,241,0.18);
+    0 10px 24px rgba(0,0,0,0.28),
+    0 0 0 5px rgba(99,102,241,0.25);
 }
 
+/* Name */
 .auth-profile h3 {
-  font-size: 1.35rem;
+  font-size: 1.1rem;
   font-weight: 800;
-  color: var(--auth-text);
-  letter-spacing: -0.02em;
-  margin-top: 0.3rem;
+  color: #0f172a;
+  letter-spacing: -0.01em;
 }
 
+/* Subtext */
 .auth-profile p {
-  font-size: 0.95rem;
-  color: var(--auth-subtext);
-  margin-bottom: 0.6rem;
+  font-size: 0.85rem;
+  color: #475569;
+  margin-bottom: 0.2rem;
+}
+
+/* Entry animation */
+@keyframes profileEnter {
+  from {
+    opacity: 0;
+    transform: translateY(14px) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
 }
 
 /* ============================================================
@@ -365,7 +390,7 @@
 .auth-illustration {
   position: absolute;
   inset: 0;
-  background-image: url("/assets/auth-illustration.png");
+  background-image: url("/assets/auth-illustration.avif");
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
