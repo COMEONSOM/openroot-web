@@ -113,7 +113,7 @@
 
 /* Brand */
 .auth-brand {
-  position: absolute;        /* ✅ remove from document flow */
+  position: absolute;        /* remove from document flow */
   top: 18px;
   left: 22px;
 
@@ -123,10 +123,9 @@
 
   font-weight: 800;
   letter-spacing: 0.05em;
-  margin: 0;                 /* ✅ prevent layout shifting */
+  margin: 0;                 /* prevent layout shifting */
   z-index: 5;
 }
-
 
 .auth-brand img {
   height: 34px;
