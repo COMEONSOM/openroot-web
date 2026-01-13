@@ -1,7 +1,6 @@
 // ============================================================
 // LOGIN MODAL — OPENROOT PREMIUM SPLIT PANEL
-// LOGIC PRESERVED FROM MAIN SITE
-// UI MATCHED WITH PRICE TRACKER EXPERIENCE
+// LOGIC PRESERVED + RACE CONDITION FIXED
 // ============================================================
 
 import { useState, useEffect, useRef } from "react";
@@ -61,6 +60,11 @@ export default function LoginModal({
 
   const modalRef = useRef<HTMLDivElement | null>(null);
 
+  // ✅ Timer refs to prevent race conditions
+  const successTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const successIntervalRef =
+    useRef<ReturnType<typeof setInterval> | null>(null);
+
   // ============================================================
   // HELPERS
   // ============================================================
@@ -113,6 +117,7 @@ export default function LoginModal({
         sessionStorage.setItem("openrootUser", uName);
         sessionStorage.setItem("openrootUserUID", user.uid);
 
+        // Do NOT override success/error transitions
         setStep((prev) =>
           prev === "success" || prev === "error" ? prev : "profile"
         );
@@ -141,27 +146,49 @@ export default function LoginModal({
   }, [onLogin]);
 
   // ============================================================
-  // SUCCESS REDIRECT COUNTDOWN
+  // ✅ FIXED SUCCESS COUNTDOWN (NO RACE CONDITIONS)
   // ============================================================
 
   useEffect(() => {
-    if (step === "success") {
-      setCountdown(5);
+    // Clear timers whenever leaving success state
+    if (step !== "success") {
+      if (successTimerRef.current) {
+        clearTimeout(successTimerRef.current);
+        successTimerRef.current = null;
+      }
 
-      const interval = setInterval(() => {
-        setCountdown((s) => s - 1);
-      }, 1000);
+      if (successIntervalRef.current) {
+        clearInterval(successIntervalRef.current);
+        successIntervalRef.current = null;
+      }
 
-      const timeout = setTimeout(() => {
-        onClose?.();
-        window.location.assign(window.location.origin);
-      }, 5000);
-
-      return () => {
-        clearInterval(interval);
-        clearTimeout(timeout);
-      };
+      return;
     }
+
+    // Start countdown
+    setCountdown(5);
+
+    successIntervalRef.current = setInterval(() => {
+      setCountdown((s) => s - 1);
+    }, 1000);
+
+    successTimerRef.current = setTimeout(() => {
+      if (step === "success") {
+        onClose?.(); // ✅ Close modal only — NO PAGE RELOAD
+      }
+    }, 5000);
+
+    return () => {
+      if (successIntervalRef.current) {
+        clearInterval(successIntervalRef.current);
+        successIntervalRef.current = null;
+      }
+
+      if (successTimerRef.current) {
+        clearTimeout(successTimerRef.current);
+        successTimerRef.current = null;
+      }
+    };
   }, [step, onClose]);
 
   // ============================================================
@@ -253,12 +280,9 @@ export default function LoginModal({
       }}
     >
       <div className="auth-card" ref={modalRef}>
-        {/* ======================================================
-            LEFT PANEL
-        ======================================================= */}
+        {/* ================= LEFT PANEL ================= */}
         <div className="auth-left">
-
-          {/* ✅ BRAND — ALWAYS VISIBLE */}
+          {/* BRAND */}
           <div className="auth-brand">
             <img src="./logo-nobg.png" alt="Openroot" />
           </div>
@@ -384,9 +408,7 @@ export default function LoginModal({
           )}
         </div>
 
-        {/* ======================================================
-            RIGHT PANEL (ILLUSTRATION)
-        ======================================================= */}
+        {/* ================= RIGHT PANEL ================= */}
         <div className="auth-right">
           <div className="auth-illustration" />
         </div>

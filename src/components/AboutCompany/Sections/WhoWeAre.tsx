@@ -5,46 +5,74 @@ import { SECTION_FADE } from "../data";
 import styles from "../styles-ac-section/WhoWeAre.module.css";
 
 /* -------------------------------------------------
-   Modern tech-style motion variants
+   Premium tech-style motion system
 -------------------------------------------------- */
-const softFade: Variants = {
-  hidden: {
-    opacity: 0,
-  },
+
+/**
+ * Container orchestrates staggered reveal
+ */
+const containerMotion: Variants = {
+  hidden: {},
   visible: {
-    opacity: 1,
     transition: {
-      duration: 0.5,
-      ease: "easeOut",
+      staggerChildren: 0.12,
+      delayChildren: 0.05,
     },
   },
 };
 
-const titleTech: Variants = {
+/**
+ * Eyebrow — gentle slide from left + fade
+ */
+const eyebrowMotion: Variants = {
   hidden: {
     opacity: 0,
-    scale: 0.985,
+    x: -24,
   },
   visible: {
     opacity: 1,
+    x: 0,
+    transition: {
+      duration: 0.55,
+      ease: [0.22, 1, 0.36, 1], // smooth cubic-bezier
+    },
+  },
+};
+
+/**
+ * Title — micro scale + vertical lift
+ */
+const titleMotion: Variants = {
+  hidden: {
+    opacity: 0,
+    y: 16,
+    scale: 0.97,
+  },
+  visible: {
+    opacity: 1,
+    y: 0,
     scale: 1,
     transition: {
-      duration: 0.6,
-      ease: "easeOut",
+      duration: 0.65,
+      ease: [0.22, 1, 0.36, 1],
     },
   },
 };
 
-const contentBlock: Variants = {
+/**
+ * Content block — soft rise + fade
+ */
+const contentMotion: Variants = {
   hidden: {
     opacity: 0,
+    y: 24,
   },
   visible: {
     opacity: 1,
+    y: 0,
     transition: {
-      duration: 0.6,
-      ease: "easeOut",
-      delay: 0.05,
+      duration: 0.7,
+      ease: [0.22, 1, 0.36, 1],
     },
   },
 };
@@ -58,59 +86,56 @@ function WhoWeAre() {
       viewport={SECTION_FADE.viewport}
       transition={SECTION_FADE.transition}
     >
-      {/* Eyebrow */}
-      <motion.p
-        className={styles.whoWeAreEyebrow}
-        variants={softFade}
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: false, margin: "-120px" }}
-      >
-        About Openroot
-      </motion.p>
-
-      {/* Title */}
-      <motion.h1
-        className={styles.whoWeAreTitle}
-        variants={titleTech}
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: false, margin: "-120px" }}
-      >
-        Who We Are
-      </motion.h1>
-
-      {/* Content — single calm reveal */}
       <motion.div
-        className={styles.whoWeAreTextBlock}
-        variants={contentBlock}
+        variants={containerMotion}
         initial="hidden"
         whileInView="visible"
-        viewport={{ once: false, margin: "-120px" }}
+        viewport={{ once: true, margin: "-120px" }}
       >
-        <p>
-          At <strong>Openroot</strong>, we build modern digital technology
-          that empowers people and small businesses to do more with less
-          effort. We create{" "}
-          <strong>
-            free-to-use financial utilities, AI-powered tools, and
-            productivity apps
-          </strong>{" "}
-          that simplify everyday tasks — from managing expenses and planning
-          investments to automating workflows and staying organized.
-        </p>
+        {/* Eyebrow */}
+        <motion.p
+          className={styles.whoWeAreEyebrow}
+          variants={eyebrowMotion}
+        >
+          About Openroot
+        </motion.p>
 
-        <p>
-          We also build <strong>custom software solutions</strong> for{" "}
-          <strong>MSMEs</strong>, helping them scale affordably and efficiently
-          with practical, real-world systems instead of over-engineered
-          complexity.
-          Beyond software, Openroot is a platform for{" "}
-          <strong>skill development and empowerment</strong>. Through our
-          classes and resources, we help students, working professionals,
-          and small business owners become confident in using technology,
-          AI, and finance to improve their lives.
-        </p>
+        {/* Title */}
+        <motion.h1
+          className={styles.whoWeAreTitle}
+          variants={titleMotion}
+        >
+          Who We Are
+        </motion.h1>
+
+        {/* Content */}
+        <motion.div
+          className={styles.whoWeAreTextBlock}
+          variants={contentMotion}
+        >
+          <p>
+            At <strong>Openroot</strong>, we build modern digital technology
+            that empowers people and small businesses to do more with less
+            effort. We create{" "}
+            <strong>
+              free-to-use financial utilities, AI-powered tools, and
+              productivity apps
+            </strong>{" "}
+            that simplify everyday tasks — from managing expenses and planning
+            investments to automating workflows and staying organized.
+          </p>
+
+          <p>
+            We also build <strong>custom software solutions</strong> for{" "}
+            <strong>MSMEs</strong>, helping them scale affordably and efficiently
+            with practical, real-world systems instead of over-engineered
+            complexity. Beyond software, Openroot is a platform for{" "}
+            <strong>skill development and empowerment</strong>. Through our
+            classes and resources, we help students, working professionals,
+            and small business owners become confident in using technology,
+            AI, and finance to improve their lives.
+          </p>
+        </motion.div>
       </motion.div>
     </motion.section>
   );
