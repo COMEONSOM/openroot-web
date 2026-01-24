@@ -105,7 +105,7 @@ We maintain strong internal standards:
 * Production-ready UI polish
 * Version controlled workflows
 
-## 🚀 How to Run Locally
+## How to Run Locally
 
 npm install
 npm run dev
@@ -117,12 +117,12 @@ Environment variables are configured via ".env" files.
 
 If you are evaluating this project or contributor:
 
-* ✔ Demonstrates real-world engineering practices
-* ✔ Strong UI engineering skills
-* ✔ Production-focused architecture
-* ✔ Clean code discipline
-* ✔ Scalable system thinking
-* ✔ Professional product mindset
+* Demonstrates real-world engineering practices
+* Strong UI engineering skills
+* Production-focused architecture
+* Clean code discipline
+* Scalable system thinking
+* Professional product mindset
 
 This is not a demo-only project — it reflects production-grade thinking.
 

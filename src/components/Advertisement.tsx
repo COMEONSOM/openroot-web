@@ -7,7 +7,7 @@ export default function Advertisement() {
 
   if (!visible) return null;
 
-  const TEXT = "✨ HAPPY NEW YEAR 2026 ✨";
+  const TEXT = "✨ WE THE PEOPLE OF INDIA ✨";
 
   return (
     <AnimatePresence>
