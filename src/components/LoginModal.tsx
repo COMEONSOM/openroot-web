@@ -70,10 +70,30 @@ export default function LoginModal({
   // ============================================================
 
   const getUsername = (user: User) => {
-    if (user?.email) return user.email.split("@")[0] + "@openroot";
-    if (user?.phoneNumber)
-      return user.phoneNumber.replace(/[^0-9]/g, "") + "@openroot";
-    return "guest@openroot";
+    // 1️⃣ Email based
+    if (user?.email) {
+      return user.email.split("@")[0].toLowerCase() + "@openroot";
+    }
+
+    // 2️⃣ Phone based
+    if (user?.phoneNumber) {
+      return (
+        user.phoneNumber.replace(/[^0-9]/g, "") + "@openroot"
+      );
+    }
+
+    // 3️⃣ Facebook / OAuth name based
+    if (user?.displayName) {
+      return (
+        user.displayName
+          .toLowerCase()
+          .replace(/[^a-z0-9]/g, "")
+          .slice(0, 16) + "@openroot"
+      );
+    }
+
+    // 4️⃣ Fallback unique guest
+    return `guest${user.uid.slice(0, 5)}@openroot`;
   };
 
   const getInitial = (name?: string | null) =>
@@ -81,6 +101,27 @@ export default function LoginModal({
 
   const safe = (value: string | null | undefined, fb = "Not specified") =>
     value || fb;
+
+  const getProfilePhoto = (user: User) => {
+    if (!user.photoURL) return null;
+
+    // Facebook usually supports higher resolution via ?height & ?width
+    if (user.providerData?.[0]?.providerId === "facebook.com") {
+      return `${user.photoURL}?height=400&width=400`;
+    }
+
+    return user.photoURL;
+  };
+
+  // ============================================================
+  // BROWSER DETECTION (BLOCK FACEBOOK REDIRECT BUG)
+  // ============================================================
+
+  const isRestrictedBrowser = () => {
+    if (typeof navigator === "undefined") return false;
+    const ua = navigator.userAgent || "";
+    return /FBAN|FBAV|Instagram|WhatsApp|Line|WebView/i.test(ua);
+  };
 
   // ============================================================
   // GSAP ENTRY
@@ -310,10 +351,21 @@ export default function LoginModal({
 
                 <button
                   className="btn facebook"
-                  onClick={() => handleOAuthLogin(facebookProvider)}
+                  onClick={() => {
+                    if (isRestrictedBrowser()) {
+                      alert(
+                        "Facebook login requires opening this site in Chrome browser.\n\n" +
+                        "Please tap the menu (⋮) and choose 'Open in browser', then login again."
+                      );
+                      return;
+                    }
+
+                    handleOAuthLogin(facebookProvider);
+                  }}
                 >
                   Continue with Facebook
                 </button>
+
 
                 <button
                   className="btn github"
@@ -354,13 +406,15 @@ export default function LoginModal({
           {/* PROFILE */}
           {step === "profile" && userData && (
             <div className="auth-profile">
-              {userData.photoURL ? (
+              {getProfilePhoto(userData) ? (
                 <img
-                  src={userData.photoURL}
+                  src={getProfilePhoto(userData)!}
                   className="profile-avatar-lg"
                   alt="User avatar"
+                  referrerPolicy="no-referrer"
                 />
               ) : (
+
                 <div className="avatar-fallback-lg">
                   {getInitial(userData.displayName)}
                 </div>
