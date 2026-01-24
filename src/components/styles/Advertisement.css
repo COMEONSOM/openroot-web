@@ -1,12 +1,129 @@
-/* ADVERTISEMENT BAND */
-.advertisement-band {position: relative;width: 100vw;left: 50%;right: 50%;margin-left: -50vw;margin-right: -50vw;height: 64px;background-image: linear-gradient(90deg,#4f46e5,#7c3aed,#9333ea);display: flex;align-items: center;align-items: center;justify-content: center;z-index: 999;overflow: hidden;}
-.advertisement-text {color: #ffffff;font-size: 14px;font-weight: 600;text-transform: uppercase;white-space: nowrap;user-select: none;}
+/* ============================================================
+   🇮🇳 INDIAN TRICOLOR — HORIZONTAL FLAG BANNER
+   ============================================================ */
 
-@media (max-width: 640px) {
-  .advertisement-band {height: 56px;}
-  .advertisement-text {font-size: 12px;letter-spacing: 0.12em;}
+/* MAIN BAND */
+.advertisement-band {
+  position: relative;
+  width: 100vw;
+  left: 50%;
+  right: 50%;
+  margin-left: -50vw;
+  margin-right: -50vw;
+  height: 64px;
+
+  /* 🇮🇳 Horizontal Tricolor */
+  background: linear-gradient(
+    to bottom,
+    #ff9933 0%,      /* Saffron */
+    #ff9933 33.33%,
+    #ffffff 33.33%, /* White */
+    #ffffff 66.66%,
+    #138808 66.66%, /* Green */
+    #138808 100%
+  );
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  z-index: 999;
+  overflow: hidden;
+
+  /* Premium depth */
+  box-shadow:
+    0 6px 16px rgba(0,0,0,0.14),
+    inset 0 0 24px rgba(255,255,255,0.25);
 }
 
-/* Text movement container */
-.advertisement-track {position: relative;width: 100%;overflow: hidden;white-space: nowrap;}
-.advertisement-glow {text-shadow:0 0 6px rgb(255, 255, 255),0 0 12px rgba(255, 255, 255, 0),0 0 18px rgba(48, 17, 142, 0);}
+/* Soft light shimmer */
+.advertisement-band::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    120deg,
+    rgba(255,255,255,0.10),
+    rgba(255,255,255,0.04),
+    rgba(255,255,255,0.10)
+  );
+  pointer-events: none;
+}
+
+/* TRACK */
+.advertisement-track {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+/* MARQUEE */
+.advertisement-marquee {
+  display: flex;
+  align-items: center;
+  gap: 42px;
+  will-change: transform;
+}
+
+/* TEXT */
+.advertisement-text {
+  font-size: 15px;
+  font-weight: 900;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  white-space: nowrap;
+
+  /* Strong contrast on white */
+  color: #1f2933;
+
+  text-shadow:
+    0 1px 2px rgba(0,0,0,0.18),
+    0 0 10px rgba(255,255,255,0.6);
+
+  user-select: none;
+}
+
+/* Gentle glow animation */
+.advertisement-glow {
+  animation: glowPulse 3.5s ease-in-out infinite alternate;
+}
+
+@keyframes glowPulse {
+  from {
+    text-shadow:
+      0 0 6px rgba(255,255,255,0.6),
+      0 0 12px rgba(255,255,255,0.4);
+  }
+  to {
+    text-shadow:
+      0 0 10px rgba(255,255,255,0.9),
+      0 0 16px rgba(255,255,255,0.6);
+  }
+}
+
+/* Hover pause (desktop only) */
+@media (hover: hover) {
+  .advertisement-band:hover .advertisement-marquee {
+    animation-play-state: paused;
+  }
+}
+
+/* ============================================================
+   📱 MOBILE OPTIMIZATION
+   ============================================================ */
+
+@media (max-width: 640px) {
+  .advertisement-band {
+    height: 56px;
+  }
+
+  .advertisement-marquee {
+    gap: 28px;
+  }
+
+  .advertisement-text {
+    font-size: 13px;
+    letter-spacing: 0.12em;
+  }
+}

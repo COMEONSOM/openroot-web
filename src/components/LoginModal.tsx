@@ -316,10 +316,23 @@ export default function LoginModal({
     <div
       className="auth-overlay"
       onMouseDown={(e) => {
+        // 🚫 Block manual closing during controlled states
+        if (
+          step === "success" ||
+          step === "profile" ||
+          step === "error" ||
+          step === "confirmLogout"
+        ) {
+          return;
+        }
+
         const target = e.target as HTMLElement | null;
-        if (target?.classList?.contains("auth-overlay")) onClose?.();
+        if (target?.classList?.contains("auth-overlay")) {
+          onClose?.();
+        }
       }}
     >
+
       <div className="auth-card" ref={modalRef}>
         {/* ================= LEFT PANEL ================= */}
         <div className="auth-left">

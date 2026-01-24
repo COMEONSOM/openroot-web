@@ -7,7 +7,7 @@ export default function Advertisement() {
 
   if (!visible) return null;
 
-  const TEXT = "✨ WE THE PEOPLE OF INDIA ✨";
+  const TEXT = "WE THE PEOPLE OF INDIA";
 
   return (
     <AnimatePresence>
