@@ -168,7 +168,7 @@
   border-radius: 50px;
   
   /* Glassmorphism */
-  background: rgba(255, 255, 255, 0.05);
+  background: rgba(255, 255, 255, 0.934);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
   
