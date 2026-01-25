@@ -1,6 +1,15 @@
 /* ============================================================
-   🇮🇳 INDIAN TRICOLOR — HORIZONTAL FLAG BANNER
+   🇮🇳 IMMERSIVE INDIAN TRICOLOR — PREMIUM EXPERIENCE
    ============================================================ */
+
+/* ROOT VARIABLES */
+:root {
+  --saffron: #ff9933;
+  --white: #ffffff;
+  --green: #138808;
+  --navy: #000080;
+  --gold: #ffd700;
+}
 
 /* MAIN BAND */
 .advertisement-band {
@@ -10,120 +19,346 @@
   right: 50%;
   margin-left: -50vw;
   margin-right: -50vw;
-  height: 64px;
-
-  /* 🇮🇳 Horizontal Tricolor */
+  height: 80px;
+  
+  /* Deep gradient base */
   background: linear-gradient(
-    to bottom,
-    #ff9933 0%,      /* Saffron */
-    #ff9933 33.33%,
-    #ffffff 33.33%, /* White */
-    #ffffff 66.66%,
-    #138808 66.66%, /* Green */
-    #138808 100%
+    135deg,
+    #0a0a1a 0%,
+    #1a1a3a 50%,
+    #0a0a1a 100%
   );
-
+  
   display: flex;
   align-items: center;
   justify-content: center;
-
+  
   z-index: 999;
   overflow: hidden;
-
-  /* Premium depth */
-  box-shadow:
-    0 6px 16px rgba(0,0,0,0.14),
-    inset 0 0 24px rgba(255,255,255,0.25);
+  
+  /* 3D depth */
+  transform-style: preserve-3d;
+  perspective: 1000px;
 }
 
-/* Soft light shimmer */
-.advertisement-band::before {
-  content: "";
+/* AURORA BACKGROUND — Animated gradient waves */
+.aurora-layer {
   position: absolute;
   inset: 0;
-  background: linear-gradient(
-    120deg,
-    rgba(255,255,255,0.10),
-    rgba(255,255,255,0.04),
-    rgba(255,255,255,0.10)
-  );
+  background: 
+    linear-gradient(
+      125deg,
+      transparent 0%,
+      rgba(255, 153, 51, 0.15) 20%,
+      transparent 40%,
+      rgba(255, 255, 255, 0.1) 50%,
+      transparent 60%,
+      rgba(19, 136, 8, 0.15) 80%,
+      transparent 100%
+    );
+  background-size: 400% 100%;
+  animation: auroraWave 8s ease-in-out infinite;
   pointer-events: none;
 }
 
-/* TRACK */
+@keyframes auroraWave {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+/* TRICOLOR LIGHT BEAMS */
+.tricolor-beams {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.beam {
+  position: absolute;
+  width: 150px;
+  height: 200%;
+  top: -50%;
+  filter: blur(40px);
+  opacity: 0.4;
+  animation: beamFloat 12s ease-in-out infinite;
+}
+
+.beam--saffron {
+  left: 10%;
+  background: linear-gradient(180deg, var(--saffron), transparent);
+  animation-delay: 0s;
+}
+
+.beam--white {
+  left: 45%;
+  background: linear-gradient(180deg, rgba(255,255,255,0.8), transparent);
+  animation-delay: -4s;
+}
+
+.beam--green {
+  left: 80%;
+  background: linear-gradient(180deg, var(--green), transparent);
+  animation-delay: -8s;
+}
+
+@keyframes beamFloat {
+  0%, 100% { transform: translateY(-10%) rotate(-15deg); opacity: 0.3; }
+  50% { transform: translateY(10%) rotate(15deg); opacity: 0.6; }
+}
+
+@keyframes particleFloat {
+  0%, 100% { transform: translateY(0) scale(1); opacity: 0.6; }
+  50% { transform: translateY(-20px) scale(1.2); opacity: 1; }
+}
+
+/* ASHOKA CHAKRA — Spinning in center */
+.chakra-container {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 50px;
+  height: 50px;
+  z-index: 10;
+}
+
+.chakra {
+  width: 100%;
+  height: 100%;
+  border: 3px solid var(--navy);
+  border-radius: 50%;
+  position: relative;
+  animation: chakraSpin 20s linear infinite;
+  box-shadow: 
+    0 0 15px rgba(0, 0, 128, 0.5),
+    inset 0 0 10px rgba(0, 0, 128, 0.3);
+}
+
+.chakra::before {
+  content: "";
+  position: absolute;
+  inset: 3px;
+  border: 2px solid rgba(0, 0, 128, 0.5);
+  border-radius: 50%;
+}
+
+.chakra-spoke {
+  position: absolute;
+  width: 2px;
+  height: 50%;
+  background: var(--navy);
+  left: 50%;
+  top: 0;
+  transform-origin: bottom center;
+  box-shadow: 0 0 5px rgba(0, 0, 128, 0.5);
+}
+
+@keyframes chakraSpin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* GLASSMORPHIC MARQUEE TRACK */
 .advertisement-track {
   position: relative;
-  width: 100%;
+  width: 90%;
+  height: 60%;
   overflow: hidden;
-  white-space: nowrap;
+  border-radius: 50px;
+  
+  /* Glassmorphism */
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 
+    0 8px 32px rgba(0, 0, 0, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+/* Glass shine effect */
+.advertisement-track::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.1),
+    transparent
+  );
+  animation: glassShine 4s ease-in-out infinite;
+}
+
+@keyframes glassShine {
+  0% { left: -100%; }
+  50%, 100% { left: 100%; }
 }
 
 /* MARQUEE */
 .advertisement-marquee {
   display: flex;
   align-items: center;
-  gap: 42px;
-  will-change: transform;
+  height: 100%;
+  gap: 60px;
+  padding: 0 30px;
 }
 
-/* TEXT */
+/* TEXT WITH GRADIENT */
 .advertisement-text {
-  font-size: 15px;
+  font-size: 16px;
   font-weight: 900;
-  letter-spacing: 0.18em;
+  letter-spacing: 0.25em;
   text-transform: uppercase;
   white-space: nowrap;
-
-  /* Strong contrast on white */
-  color: #1f2933;
-
-  text-shadow:
-    0 1px 2px rgba(0,0,0,0.18),
-    0 0 10px rgba(255,255,255,0.6);
-
+  
+  /* Animated tricolor gradient */
+  background: linear-gradient(
+    90deg,
+    var(--saffron) 0%,
+    var(--gold) 20%,
+    var(--white) 40%,
+    var(--white) 60%,
+    var(--green) 80%,
+    #00ff88 100%
+  );
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  
+  animation: textGradient 4s linear infinite;
+  
+  filter: drop-shadow(0 0 10px rgba(255, 153, 51, 0.5))
+          drop-shadow(0 0 20px rgba(19, 136, 8, 0.3));
+  
   user-select: none;
+  cursor: default;
 }
 
-/* Gentle glow animation */
-.advertisement-glow {
-  animation: glowPulse 3.5s ease-in-out infinite alternate;
+@keyframes textGradient {
+  0% { background-position: 0% center; }
+  100% { background-position: 200% center; }
 }
 
-@keyframes glowPulse {
-  from {
-    text-shadow:
-      0 0 6px rgba(255,255,255,0.6),
-      0 0 12px rgba(255,255,255,0.4);
-  }
-  to {
-    text-shadow:
-      0 0 10px rgba(255,255,255,0.9),
-      0 0 16px rgba(255,255,255,0.6);
-  }
+/* DECORATIVE DIVIDER */
+.divider-star {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  color: var(--gold);
+  text-shadow: 
+    0 0 10px var(--gold),
+    0 0 20px var(--gold);
+  animation: starPulse 2s ease-in-out infinite;
 }
 
-/* Hover pause (desktop only) */
-@media (hover: hover) {
-  .advertisement-band:hover .advertisement-marquee {
-    animation-play-state: paused;
-  }
+@keyframes starPulse {
+  0%, 100% { transform: scale(1) rotate(0deg); opacity: 0.8; }
+  50% { transform: scale(1.3) rotate(180deg); opacity: 1; }
+}
+
+/* INTERACTIVE GLOW ON HOVER */
+.advertisement-band::after {
+  content: "";
+  position: absolute;
+  width: 300px;
+  height: 300px;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    rgba(255, 215, 0, 0.15),
+    transparent 70%
+  );
+  pointer-events: none;
+  transform: translate(-50%, -50%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.advertisement-band:hover::after {
+  opacity: 1;
+}
+
+/* BORDER GLOW ANIMATION */
+.border-glow {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 2px;
+  background: linear-gradient(
+    90deg,
+    var(--saffron),
+    var(--white),
+    var(--green),
+    var(--white),
+    var(--saffron)
+  );
+  background-size: 400% 100%;
+  animation: borderGlow 6s linear infinite;
+  -webkit-mask: 
+    linear-gradient(#fff 0 0) content-box, 
+    linear-gradient(#fff 0 0);
+  mask: 
+    linear-gradient(#fff 0 0) content-box, 
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+  opacity: 0.6;
+}
+
+@keyframes borderGlow {
+  0% { background-position: 0% 50%; }
+  100% { background-position: 400% 50%; }
 }
 
 /* ============================================================
    📱 MOBILE OPTIMIZATION
    ============================================================ */
 
-@media (max-width: 640px) {
+@media (max-width: 768px) {
   .advertisement-band {
-    height: 56px;
+    height: 70px;
   }
-
-  .advertisement-marquee {
-    gap: 28px;
+  
+  .advertisement-track {
+    width: 95%;
+    border-radius: 35px;
   }
-
+  
   .advertisement-text {
     font-size: 13px;
-    letter-spacing: 0.12em;
+    letter-spacing: 0.15em;
+  }
+  
+  .chakra-container {
+    width: 40px;
+    height: 40px;
+  }
+  
+  .beam {
+    width: 80px;
+  }
+}
+
+@media (max-width: 480px) {
+  .advertisement-band {
+    height: 60px;
+  }
+  
+  .advertisement-text {
+    font-size: 11px;
+    letter-spacing: 0.1em;
+  }
+  
+  .chakra-container {
+    display: none;
   }
 }
