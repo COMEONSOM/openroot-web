@@ -51,6 +51,14 @@ export default function DynamicIsland() {
             </a>
 
             <a
+              href="https://www.youtube.com/channel/UCx4LkoSQfZtlIKDtH9y3zRA"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Music Production
+            </a>
+
+            <a
               href="https://openroot-classes-firebase.web.app/"
               target="_blank"
               rel="noopener noreferrer"
