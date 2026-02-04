@@ -1,168 +1,188 @@
-import { useState, useEffect, useRef } from "react";
-import { motion, useMotionValue, useSpring, AnimatePresence } from "framer-motion";
+import { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import "./styles/Advertisement.css";
 
-// Ashoka Chakra Component
-const AshokaChakra = () => {
-  const spokes = 24;
+const LETTER_DELAY = 0.1;
+const CURSOR_BLINK_DURATION = 0.8;
+
+// ==============================
+// Typewriter Text Component
+// ==============================
+const TypewriterText = ({ text, onComplete }) => {
+  const [displayed, setDisplayed] = useState("");
+  const [isDeleting, setIsDeleting] = useState(false);
+
+  const TYPING_SPEED = 120;   // ms per letter
+  const DELETING_SPEED = 120;  // ms per letter
+  const PAUSE_AFTER_TYPE = 3600;
+  const PAUSE_AFTER_DELETE = 800;
+
+  useEffect(() => {
+    let timer;
+
+    if (!isDeleting && displayed.length < text.length) {
+      // Typing
+      timer = setTimeout(() => {
+        setDisplayed(text.slice(0, displayed.length + 1));
+      }, TYPING_SPEED);
+    
+    } else if (!isDeleting && displayed.length === text.length) {
+      // Fire immediately when typing completes
+      onComplete?.();
+
+      // Then pause before deleting
+      timer = setTimeout(() => {
+        setIsDeleting(true);
+      }, PAUSE_AFTER_TYPE);
+
+    } else if (isDeleting && displayed.length > 0) {
+      // Deleting
+      timer = setTimeout(() => {
+        setDisplayed(text.slice(0, displayed.length - 1));
+      }, DELETING_SPEED);
+    } else if (isDeleting && displayed.length === 0) {
+      // Pause after delete, then start typing again
+      timer = setTimeout(() => {
+        setIsDeleting(false);
+      }, PAUSE_AFTER_DELETE);
+    }
+
+    return () => clearTimeout(timer);
+  }, [displayed, isDeleting, text, onComplete]);
+
   return (
-    <motion.div 
-      className="chakra-container"
-      initial={{ scale: 0, opacity: 0 }}
-      animate={{ scale: 1, opacity: 1 }}
-      transition={{ delay: 0.5, duration: 0.8, type: "spring" }}
-    >
-      <div className="chakra">
-        {Array.from({ length: spokes }).map((_, i) => (
-          <div
-            key={i}
-            className="chakra-spoke"
-            style={{ transform: `translateX(-50%) rotate(${i * (360 / spokes)}deg)` }}
-          />
+    <span className="typewriter-container">
+      <span>
+        {displayed.split("").map((char, i) => (
+          <span key={i} className="typewriter-char">
+            {char === " " ? "\u00A0" : char}
+          </span>
         ))}
-      </div>
-    </motion.div>
+      </span>
+
+      {/* Blinking Cursor */}
+      <motion.span
+        className="typewriter-cursor"
+        animate={{ opacity: [1, 0, 1] }}
+        transition={{
+          duration: 0.8,
+          repeat: Infinity,
+          ease: "linear",
+        }}
+      >
+        |
+      </motion.span>
+    </span>
   );
 };
 
-// Tricolor Beams Component
-const TricolorBeams = () => (
-  <div className="tricolor-beams">
-    <motion.div 
-      className="beam beam--saffron"
-      animate={{ x: [0, 50, 0], opacity: [0.3, 0.6, 0.3] }}
-      transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
-    />
-    <motion.div 
-      className="beam beam--white"
-      animate={{ x: [0, -30, 0], opacity: [0.2, 0.5, 0.2] }}
-      transition={{ duration: 10, repeat: Infinity, ease: "easeInOut", delay: 2 }}
-    />
-    <motion.div 
-      className="beam beam--green"
-      animate={{ x: [0, -50, 0], opacity: [0.3, 0.6, 0.3] }}
-      transition={{ duration: 8, repeat: Infinity, ease: "easeInOut", delay: 4 }}
-    />
+// ==============================
+// Glowing Particles Background
+// ==============================
+const GlowParticles = () => (
+  <div className="glow-particles">
+    {Array.from({ length: 20 }).map((_, i) => (
+      <motion.div
+        key={i}
+        className="particle"
+        initial={{
+          x: Math.random() * 100 + "%",
+          y: Math.random() * 100 + "%",
+          scale: 0,
+        }}
+        animate={{
+          y: [null, "-20%"],
+          scale: [0, 1, 0],
+          opacity: [0, 0.6, 0],
+        }}
+        transition={{
+          duration: 3 + Math.random() * 2,
+          repeat: Infinity,
+          delay: Math.random() * 3,
+          ease: "easeOut",
+        }}
+      />
+    ))}
   </div>
 );
 
+// ==============================
 // Main Component
+// ==============================
 export default function Advertisement() {
   const [visible, setVisible] = useState(true);
-  const bandRef = useRef(null);
-  
-  // Mouse tracking for interactive glow
-  const mouseX = useMotionValue(0);
-  const mouseY = useMotionValue(0);
-  const springX = useSpring(mouseX, { stiffness: 500, damping: 50 });
-  const springY = useSpring(mouseY, { stiffness: 500, damping: 50 });
+  const [isTypingComplete, setIsTypingComplete] = useState(false);
 
-  const handleMouseMove = (e) => {
-    const rect = bandRef.current?.getBoundingClientRect();
-    if (rect) {
-      mouseX.set(e.clientX - rect.left);
-      mouseY.set(e.clientY - rect.top);
-    }
-  };
+  const TEXT = "VISION 2047";
 
   if (!visible) return null;
-
-  const TEXT = "WE THE PEOPLE OF INDIA";
-  const ITEMS_COUNT = 8;
 
   return (
     <AnimatePresence>
       <motion.section
-        ref={bandRef}
         className="advertisement-band"
-        onMouseMove={handleMouseMove}
         initial={{ y: -100, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         exit={{ y: -100, opacity: 0 }}
-        transition={{ 
-          duration: 0.8, 
+        transition={{
+          duration: 0.8,
           ease: [0.22, 1, 0.36, 1],
-          opacity: { duration: 0.4 }
         }}
       >
-        {/* Border Glow Effect */}
-        <div className="border-glow" />
-        
-        {/* Aurora Background */}
-        <motion.div 
-          className="aurora-layer"
-          animate={{ opacity: [0.5, 0.8, 0.5] }}
-          transition={{ duration: 4, repeat: Infinity }}
-        />
-        
-        {/* Tricolor Light Beams */}
-        <TricolorBeams />
-        
-        {/* Interactive Mouse Glow */}
+        {/* Gradient Background */}
+        <div className="gradient-bg" />
+
+        {/* Animated Glow */}
         <motion.div
-          style={{
-            position: "absolute",
-            width: 250,
-            height: 250,
-            borderRadius: "50%",
-            background: "radial-gradient(circle, rgba(255,215,0,0.2), transparent 70%)",
-            pointerEvents: "none",
-            x: springX,
-            y: springY,
-            translateX: "-50%",
-            translateY: "-50%",
+          className="center-glow"
+          animate={{
+            scale: [1, 1.2, 1],
+            opacity: [0.3, 0.6, 0.3],
+          }}
+          transition={{
+            duration: 3,
+            repeat: Infinity,
+            ease: "easeInOut",
           }}
         />
-        
-        {/* Ashoka Chakra */}
-        <AshokaChakra />
-        
-        {/* Glassmorphic Track */}
-        <motion.div 
-          className="advertisement-track"
-          whileHover={{ scale: 1.01 }}
-          transition={{ type: "spring", stiffness: 400 }}
-        >
-          <motion.div
-            className="advertisement-marquee"
-            animate={{ x: ["0%", "-50%"] }}
-            transition={{
-              duration: 20,
-              ease: "linear",
-              repeat: Infinity,
-            }}
+
+        {/* Particles */}
+        <GlowParticles />
+
+        {/* Main Content */}
+        <div className="advertisement-content">
+          {/* Subtitle */}
+          <motion.span
+            className="subtitle"
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.3, duration: 0.5 }}
           >
-            {/* First set with dividers */}
-            {Array.from({ length: ITEMS_COUNT }).map((_, i) => (
-              <motion.span
-                key={`a-${i}`}
-                className="advertisement-text"
-                whileHover={{ 
-                  scale: 1.1,
-                  filter: "drop-shadow(0 0 20px rgba(255, 215, 0, 0.8))"
-                }}
+            INDIA @100
+          </motion.span>
+
+          {/* Main Typewriter Text */}
+          <h1 className="main-title">
+            <TypewriterText
+              text={TEXT}
+              onComplete={() => setIsTypingComplete(true)}
+            />
+          </h1>
+
+          {/* Tagline - appears after typing completes */}
+          <AnimatePresence>
+            {isTypingComplete && (
+              <motion.p
+                className="tagline"
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5 }}
               >
-                {TEXT}
-                <span className="divider-star" style={{ marginLeft: 30 }}>✦</span>
-              </motion.span>
-            ))}
-            
-            {/* Duplicate set for seamless loop */}
-            {Array.from({ length: ITEMS_COUNT }).map((_, i) => (
-              <motion.span
-                key={`b-${i}`}
-                className="advertisement-text"
-                whileHover={{ 
-                  scale: 1.1,
-                  filter: "drop-shadow(0 0 20px rgba(255, 215, 0, 0.8))"
-                }}
-              >
-                {TEXT}
-                <span className="divider-star" style={{ marginLeft: 30 }}>✦</span>
-              </motion.span>
-            ))}
-          </motion.div>
-        </motion.div>
+                Building a Developed Nation Together
+              </motion.p>
+            )}
+          </AnimatePresence>
+        </div>
       </motion.section>
     </AnimatePresence>
   );
