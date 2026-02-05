@@ -42,7 +42,7 @@
   padding: var(--band-padding-vertical) var(--band-padding-horizontal);
   color: var(--fg);
   font-family: var(--font-stack);
-  overflow: hidden; /* keep particles & glow inside */
+  overflow: show; /* keep particles & glow inside */
   box-sizing: border-box;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -59,7 +59,7 @@
   inset: 0;
   z-index: 0;
   pointer-events: none;
-  background: linear-gradient(120deg, var(--bg-start) 0%, rgba(4,16,35,0.7) 35%, rgba(8,20,49,0.6) 65%, var(--bg-end) 100%);
+  background: linear-gradient(120deg, var(--bg-start) 0%, rgba(0, 0, 0, 0.7) 35%, rgba(0, 0, 0, 0.6) 65%, var(--bg-end) 100%);
   filter: blur(36px) saturate(120%);
   transform: scale(1.03);
   opacity: 1;
