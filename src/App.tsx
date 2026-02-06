@@ -5,7 +5,7 @@
 // src/App.jsx
 // ============================================================
 
-import { Helmet, HelmetProvider } from "@dr.pogodin/react-helmet";
+import { Helmet } from "@dr.pogodin/react-helmet";
 import React, { Suspense } from "react";
 
 // COMPONENTS

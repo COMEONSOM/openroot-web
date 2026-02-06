@@ -5,7 +5,7 @@ export const SECTION_FADE = {
   transition: { duration: 0.6 },
 };
 
-export const createSmallStagger = (index) => ({
+export const createSmallStagger = (index: number) => ({
   initial: { opacity: 0, y: 18 },
   whileInView: { opacity: 1, y: 0 },
   viewport: { once: true, amount: 0.2 },
