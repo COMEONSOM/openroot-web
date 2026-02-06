@@ -253,15 +253,17 @@ export default function LoginModal({
 
       setStep("success");
       onLogin?.(user);
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error("LOGIN ERROR:", error);
 
       let msg = "Login failed. Please try again.";
 
-      if (error?.code === "auth/popup-closed-by-user")
+      const errCode = (error as { code?: string })?.code;
+
+      if (errCode === "auth/popup-closed-by-user")
         msg = "Login cancelled.";
       else if (
-        error?.code === "auth/account-exists-with-different-credential"
+        errCode === "auth/account-exists-with-different-credential"
       )
         msg = "This email is already registered with a different provider.";
 
@@ -288,8 +290,8 @@ export default function LoginModal({
       sessionStorage.removeItem("openrootUserUID");
 
       onLogout?.();
-    } catch (err: any) {
-      setErrorMessage(err.message || "Logout failed");
+    } catch (err: unknown) {
+      setErrorMessage((err as Error).message || "Logout failed");
       setStep("error");
     }
   };

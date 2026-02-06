@@ -351,7 +351,7 @@ export default function CalmPremiumCore() {
       renderer.dispose();
       try {
         mount.removeChild(renderer.domElement);
-      } catch {}
+      } catch { /* empty */ }
     };
   }, []);
 

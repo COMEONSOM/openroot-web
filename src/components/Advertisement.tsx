@@ -2,13 +2,12 @@ import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import "./styles/Advertisement.css";
 
-const LETTER_DELAY = 0.1;
-const CURSOR_BLINK_DURATION = 0.8;
+// Unused constants removed
 
 // ==============================
 // Typewriter Text Component
 // ==============================
-const TypewriterText = ({ text, onComplete }) => {
+const TypewriterText = ({ text, onComplete }: { text: string; onComplete?: () => void }) => {
   const [displayed, setDisplayed] = useState("");
   const [isDeleting, setIsDeleting] = useState(false);
 
@@ -18,14 +17,14 @@ const TypewriterText = ({ text, onComplete }) => {
   const PAUSE_AFTER_DELETE = 800;
 
   useEffect(() => {
-    let timer;
+    let timer: ReturnType<typeof setTimeout>;
 
     if (!isDeleting && displayed.length < text.length) {
       // Typing
       timer = setTimeout(() => {
         setDisplayed(text.slice(0, displayed.length + 1));
       }, TYPING_SPEED);
-    
+
     } else if (!isDeleting && displayed.length === text.length) {
       // Fire immediately when typing completes
       onComplete?.();
@@ -110,7 +109,7 @@ const GlowParticles = () => (
 // Main Component
 // ==============================
 export default function Advertisement() {
-  const [visible, setVisible] = useState(true);
+  const [visible] = useState(true);
   const [isTypingComplete, setIsTypingComplete] = useState(false);
 
   const TEXT = "VISION 2047";
