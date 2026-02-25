@@ -7,7 +7,7 @@ import {
 } from "firebase/auth";
 
 // ============================================================
-// FIREBASE CONFIG
+// FIREBASE CONFIG #aryan
 // ============================================================
 
 const firebaseConfig = {

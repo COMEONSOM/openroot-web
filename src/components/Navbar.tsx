@@ -97,15 +97,24 @@ const Icons = {
       <path d="M20 12l2-2-1.5-1.5-2 2L20 12Z" />
     </svg>
   ),
-  gradeCalculator: (
-    <svg viewBox="0 0 24 24" width="34" height="34" fill="currentColor">
-      {/* Calculator */}
-      <rect x="4" y="2" width="16" height="20" rx="2" />
-      <rect x="7" y="5" width="10" height="3" fill="#000" />
-      <circle cx="9" cy="12" r="1.3" fill="#000" />
-      <circle cx="13" cy="12" r="1.3" fill="#000" />
-      <circle cx="9" cy="16" r="1.3" fill="#000" />
-      <rect x="12" y="15" width="4.5" height="2" fill="#000" />
+  Coevas: (
+    <svg
+      viewBox="0 0 24 24"
+      width="34"
+      height="34"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.8"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      {/* Play button container */}
+      <rect x="3" y="3" width="18" height="14" rx="3" />
+      <path d="M10 7l5 3-5 3z" />
+
+      {/* Download arrow */}
+      <path d="M12 17v4" />
+      <path d="M9.5 19.5L12 22l2.5-2.5" />
     </svg>
   ),
   helpingHand: (
@@ -120,11 +129,11 @@ const Icons = {
 // 🔹 SOFTWARE DATA
 // ============================================================
 const releasedSoftwares = Object.freeze([
-  { name: "Makaut Grade Calculator", href: "https://openroot.in/openroot-makaut_grade_and_percentage-calculator/", icon: Icons.gradeCalculator },
-  { name: "Helping Hand (Job Updates)", href: "https://openroot.in/openroot-helping-hand/", icon: Icons.helpingHand },
-  { name: "Openroot Classes", href: "https://openroot-classes-firebase.web.app/", icon: Icons.Classes },
+  { name: "Coevas Media Downloder", href: "https://openroot.in/Coevas-Systems-Openroot/", icon: Icons.Coevas },
   { name: "Travel Expense Manager", href: "https://openroot.in/openroot-travel-expense-manager/", icon: Icons.travelExpense },
   { name: "NIOR Module", href: "https://openroot-time-ai-module.web.app/", icon: Icons.timeAI },
+  { name: "Helping Hand (Job Updates)", href: "https://openroot.in/openroot-helping-hand/", icon: Icons.helpingHand },
+  { name: "Openroot Classes", href: "https://openroot-classes-firebase.web.app/", icon: Icons.Classes },
 ]);
 
 // ============================================================
