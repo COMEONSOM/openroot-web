@@ -75,14 +75,6 @@ export default function DynamicIsland() {
             </a>
 
             <a
-              href="https://comeonsom.github.io/openroot-travel-expense-manager/"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Expense Manager
-            </a>
-
-            <a
               href="https://openroot-time-ai-module.web.app/"
               target="_blank"
               rel="noopener noreferrer"
@@ -184,7 +176,7 @@ export default function DynamicIsland() {
                     className="heart-cta"
                     onClick={() =>
                       window.open(
-                        "https://www.facebook.com/openroothypersite",
+                        "https://www.facebook.com/OpenrootSystems",
                         "_blank"
                       )
                     }
