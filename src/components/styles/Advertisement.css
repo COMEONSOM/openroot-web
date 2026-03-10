@@ -48,69 +48,6 @@
   -moz-osx-font-smoothing: grayscale;
   z-index: 100; /* sits above page content if used as a top banner */
   isolation: isolate;
-  background: transparent;
-  /* subtle backdrop so text remains legible on varied backgrounds */
-  backdrop-filter: blur(6px) saturate(120%);
-}
-
-/* full bleed gradient blurred background */
-.gradient-bg{
-  position: absolute;
-  inset: 0;
-  z-index: 0;
-  pointer-events: none;
-  background: linear-gradient(120deg, var(--bg-start) 0%, rgba(0, 0, 0, 0.7) 35%, rgba(0, 0, 0, 0.6) 65%, var(--bg-end) 100%);
-  filter: blur(36px) saturate(120%);
-  transform: scale(1.03);
-  opacity: 1;
-}
-
-/* animated central glow (circle) */
-.center-glow{
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -40%);
-  width: 420px;
-  height: 420px;
-  border-radius: 50%;
-  z-index: 1;
-  pointer-events: none;
-  mix-blend-mode: screen;
-  background: radial-gradient(circle at 50% 40%,
-    rgba(255,255,255,0.06) 0%,
-    rgba(160,64,255,0.10) 16%,
-    rgba(0,200,255,0.08) 38%,
-    transparent 70%);
-  filter: blur(22px);
-  opacity: 0.9;
-}
-
-/* -------------------------
-   Particles (glow dots)
-   ------------------------- */
-.glow-particles{
-  position: absolute;
-  inset: 0;
-  z-index: 2;
-  pointer-events: none;
-  overflow: hidden;
-}
-
-/* the component renders <motion.div className="particle" /> for each */
-.glow-particles .particle{
-  position: absolute;
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  z-index: 2;
-  background: radial-gradient(circle at 35% 25%, var(--accent-1), var(--accent-2));
-  filter: blur(6px);
-  opacity: 0;                      /* animations control opacity */
-  transform-origin: center;
-  will-change: transform, opacity;
-  mix-blend-mode: screen;
-  pointer-events: none;
 }
 
 /* -------------------------
@@ -224,13 +161,6 @@
    Responsiveness & small screen optimizations
    ------------------------- */
 @media (max-width: 820px){
-  .center-glow{
-    width: 300px;
-    height: 300px;
-    transform: translate(-50%, -45%);
-    filter: blur(18px);
-    opacity: 0.85;
-  }
 
   .advertisement-band{
     padding: 16px 12px;
@@ -240,14 +170,9 @@
     font-size: clamp(22px, 7.2vw, 44px);
   }
 
-  /* hide noisy particles on small devices for clarity & performance */
-  .glow-particles { opacity: 0.6; }
-  .glow-particles .particle { filter: blur(4px); width: 7px; height: 7px; }
 }
 
 @media (max-width: 420px){
-  .center-glow { display: none; }
-  .glow-particles { display: none; }
   .subtitle { font-size: 11px; padding: 5px 8px; }
   .main-title { font-size: clamp(18px, 8.6vw, 32px); }
   .advertisement-band { padding: 12px 10px; }
@@ -257,14 +182,8 @@
    Accessibility: reduce motion preference
    ------------------------- */
 @media (prefers-reduced-motion: reduce){
-  .center-glow,
-  .glow-particles .particle,
   .typewriter-cursor,
   .advertisement-band,
-  .gradient-bg {
-    transition: none !important;
-    animation: none !important;
-  }
   /* keep the typed text visible but static */
   .typewriter-cursor{
     opacity: 0.8 !important;
@@ -282,16 +201,6 @@
   margin: 8px;
 }
 
-/* If you want the banner to float over page content (sticky) */
-/* uncomment to enable */
-/*
-.advertisement-band.sticky {
-  position: fixed;
-  top: 12px;
-  left: 12px;
-  right: 12px;
-}
-*/
 /* =========================
    < 768px (Mobile / Small)
 ========================= */
@@ -300,11 +209,6 @@
     min-height: 180px;
     height: auto;
     padding: 12px 10px;
-  }
-
-  .center-glow,
-  .glow-particles {
-    display: none; /* cleaner + faster */
   }
 
   .main-title {
