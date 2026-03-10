@@ -1,21 +1,23 @@
 /* ============================================================
-   RELEASED SOFTWARE NAV — NEO-TECH GREEN EDITION (OPTIMIZED)
-   Aurora Glass | Smooth Motion | Performance Friendly
+   RELEASED SOFTWARE NAV — FROSTED EMERALD EDITION
+   Refined Glassmorphism | Fluid Motion | Premium Typography
 ============================================================ */
 
-/* ===============================
-   COMPONENT VARIABLES
-================================ */
-
 :root {
-  --os-text: #e8fff3;
-  --os-glass-border: rgba(0, 255, 136, 0.28);
-
-  --os-aurora-1: #a3e87b;
-
-  --os-shadow: 0 10px 28px rgba(0, 0, 0, 0.5);
-
-  --os-transition: 0.35s ease;
+    /* Refined Color Palette */
+    --os-text-primary: #f8fafc;
+    --os-text-secondary: #94a3b8;
+    
+    /* Emerald/Teal Accents */
+    --os-accent-color: #a3e87b; /* Clean Emerald */
+    --os-glass-bg: #a3e87be2; /* Slate glass */
+    --os-glass-border: rgba(16, 185, 129, 0.15);
+    --os-glass-border-hover: #a3e87b;
+    
+    /* Shadows & Transitions */
+    --os-shadow-base: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
+    --os-shadow-hover: 0 20px 40px -15px rgba(16, 185, 129, 0.2);
+    --os-transition: 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 /* ===============================
@@ -23,17 +25,17 @@
 ================================ */
 
 .navbar {
-  width: 100%;
-  padding: 0.1rem 1rem 0;
-  margin-top: 0%;
-  display: flex;
-  justify-content: center;
-
-  background: transparent;
+    width: 100%;
+    padding: 0.2rem 1rem 2rem;
+    display: flex;
+    justify-content: center;
+    background: transparent;
+    font-family: 'Inter', system-ui, sans-serif;
 }
 
 .navbar-content {
-  max-width: 100%;
+    width: 100%;
+    max-width: 800px;
 }
 
 /* ===============================
@@ -41,23 +43,17 @@
 ================================ */
 
 .navbar-title {
-
-  font-size: 1.45rem;
-  font-weight: 800;
-
-  margin-bottom: 1.4rem;
-
-  background: linear-gradient(90deg,#ffffff,#b4e4ff);
-  -webkit-background-clip: text;
-  background-clip: text;
-
-  color: transparent;
-
-  text-align: center;
-
-  letter-spacing: .6px;
-
-  text-shadow: 0 0 12px rgba(0,255,136,0.22);
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 2rem;
+    text-align: center;
+    letter-spacing: -0.02em;
+    
+    /* Clean Emerald Gradient */
+    background: linear-gradient(135deg, #ffffff 0%, #6ee7b7 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
 }
 
 /* ===============================
@@ -65,15 +61,10 @@
 ================================ */
 
 .released-softwares {
-
-  display: flex;
-  flex-wrap: wrap;
-
-  justify-content: center;
-
-  gap: 1.3rem;
-
-  padding: 0.5rem 0 1rem;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1.5rem;
 }
 
 /* ===============================
@@ -81,146 +72,128 @@
 ================================ */
 
 .software-btn {
-
-  position: relative;
-
-  width: 110px;
-  height: 110px;
-
-  border-radius: 20px;
-
-  background: rgba(0,0,0,0.75);
-  border: 1px solid var(--os-glass-border);
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-
-  color: var(--os-text);
-  text-align: center;
-
-  box-shadow: var(--os-shadow);
-
-  transition:
-    transform var(--os-transition),
-    border-color var(--os-transition),
-    box-shadow var(--os-transition);
-
-  overflow: hidden;
+    position: relative;
+    width: 120px; /* Slightly larger for better breathing room */
+    height: 120px;
+    border-radius: 24px; /* Softer corners */
+    
+    background: var(--os-glass-bg);
+    border: 1px solid var(--os-glass-border);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 12px;
+    
+    color: var(--os-text-primary);
+    box-shadow: var(--os-shadow-base);
+    cursor: pointer;
+    overflow: hidden;
+    
+    transition: all var(--os-transition);
 }
 
-/* Soft Aurora Glow */
-
+/* Inner Glow Effect */
 .software-btn::before {
-
-  content: "";
-
-  position: absolute;
-  inset: -40%;
-
-  background:
-    radial-gradient(circle at 60% 40%, var(--os-aurora-1), transparent 65%);
-
-  filter: blur(30px);
-
-  opacity: 0.18;
-
-  transition: opacity var(--os-transition);
-
-  z-index: 0;
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle at 50% 0%, rgba(16, 185, 129, 0.15), transparent 70%);
+    opacity: 0;
+    transition: opacity var(--os-transition);
+    z-index: 0;
 }
 
-.software-btn > * {
-  position: relative;
-  z-index: 2;
+/* Ensure content stays above the glow */
+.software-btn .software-icon,
+.software-btn .software-name {
+    position: relative;
+    z-index: 2;
 }
 
 /* ===============================
-   HOVER EFFECT
-================================ */
-
-@media (hover: hover) and (pointer: fine) {
-
-  .software-btn:hover {
-
-    transform: translateY(-6px) scale(1.04);
-
-    border-color: #00ff88;
-
-    box-shadow:
-      inset 0 0 10px rgba(0,255,136,0.15),
-      0 20px 45px rgba(0,0,0,0.6);
-
-  }
-
-  .software-btn:hover::before {
-    opacity: 0.32;
-  }
-
-}
-
-/* ===============================
-   ICON
+   ICON & TEXT
 ================================ */
 
 .software-icon {
-
-  margin-bottom: 6px;
-
-  font-size: 1.7rem;
-
-  transition: transform var(--os-transition);
+    font-size: 2rem; /* Slightly larger */
+    color:#000;
+    transition: transform var(--os-transition);
+    filter: drop-shadow(0 4px 6px rgba(0,0,0,0.3));
 }
-
-.software-btn:hover .software-icon {
-
-  transform: scale(1.12) rotate(4deg);
-
-}
-
-/* ===============================
-   SOFTWARE NAME
-================================ */
 
 .software-name {
-
-  font-size: 0.83rem;
-
-  font-weight: 600;
-
-  letter-spacing: 0.3px;
-
-  color: #cfe2ff;
-
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: #000;
+    transition: color var(--os-transition);
 }
 
 /* ===============================
-   RESPONSIVE
+   HOVER EFFECTS
+================================ */
+
+@media (hover: hover) and (pointer: fine) {
+    .software-btn:hover {
+        transform: translateY(-8px);
+        border-color: var(--os-glass-border-hover);
+        box-shadow: var(--os-shadow-hover);
+        background: rgba(30, 41, 59, 0.8);
+    }
+
+    .software-btn:hover::before {
+        opacity: 1; /* Turn on the inner glow */
+    }
+
+    .software-btn:hover .software-icon {
+        transform: scale(1.1) translateY(-4px);
+    }
+    
+    .software-btn:hover .software-name {
+        color: var(--os-text-primary); /* Brighten text on hover */
+    }
+
+    .software-btn:hover .software-icon{
+      color:#fff;
+    }
+}
+
+/* ===============================
+   RESPONSIVE DESIGN
 ================================ */
 
 @media (max-width: 768px) {
-
-  .software-btn {
-    width: 100px;
-    height: 100px;
-  }
-
-  .software-name {
-    font-size: 0.72rem;
-  }
-
+    .software-btn {
+        width: 105px;
+        height: 105px;
+        border-radius: 20px;
+    }
+    .software-icon {
+        font-size: 1.75rem;
+    }
+    .software-name {
+        font-size: 0.8rem;
+    }
 }
 
 @media (max-width: 480px) {
-
-  .software-btn {
-    width: 95px;
-    height: 95px;
-  }
-
-  .navbar-title {
-    font-size: 1.25rem;
-  }
-
+    .released-softwares {
+        gap: 1rem;
+    }
+    .software-btn {
+        width: 90px;
+        height: 90px;
+        border-radius: 18px;
+        gap: 8px;
+    }
+    .navbar-title {
+        font-size: 1.3rem;
+        margin-bottom: 1.5rem;
+    }
 }
