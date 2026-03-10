@@ -132,7 +132,7 @@
 
 /* CONTACT / FOLLOW BLOCKS */
 .cf-block {position: relative;z-index: 1;display: flex;flex-direction: column;align-items: flex-start;gap: var(--fd-gap-md);padding: 1.6rem;border-radius: var(--fd-radius-lg);background: var(--fd-glass-bg);border: 1px solid var(--fd-glass-border);backdrop-filter: blur(var(--fd-blur));}
-.cf-heading {font-size: 1.2rem;font-weight: 700;letter-spacing: 1.2px;text-transform: uppercase;}
+.cf-heading {font-size: 1.2rem;font-weight: 700;letter-spacing: 1.2px;text-transform: uppercase; color:#000}
 .cf-icons-row {display: flex;gap: clamp(0.8rem, 2vw, 1.4rem);}
 .cf-icon {width: clamp(40px, 6vw, 54px);height: clamp(40px, 6vw, 54px);display: grid;place-items: center;border-radius: var(--fd-radius-md);background: rgba(255,255,255,0.12);border: 1px solid var(--fd-glass-border);transition: transform var(--fd-transition), box-shadow var(--fd-transition), background var(--fd-transition);}
 .cf-icon img {width: clamp(18px, 3.5vw, 24px);filter: brightness(0.95);}
@@ -174,7 +174,7 @@
   .footer-links a { font-size: 0.95rem; font-weight: 500; color: #000; } 
   /* ----------------------------- CONTACT + FOLLOW CARDS ----------------------------- */ 
   .cf-block { width: 100%; align-items: center; text-align: center; padding: 1.6rem 1.2rem; border-radius: 22px; background: rgba(255, 255, 255, 0.08); } 
-  .cf-heading { font-size: 1rem; letter-spacing: 1.4px; } 
+  .cf-heading { font-size: 1rem; letter-spacing: 1.4px; color: #000 } 
   .cf-icons-row { justify-content: center; gap: 1.4rem; } 
   /* Place Contact & Follow side-by-side */ 
   .footer-details > .cf-block { margin-top: 0.5rem; } 
@@ -182,3 +182,23 @@
   .footer-links { grid-area: links; } 
   .footer-details > .cf-block:nth-of-type(1) { grid-area: contact; } 
   .footer-details > .cf-block:nth-of-type(2) { grid-area: follow; } }
+
+  .verify-link{
+    padding:10px 18px;
+    border-radius:10px;
+    border:none;
+    background:linear-gradient(135deg,#2563eb,#1d4ed8);
+    color:white;
+    font-weight:600;
+    font-size:14px;
+    cursor:pointer;
+    transition:all .25s ease;
+  }
+
+  .verify-link:hover{
+    transform:translateY(-2px);
+  }
+
+  .verify-link:active{
+    transform:scale(.96);
+  }

@@ -1,9 +1,22 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import "./styles-footer/DynamicIsland.css";
+import CertificateModal from "../CertificateModal";
 
 export default function DynamicIsland() {
   const [isOpen, setIsOpen] = useState(false);
   const toggleHeart = () => setIsOpen(prev => !prev);
+  const [openVerify, setOpenVerify] = useState(false);
+  useEffect(() => {
+
+    const params = new URLSearchParams(window.location.search);
+
+    const certId = params.get("cert");
+
+    if (certId) {
+      setOpenVerify(true);
+    }
+
+  }, []);
 
   return (
     <section className="dynamic-island">
@@ -81,6 +94,13 @@ export default function DynamicIsland() {
             >
               Nior AI
             </a>
+            
+            <button
+            className="verify-link"
+            onClick={()=>setOpenVerify(true)}
+            >
+            Verify Certificate
+            </button>
           </div>
 
           {/* 📞 CONTACT */}
@@ -130,6 +150,11 @@ export default function DynamicIsland() {
           </div>
 
         </section>
+
+        <CertificateModal
+          isOpen={openVerify}
+          onClose={()=>setOpenVerify(false)}
+        />
 
         {/* ❤️ HEART — PART OF SAME SHELL */}
         <section className="dynamic-island-heart">
