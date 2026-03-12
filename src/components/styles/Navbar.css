@@ -1,23 +1,34 @@
 /* ============================================================
    RELEASED SOFTWARE NAV — FROSTED EMERALD EDITION
-   Final Stable Version
-============================================================ */
+   Production Optimized
+   ============================================================ */
+
+/* ===============================
+   ROOT VARIABLES
+================================ */
 
 :root{
 
---os-text-primary:#f8fafc;
---os-text-secondary:#94a3b8;
+  /* Typography */
+  --os-font:'Inter',system-ui,sans-serif;
 
---os-accent-color:#a3e87b;
+  /* Colors */
+  --os-text-primary:#f8fafc;
+  --os-text-secondary:#94a3b8;
+  --os-accent:#a3e87b;
 
---os-glass-bg:#a3e87be2;
---os-glass-border:rgba(16,185,129,0.15);
---os-glass-border-hover:#a3e87b;
+  /* Glass */
+  --os-glass-bg:#a3e87be2;
+  --os-glass-border:rgba(16,185,129,.15);
+  --os-glass-border-hover:#a3e87b;
 
---os-shadow-base:0 10px 30px -10px rgba(0,0,0,0.5);
---os-shadow-hover:0 20px 40px -15px rgba(16,185,129,0.2);
+  /* Shadows */
+  --os-shadow-base:0 10px 30px -10px rgba(0,0,0,.5);
+  --os-shadow-hover:0 20px 40px -15px rgba(16,185,129,.2);
 
---os-transition:0.35s cubic-bezier(0.16,1,0.3,1);
+  /* Motion */
+  --os-transition-fast:.2s ease;
+  --os-transition-main:.35s cubic-bezier(.16,1,.3,1);
 
 }
 
@@ -27,79 +38,85 @@
 
 .navbar{
 
-width:100%;
-padding:0.2rem 1rem 2rem;
+  width:100%;
+  padding:.2rem 1rem 2rem;
 
-display:flex;
-justify-content:center;
+  display:flex;
+  justify-content:center;
 
-background:transparent;
-
-font-family:'Inter',system-ui,sans-serif;
+  font-family:var(--os-font);
 
 }
 
 .navbar-content{
-width:100%;
-max-width:800px;
-position:relative;
+
+  width:100%;
+  max-width:800px;
+
+  position:relative;
+
 }
 
 /* ============================================================
-   SEO NAVIGATION LINKS (Hidden from UI)
+   SEO NAVIGATION LINKS
 ============================================================ */
 
 .seo-nav-links{
 
-position:absolute;
-width:1px;
-height:1px;
+  position:absolute;
 
-overflow:hidden;
-clip:rect(0 0 0 0);
-clip-path:inset(50%);
+  width:1px;
+  height:1px;
 
-white-space:nowrap;
+  overflow:hidden;
+
+  clip:rect(0 0 0 0);
+  clip-path:inset(50%);
+
+  white-space:nowrap;
 
 }
 
 /* ============================================================
-   SOFTWARE HEADER
+   HEADER
 ============================================================ */
 
 .software-header{
 
-display:flex;
-justify-content:space-between;
-align-items:center;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
 
-margin-bottom:30px;
+  margin-bottom:30px;
 
 }
+
+/* ===============================
+   VIEW ALL BUTTON
+================================ */
 
 .view-all-link{
 
-background:none;
-border:none;
+  border:0;
+  background:none;
 
-color:#ffffff;
+  color:#fff;
 
-font-size:15px;
-font-weight:600;
+  font-size:15px;
+  font-weight:600;
 
-cursor:pointer;
+  cursor:pointer;
 
-transition:.2s;
+  transition:transform var(--os-transition-fast),
+             opacity var(--os-transition-fast);
 
 }
 
 .view-all-link:hover{
-transform:translateX(4px);
-opacity:.9;
-}
 
-.view-all-link:hover{
-transform:translateX(4px);
+  transform:translateX(4px);
+  opacity:.9;
+
 }
 
 /* ============================================================
@@ -108,17 +125,18 @@ transform:translateX(4px);
 
 .navbar-title{
 
-font-size:1.5rem;
-font-weight:700;
+  font-size:1.5rem;
+  font-weight:700;
 
-letter-spacing:-0.02em;
+  letter-spacing:-.02em;
 
-background:linear-gradient(135deg,#ffffff 0%,#b4e4ff 100%);
--webkit-background-clip:text;
-background-clip:text;
+  background:linear-gradient(135deg,#fff 0%,#b4e4ff 100%);
+  -webkit-background-clip:text;
+  background-clip:text;
 
-color:transparent;
-margin:0;
+  color:transparent;
+
+  margin:0;
 
 }
 
@@ -128,12 +146,12 @@ margin:0;
 
 .released-softwares{
 
-display:flex;
-flex-wrap:wrap;
+  display:flex;
+  flex-wrap:wrap;
 
-justify-content:center;
+  justify-content:center;
 
-gap:1.5rem;
+  gap:1.5rem;
 
 }
 
@@ -143,56 +161,64 @@ gap:1.5rem;
 
 .software-btn{
 
-position:relative;
+  position:relative;
 
-width:120px;
-height:120px;
+  width:120px;
+  height:120px;
 
-border-radius:24px;
+  border-radius:24px;
 
-background:var(--os-glass-bg);
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
 
-border:1px solid var(--os-glass-border);
+  gap:12px;
 
-backdrop-filter:blur(12px);
--webkit-backdrop-filter:blur(12px);
+  color:var(--os-text-primary);
 
-display:flex;
-flex-direction:column;
-align-items:center;
-justify-content:center;
+  background:var(--os-glass-bg);
 
-gap:12px;
+  border:1px solid var(--os-glass-border);
 
-color:var(--os-text-primary);
+  backdrop-filter:blur(12px);
+  -webkit-backdrop-filter:blur(12px);
 
-box-shadow:var(--os-shadow-base);
+  box-shadow:var(--os-shadow-base);
 
-cursor:pointer;
-overflow:hidden;
+  cursor:pointer;
 
-transition:all var(--os-transition);
+  overflow:hidden;
+
+  transition:
+  transform var(--os-transition-main),
+  box-shadow var(--os-transition-main),
+  border-color var(--os-transition-main),
+  background var(--os-transition-main);
 
 }
 
-/* Spotlight effect */
+/* ===============================
+   SPOTLIGHT EFFECT
+================================ */
 
 .software-btn::before{
 
-content:"";
+  content:"";
 
-position:absolute;
-inset:0;
+  position:absolute;
+  inset:0;
 
-background:
-radial-gradient(circle at var(--x) var(--y),
-rgba(255,255,255,0.25),
-transparent 40%
-);
+  background:
+  radial-gradient(
+  circle at var(--x) var(--y),
+  rgba(92,91,91,.7),
+  transparent 40%
+  );
 
-opacity:0;
+  opacity:0;
 
-transition:opacity var(--os-transition);
+  transition:opacity var(--os-transition-main);
 
 }
 
@@ -201,66 +227,79 @@ opacity:1;
 }
 
 /* ============================================================
-   ICON & TEXT
+   ICON
 ============================================================ */
 
 .software-icon{
 
-width:34px;
-height:34px;
+  width:34px;
+  height:34px;
 
-display:flex;
-align-items:center;
-justify-content:center;
+  display:flex;
+  align-items:center;
+  justify-content:center;
 
-color:#000;
+  color:#000;
 
-transition:transform var(--os-transition);
+  transition:transform var(--os-transition-main),
+             color var(--os-transition-main);
 
 }
 
 .software-icon svg{
-width:100%;
-height:100%;
-}
 
-.software-name{
-
-font-size:0.85rem;
-font-weight:500;
-
-color:#000;
-
-text-align:center;
+  width:100%;
+  height:100%;
 
 }
 
 /* ============================================================
-   HOVER EFFECT
+   TEXT
+============================================================ */
+
+.software-name{
+
+  font-size:.85rem;
+  font-weight:500;
+
+  color:#000;
+
+  text-align:center;
+
+  line-height:1.2;
+
+}
+
+/* ============================================================
+   HOVER INTERACTIONS
 ============================================================ */
 
 @media (hover:hover) and (pointer:fine){
 
-.software-btn:hover{
+  .software-btn:hover{
 
-transform:translateY(-8px);
+    transform:translateY(-8px);
 
-border-color:var(--os-glass-border-hover);
+    border-color:var(--os-glass-border-hover);
 
-box-shadow:var(--os-shadow-hover);
+    box-shadow:var(--os-shadow-hover);
 
-background:rgba(30,41,59,0.8);
+    background:rgba(30,41,59,.8);
 
-}
+  }
 
-.software-btn:hover .software-icon{
-transform:scale(1.1) translateY(-4px);
-color:#fff;
-}
+  .software-btn:hover .software-icon{
 
-.software-btn:hover .software-name{
-color:#fff;
-}
+    transform:scale(1.1) translateY(-4px);
+    color:#fff;
+
+  }
+
+  .software-btn:hover .software-name{
+
+    color:#fff;
+
+  }
 
 }
 
@@ -270,69 +309,73 @@ color:#fff;
 
 .software-overlay{
 
-position:fixed;
-inset:0;
+  position:fixed;
+  inset:0;
 
-background:rgb(0,0,0);
+  display:flex;
+  justify-content:center;
+  align-items:center;
 
-z-index:999;
+  background:#000;
 
-display:flex;
-justify-content:center;
-align-items:center;
+  z-index:999;
 
 }
 
 .overlay-grid{
 
-display:grid;
+  display:grid;
 
-grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+  grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
 
-gap:30px;
+  gap:30px;
 
-width:80%;
-max-width:900px;
+  width:80%;
+  max-width:900px;
 
 }
 
 .close-overlay{
 
-position:absolute;
-top:30px;
-right:30px;
+  position:absolute;
 
-font-size:28px;
+  top:30px;
+  right:30px;
 
-border:none;
-background:none;
+  font-size:28px;
 
-color:white;
+  border:0;
+  background:none;
 
-cursor:pointer;
+  color:#fff;
+
+  cursor:pointer;
 
 }
 
 /* ============================================================
-   RESPONSIVE
+   TABLET
 ============================================================ */
 
 @media (max-width:768px){
 
-.software-btn{
-width:105px;
-height:105px;
-border-radius:20px;
-}
+  .software-btn{
 
-.software-icon{
-width:30px;
-height:30px;
-}
+    width:105px;
+    height:105px;
 
-.software-name{
-font-size:0.8rem;
-}
+    border-radius:20px;
+
+  }
+
+  .software-icon{
+    width:30px;
+    height:30px;
+  }
+
+  .software-name{
+    font-size:.8rem;
+  }
 
 }
 
@@ -342,43 +385,54 @@ font-size:0.8rem;
 
 @media (max-width:480px){
 
-.released-softwares{
+  .released-softwares{
 
-display:grid;
-grid-template-columns:repeat(2,1fr);
+    display:grid;
 
-gap:14px;
+    grid-template-columns:repeat(2,1fr);
 
-padding:0 10px;
+    gap:14px;
+
+    padding-inline:10px;
+
+  }
+
+  .software-btn{
+
+    width:100%;
+    height:95px;
+
+    border-radius:18px;
+
+    gap:6px;
+
+  }
+
+  .software-icon{
+
+    width:26px;
+    height:26px;
+
+  }
+
+  .software-name{
+
+    font-size:.72rem;
+
+    padding-inline:4px;
+
+    word-break:break-word;
+
+  }
 
 }
 
-.software-btn{
+/* ============================================================
+   SCROLL OFFSET
+============================================================ */
 
-width:100%;
-height:95px;
+#released-softwares-section{
 
-border-radius:18px;
-
-gap:6px;
-
-}
-
-.software-icon{
-width:26px;
-height:26px;
-}
-
-.software-name{
-
-font-size:0.72rem;
-
-line-height:1.2;
-
-padding:0 4px;
-
-word-break:break-word;
-
-}
+  scroll-margin-top:120px;
 
 }

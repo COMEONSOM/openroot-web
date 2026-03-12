@@ -26,6 +26,24 @@ export default function Footer() {
   return (
     <footer ref={footerRef} className="footer-container">
       <DynamicIsland />
+
+      {/* TRUST BADGES */}
+      <div className="footer-trust">
+        <img
+          src="/assets/msme-logo.png"
+          alt="MSME Registered"
+          className="footer-trust-logo"
+          draggable={false}
+        />
+
+        <img
+          src="/assets/google-analytics-badge.png"
+          alt="Google Analytics Certified"
+          className="footer-trust-logo"
+          draggable={false}
+        />
+      </div>
+
       <License />
     </footer>
   );

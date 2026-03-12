@@ -1,30 +1,44 @@
 import { useState, useEffect } from "react";
-import { useSearchParams } from "react-router-dom";
 import "./styles-footer/DynamicIsland.css";
 import CertificateModal from "../CertificateModal";
 
 export default function DynamicIsland() {
 
   const [isOpen, setIsOpen] = useState(false);
-  const [openVerify, setOpenVerify] = useState(false);
-
   const toggleHeart = () => setIsOpen(prev => !prev);
 
-  const [searchParams] = useSearchParams();
-
-  // ======================================================
-  // CERTIFICATE AUTO OPEN VIA URL
-  // ======================================================
+  const [openVerify, setOpenVerify] = useState(false);
 
   useEffect(() => {
 
-    const certId = searchParams.get("cert");
+    const params = new URLSearchParams(window.location.search);
+    const certId = params.get("cert");
 
     if (certId) {
       setOpenVerify(true);
     }
 
-  }, [searchParams]);
+  }, []);
+
+  // ======================================================
+  // SCROLL TO SOFTWARE SECTION
+  // ======================================================
+
+  const scrollToSoftwares = () => {
+
+    const section = document.getElementById(
+      "released-softwares-section"
+    );
+
+    if (section) {
+
+      section.scrollIntoView({
+        behavior: "smooth"
+      });
+
+    }
+
+  };
 
   return (
 
@@ -33,7 +47,7 @@ export default function DynamicIsland() {
       <div className="dynamic-island-shell">
 
         {/* ======================================================
-           FOOTER DETAILS
+           FOOTER BASE
         ====================================================== */}
 
         <section className="footer-details">
@@ -42,34 +56,34 @@ export default function DynamicIsland() {
 
           <div className="footer-links">
 
+            <a href="#released-softwares-section">
+              Released Softwares
+            </a>
+
             <a
               href="https://comeonsom.github.io/openroot-helping-hand/other_files/terms.html"
-              target="_blank"
-              rel="noopener noreferrer nofollow"
+              rel="external"
             >
               Terms & Conditions
             </a>
 
             <a
               href="https://comeonsom.github.io/openroot-helping-hand/other_files/founder.html"
-              target="_blank"
-              rel="noopener noreferrer nofollow"
+              rel="external"
             >
               Founder Details
             </a>
 
             <a
               href="#"
-              target="_blank"
-              rel="noopener noreferrer nofollow"
             >
               Feedback Form
             </a>
 
             <a
-              href="https://youtube.com/@knowledge.openroot"
+              href="https://youtube.com/@knowledge.openroot?si=9QyqR0bMkKmY8HPq"
               target="_blank"
-              rel="noopener noreferrer nofollow"
+              rel="noopener noreferrer"
             >
               Watch Content
             </a>
@@ -77,42 +91,13 @@ export default function DynamicIsland() {
             <a
               href="https://www.youtube.com/channel/UCx4LkoSQfZtlIKDtH9y3zRA"
               target="_blank"
-              rel="noopener noreferrer nofollow"
+              rel="noopener noreferrer"
             >
               Music Production
             </a>
 
-            {/* INTERNAL SEO LINKS */}
-
-            <a
-              href="https://openroot.in/openroot-classes"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Openroot Classes
-            </a>
-
-            <a
-              href="https://openroot.in/resource-hub"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Resource Hub
-            </a>
-
-            <a
-              href="https://openroot.in/nior-ai"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              NIOR AI
-            </a>
-
-            {/* CERTIFICATE VERIFY */}
-
             <button
               className="verify-link"
-              aria-label="Verify Openroot Certificate"
               onClick={() => setOpenVerify(true)}
             >
               Verify Certificate
@@ -180,17 +165,13 @@ export default function DynamicIsland() {
 
         </section>
 
-        {/* ======================================================
-           CERTIFICATE MODAL
-        ====================================================== */}
-
         <CertificateModal
           isOpen={openVerify}
           onClose={() => setOpenVerify(false)}
         />
 
         {/* ======================================================
-           OPENROOT HEART SECTION
+           HEART SECTION
         ====================================================== */}
 
         <section className="dynamic-island-heart">
@@ -203,7 +184,6 @@ export default function DynamicIsland() {
                 type="button"
                 className={`heart-band ${isOpen ? "heart-band--open" : ""}`}
                 onClick={toggleHeart}
-                aria-expanded={isOpen}
               >
 
                 <span className="heart-band-text">
@@ -246,7 +226,6 @@ export default function DynamicIsland() {
                   </div>
 
                   <button
-                    type="button"
                     className="heart-cta"
                     onClick={() =>
                       window.open(

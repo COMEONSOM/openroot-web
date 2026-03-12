@@ -9,3 +9,50 @@
 @media (max-width: 899px) {
   .footer-container {width: 100vw;max-width: 100vw;margin-left: calc(50% - 50vw);margin-right: calc(50% - 50vw);margin-bottom: calc(50% - 50vw);}
 }
+/* TRUST BADGES */
+
+.footer-trust{
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  gap:28px;
+  margin:18px auto 6px;
+}
+
+.footer-trust-logo{
+  height:42px;
+  width:auto;
+  object-fit:contain;
+  transition:transform .25s ease;
+  mix-blend-mode: multiply;
+  filter: brightness(0.95) contrast(1.1);
+}
+
+/* MOBILE */
+
+@media (max-width:786px){
+
+  .footer-trust-logo{
+    height:76px;
+    width: auto;
+  }
+
+}
+
+@media (max-width:899px){
+
+  .footer-trust-logo{
+    height:96px;
+    width: auto;
+  }
+
+}
+
+@media (min-width:900px){
+
+  .footer-trust-logo{
+    height:126px;
+    width: auto;
+  }
+
+}

@@ -159,7 +159,7 @@ export default function Navbar() {
 
   return (
 
-    <nav className="navbar">
+    <nav id="released-softwares-section" className="navbar">
 
       <div className="navbar-content">
 
