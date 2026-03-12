@@ -24,179 +24,100 @@ import "./App.css";
 export default function App() {
   return (
     <BrowserRouter>
-      <div className="app-wrapper">
 
-        {/* ============================================================
-           GLOBAL SEO META
-        ============================================================ */}
+      <Helmet>
 
-        <Helmet>
+        <title>
+          Openroot Systems | AI Tools, Productivity Software & Student Utilities
+        </title>
 
-          <title>
-            Openroot Systems | AI Tools, Productivity Software & Student Utilities
-          </title>
+        <meta
+          name="description"
+          content="Openroot Systems builds AI tools, productivity software, student utilities and financial management applications."
+        />
 
-          <meta
-            name="description"
-            content="Openroot Systems builds AI tools, productivity software, student utilities and financial management applications."
-          />
+        <meta
+          name="keywords"
+          content="Openroot, NIOR AI, travel expense manager, resource hub, student tools, productivity software, Openroot systems"
+        />
 
-          <meta
-            name="keywords"
-            content="Openroot, NIOR AI, travel expense manager, resource hub, student tools, productivity software, Openroot systems"
-          />
+      </Helmet>
 
-          <meta
-            name="author"
-            content="Openroot Systems"
-          />
+      {/* GLOBAL HEADER */}
+      <Header />
 
-          {/* Open Graph */}
+      {/* ROUTES */}
+      <Routes>
 
-          <meta
-            property="og:title"
-            content="Openroot Systems | AI Tools & Productivity Software"
-          />
+        {/* =====================================================
+           HOME PAGE
+        ===================================================== */}
 
-          <meta
-            property="og:description"
-            content="Explore Openroot tools including NIOR AI, Resource Hub, Travel Expense Manager and more productivity utilities."
-          />
+        <Route
+          path="/"
+          element={
+            <>
+              <Advertisement />
+              <Navbar />
+              <AboutCompany />
+            </>
+          }
+        />
 
-          <meta
-            property="og:url"
-            content="https://openroot.in"
-          />
+        {/* =====================================================
+           CERTIFICATE VERIFICATION
+        ===================================================== */}
 
-          <meta
-            property="og:type"
-            content="website"
-          />
+        <Route
+          path="/certificate-verification"
+          element={<CertificateVerification />}
+        />
 
-          {/* ============================================================
-             STRUCTURED DATA (SITELINKS SEO)
-          ============================================================ */}
+        {/* =====================================================
+           SOFTWARE HUB
+        ===================================================== */}
 
-          <script type="application/ld+json">
-            {`
-{
-  "@context": "https://schema.org",
-  "@type": "WebSite",
-  "name": "Openroot Systems",
-  "url": "https://openroot.in",
-  "potentialAction": {
-    "@type": "SearchAction",
-    "target": "https://openroot.in/search?q={search_term_string}",
-    "query-input": "required name=search_term_string"
-  },
-  "hasPart": [
-    {
-      "@type": "WebPage",
-      "name": "NIOR AI",
-      "url": "https://openroot.in/nior-ai"
-    },
-    {
-      "@type": "WebPage",
-      "name": "Resource Hub & Job Updates",
-      "url": "https://openroot.in/resource-hub"
-    },
-    {
-      "@type": "WebPage",
-      "name": "Travel Expense Manager",
-      "url": "https://openroot.in/travel-expense-manager"
-    },
-    {
-      "@type": "WebPage",
-      "name": "Openroot Classes",
-      "url": "https://openroot.in/openroot-classes"
-    },
-    {
-      "@type": "WebPage",
-      "name": "Certificate Verification",
-      "url": "https://openroot.in/certificate-verification"
-    }
-  ]
-}
-`}
-          </script>
+        <Route
+          path="/software"
+          element={<SoftwareHub />}
+        />
 
-        </Helmet>
+        {/* =====================================================
+           SOFTWARE PAGES
+        ===================================================== */}
 
-        {/* ============================================================
-           GLOBAL COMPONENTS
-        ============================================================ */}
+        <Route
+          path="/software/:slug"
+          element={<SoftwarePage />}
+        />
 
-        <Header />
+        {/* DIRECT SEO ROUTES */}
 
-        {/* HERO / ADVERTISEMENT SECTION */}
-        <Advertisement />
+        <Route
+          path="/nior-ai"
+          element={<SoftwarePage />}
+        />
 
-        {/* SOFTWARE NAVIGATION SECTION */}
-        <Navbar />
+        <Route
+          path="/resource-hub"
+          element={<SoftwarePage />}
+        />
 
-        {/* ============================================================
-           ROUTING STRUCTURE
-        ============================================================ */}
+        <Route
+          path="/travel-expense-manager"
+          element={<SoftwarePage />}
+        />
 
-        <Routes>
+        <Route
+          path="/openroot-classes"
+          element={<SoftwarePage />}
+        />
 
-          {/* HOME PAGE */}
-          <Route
-            path="/"
-            element={<AboutCompany />}
-          />
+      </Routes>
 
-          {/* CERTIFICATE VERIFICATION */}
-          <Route
-            path="/certificate-verification"
-            element={<CertificateVerification />}
-          />
+      {/* FOOTER */}
+      <Footer />
 
-          {/* SOFTWARE HUB (OPTIONAL DIRECTORY PAGE) */}
-          <Route
-            path="/software"
-            element={<SoftwareHub />}
-          />
-
-          {/* DYNAMIC SOFTWARE PAGE */}
-          <Route
-            path="/software/:slug"
-            element={<SoftwarePage />}
-          />
-
-          {/* ============================================================
-             DIRECT TOOL ROUTES (BOOSTS SEO DISCOVERY)
-          ============================================================ */}
-
-          <Route
-            path="/nior-ai"
-            element={<SoftwarePage />}
-          />
-
-          <Route
-            path="/resource-hub"
-            element={<SoftwarePage />}
-          />
-
-          <Route
-            path="/travel-expense-manager"
-            element={<SoftwarePage />}
-          />
-
-          <Route
-            path="/openroot-classes"
-            element={<SoftwarePage />}
-          />
-
-        </Routes>
-
-        {/* ============================================================
-           FOOTER
-        ============================================================ */}
-
-        <Footer />
-
-      </div>
     </BrowserRouter>
   );
 }
