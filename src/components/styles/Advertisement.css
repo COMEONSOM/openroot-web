@@ -31,23 +31,31 @@
    Container / layout
    ------------------------- */
 .advertisement-band {
-  position: relative;
-  width: 100%;
-  min-height: 220px;
-  max-height: 420px;
-  height: clamp(220px, 28vw, 380px);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: var(--band-padding-vertical) var(--band-padding-horizontal);
-  color: var(--fg);
-  font-family: var(--font-stack);
-  overflow: show; /* keep particles & glow inside */
-  box-sizing: border-box;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  z-index: 100; /* sits above page content if used as a top banner */
-  isolation: isolate;
+
+  width:100vw;
+  margin-left:calc(50% - 50vw);
+  position:relative;
+
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  margin-bottom: clamp(50px,8vw,120px);
+  padding:var(--band-padding-vertical) var(--band-padding-horizontal);
+
+  /* GLASS EFFECT FULL WIDTH */
+  background:
+    linear-gradient(
+    90deg,
+    rgba(92, 91, 91, 0.687),
+    rgba(255,255,255,0.02)
+    );
+
+  backdrop-filter:blur(12px);
+  -webkit-backdrop-filter:blur(12px);
+
+  border-top:1px solid rgba(255,255,255,0.08);
+  border-bottom:1px solid rgba(255,255,255,0.05);
+
 }
 
 /* -------------------------
