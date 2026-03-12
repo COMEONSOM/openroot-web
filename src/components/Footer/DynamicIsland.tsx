@@ -1,40 +1,51 @@
 import { useState, useEffect } from "react";
+import { useSearchParams } from "react-router-dom";
 import "./styles-footer/DynamicIsland.css";
 import CertificateModal from "../CertificateModal";
 
 export default function DynamicIsland() {
+
   const [isOpen, setIsOpen] = useState(false);
-  const toggleHeart = () => setIsOpen(prev => !prev);
   const [openVerify, setOpenVerify] = useState(false);
+
+  const toggleHeart = () => setIsOpen(prev => !prev);
+
+  const [searchParams] = useSearchParams();
+
+  // ======================================================
+  // CERTIFICATE AUTO OPEN VIA URL
+  // ======================================================
+
   useEffect(() => {
 
-    const params = new URLSearchParams(window.location.search);
-
-    const certId = params.get("cert");
+    const certId = searchParams.get("cert");
 
     if (certId) {
       setOpenVerify(true);
     }
 
-  }, []);
+  }, [searchParams]);
 
   return (
+
     <section className="dynamic-island">
 
-      {/* ======================================================
-         SINGLE STRUCTURAL SHELL
-         ====================================================== */}
       <div className="dynamic-island-shell">
 
-        {/* 💚 FOOTER BASE (FULL WIDTH) */}
+        {/* ======================================================
+           FOOTER DETAILS
+        ====================================================== */}
+
         <section className="footer-details">
 
-          {/* 🔗 LINKS */}
+          {/* LINKS */}
+
           <div className="footer-links">
+
             <a
               href="https://comeonsom.github.io/openroot-helping-hand/other_files/terms.html"
               target="_blank"
-              rel="noopener noreferrer"
+              rel="noopener noreferrer nofollow"
             >
               Terms & Conditions
             </a>
@@ -42,7 +53,7 @@ export default function DynamicIsland() {
             <a
               href="https://comeonsom.github.io/openroot-helping-hand/other_files/founder.html"
               target="_blank"
-              rel="noopener noreferrer"
+              rel="noopener noreferrer nofollow"
             >
               Founder Details
             </a>
@@ -50,15 +61,15 @@ export default function DynamicIsland() {
             <a
               href="#"
               target="_blank"
-              rel="noopener noreferrer"
+              rel="noopener noreferrer nofollow"
             >
               Feedback Form
             </a>
 
             <a
-              href="https://youtube.com/@knowledge.openroot?si=9QyqR0bMkKmY8HPq"
+              href="https://youtube.com/@knowledge.openroot"
               target="_blank"
-              rel="noopener noreferrer"
+              rel="noopener noreferrer nofollow"
             >
               Watch Content
             </a>
@@ -66,13 +77,15 @@ export default function DynamicIsland() {
             <a
               href="https://www.youtube.com/channel/UCx4LkoSQfZtlIKDtH9y3zRA"
               target="_blank"
-              rel="noopener noreferrer"
+              rel="noopener noreferrer nofollow"
             >
               Music Production
             </a>
 
+            {/* INTERNAL SEO LINKS */}
+
             <a
-              href="https://openroot-classes-firebase.web.app/"
+              href="https://openroot.in/openroot-classes"
               target="_blank"
               rel="noopener noreferrer"
             >
@@ -80,33 +93,41 @@ export default function DynamicIsland() {
             </a>
 
             <a
-              href="https://comeonsom.github.io/openroot-helping-hand/"
+              href="https://openroot.in/resource-hub"
               target="_blank"
               rel="noopener noreferrer"
             >
-              Job Updates
+              Resource Hub
             </a>
 
             <a
-              href="https://openroot-time-ai-module.web.app/"
+              href="https://openroot.in/nior-ai"
               target="_blank"
               rel="noopener noreferrer"
             >
-              Nior AI
+              NIOR AI
             </a>
-            
+
+            {/* CERTIFICATE VERIFY */}
+
             <button
-            className="verify-link"
-            onClick={()=>setOpenVerify(true)}
+              className="verify-link"
+              aria-label="Verify Openroot Certificate"
+              onClick={() => setOpenVerify(true)}
             >
-            Verify Certificate
+              Verify Certificate
             </button>
+
           </div>
 
-          {/* 📞 CONTACT */}
+          {/* CONTACT */}
+
           <div className="cf-block">
+
             <h3 className="cf-heading">Contact</h3>
+
             <div className="cf-icons-row">
+
               <a
                 href="https://wa.me/917866049865"
                 target="_blank"
@@ -122,13 +143,19 @@ export default function DynamicIsland() {
               >
                 <img src="/assets/gmail.svg" alt="Gmail" />
               </a>
+
             </div>
+
           </div>
 
-          {/* 🌐 FOLLOW */}
+          {/* FOLLOW */}
+
           <div className="cf-block">
+
             <h3 className="cf-heading">Follow</h3>
+
             <div className="cf-icons-row">
+
               <a
                 href="https://x.com/comeonsom_"
                 target="_blank"
@@ -146,19 +173,30 @@ export default function DynamicIsland() {
               >
                 <img src="/assets/facebook.svg" alt="Facebook" />
               </a>
+
             </div>
+
           </div>
 
         </section>
 
+        {/* ======================================================
+           CERTIFICATE MODAL
+        ====================================================== */}
+
         <CertificateModal
           isOpen={openVerify}
-          onClose={()=>setOpenVerify(false)}
+          onClose={() => setOpenVerify(false)}
         />
 
-        {/* ❤️ HEART — PART OF SAME SHELL */}
+        {/* ======================================================
+           OPENROOT HEART SECTION
+        ====================================================== */}
+
         <section className="dynamic-island-heart">
+
           <section className="elements-section">
+
             <div className="elements-main">
 
               <button
@@ -167,17 +205,27 @@ export default function DynamicIsland() {
                 onClick={toggleHeart}
                 aria-expanded={isOpen}
               >
-                <span className="heart-band-text">💗 Openroot Has A Heart</span>
+
+                <span className="heart-band-text">
+                  💗 Openroot Has A Heart
+                </span>
+
                 <span className="heart-band-chevron">
                   {isOpen ? "▼" : "►"}
                 </span>
+
               </button>
 
               <div className={`heart-panel ${isOpen ? "heart-panel--open" : ""}`}>
+
                 <div className="heart-card">
-                  <h2 className="heart-title">Openroot Has A Heart</h2>
+
+                  <h2 className="heart-title">
+                    Openroot Has A Heart
+                  </h2>
 
                   <div className="heart-body">
+
                     <p>
                       <strong>Openroot Has A Heart</strong> is a safe corner of the world
                       where we don’t pretend to have everything figured out.
@@ -194,6 +242,7 @@ export default function DynamicIsland() {
                       This is not a platform, not a brand —
                       <strong> it’s a home for every imperfect story.</strong>
                     </p>
+
                   </div>
 
                   <button
@@ -208,14 +257,20 @@ export default function DynamicIsland() {
                   >
                     Join Us →
                   </button>
+
                 </div>
+
               </div>
 
             </div>
+
           </section>
+
         </section>
 
       </div>
+
     </section>
+
   );
 }

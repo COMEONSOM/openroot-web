@@ -1,199 +1,384 @@
 /* ============================================================
    RELEASED SOFTWARE NAV — FROSTED EMERALD EDITION
-   Refined Glassmorphism | Fluid Motion | Premium Typography
+   Final Stable Version
 ============================================================ */
 
-:root {
-    /* Refined Color Palette */
-    --os-text-primary: #f8fafc;
-    --os-text-secondary: #94a3b8;
-    
-    /* Emerald/Teal Accents */
-    --os-accent-color: #a3e87b; /* Clean Emerald */
-    --os-glass-bg: #a3e87be2; /* Slate glass */
-    --os-glass-border: rgba(16, 185, 129, 0.15);
-    --os-glass-border-hover: #a3e87b;
-    
-    /* Shadows & Transitions */
-    --os-shadow-base: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
-    --os-shadow-hover: 0 20px 40px -15px rgba(16, 185, 129, 0.2);
-    --os-transition: 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+:root{
+
+--os-text-primary:#f8fafc;
+--os-text-secondary:#94a3b8;
+
+--os-accent-color:#a3e87b;
+
+--os-glass-bg:#a3e87be2;
+--os-glass-border:rgba(16,185,129,0.15);
+--os-glass-border-hover:#a3e87b;
+
+--os-shadow-base:0 10px 30px -10px rgba(0,0,0,0.5);
+--os-shadow-hover:0 20px 40px -15px rgba(16,185,129,0.2);
+
+--os-transition:0.35s cubic-bezier(0.16,1,0.3,1);
+
 }
 
-/* ===============================
+/* ============================================================
    NAVBAR CORE
-================================ */
+============================================================ */
 
-.navbar {
-    width: 100%;
-    padding: 0.2rem 1rem 2rem;
-    display: flex;
-    justify-content: center;
-    background: transparent;
-    font-family: 'Inter', system-ui, sans-serif;
+.navbar{
+
+width:100%;
+padding:0.2rem 1rem 2rem;
+
+display:flex;
+justify-content:center;
+
+background:transparent;
+
+font-family:'Inter',system-ui,sans-serif;
+
 }
 
-.navbar-content {
-    width: 100%;
-    max-width: 800px;
+.navbar-content{
+width:100%;
+max-width:800px;
+position:relative;
 }
 
-/* ===============================
+/* ============================================================
+   SEO NAVIGATION LINKS (Hidden from UI)
+============================================================ */
+
+.seo-nav-links{
+
+position:absolute;
+width:1px;
+height:1px;
+
+overflow:hidden;
+clip:rect(0 0 0 0);
+clip-path:inset(50%);
+
+white-space:nowrap;
+
+}
+
+/* ============================================================
+   SOFTWARE HEADER
+============================================================ */
+
+.software-header{
+
+display:flex;
+justify-content:space-between;
+align-items:center;
+
+margin-bottom:30px;
+
+}
+
+.view-all-link{
+
+background:none;
+border:none;
+
+color:#ffffff;
+
+font-size:15px;
+font-weight:600;
+
+cursor:pointer;
+
+transition:.2s;
+
+}
+
+.view-all-link:hover{
+transform:translateX(4px);
+opacity:.9;
+}
+
+.view-all-link:hover{
+transform:translateX(4px);
+}
+
+/* ============================================================
    NAVBAR TITLE
-================================ */
+============================================================ */
 
-.navbar-title {
-    font-size: 1.5rem;
-    font-weight: 700;
-    margin-bottom: 2rem;
-    text-align: center;
-    letter-spacing: -0.02em;
-    
-    /* Clean Emerald Gradient */
-    background: linear-gradient(135deg, #ffffff 0%, #6ee7b7 100%);
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
+.navbar-title{
+
+font-size:1.5rem;
+font-weight:700;
+
+letter-spacing:-0.02em;
+
+background:linear-gradient(135deg,#ffffff 0%,#b4e4ff 100%);
+-webkit-background-clip:text;
+background-clip:text;
+
+color:transparent;
+margin:0;
+
 }
 
-/* ===============================
-   SOFTWARE BUTTON GRID
-================================ */
+/* ============================================================
+   SOFTWARE GRID
+============================================================ */
 
-.released-softwares {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 1.5rem;
+.released-softwares{
+
+display:flex;
+flex-wrap:wrap;
+
+justify-content:center;
+
+gap:1.5rem;
+
 }
 
-/* ===============================
+/* ============================================================
    SOFTWARE CARD
-================================ */
+============================================================ */
 
-.software-btn {
-    position: relative;
-    width: 120px; /* Slightly larger for better breathing room */
-    height: 120px;
-    border-radius: 24px; /* Softer corners */
-    
-    background: var(--os-glass-bg);
-    border: 1px solid var(--os-glass-border);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
-    gap: 12px;
-    
-    color: var(--os-text-primary);
-    box-shadow: var(--os-shadow-base);
-    cursor: pointer;
-    overflow: hidden;
-    
-    transition: all var(--os-transition);
+.software-btn{
+
+position:relative;
+
+width:120px;
+height:120px;
+
+border-radius:24px;
+
+background:var(--os-glass-bg);
+
+border:1px solid var(--os-glass-border);
+
+backdrop-filter:blur(12px);
+-webkit-backdrop-filter:blur(12px);
+
+display:flex;
+flex-direction:column;
+align-items:center;
+justify-content:center;
+
+gap:12px;
+
+color:var(--os-text-primary);
+
+box-shadow:var(--os-shadow-base);
+
+cursor:pointer;
+overflow:hidden;
+
+transition:all var(--os-transition);
+
 }
 
-/* Inner Glow Effect */
-.software-btn::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: radial-gradient(circle at 50% 0%, rgba(16, 185, 129, 0.15), transparent 70%);
-    opacity: 0;
-    transition: opacity var(--os-transition);
-    z-index: 0;
+/* Spotlight effect */
+
+.software-btn::before{
+
+content:"";
+
+position:absolute;
+inset:0;
+
+background:
+radial-gradient(circle at var(--x) var(--y),
+rgba(255,255,255,0.25),
+transparent 40%
+);
+
+opacity:0;
+
+transition:opacity var(--os-transition);
+
 }
 
-/* Ensure content stays above the glow */
-.software-btn .software-icon,
-.software-btn .software-name {
-    position: relative;
-    z-index: 2;
+.software-btn:hover::before{
+opacity:1;
 }
 
-/* ===============================
+/* ============================================================
    ICON & TEXT
-================================ */
+============================================================ */
 
-.software-icon {
-    font-size: 2rem; /* Slightly larger */
-    color:#000;
-    transition: transform var(--os-transition);
-    filter: drop-shadow(0 4px 6px rgba(0,0,0,0.3));
+.software-icon{
+
+width:34px;
+height:34px;
+
+display:flex;
+align-items:center;
+justify-content:center;
+
+color:#000;
+
+transition:transform var(--os-transition);
+
 }
 
-.software-name {
-    font-size: 0.85rem;
-    font-weight: 500;
-    color: #000;
-    transition: color var(--os-transition);
+.software-icon svg{
+width:100%;
+height:100%;
 }
 
-/* ===============================
-   HOVER EFFECTS
-================================ */
+.software-name{
 
-@media (hover: hover) and (pointer: fine) {
-    .software-btn:hover {
-        transform: translateY(-8px);
-        border-color: var(--os-glass-border-hover);
-        box-shadow: var(--os-shadow-hover);
-        background: rgba(30, 41, 59, 0.8);
-    }
+font-size:0.85rem;
+font-weight:500;
 
-    .software-btn:hover::before {
-        opacity: 1; /* Turn on the inner glow */
-    }
+color:#000;
 
-    .software-btn:hover .software-icon {
-        transform: scale(1.1) translateY(-4px);
-    }
-    
-    .software-btn:hover .software-name {
-        color: var(--os-text-primary); /* Brighten text on hover */
-    }
+text-align:center;
 
-    .software-btn:hover .software-icon{
-      color:#fff;
-    }
 }
 
-/* ===============================
-   RESPONSIVE DESIGN
-================================ */
+/* ============================================================
+   HOVER EFFECT
+============================================================ */
 
-@media (max-width: 768px) {
-    .software-btn {
-        width: 105px;
-        height: 105px;
-        border-radius: 20px;
-    }
-    .software-icon {
-        font-size: 1.75rem;
-    }
-    .software-name {
-        font-size: 0.8rem;
-    }
+@media (hover:hover) and (pointer:fine){
+
+.software-btn:hover{
+
+transform:translateY(-8px);
+
+border-color:var(--os-glass-border-hover);
+
+box-shadow:var(--os-shadow-hover);
+
+background:rgba(30,41,59,0.8);
+
 }
 
-@media (max-width: 480px) {
-    .released-softwares {
-        gap: 1rem;
-    }
-    .software-btn {
-        width: 90px;
-        height: 90px;
-        border-radius: 18px;
-        gap: 8px;
-    }
-    .navbar-title {
-        font-size: 1.3rem;
-        margin-bottom: 1.5rem;
-    }
+.software-btn:hover .software-icon{
+transform:scale(1.1) translateY(-4px);
+color:#fff;
+}
+
+.software-btn:hover .software-name{
+color:#fff;
+}
+
+}
+
+/* ============================================================
+   OVERLAY SYSTEM
+============================================================ */
+
+.software-overlay{
+
+position:fixed;
+inset:0;
+
+background:rgb(0,0,0);
+
+z-index:999;
+
+display:flex;
+justify-content:center;
+align-items:center;
+
+}
+
+.overlay-grid{
+
+display:grid;
+
+grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+
+gap:30px;
+
+width:80%;
+max-width:900px;
+
+}
+
+.close-overlay{
+
+position:absolute;
+top:30px;
+right:30px;
+
+font-size:28px;
+
+border:none;
+background:none;
+
+color:white;
+
+cursor:pointer;
+
+}
+
+/* ============================================================
+   RESPONSIVE
+============================================================ */
+
+@media (max-width:768px){
+
+.software-btn{
+width:105px;
+height:105px;
+border-radius:20px;
+}
+
+.software-icon{
+width:30px;
+height:30px;
+}
+
+.software-name{
+font-size:0.8rem;
+}
+
+}
+
+/* ============================================================
+   MOBILE GRID
+============================================================ */
+
+@media (max-width:480px){
+
+.released-softwares{
+
+display:grid;
+grid-template-columns:repeat(2,1fr);
+
+gap:14px;
+
+padding:0 10px;
+
+}
+
+.software-btn{
+
+width:100%;
+height:95px;
+
+border-radius:18px;
+
+gap:6px;
+
+}
+
+.software-icon{
+width:26px;
+height:26px;
+}
+
+.software-name{
+
+font-size:0.72rem;
+
+line-height:1.2;
+
+padding:0 4px;
+
+word-break:break-word;
+
+}
+
 }
