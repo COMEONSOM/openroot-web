@@ -33,6 +33,22 @@
 
     "rewrites": [
       {
+        "source": "/software/**",
+        "destination": "/index.html"
+      },
+      {
+        "source": "/certificate-verification",
+        "destination": "/index.html"
+      },
+      {
+        "source": "/about",
+        "destination": "/index.html"
+      },
+      {
+        "source": "/contact",
+        "destination": "/index.html"
+      },
+      {
         "source": "**",
         "destination": "/index.html"
       }
