@@ -6,16 +6,15 @@ export default function SoftwarePage() {
 
   const { slug } = useParams();
 
-  const slugMap: Record<string, string> = {
-    "resource-hub": "helping-hand",
-    "nior-ai": "nior-module"
-  };
+  const tool = softwareList.find((t) => t.slug === slug);
 
-  const resolvedSlug = slugMap[slug || ""] || slug;
-
-  const tool = softwareList.find((t) => t.slug === resolvedSlug);
-
-  if (!tool) return <h2>Software not found</h2>;
+  if (!tool) {
+    return (
+      <div style={{ padding: "80px", textAlign: "center" }}>
+        <h2>Software not found</h2>
+      </div>
+    );
+  }
 
   const launch = () => {
     window.open(tool.url, "_blank");
@@ -36,12 +35,12 @@ export default function SoftwarePage() {
         </title>
 
         {/* ======================================================
-           CANONICAL (IMPORTANT FOR SEO)
+           CANONICAL (VERY IMPORTANT FOR SEO)
         ====================================================== */}
 
         <link
           rel="canonical"
-          href={`https://openroot.in/${slug}`}
+          href={`https://openroot.in/software/${tool.slug}`}
         />
 
         {/* ======================================================
@@ -69,7 +68,7 @@ export default function SoftwarePage() {
 
         <meta
           property="og:url"
-          content={`https://openroot.in/${slug}`}
+          content={`https://openroot.in/software/${tool.slug}`}
         />
 
         <meta
@@ -119,8 +118,14 @@ export default function SoftwarePage() {
    {
      "@type": "ListItem",
      "position": 2,
+     "name": "Software",
+     "item": "https://openroot.in/software"
+   },
+   {
+     "@type": "ListItem",
+     "position": 3,
      "name": "${tool.name}",
-     "item": "https://openroot.in/${slug}"
+     "item": "https://openroot.in/software/${tool.slug}"
    }
  ]
 }
@@ -154,5 +159,7 @@ export default function SoftwarePage() {
       </button>
 
     </div>
+
   );
+
 }
