@@ -27,14 +27,35 @@ export default function SoftwarePage() {
 
       <Helmet>
 
+        {/* ======================================================
+           PAGE TITLE
+        ====================================================== */}
+
         <title>
           {tool.name} | Openroot Systems
         </title>
+
+        {/* ======================================================
+           CANONICAL (IMPORTANT FOR SEO)
+        ====================================================== */}
+
+        <link
+          rel="canonical"
+          href={`https://openroot.in/${slug}`}
+        />
+
+        {/* ======================================================
+           META DESCRIPTION
+        ====================================================== */}
 
         <meta
           name="description"
           content={tool.description}
         />
+
+        {/* ======================================================
+           OPEN GRAPH
+        ====================================================== */}
 
         <meta
           property="og:title"
@@ -49,6 +70,11 @@ export default function SoftwarePage() {
         <meta
           property="og:url"
           content={`https://openroot.in/${slug}`}
+        />
+
+        <meta
+          property="og:type"
+          content="website"
         />
 
         {/* ======================================================
@@ -103,7 +129,9 @@ export default function SoftwarePage() {
 
       </Helmet>
 
-      {/* PAGE CONTENT */}
+      {/* ======================================================
+         PAGE CONTENT
+      ====================================================== */}
 
       <h1>{tool.name}</h1>
 
@@ -126,6 +154,5 @@ export default function SoftwarePage() {
       </button>
 
     </div>
-
   );
 }

@@ -133,6 +133,7 @@ const Header = () => {
             draggable={false}
             loading="eager"
           />
+
         </div>
 
         {/* RIGHT SIDE */}

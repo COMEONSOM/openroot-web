@@ -139,3 +139,14 @@
   }
 
 }
+
+.companyCredibility{
+  margin-top:1.4rem;
+  padding:14px 18px;
+  border-left:4px solid #a3e87b;
+  background:rgba(124,58,237,0.06);
+  border-radius:6px;
+
+  font-size:0.9rem;
+  line-height:1.7;
+}

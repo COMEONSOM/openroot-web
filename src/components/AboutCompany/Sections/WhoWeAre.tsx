@@ -113,18 +113,15 @@ function WhoWeAre() {
           className={styles.whoWeAreTextBlock}
           variants={contentMotion}
         >
-          <p>
-            At <strong>Openroot</strong>, we build modern digital technology
-            that empowers people and small businesses to do more with less
-            effort. We create{" "}
-            <strong>
-              free-to-use financial utilities, AI-powered tools, and
-              productivity apps
-            </strong>{" "}
-            that simplify everyday tasks — from managing expenses and planning
-            investments to automating workflows and staying organized.
+          <p  className={styles.companyCredibility}>
+            <strong>Openroot Systems</strong> is a registered MSME under the
+            Government of India with UDYAM Registration Number{" "}
+            <strong>UDYAM-WB-14-0263034</strong>. The organization is also a
+            registered employer on the <strong>National Career Service</strong> (NCS) portal,
+            enabling us to support skill development and employment
+            opportunities for students and professionals across India.
           </p>
-
+      
           <p>
             We also build <strong>custom software solutions</strong> for{" "}
             <strong>MSMEs</strong>, helping them scale affordably and efficiently
