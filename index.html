@@ -21,11 +21,6 @@ name="description"
 content="Openroot Systems empowers students and small businesses with AI tools, productivity software, financial education and innovative digital solutions."
 />
 
-<meta
-name="keywords"
-content="Openroot Systems, Openroot AI tools, resource hub, travel expense manager, software for students, MSME software solutions, financial education India"
-/>
-
 <meta name="robots" content="index, follow" />
 
 <!-- Canonical -->
@@ -44,22 +39,28 @@ Favicon
 <link rel="apple-touch-icon" href="/logo.png" />
 
 <!-- ======================================================
-Theme Color
+Performance Optimization
 ====================================================== -->
 
-<meta name="theme-color" content="#000000" />
-
-<!-- ======================================================
-Fonts Performance
-====================================================== -->
+<link rel="preload" href="/logo.png" as="image">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<!-- ======================================================
+Fonts
+====================================================== -->
 
 <link
 href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&display=swap"
 rel="stylesheet"
 />
+
+<!-- ======================================================
+Theme Color
+====================================================== -->
+
+<meta name="theme-color" content="#000000" />
 
 <!-- ======================================================
 Font Awesome
@@ -73,7 +74,7 @@ referrerpolicy="no-referrer"
 />
 
 <!-- ======================================================
-OpenGraph
+OpenGraph (Social Sharing)
 ====================================================== -->
 
 <meta property="og:title" content="Openroot Systems – AI Tools & Software Solutions" />
@@ -142,7 +143,12 @@ Website Schema
 "@context": "https://schema.org",
 "@type": "WebSite",
 "name": "Openroot Systems",
-"url": "https://openroot.in"
+"url": "https://openroot.in",
+"potentialAction": {
+  "@type": "SearchAction",
+  "target": "https://openroot.in/search?q={search_term_string}",
+  "query-input": "required name=search_term_string"
+}
 }
 </script>
 
