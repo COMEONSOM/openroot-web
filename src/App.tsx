@@ -1,8 +1,3 @@
-// ============================================================
-// APP ROOT — OPENROOT SYSTEMS
-// GLOBAL SEO + ROUTER + STRUCTURED DATA
-// ============================================================
-
 import { Helmet } from "@dr.pogodin/react-helmet";
 import React from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
@@ -22,11 +17,12 @@ import SoftwarePage from "./pages/SoftwarePage";
 import "./App.css";
 
 export default function App() {
+
   return (
+
     <BrowserRouter>
 
       <Helmet>
-
         <title>
           Openroot Systems | AI Tools, Productivity Software & Student Utilities
         </title>
@@ -35,23 +31,14 @@ export default function App() {
           name="description"
           content="Openroot Systems builds AI tools, productivity software, student utilities and financial management applications."
         />
-
-        <meta
-          name="keywords"
-          content="Openroot, NIOR AI, travel expense manager, resource hub, student tools, productivity software, Openroot systems"
-        />
-
       </Helmet>
 
       {/* GLOBAL HEADER */}
       <Header />
 
-      {/* ROUTES */}
       <Routes>
 
-        {/* =====================================================
-           HOME PAGE
-        ===================================================== */}
+        {/* HOME PAGE */}
 
         <Route
           path="/"
@@ -60,64 +47,36 @@ export default function App() {
               <Advertisement />
               <Navbar />
               <AboutCompany />
+              <Footer />
             </>
           }
         />
 
-        {/* =====================================================
-           CERTIFICATE VERIFICATION
-        ===================================================== */}
+        {/* CERTIFICATE VERIFICATION */}
 
         <Route
           path="/certificate-verification"
           element={<CertificateVerification />}
         />
 
-        {/* =====================================================
-           SOFTWARE HUB
-        ===================================================== */}
+        {/* SOFTWARE HUB */}
 
         <Route
           path="/software"
           element={<SoftwareHub />}
         />
 
-        {/* =====================================================
-           SOFTWARE PAGES
-        ===================================================== */}
+        {/* SOFTWARE PAGE */}
 
         <Route
           path="/software/:slug"
           element={<SoftwarePage />}
         />
 
-        {/* DIRECT SEO ROUTES */}
-
-        <Route
-          path="/nior-ai"
-          element={<SoftwarePage />}
-        />
-
-        <Route
-          path="/resource-hub"
-          element={<SoftwarePage />}
-        />
-
-        <Route
-          path="/travel-expense-manager"
-          element={<SoftwarePage />}
-        />
-
-        <Route
-          path="/openroot-classes"
-          element={<SoftwarePage />}
-        />
-
       </Routes>
 
-      {/* FOOTER */}
-      <Footer />
-
     </BrowserRouter>
+
   );
+
 }
