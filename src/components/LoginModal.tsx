@@ -340,7 +340,7 @@ export default function LoginModal({
         <div className="auth-left">
           {/* BRAND */}
           <div className="auth-brand">
-            <img src="./logo-nobg.png" alt="Openroot" />
+            <img src="/logo-nobg.png" alt="Openroot" />
           </div>
 
           {/* CLOSE */}
