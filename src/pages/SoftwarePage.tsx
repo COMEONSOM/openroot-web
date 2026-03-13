@@ -178,9 +178,17 @@ Instead of manually determining who owes whom, the platform generates clear summ
 
         <title>{tool.name} | Openroot Systems</title>
 
+        <link rel="icon" href="https://openroot.in/favicon.ico" />
+        <link rel="apple-touch-icon" href="https://openroot.in/logo.png" />
+
         <link
           rel="canonical"
           href={`https://openroot.in/software/${tool.slug}`}
+        />
+
+        <meta
+          name="description"
+          content={tool.description}
         />
 
         <meta
