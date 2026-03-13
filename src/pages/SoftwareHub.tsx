@@ -5,6 +5,7 @@ import { softwareList } from "../data/softwareList";
 export default function SoftwareHub() {
 
   return (
+
     <div style={{ padding: "80px", textAlign: "center" }}>
 
       {/* =====================================================
@@ -17,6 +18,11 @@ export default function SoftwareHub() {
           Openroot Softwares | AI Tools & Productivity Apps
         </title>
 
+        <link
+          rel="canonical"
+          href="https://openroot.in/software"
+        />
+
         <meta
           name="description"
           content="Explore all software tools created by Openroot Systems including NIOR AI, Resource Hub, Travel Expense Manager and Openroot Classes."
@@ -25,6 +31,11 @@ export default function SoftwareHub() {
         <meta
           property="og:title"
           content="Openroot Softwares | Openroot Systems"
+        />
+
+        <meta
+          property="og:description"
+          content="Explore productivity tools and software applications built by Openroot Systems."
         />
 
         <meta
@@ -99,6 +110,7 @@ export default function SoftwareHub() {
       </div>
 
     </div>
+
   );
 
 }

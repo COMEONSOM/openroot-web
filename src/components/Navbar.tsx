@@ -1,70 +1,13 @@
 // ============================================================
 // NAVBAR COMPONENT — FINAL STABLE VERSION
-// VERSION: 2026.4 (SEO + ROUTE FIX)
+// VERSION: 2026.5 (SEO + ROUTING IMPROVED)
 // ============================================================
 
 import "./styles/Navbar.css";
 import { softwareList } from "../data/softwareList";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import React from "react";
-
-// ============================================================
-// LOGIN STATUS CHECK
-// ============================================================
-
-const isUserLoggedIn = () => {
-  try {
-    return localStorage.getItem("isLoggedIn") === "true";
-  } catch {
-    return false;
-  }
-};
-
-// ============================================================
-// GET USER UID
-// ============================================================
-
-const getCurrentUID = () => {
-  try {
-    return (
-      sessionStorage.getItem("openrootUserUID") ||
-      localStorage.getItem("openrootUserUID") ||
-      null
-    );
-  } catch {
-    return null;
-  }
-};
-
-// ============================================================
-// REDIRECT FUNCTION
-// ============================================================
-
-const redirectTo = async (url: string) => {
-
-  try {
-
-    if (!isUserLoggedIn()) {
-      alert("⚠️ Please log in first to access this tool.");
-      return;
-    }
-
-    const finalURL = new URL(url);
-
-    const userUID = getCurrentUID();
-
-    if (userUID && !finalURL.searchParams.has("uid")) {
-      finalURL.searchParams.set("uid", encodeURIComponent(userUID));
-    }
-
-    window.location.href = finalURL.toString();
-
-  } catch (error) {
-    console.error("REDIRECTION FAILED:", error);
-  }
-
-};
 
 // ============================================================
 // SVG ICONS
@@ -93,14 +36,13 @@ const Icons = {
 
   travelExpense: (
     <svg viewBox="0 0 24 24" width="30" height="30" fill="currentColor">
-      <path d="M3 15h18v5H3v-5Zm2 2v1h14v-1H5Z" />
-      <path d="M6 10h12l2 3H4l2-3Z" />
-      <circle cx="8" cy="20" r="1" />
-      <circle cx="16" cy="20" r="1" />
-      <path d="M2 5h8v2H2V5Zm10 0h3v2h-3V5Zm5 0h5v2h-5V5Z" />
-      <path d="M20 12l2-2-1.5-1.5-2 2L20 12Z" />
+      <path d="M3 15h18v5H3v-5Zm2 2v1h14v-1H5Z"/>
+      <path d="M6 10h12l2 3H4l2-3Z"/>
+      <circle cx="8" cy="20" r="1"/>
+      <circle cx="16" cy="20" r="1"/>
+      <path d="M2 5h8v2H2V5Zm10 0h3v2h-3V5Zm5 0h5v2h-5V5Z"/>
+      <path d="M20 12l2-2-1.5-1.5-2 2L20 12Z"/>
     </svg>
-
   ),
 
   Coevas: (
@@ -130,7 +72,7 @@ const iconMap: Record<string, React.ReactNode> = {
   "travel-expense-manager": Icons.travelExpense,
   "nior-ai": Icons.timeAI,
   "helping-hand": Icons.helpingHand,
-  "openroot-classes": Icons.Classes,
+  "openroot-classes": Icons.Classes
 
 };
 
@@ -144,9 +86,9 @@ export default function Navbar() {
 
   const visibleSoftwares = softwareList.slice(0, 5);
 
-  // ============================================================
+  // ==========================================================
   // CURSOR EFFECT
-  // ============================================================
+  // ==========================================================
 
   const handleMouseMove = (e: React.MouseEvent<HTMLButtonElement>) => {
 
@@ -164,7 +106,7 @@ export default function Navbar() {
       <div className="navbar-content">
 
         {/* =====================================================
-           SEO NAVIGATION LINKS (Hidden but crawlable)
+           SEO LINKS (Hidden but crawlable)
         ===================================================== */}
 
         <div className="seo-nav-links">
@@ -173,9 +115,9 @@ export default function Navbar() {
           <Link to="/software/helping-hand">Resource Hub & Job Updates</Link>
           <Link to="/software/travel-expense-manager">Travel Expense Manager</Link>
           <Link to="/software/openroot-classes">Openroot Classes</Link>
+          <Link to="/software/coevas-media-downloader">Coevas Media Downloader</Link>
+
           <Link to="/certificate-verification">Certificate Verification</Link>
-          <Link to="/about">About Openroot</Link>
-          <Link to="/contact">Contact</Link>
 
         </div>
 
@@ -199,7 +141,7 @@ export default function Navbar() {
         </div>
 
         {/* =====================================================
-           VISIBLE TOOLS
+           VISIBLE SOFTWARE BUTTONS
         ===================================================== */}
 
         <div className="released-softwares">
@@ -209,7 +151,7 @@ export default function Navbar() {
             <button
               key={app.slug}
               className="software-btn"
-              onClick={() => redirectTo(app.url)}
+              onClick={() => window.location.href = `/software/${app.slug}`}
               onMouseMove={handleMouseMove}
             >
 
@@ -230,7 +172,7 @@ export default function Navbar() {
       </div>
 
       {/* =====================================================
-         FULL OVERLAY
+         FULL SOFTWARE OVERLAY
       ===================================================== */}
 
       {showAllSoftware && (
@@ -251,7 +193,7 @@ export default function Navbar() {
               <button
                 key={app.slug}
                 className="software-btn"
-                onClick={() => redirectTo(app.url)}
+                onClick={() => window.location.href = `/software/${app.slug}`}
                 onMouseMove={handleMouseMove}
               >
 

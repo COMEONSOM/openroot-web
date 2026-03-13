@@ -5,7 +5,8 @@ export const softwareList = [
     shortName: "Coevas",
     slug: "coevas-media-downloader",
     url: "https://openroot.in/Coevas-Systems-Openroot/",
-    description: "Download media from multiple platforms quickly using Coevas."
+    description: "Download videos and audio from multiple platforms using the Coevas desktop media downloader.",
+    category: "Media Utility"
   },
 
   {
@@ -13,7 +14,8 @@ export const softwareList = [
     shortName: "Travel Manager",
     slug: "travel-expense-manager",
     url: "https://openroot.in/openroot-travel-expense-manager/",
-    description: "Manage travel expenses and trip budgets easily."
+    description: "Track group travel expenses and automatically calculate who owes whom during trips.",
+    category: "Finance Utility"
   },
 
   {
@@ -21,7 +23,8 @@ export const softwareList = [
     shortName: "NIOR AI",
     slug: "nior-ai",
     url: "https://openroot-time-ai-module.web.app/",
-    description: "AI powered time intelligence and productivity system."
+    description: "AI powered productivity assistant that helps with financial insights, calculations and decision support.",
+    category: "AI Tool"
   },
 
   {
@@ -29,7 +32,8 @@ export const softwareList = [
     shortName: "Resource Hub",
     slug: "helping-hand",
     url: "https://openroot.in/openroot-helping-hand/",
-    description: "Curated collection of important websites, tools and job updates."
+    description: "A curated collection of important websites, tools and job updates for students and learners.",
+    category: "Resource Platform"
   },
 
   {
@@ -37,7 +41,8 @@ export const softwareList = [
     shortName: "Classes",
     slug: "openroot-classes",
     url: "https://openroot-classes-firebase.web.app/",
-    description: "Online classes and learning resources from Openroot."
+    description: "Online learning platform providing training in prompt engineering, financial literacy and productivity skills.",
+    category: "Education Platform"
   }
 
 ];
