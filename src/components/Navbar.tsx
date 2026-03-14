@@ -58,6 +58,12 @@ const Icons = {
     <svg viewBox="0 0 24 24" width="28" height="28" fill="currentColor">
       <path d="M6 4a1 1 0 0 0-1 1v3h3l4 4 2-2-3-3h3V5a1 1 0 0 0-1-1H6zM18 20a1 1 0 0 0 1-1v-3h-3l-4-4-2 2 3 3H8v3a1 1 0 0 0 1 1h8z"/>
     </svg>
+  ),
+
+  makaut: (
+    <svg viewBox="0 0 24 24" width="28" height="28" fill="currentColor">
+      <path d="M6 2h12a2 2 0 0 1 2 2v16a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2zm2 3h8v3H8V5zm0 5h2v2H8v-2zm4 0h2v2h-2v-2zm4 0h2v2h-2v-2zM8 14h2v2H8v-2zm4 0h2v2h-2v-2zm4 0h2v5h-2v-5z"/>
+    </svg>
   )
 
 };
@@ -72,7 +78,8 @@ const iconMap: Record<string, React.ReactNode> = {
   "travel-expense-manager": Icons.travelExpense,
   "nior-ai": Icons.timeAI,
   "helping-hand": Icons.helpingHand,
-  "openroot-classes": Icons.Classes
+  "openroot-classes": Icons.Classes,
+  "makaut-gpa-percentage-calculator": Icons.makaut
 
 };
 
@@ -116,6 +123,7 @@ export default function Navbar() {
           <Link to="/software/travel-expense-manager">Travel Expense Manager</Link>
           <Link to="/software/openroot-classes">Openroot Classes</Link>
           <Link to="/software/coevas-media-downloader">Coevas Media Downloader</Link>
+          <Link to="/software/makaut-gpa-percentage-calculator">MAKAUT GPA Percentage Calculator</Link>
 
           <Link to="/certificate-verification">Certificate Verification</Link>
 

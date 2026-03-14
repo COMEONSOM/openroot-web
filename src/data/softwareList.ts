@@ -43,6 +43,15 @@ export const softwareList = [
     url: "https://openroot-classes-firebase.web.app/",
     description: "Online learning platform providing training in prompt engineering, financial literacy and productivity skills.",
     category: "Education Platform"
+  },
+
+  {
+    name: "Makaut GPA Percentage Calculator",
+    shortName: "makaut",
+    slug: "makaut-gpa-percentage-calculator",
+    url: "https://openroot.in/openroot-makaut_grade_and_percentage-calculator/",
+    description: "Grade and Percentage Calculator for MAKAUT students to easily calculate their GPA and percentage based on their marks.",
+    category: "Education Platform"
   }
 
 ];

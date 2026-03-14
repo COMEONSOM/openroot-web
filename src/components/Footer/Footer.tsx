@@ -29,6 +29,14 @@ export default function Footer() {
 
       {/* TRUST BADGES */}
       <div className="footer-trust">
+        
+        <img
+          src="/assets/google-analytics-badge.png"
+          alt="Google Analytics Certified"
+          className="footer-trust-logo"
+          draggable={false}
+        />
+        
         <img
           src="/assets/msme-logo.png"
           alt="MSME Registered"
@@ -37,8 +45,8 @@ export default function Footer() {
         />
 
         <img
-          src="/assets/google-analytics-badge.png"
-          alt="Google Analytics Certified"
+          src="/assets/hubspot-badge.png"
+          alt="HubSpot Certified"
           className="footer-trust-logo"
           draggable={false}
         />
