@@ -137,6 +137,29 @@ The platform contains multiple financial engines designed to solve real-world pr
 By combining financial calculators with an AI-guided workflow, the system helps users understand investments, pricing, loans, and financial planning in a clear and structured way.`
     },
 
+    "openroot-makaut_grade_and_percentage-calculator": {
+      overview: `Openroot MAKAUT GPA & Percentage Calculator is a specialized academic tool designed for students of Maulana Abul Kalam Azad University of Technology (MAKAUT). The platform helps students quickly convert their academic GPA scores into percentage values using formulas that follow the official university grading system.
+
+    Instead of manually applying complex credit-based calculations, students can simply enter their GPA values and instantly receive accurate results. The tool provides multiple calculators in a unified dashboard, allowing students to convert SGPA, YGPA, DGPA, and CGPA into percentage without confusion or calculation errors.
+
+    The platform also includes a unique feature that allows students to calculate their percentage up to a specific semester. This is especially useful for internship applications, scholarship forms, and placement processes where students often need to report their current academic percentage based on completed semesters.`,
+
+      features: [
+        "SGPA to Percentage conversion based on MAKAUT grading rules",
+        "YGPA calculator using odd and even semester credit details",
+        "DGPA calculator for multi-year courses with course type selection",
+        "CGPA calculator using total credit index and total credits",
+        "Percentage calculation up to a selected semester",
+        "Support for both regular and lateral entry students",
+        "Unified dashboard with multiple academic calculators",
+        "Fast and accurate calculations following official MAKAUT formulas"
+      ],
+
+      purpose: `The primary purpose of the MAKAUT GPA & Percentage Calculator is to simplify academic result interpretation for MAKAUT students. Converting GPA values into percentage often requires multiple formulas and credit-based calculations that can be confusing when done manually.
+
+    Through this tool, Openroot Systems aims to provide students with a reliable academic utility that reduces calculation errors and makes academic performance evaluation faster, easier, and more transparent.`
+    },
+
     "travel-expense-manager": {
       overview: `Openroot Travel Expense Manager is a smart group-expense management tool designed for travelers who want an easier way to track and split expenses during group trips.
 
