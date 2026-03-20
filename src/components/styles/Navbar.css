@@ -1,438 +1,351 @@
 /* ============================================================
    RELEASED SOFTWARE NAV — FROSTED EMERALD EDITION
    Production Optimized
-   ============================================================ */
+============================================================ */
 
 /* ===============================
    ROOT VARIABLES
 ================================ */
 
-:root{
-
+:root {
   /* Typography */
-  --os-font:'Inter',system-ui,sans-serif;
+  --os-font: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
 
   /* Colors */
-  --os-text-primary:#f8fafc;
-  --os-text-secondary:#94a3b8;
-  --os-accent:#a3e87b;
+  --os-text-primary: #f8fafc;
+  --os-text-secondary: #94a3b8;
+  --os-accent: #a3e87b;
 
   /* Glass */
-  --os-glass-bg:#a3e87be2;
-  --os-glass-border:rgba(16,185,129,.15);
-  --os-glass-border-hover:#a3e87b;
+  --os-glass-bg: #a3e87be2;
+  --os-glass-border: rgba(16, 185, 129, .15);
+  --os-glass-border-hover: #a3e87b;
 
   /* Shadows */
-  --os-shadow-base:0 10px 30px -10px rgba(0,0,0,.5);
-  --os-shadow-hover:0 20px 40px -15px rgba(16,185,129,.2);
+  --os-shadow-base: 0 10px 30px -10px rgba(0, 0, 0, .5);
+  --os-shadow-hover: 0 20px 40px -15px rgba(16, 185, 129, .2);
 
   /* Motion */
-  --os-transition-fast:.2s ease;
-  --os-transition-main:.35s cubic-bezier(.16,1,.3,1);
+  --os-transition-fast: .2s ease-out;
+  --os-transition-main: .35s cubic-bezier(.16, 1, .3, 1);
+}
 
+/* Reduce motion for users who prefer it */
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --os-transition-fast: 0s linear;
+    --os-transition-main: 0s linear;
+  }
 }
 
 /* ============================================================
    NAVBAR CORE
 ============================================================ */
 
-.navbar{
-
-  width:100%;
-  padding:.2rem 1rem 2rem;
-
-  display:flex;
-  justify-content:center;
-
-  font-family:var(--os-font);
-
+.navbar {
+  width: 100%;
+  padding: .2rem 1rem 2rem;
+  display: flex;
+  justify-content: center;
+  font-family: var(--os-font);
 }
 
-.navbar-content{
-
-  width:100%;
-  max-width:800px;
-
-  position:relative;
-
+.navbar-content {
+  width: 100%;
+  max-width: 800px;
+  position: relative;
 }
 
 /* ============================================================
-   SEO NAVIGATION LINKS
+   SEO NAVIGATION LINKS (visually hidden but accessible)
 ============================================================ */
 
-.seo-nav-links{
-
-  position:absolute;
-
-  width:1px;
-  height:1px;
-
-  overflow:hidden;
-
-  clip:rect(0 0 0 0);
-  clip-path:inset(50%);
-
-  white-space:nowrap;
-
+.seo-nav-links {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
 }
 
 /* ============================================================
    HEADER
 ============================================================ */
 
-.software-header{
-
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-
-  margin-bottom:30px;
-
+.software-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
 }
 
 /* ===============================
    VIEW ALL BUTTON
 ================================ */
 
-.view-all-link{
-
-  border:0;
-  background:none;
-
-  color:#fff;
-
-  font-size:15px;
-  font-weight:600;
-
-  cursor:pointer;
-
-  transition:transform var(--os-transition-fast),
-             opacity var(--os-transition-fast);
-
+.view-all-link {
+  border: 0;
+  background: none;
+  color: #fff;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    transform var(--os-transition-fast),
+    opacity var(--os-transition-fast);
 }
 
-.view-all-link:hover{
-
-  transform:translateX(4px);
-  opacity:.9;
-
+.view-all-link:hover,
+.view-all-link:focus-visible {
+  transform: translateX(4px);
+  opacity: .9;
 }
 
 /* ============================================================
    NAVBAR TITLE
 ============================================================ */
 
-.navbar-title{
-
-  font-size:1.5rem;
-  font-weight:700;
-
-  letter-spacing:-.02em;
-
-  background:linear-gradient(135deg,#fff 0%,#b4e4ff 100%);
-  -webkit-background-clip:text;
-  background-clip:text;
-
-  color:transparent;
-
-  margin:0;
-
+.navbar-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  letter-spacing: -.02em;
+  background: linear-gradient(135deg, #fff 0%, #b4e4ff 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  margin: 0;
 }
 
 /* ============================================================
    SOFTWARE GRID
 ============================================================ */
 
-.released-softwares{
-
-  display:flex;
-  flex-wrap:wrap;
-
-  justify-content:center;
-
-  gap:1.5rem;
-
+.released-softwares {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1.5rem;
 }
 
 /* ============================================================
    SOFTWARE CARD
 ============================================================ */
 
-.software-btn{
-
-  position:relative;
-
-  width:120px;
-  height:120px;
-
-  border-radius:24px;
-
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  justify-content:center;
-
-  gap:12px;
-
-  color:var(--os-text-primary);
-
-  background:var(--os-glass-bg);
-
-  border:1px solid var(--os-glass-border);
-
-  backdrop-filter:blur(12px);
-  -webkit-backdrop-filter:blur(12px);
-
-  box-shadow:var(--os-shadow-base);
-
-  cursor:pointer;
-
-  overflow:hidden;
-
+.software-btn {
+  position: relative;
+  width: 120px;
+  height: 120px;
+  border-radius: 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  color: var(--os-text-primary);
+  background: var(--os-glass-bg);
+  border: 1px solid var(--os-glass-border);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow: var(--os-shadow-base);
+  cursor: pointer;
+  overflow: hidden;
+  will-change: transform, box-shadow, border-color, background;
   transition:
-  transform var(--os-transition-main),
-  box-shadow var(--os-transition-main),
-  border-color var(--os-transition-main),
-  background var(--os-transition-main);
-
+    transform var(--os-transition-main),
+    box-shadow var(--os-transition-main),
+    border-color var(--os-transition-main),
+    background var(--os-transition-main);
 }
 
 /* ===============================
    SPOTLIGHT EFFECT
 ================================ */
 
-.software-btn::before{
-
-  content:"";
-
-  position:absolute;
-  inset:0;
-
+.software-btn::before {
+  content: "";
+  position: absolute;
+  inset: 0;
   background:
-  radial-gradient(
-  circle at var(--x) var(--y),
-  rgba(92,91,91,.7),
-  transparent 40%
-  );
-
-  opacity:0;
-
-  transition:opacity var(--os-transition-main);
-
+    radial-gradient(
+      circle at var(--x) var(--y),
+      rgba(92, 91, 91, .7),
+      transparent 40%
+    );
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--os-transition-main);
 }
 
-.software-btn:hover::before{
-opacity:1;
+.software-btn:hover::before,
+.software-btn:focus-visible::before {
+  opacity: 1;
 }
 
 /* ============================================================
    ICON
 ============================================================ */
 
-.software-icon{
-
-  width:34px;
-  height:34px;
-
-  display:flex;
-  align-items:center;
-  justify-content:center;
-
-  color:#000;
-
-  transition:transform var(--os-transition-main),
-             color var(--os-transition-main);
-
+.software-icon {
+  width: 34px;
+  height: 34px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #000;
+  transition:
+    transform var(--os-transition-main),
+    color var(--os-transition-main);
 }
 
-.software-icon svg{
-
-  width:100%;
-  height:100%;
-
+.software-icon svg {
+  width: 100%;
+  height: 100%;
 }
 
 /* ============================================================
    TEXT
 ============================================================ */
 
-.software-name{
-
-  font-size:.85rem;
-  font-weight:500;
-
-  color:#000;
-
-  text-align:center;
-
-  line-height:1.2;
-
+.software-name {
+  font-size: .85rem;
+  font-weight: 500;
+  color: #000;
+  text-align: center;
+  line-height: 1.2;
 }
 
 /* ============================================================
    HOVER INTERACTIONS
 ============================================================ */
 
-@media (hover:hover) and (pointer:fine){
-
-  .software-btn:hover{
-
-    transform:translateY(-8px);
-
-    border-color:var(--os-glass-border-hover);
-
-    box-shadow:var(--os-shadow-hover);
-
-    background:rgba(30,41,59,.8);
-
+@media (hover: hover) and (pointer: fine) {
+  .software-btn:hover {
+    transform: translateY(-8px);
+    border-color: var(--os-glass-border-hover);
+    box-shadow: var(--os-shadow-hover);
+    background: rgba(30, 41, 59, .8);
   }
 
-  .software-btn:hover .software-icon{
-
-    transform:scale(1.1) translateY(-4px);
-    color:#fff;
-
+  .software-btn:hover .software-icon {
+    transform: scale(1.1) translateY(-4px);
+    color: #fff;
   }
 
-  .software-btn:hover .software-name{
-
-    color:#fff;
-
+  .software-btn:hover .software-name {
+    color: #fff;
   }
+}
 
+/* Keyboard focus parity with hover */
+.software-btn:focus-visible {
+  outline: 2px solid var(--os-accent);
+  outline-offset: 3px;
+  transform: translateY(-4px);
+  border-color: var(--os-glass-border-hover);
+  box-shadow: var(--os-shadow-hover);
+  background: rgba(30, 41, 59, .8);
+}
+
+.software-btn:focus-visible .software-icon {
+  transform: scale(1.05) translateY(-2px);
+  color: #fff;
+}
+
+.software-btn:focus-visible .software-name {
+  color: #fff;
 }
 
 /* ============================================================
    OVERLAY SYSTEM
 ============================================================ */
 
-.software-overlay{
-
-  position:fixed;
-  inset:0;
-
-  display:flex;
-  justify-content:center;
-  align-items:center;
-
-  background:#000;
-
-  z-index:999;
-
+.software-overlay {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #000;
+  z-index: 999;
 }
 
-.overlay-grid{
-
-  display:grid;
-
-  grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
-
-  gap:30px;
-
-  width:80%;
-  max-width:900px;
-
+.overlay-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 30px;
+  width: 80%;
+  max-width: 900px;
 }
 
-.close-overlay{
-
-  position:absolute;
-
-  top:30px;
-  right:30px;
-
-  font-size:28px;
-
-  border:0;
-  background:none;
-
-  color:#fff;
-
-  cursor:pointer;
-
+.close-overlay {
+  position: absolute;
+  top: 30px;
+  right: 30px;
+  font-size: 28px;
+  border: 0;
+  background: none;
+  color: #fff;
+  cursor: pointer;
 }
 
 /* ============================================================
    TABLET
 ============================================================ */
 
-@media (max-width:768px){
-
-  .software-btn{
-
-    width:105px;
-    height:105px;
-
-    border-radius:20px;
-
+@media (max-width: 768px) {
+  .software-btn {
+    width: 105px;
+    height: 105px;
+    border-radius: 20px;
   }
 
-  .software-icon{
-    width:30px;
-    height:30px;
+  .software-icon {
+    width: 30px;
+    height: 30px;
   }
 
-  .software-name{
-    font-size:.8rem;
+  .software-name {
+    font-size: .8rem;
   }
-
 }
 
 /* ============================================================
    MOBILE GRID
 ============================================================ */
 
-@media (max-width:480px){
-
-  .released-softwares{
-
-    display:grid;
-
-    grid-template-columns:repeat(2,1fr);
-
-    gap:14px;
-
-    padding-inline:10px;
-
+@media (max-width: 480px) {
+  .released-softwares {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 14px;
+    padding-inline: 10px;
   }
 
-  .software-btn{
-
-    width:100%;
-    height:95px;
-
-    border-radius:18px;
-
-    gap:6px;
-
+  .software-btn {
+    width: 100%;
+    height: 95px;
+    border-radius: 18px;
+    gap: 6px;
   }
 
-  .software-icon{
-
-    width:26px;
-    height:26px;
-
+  .software-icon {
+    width: 26px;
+    height: 26px;
   }
 
-  .software-name{
-
-    font-size:.72rem;
-
-    padding-inline:4px;
-
-    word-break:break-word;
-
+  .software-name {
+    font-size: .72rem;
+    padding-inline: 4px;
+    word-break: break-word;
   }
-
 }
 
 /* ============================================================
    SCROLL OFFSET
 ============================================================ */
 
-#released-softwares-section{
-
-  scroll-margin-top:120px;
-
+#released-softwares-section {
+  scroll-margin-top: 120px;
 }

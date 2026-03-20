@@ -22,9 +22,10 @@ const cardTech: Variants = {
 };
 
 const softFade: Variants = {
-  hidden: { opacity: 0 },
+  hidden: { opacity: 0, y: 8 },
   visible: {
     opacity: 1,
+    y: 0,
     transition: {
       duration: 0.5,
       ease: "easeOut",
@@ -38,11 +39,14 @@ function OfferClasses() {
       className={styles.offerClassesContainer}
       initial="hidden"
       whileInView="visible"
-      viewport={{ once: false, margin: "-120px" }}
+      viewport={{ once: true, margin: "-120px" }}
     >
       {/* Section title */}
       <motion.h2
-        className={styles.offerClassesTitle}
+        className={`
+          ${styles.offerClassesTitle}
+          section-title text-gradient-primary
+        `}
         variants={softFade}
       >
         What We Offer
@@ -50,12 +54,15 @@ function OfferClasses() {
 
       <div className={styles.offerClassesGrid}>
         <motion.article
-          className={styles.offerClassCard}
+          className={`
+            ${styles.offerClassCard}
+            card-dark card-dark-soft-border card-dark-hover card-compact-mobile
+          `}
           variants={cardTech}
         >
           {/* Tag */}
           <motion.div
-            className={styles.offerClassTag}
+            className={`${styles.offerClassTag} badge-pill badge-pill--accent`}
             variants={softFade}
           >
             Openroot Classes
@@ -63,7 +70,10 @@ function OfferClasses() {
 
           {/* Card title */}
           <motion.h3
-            className={styles.offerClassCardTitle}
+            className={`
+              ${styles.offerClassCardTitle}
+              section-title-left text-gradient-strong
+            `}
             variants={softFade}
           >
             Learn Skills That Actually Help
@@ -74,13 +84,23 @@ function OfferClasses() {
             className={styles.offerClassIntro}
             variants={softFade}
           >
-            <strong>Openroot Classes</strong> is our education arm — a
-            financial-literacy and <strong>investing-education initiative</strong> for{" "}
-            <strong>students, beginners, and MSMEs</strong> who want practical
-            skills, not just theory. We believe high-quality, in-depth learning
-            shouldn’t break the bank. That’s why our programs are{" "}
-            <strong>affordable, ad-free, and transparent</strong>, with a deep
-            focus on real-life application instead of textbook-style content.
+            <strong className="text-accent">Openroot Classes</strong> is our
+            education arm — a financial-literacy and{" "}
+            <strong className="text-accent">
+              investing-education initiative
+            </strong>{" "}
+            for{" "}
+            <strong className="text-accent">
+              students, beginners, and MSMEs
+            </strong>{" "}
+            who want practical skills, not just theory. We believe
+            high-quality, in-depth learning shouldn’t break the bank. That’s
+            why our programs are{" "}
+            <strong className="text-accent">
+              affordable, ad-free, and transparent
+            </strong>
+            , with a deep focus on real-life application instead of
+            textbook-style content.
           </motion.p>
 
           {/* Subheading */}
@@ -88,28 +108,34 @@ function OfferClasses() {
             className={styles.offerClassSubheading}
             variants={softFade}
           >
-            <strong>Our expert-led programs include:</strong>
+            <strong className="text-accent">
+              Our expert-led programs include:
+            </strong>
           </motion.div>
 
           {/* List */}
           <motion.ul
-            className={styles.offerClassList}
+            className={`${styles.offerClassList} list-spaced`}
             variants={softFade}
           >
             <li>
-              <strong>Prompt Engineering</strong> — Learn how to design{" "}
-              <strong>AI workflows and automations</strong> that can help in
-              content creation, data handling, business operations, and
-              day-to-day productivity.
+              <strong className="text-accent">Prompt Engineering</strong> —
+              Learn how to design{" "}
+              <strong className="text-accent">
+                AI workflows and automations
+              </strong>{" "}
+              that can help in content creation, data handling, business
+              operations, and day-to-day productivity.
             </li>
             <li>
-              <strong>Financial Investing</strong> — Understand{" "}
-              <strong>
+              <strong className="text-accent">Financial Investing</strong> —
+              Understand{" "}
+              <strong className="text-accent">
                 wealth-building fundamentals, risk management, and long-term
                 investing strategies
               </strong>{" "}
-              so you can make confident financial decisions instead of guessing
-              or following hype.
+              so you can make confident financial decisions instead of
+              guessing or following hype.
             </li>
           </motion.ul>
 
@@ -119,8 +145,9 @@ function OfferClasses() {
             variants={softFade}
           >
             Our goal is simple — to make people{" "}
-            <strong>future-ready</strong> by combining technology, financial
-            literacy, and practical skill-building in one place.
+            <strong className="text-accent">future-ready</strong> by combining
+            technology, financial literacy, and practical skill-building in
+            one place.
           </motion.p>
         </motion.article>
       </div>
