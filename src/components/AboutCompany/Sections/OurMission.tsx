@@ -8,7 +8,7 @@ import { motion, Variants } from "framer-motion";
 import styles from "../styles-ac-section/OurMission.module.css";
 
 /* -------------------------------------------------
-   Same variants as WhoWeAre
+   Motion variants
 -------------------------------------------------- */
 const softFade: Variants = {
   hidden: { opacity: 0 },
@@ -25,10 +25,12 @@ const titleTech: Variants = {
   hidden: {
     opacity: 0,
     scale: 0.985,
+    y: 8,
   },
   visible: {
     opacity: 1,
     scale: 1,
+    y: 0,
     transition: {
       duration: 0.6,
       ease: "easeOut",
@@ -37,9 +39,10 @@ const titleTech: Variants = {
 };
 
 const contentBlock: Variants = {
-  hidden: { opacity: 0 },
+  hidden: { opacity: 0, y: 12 },
   visible: {
     opacity: 1,
+    y: 0,
     transition: {
       duration: 0.6,
       ease: "easeOut",
@@ -51,38 +54,46 @@ const contentBlock: Variants = {
 function OurMission() {
   return (
     <section className={styles.missionSection}>
-      <div className={styles.missionContainer}>
+      <section
+        className={`
+          ${styles.missionContainer}
+          card-dark card-dark-hover card-compact-mobile
+        `}
+      >
         <motion.div
           className={styles.missionContent}
           initial="hidden"
           whileInView="visible"
-          viewport={{ once: false, margin: "-120px" }}
+          viewport={{ once: true, margin: "-120px" }}
           aria-labelledby="mission-heading"
         >
           <div className={styles.textGroup}>
-            {/* Title — same as WhoWeAre */}
+            {/* Title */}
             <motion.h2
               id="mission-heading"
-              className={styles.missionTitle}
+              className={`
+                ${styles.missionTitle}
+                section-title-left text-gradient-strong
+              `}
               variants={titleTech}
             >
               Our Mission
             </motion.h2>
 
-            {/* Text block — single calm reveal */}
+            {/* Text block */}
             <motion.div
               className={styles.missionTextBlock}
               variants={contentBlock}
             >
               <p>
                 Our mission is to{" "}
-                <strong>
+                <strong className="text-accent">
                   open new roots of innovation, opportunity, and digital
                   independence
                 </strong>{" "}
                 for people and small businesses. We believe that everyone
                 deserves access to{" "}
-                <strong>
+                <strong className="text-accent">
                   smart technology, financial knowledge, and future-ready skills
                 </strong>{" "}
                 — regardless of income, background, or location.
@@ -91,18 +102,20 @@ function OurMission() {
               <p>
                 Whether it’s through a simple finance tool, a powerful AI
                 workflow, or an in-depth class,{" "}
-                <strong>Openroot exists to remove barriers</strong> and make
-                growth more achievable. Let’s grow together,{" "}
-                <strong>Let&apos;s choose Openroot.</strong>
+                <strong className="text-accent">
+                  Openroot exists to remove barriers
+                </strong>{" "}
+                and make growth more achievable. Let’s grow together,{" "}
+                <strong className="text-accent">let&apos;s choose Openroot.</strong>
               </p>
             </motion.div>
 
-            {/* CTA — fades in with content (no separate animation) */}
+            {/* CTA */}
             <motion.div
-              className={styles.missionCTA}
+              className={`${styles.missionCTA} btn-stack-mobile`}
               variants={softFade}
             >
-              <a href="/tools" className={styles.ctaPrimary}>
+              <a href="/tools" className="btn-pill btn-pill-primary">
                 Explore Our Tools
               </a>
 
@@ -110,14 +123,14 @@ function OurMission() {
                 href="https://openroot-classes-firebase.web.app/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className={styles.ctaGhost}
+                className="btn-pill btn-pill-ghost"
               >
                 Learn with Openroot Classes
               </a>
             </motion.div>
           </div>
         </motion.div>
-      </div>
+      </section>
     </section>
   );
 }

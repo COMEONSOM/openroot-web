@@ -37,36 +37,36 @@ function WhyChooseOpenroot() {
       className={styles.whyChooseContainer}
       initial={{ opacity: 0 }}
       whileInView={{ opacity: 1 }}
-      viewport={{ once: false, amount: 0.25 }}
+      viewport={{ once: true, amount: 0.25 }}
       transition={{ duration: 0.6, ease: "easeOut" }}
     >
-      {/* ✅ Title now visible */}
-      <motion.h2
-        className={styles.whyChooseTitle}
-        initial={{ opacity: 0 }}
-        whileInView={{ opacity: 1 }}
-        viewport={{ once: false, amount: 0.3 }}
-        transition={{ duration: 0.5, ease: "easeOut" }}
+      <h2
+        className={`${styles.whyChooseTitle} section-title text-gradient-primary`}
       >
         Why Choose Openroot?
-      </motion.h2>
+      </h2>
 
       <div className={styles.whyChooseGrid}>
         {reasonItems.map((item) => (
           <motion.article
             key={item.title}
-            className={styles.whyChooseCard}
+            className={`
+              ${styles.whyChooseCard}
+              card-dark card-dark-soft-border card-dark-hover card-compact-mobile
+            `}
             variants={cardTech}
             initial="hidden"
             whileInView="visible"
-            viewport={{ once: false, amount: 0.35 }}
+            viewport={{ once: true, amount: 0.35 }}
           >
-            <div className={styles.whyChooseIcon}>
+            <div className={`${styles.whyChooseIcon} icon-pill`}>
               <span>✔</span>
             </div>
 
             <div className={styles.whyChooseText}>
-              <h3>{item.title}</h3>
+              <h3 className="section-title-left text-gradient-strong">
+                {item.title}
+              </h3>
               <p>{item.body}</p>
             </div>
           </motion.article>

@@ -60,10 +60,11 @@
 }
 
 /* Mobile fallback */
-@media (max-width: 860px) {
+@media (max-width: 768px) {
   .auth-card {
     grid-template-columns: 1fr;
     height: auto;
+    width: 90%;
   }
 
   .auth-right {

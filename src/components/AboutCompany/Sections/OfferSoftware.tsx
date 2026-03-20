@@ -22,9 +22,10 @@ const cardTech: Variants = {
 };
 
 const softFade: Variants = {
-  hidden: { opacity: 0 },
+  hidden: { opacity: 0, y: 8 },
   visible: {
     opacity: 1,
+    y: 0,
     transition: {
       duration: 0.5,
       ease: "easeOut",
@@ -35,15 +36,18 @@ const softFade: Variants = {
 function OfferSoftware() {
   return (
     <motion.article
-      className={styles.offerSoftwareCard}
+      className={`
+        ${styles.offerSoftwareCard}
+        card-dark card-dark-soft-border card-dark-hover card-compact-mobile
+      `}
       variants={cardTech}
       initial="hidden"
       whileInView="visible"
-      viewport={{ once: false, margin: "-120px" }}
+      viewport={{ once: true, margin: "-120px" }}
     >
       {/* Tag */}
       <motion.div
-        className={styles.offerSoftwareTag}
+        className={`${styles.offerSoftwareTag} badge-pill badge-pill--accent`}
         variants={softFade}
       >
         Software Solutions
@@ -51,7 +55,10 @@ function OfferSoftware() {
 
       {/* Title */}
       <motion.h3
-        className={styles.offerSoftwareTitle}
+        className={`
+          ${styles.offerSoftwareTitle}
+          section-title-left text-gradient-strong
+        `}
         variants={softFade}
       >
         Software Built for Real-World Businesses
@@ -62,13 +69,19 @@ function OfferSoftware() {
         className={styles.offerSoftwareIntro}
         variants={softFade}
       >
-        Under <strong>Software Solutions</strong>, we design and build{" "}
-        <strong>custom digital tools, web apps, and automation systems</strong>{" "}
+        Under <strong className="text-accent">Software Solutions</strong>, we
+        design and build{" "}
+        <strong className="text-accent">
+          custom digital tools, web apps, and automation systems
+        </strong>{" "}
         for micro and small enterprises that need strong online systems at
         practical, sustainable pricing. Our work is focused on enabling
         businesses that often don’t have access to expensive software,
         in-house tech teams, or complex tools — but still need{" "}
-        <strong>reliable, long-term digital systems</strong> to grow.
+        <strong className="text-accent">
+          reliable, long-term digital systems
+        </strong>{" "}
+        to grow.
       </motion.p>
 
       {/* Subheading */}
@@ -76,25 +89,30 @@ function OfferSoftware() {
         className={styles.offerSoftwareSubheading}
         variants={softFade}
       >
-        <strong>We help MSMEs with:</strong>
+        <strong className="text-accent">We help MSMEs with:</strong>
       </motion.div>
 
       {/* List */}
       <motion.ul
-        className={styles.offerSoftwareList}
+        className={`${styles.offerSoftwareList} list-spaced`}
         variants={softFade}
       >
         <li>
-          <strong>Business automation</strong> to reduce repetitive manual tasks
-          and save time.
+          <strong className="text-accent">Business automation</strong> to
+          reduce repetitive manual tasks and save time.
         </li>
         <li>
-          <strong>Custom applications & portals</strong> built specifically for
-          their workflows instead of forcing them to adjust to generic tools.
+          <strong className="text-accent">
+            Custom applications &amp; portals
+          </strong>{" "}
+          built specifically for their workflows instead of forcing them to
+          adjust to generic tools.
         </li>
         <li>
-          <strong>Practical, scalable architectures</strong> designed to grow
-          with the business without unnecessary complexity.
+          <strong className="text-accent">
+            Practical, scalable architectures
+          </strong>{" "}
+          designed to grow with the business without unnecessary complexity.
         </li>
       </motion.ul>
 
@@ -104,8 +122,10 @@ function OfferSoftware() {
         variants={softFade}
       >
         Every solution is meant to be{" "}
-        <strong>understandable, maintainable, and truly helpful</strong> — not
-        just impressive on paper.
+        <strong className="text-accent">
+          understandable, maintainable, and truly helpful
+        </strong>{" "}
+        — not just impressive on paper.
       </motion.p>
     </motion.article>
   );

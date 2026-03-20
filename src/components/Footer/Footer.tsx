@@ -31,21 +31,21 @@ export default function Footer() {
       <div className="footer-trust">
         
         <img
-          src="/assets/google-analytics-badge.png"
+          src="/assets/google-analytics-badge.avif"
           alt="Google Analytics Certified"
           className="footer-trust-logo"
           draggable={false}
         />
         
         <img
-          src="/assets/msme-logo.png"
+          src="/assets/msme-logo.avif"
           alt="MSME Registered"
           className="footer-trust-logo"
           draggable={false}
         />
 
         <img
-          src="/assets/hubspot-badge.png"
+          src="/assets/hubspot-badge.avif"
           alt="HubSpot Certified"
           className="footer-trust-logo"
           draggable={false}

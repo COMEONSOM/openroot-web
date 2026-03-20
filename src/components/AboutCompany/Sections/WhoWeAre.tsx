@@ -34,7 +34,7 @@ const eyebrowMotion: Variants = {
     x: 0,
     transition: {
       duration: 0.55,
-      ease: [0.22, 1, 0.36, 1], // smooth cubic-bezier
+      ease: [0.22, 1, 0.36, 1],
     },
   },
 };
@@ -80,7 +80,10 @@ const contentMotion: Variants = {
 function WhoWeAre() {
   return (
     <motion.section
-      className={styles.whoWeAreContainer}
+      className={`
+        ${styles.whoWeAreContainer}
+        card-dark card-dark-hover card-compact-mobile
+      `}
       initial={SECTION_FADE.initial}
       whileInView={SECTION_FADE.whileInView}
       viewport={SECTION_FADE.viewport}
@@ -94,7 +97,7 @@ function WhoWeAre() {
       >
         {/* Eyebrow */}
         <motion.p
-          className={styles.whoWeAreEyebrow}
+          className={`${styles.whoWeAreEyebrow} eyebrow-accent`}
           variants={eyebrowMotion}
         >
           About Openroot
@@ -102,7 +105,10 @@ function WhoWeAre() {
 
         {/* Title */}
         <motion.h1
-          className={styles.whoWeAreTitle}
+          className={`
+            ${styles.whoWeAreTitle}
+            section-title-left text-gradient-strong
+          `}
           variants={titleMotion}
         >
           Who We Are
@@ -113,24 +119,33 @@ function WhoWeAre() {
           className={styles.whoWeAreTextBlock}
           variants={contentMotion}
         >
-          <p  className={styles.companyCredibility}>
-            <strong>Openroot Systems</strong> is a registered MSME under the
-            Government of India with UDYAM Registration Number{" "}
-            <strong>UDYAM-WB-14-0263034</strong>. The organization is also a
-            registered employer on the <strong>National Career Service</strong> (NCS) portal,
-            enabling us to support skill development and employment
-            opportunities for students and professionals across India.
+          <p className={`${styles.companyCredibility} note-accent`}>
+            <strong className="text-accent">Openroot Systems</strong> is a
+            registered MSME under the Government of India with UDYAM
+            Registration Number{" "}
+            <strong className="text-accent">UDYAM-WB-14-0263034</strong>. The
+            organization is also a registered employer on the{" "}
+            <strong className="text-accent">
+              National Career Service
+            </strong>{" "}
+            (NCS) portal, enabling us to support skill development and
+            employment opportunities for students and professionals across
+            India.
           </p>
-      
+
           <p>
-            We also build <strong>custom software solutions</strong> for{" "}
-            <strong>MSMEs</strong>, helping them scale affordably and efficiently
-            with practical, real-world systems instead of over-engineered
-            complexity. Beyond software, Openroot is a platform for{" "}
-            <strong>skill development and empowerment</strong>. Through our
-            classes and resources, we help students, working professionals,
-            and small business owners become confident in using technology,
-            AI, and finance to improve their lives.
+            We also build{" "}
+            <strong className="text-accent">custom software solutions</strong>{" "}
+            for <strong className="text-accent">MSMEs</strong>, helping them
+            scale affordably and efficiently with practical, real-world
+            systems instead of over-engineered complexity. Beyond software,
+            Openroot is a platform for{" "}
+            <strong className="text-accent">
+              skill development and empowerment
+            </strong>
+            . Through our classes and resources, we help students, working
+            professionals, and small business owners become confident in
+            using technology, AI, and finance to improve their lives.
           </p>
         </motion.div>
       </motion.div>

@@ -127,7 +127,7 @@ const Header = () => {
         {/* LOGO */}
         <div className="header-logo">
           <img
-            src="/assets/openroot-white-nobg.png"
+            src="/assets/openroot-white-nobg.avif"
             alt="Openroot Logo"
             className="header-logo-img"
             draggable={false}
