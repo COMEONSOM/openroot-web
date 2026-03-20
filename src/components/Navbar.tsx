@@ -76,11 +76,11 @@ const Icons = {
 
 const iconMap: Record<string, React.ReactNode> = {
 
-  "coevas-media-downloader": Icons.Coevas,
   "travel-expense-manager": Icons.travelExpense,
   "nior-ai": Icons.timeAI,
   "helping-hand": Icons.helpingHand,
   "openroot-classes": Icons.Classes,
+  "coevas-media-downloader": Icons.Coevas,
   "openroot-makaut_grade_and_percentage-calculator": Icons.makaut
 
 };
