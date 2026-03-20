@@ -17,20 +17,21 @@ import SoftwarePage from "./pages/SoftwarePage";
 import "./App.css";
 
 export default function App() {
-
   return (
-
     <BrowserRouter>
 
+      {/* =====================================================
+         GLOBAL SEO (FALLBACK ONLY — DO NOT REMOVE)
+      ===================================================== */}
       <Helmet>
-        <title>
-          Openroot Systems | AI Tools, Productivity Software & Student Utilities
-        </title>
+        <title>Openroot Systems</title>
 
         <meta
           name="description"
-          content="Openroot Systems builds AI tools, productivity software, student utilities and financial management applications."
+          content="Openroot Systems builds AI tools, productivity software, student utilities and digital solutions."
         />
+
+        <link rel="canonical" href="https://openroot.in/" />
       </Helmet>
 
       {/* GLOBAL HEADER */}
@@ -38,12 +39,26 @@ export default function App() {
 
       <Routes>
 
-        {/* HOME PAGE */}
-
+        {/* =====================================================
+           HOME PAGE
+        ===================================================== */}
         <Route
           path="/"
           element={
             <>
+              <Helmet>
+                <title>
+                  Openroot Systems | AI Tools, Education & Software Solutions
+                </title>
+
+                <meta
+                  name="description"
+                  content="Explore Openroot Systems tools including AI apps, student utilities, financial tools and productivity software."
+                />
+
+                <link rel="canonical" href="https://openroot.in/" />
+              </Helmet>
+
               <Advertisement />
               <Navbar />
               <AboutCompany />
@@ -52,22 +67,58 @@ export default function App() {
           }
         />
 
-        {/* CERTIFICATE VERIFICATION */}
-
+        {/* =====================================================
+           CERTIFICATE VERIFICATION
+        ===================================================== */}
         <Route
           path="/certificate-verification"
-          element={<CertificateVerification />}
+          element={
+            <>
+              <Helmet>
+                <title>Certificate Verification | Openroot</title>
+
+                <meta
+                  name="description"
+                  content="Verify Openroot certificates securely with our official verification tool."
+                />
+
+                <link
+                  rel="canonical"
+                  href="https://openroot.in/certificate-verification"
+                />
+              </Helmet>
+
+              <CertificateVerification />
+            </>
+          }
         />
 
-        {/* SOFTWARE HUB */}
-
+        {/* =====================================================
+           SOFTWARE HUB
+        ===================================================== */}
         <Route
           path="/software"
-          element={<SoftwareHub />}
+          element={
+            <>
+              <Helmet>
+                <title>All Software Tools | Openroot</title>
+
+                <meta
+                  name="description"
+                  content="Browse all Openroot software tools including AI apps, expense managers, job update platforms and student utilities."
+                />
+
+                <link rel="canonical" href="https://openroot.in/software" />
+              </Helmet>
+
+              <SoftwareHub />
+            </>
+          }
         />
 
-        {/* SOFTWARE PAGE */}
-
+        {/* =====================================================
+           INDIVIDUAL SOFTWARE PAGE (DYNAMIC SEO INSIDE PAGE)
+        ===================================================== */}
         <Route
           path="/software/:slug"
           element={<SoftwarePage />}
@@ -76,7 +127,5 @@ export default function App() {
       </Routes>
 
     </BrowserRouter>
-
   );
-
 }

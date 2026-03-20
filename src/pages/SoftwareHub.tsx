@@ -49,23 +49,23 @@ export default function SoftwareHub() {
 
         <script type="application/ld+json">
           {`
-{
- "@context": "https://schema.org",
- "@type": "ItemList",
- "name": "Openroot Software Tools",
- "itemListElement": [
- ${softwareList.map((tool, index) => `
-   {
-     "@type": "SoftwareApplication",
-     "position": ${index + 1},
-     "name": "${tool.name}",
-     "url": "https://openroot.in/software/${tool.slug}",
-     "description": "${tool.description}"
-   }
- `).join(",")}
- ]
-}
-`}
+            {
+            "@context": "https://schema.org",
+            "@type": "ItemList",
+            "name": "Openroot Software Tools",
+            "itemListElement": [
+            ${softwareList.map((tool, index) => `
+              {
+                "@type": "SoftwareApplication",
+                "position": ${index + 1},
+                "name": "${tool.name}",
+                "url": "https://openroot.in/software/${tool.slug}",
+                "description": "${tool.description}"
+              }
+            `).join(",")}
+            ]
+            }
+            `}
         </script>
 
       </Helmet>

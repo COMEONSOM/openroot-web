@@ -199,35 +199,46 @@ Instead of manually determining who owes whom, the platform generates clear summ
 
       <Helmet>
 
-        <title>{tool.name} | Openroot Systems</title>
+        <title>{tool.seoTitle || tool.name}</title>
 
-        <link rel="icon" href="https://openroot.in/favicon.ico" />
-        <link rel="apple-touch-icon" href="https://openroot.in/logo.png" />
+        <meta
+          name="description"
+          content={tool.seoDescription || tool.description}
+        />
 
+        {/* CANONICAL */}
         <link
           rel="canonical"
           href={`https://openroot.in/software/${tool.slug}`}
         />
 
-        <meta
-          name="description"
-          content={tool.description}
-        />
+        {/* FAVICONS */}
+        <link rel="icon" href="https://openroot.in/favicon.ico" />
+        <link rel="apple-touch-icon" href="https://openroot.in/logo.png" />
 
-        <meta
-          name="description"
-          content={tool.description}
-        />
+        {/* OPEN GRAPH (VERY IMPORTANT) */}
+        <meta property="og:title" content={`${tool.name} | Openroot`} />
+        <meta property="og:description" content={tool.description} />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content={`https://openroot.in/software/${tool.slug}`} />
+        <meta property="og:image" content="https://openroot.in/assets/company-icon.png" />
 
+        {/* TWITTER */}
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content={tool.name} />
+        <meta name="twitter:description" content={tool.description} />
+        <meta name="twitter:image" content="https://openroot.in/assets/company-icon.png" />
+
+        {/* STRUCTURED DATA */}
         <script type="application/ld+json">
           {JSON.stringify({
             "@context": "https://schema.org",
             "@type": "SoftwareApplication",
-            "name": tool.name,
-            "description": tool.description,
-            "applicationCategory": "Utility",
-            "operatingSystem": "Web",
-            "url": `https://openroot.in/software/${tool.slug}`
+            name: tool.name,
+            description: tool.description,
+            applicationCategory: "Utility",
+            operatingSystem: "Web",
+            url: `https://openroot.in/software/${tool.slug}`
           })}
         </script>
 
