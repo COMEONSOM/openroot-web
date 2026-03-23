@@ -319,3 +319,22 @@ body {
 #released-softwares-section {
   scroll-margin-top: 120px;
 }
+
+@media (max-width: 768px) {
+
+  .overlay-grid {
+    grid-template-columns: repeat(2, 1fr); /* FORCE 2 columns */
+    width: 80%;
+    padding: 16px;
+  }
+
+}
+
+@media (min-width: 769px) {
+
+  .overlay-grid {
+    width: 100%;
+    padding: 16px;
+  }
+
+}

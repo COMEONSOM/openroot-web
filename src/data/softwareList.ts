@@ -1,3 +1,4 @@
+import { Software } from "../types/software";
 export const softwareList = [
 
   {

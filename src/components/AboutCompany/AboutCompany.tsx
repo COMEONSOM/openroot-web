@@ -1,6 +1,6 @@
 // src/components/AboutCompany/AboutCompany.jsx
 import React, { memo } from "react";
-import { Helmet } from "@dr.pogodin/react-helmet";
+import { Helmet } from "react-helmet-async";
 import styles from "./styles-ac-section/AboutCompany.module.css";
 
 // Sections

@@ -1,18 +1,18 @@
-// src/main.jsx
 import React from "react";
 import ReactDOM from "react-dom/client";
 import App from "./App";
-import "./index.css"; // Make sure Tailwind and FontAwesome are applied
+import "./index.css";
 import "@fortawesome/fontawesome-free/css/all.min.css";
-import { HelmetProvider } from "@dr.pogodin/react-helmet";
+import { HelmetProvider } from "react-helmet-async";
 
+const rootElement = document.getElementById("root");
 
-const rootElement = document.getElementById("root") as HTMLElement;
+if (!rootElement) {
+  throw new Error("Root element not found");
+}
 
 ReactDOM.createRoot(rootElement).render(
-  //<React.StrictMode>
   <HelmetProvider>
     <App />
   </HelmetProvider>
-  //</React.StrictMode>
 );
