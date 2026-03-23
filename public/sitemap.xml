@@ -3,58 +3,60 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
   <!-- HOME -->
-
   <url>
     <loc>https://openroot.in/</loc>
-    <lastmod>2026-03-13</lastmod>
+    <lastmod>2026-03-23</lastmod>
     <priority>1.0</priority>
   </url>
 
-  <!-- SOFTWARE HUB -->
-
+  <!-- MAIN HUB -->
   <url>
     <loc>https://openroot.in/software</loc>
-    <lastmod>2026-03-13</lastmod>
-    <priority>0.9</priority>
+    <lastmod>2026-03-23</lastmod>
+    <priority>0.95</priority>
   </url>
 
-  <!-- CORE PAGE -->
-
+  <!-- VERY IMPORTANT PAGE -->
   <url>
     <loc>https://openroot.in/certificate-verification</loc>
-    <lastmod>2026-03-13</lastmod>
-    <priority>0.9</priority>
+    <lastmod>2026-03-23</lastmod>
+    <priority>0.95</priority>
   </url>
 
-  <!-- SOFTWARE PAGES -->
+  <!-- 🔥 TOP SOFTWARE (These will show in Google) -->
+  <url>
+    <loc>https://openroot.in/software/helping-hand</loc>
+    <lastmod>2026-03-23</lastmod>
+    <priority>0.9</priority>
+  </url>
 
   <url>
     <loc>https://openroot.in/software/nior-ai</loc>
-    <lastmod>2026-03-13</lastmod>
-    <priority>0.9</priority>
-  </url>
-
-  <url>
-    <loc>https://openroot.in/software/helping-hand</loc>
-    <lastmod>2026-03-13</lastmod>
-    <priority>0.9</priority>
+    <lastmod>2026-03-23</lastmod>
+    <priority>0.95</priority>
   </url>
 
   <url>
     <loc>https://openroot.in/software/travel-expense-manager</loc>
-    <lastmod>2026-03-13</lastmod>
-    <priority>0.9</priority>
+    <lastmod>2026-03-23</lastmod>
+    <priority>0.95</priority>
   </url>
 
   <url>
     <loc>https://openroot.in/software/openroot-classes</loc>
-    <lastmod>2026-03-13</lastmod>
-    <priority>0.9</priority>
+    <lastmod>2026-03-23</lastmod>
+    <priority>0.95</priority>
   </url>
 
   <url>
     <loc>https://openroot.in/software/coevas-media-downloader</loc>
-    <lastmod>2026-03-13</lastmod>
+    <lastmod>2026-03-23</lastmod>
+    <priority>0.9</priority>
+  </url>
+
+  <url>
+    <loc>https://openroot.in/software/openroot-makaut_grade_and_percentage-calculator</loc>
+    <lastmod>2026-03-23</lastmod>
     <priority>0.9</priority>
   </url>
 

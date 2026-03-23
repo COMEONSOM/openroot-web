@@ -1,4 +1,4 @@
-import { Helmet } from "@dr.pogodin/react-helmet";
+import { Helmet } from "react-helmet-async";
 import React from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
@@ -16,26 +16,37 @@ import SoftwarePage from "./pages/SoftwarePage";
 
 import "./App.css";
 
+// ✅ 404 Page
+function NotFound() {
+  return (
+    <div style={{ padding: "100px", textAlign: "center" }}>
+      <Helmet>
+        <title>404 - Page Not Found | Openroot</title>
+        <meta name="robots" content="noindex" />
+      </Helmet>
+
+      <h1>404</h1>
+      <p>Page not found</p>
+
+      <a
+        href="/"
+        style={{
+          color: "#a3e87b",
+          display: "inline-block",
+          marginTop: "20px",
+          textDecoration: "none",
+          fontWeight: "600"
+        }}
+      >
+        ← Go back to Home
+      </a>
+    </div>
+  );
+}
+
 export default function App() {
   return (
     <BrowserRouter>
-
-      {/* =====================================================
-         GLOBAL SEO (FALLBACK ONLY — DO NOT REMOVE)
-      ===================================================== */}
-      <Helmet>
-        <title>Openroot Systems</title>
-
-        <meta
-          name="description"
-          content="Openroot Systems builds AI tools, productivity software, student utilities and digital solutions."
-        />
-
-        <link rel="canonical" href="https://openroot.in/" />
-      </Helmet>
-
-      {/* GLOBAL HEADER */}
-      <Header />
 
       <Routes>
 
@@ -59,6 +70,7 @@ export default function App() {
                 <link rel="canonical" href="https://openroot.in/" />
               </Helmet>
 
+              <Header />
               <Advertisement />
               <Navbar />
               <AboutCompany />
@@ -88,6 +100,7 @@ export default function App() {
                 />
               </Helmet>
 
+              <Header />
               <CertificateVerification />
             </>
           }
@@ -111,18 +124,29 @@ export default function App() {
                 <link rel="canonical" href="https://openroot.in/software" />
               </Helmet>
 
+              <Header />
               <SoftwareHub />
             </>
           }
         />
 
         {/* =====================================================
-           INDIVIDUAL SOFTWARE PAGE (DYNAMIC SEO INSIDE PAGE)
+           INDIVIDUAL SOFTWARE PAGE
         ===================================================== */}
         <Route
           path="/software/:slug"
-          element={<SoftwarePage />}
+          element={
+            <>
+              <Header />
+              <SoftwarePage />
+            </>
+          }
         />
+
+        {/* =====================================================
+           🚨 404 PAGE
+        ===================================================== */}
+        <Route path="*" element={<NotFound />} />
 
       </Routes>
 

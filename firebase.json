@@ -28,6 +28,28 @@
         "source": "/openroot-makaut_grade_and_percentage-calculator/**",
         "destination": "https://comeonsom.github.io/openroot-makaut_grade_and_percentage-calculator/",
         "type": 301
+      },
+
+      {
+        "source": "/gold-jewel-price-indicator",
+        "destination": "/",
+        "type": 301
+      },
+      {
+        "source": "/makaut-grade-calculator",
+        "destination": "/",
+        "type": 301
+      },
+      {
+        "source": "/tools",
+        "destination": "/software",
+        "type": 301
+      },
+
+      {
+        "source": "https://www.openroot.in/**",
+        "destination": "https://openroot.in/:splat",
+        "type": 301
       }
     ],
 
@@ -48,6 +70,7 @@
         "source": "/contact",
         "destination": "/index.html"
       },
+
       {
         "source": "**",
         "destination": "/index.html"
