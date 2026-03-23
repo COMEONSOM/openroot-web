@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { createPortal } from "react-dom";
+import { useLocation } from "react-router-dom";
 import "./styles/CertificateModal.css";
 
 interface Props {
@@ -77,33 +78,34 @@ export default function CertificateModal({ isOpen, onClose }: Props) {
      MODAL NOT OPEN → RETURN NULL
   ----------------------------------------- */
 
-  if (!isOpen) return null;
+  const location = useLocation();
+  const isStandalonePage = location.pathname === "/certificate-verification";
+
+  if (!isOpen && !isStandalonePage) return null;
 
   /* -----------------------------------------
      RENDER MODAL USING PORTAL
   ----------------------------------------- */
 
-  return createPortal(
-
+  const modalContent = (
     <div className="cert-overlay">
-
       <div className="cert-modal">
-
         <button
           className="cert-close"
-          onClick={onClose}
+          onClick={() => {
+            if (isStandalonePage) {
+              window.location.href = "/";
+            } else {
+              onClose();
+            }
+          }}
         >
           ✕
         </button>
 
-        <h2 className="cert-title">
-          Certificate Verification
-        </h2>
-
-        {/* INPUT AREA */}
+        <h2 className="cert-title">Certificate Verification</h2>
 
         <div className="cert-input-row">
-
           <input
             type="text"
             placeholder="Enter Certificate ID"
@@ -111,60 +113,31 @@ export default function CertificateModal({ isOpen, onClose }: Props) {
             onChange={(e) => setCertId(e.target.value)}
           />
 
-          <button
-            onClick={() => verify()}
-          >
+          <button onClick={() => verify()}>
             Verify
           </button>
-
         </div>
 
-        {/* VERIFIED RESULT */}
-
         {result && result !== "notfound" && (
-
           <div className="cert-result-card">
+            <div className="cert-badge">✓ VERIFIED</div>
 
-            <div className="cert-badge">
-              ✓ VERIFIED
-            </div>
-
-            <p>
-              <b>Student Name:</b> {result["Student Name"]}
-            </p>
-
-            <p>
-              <b>Course:</b> {result["Course Name"]}
-            </p>
-
-            <p>
-              <b>Result:</b> {result["Result Status"]}
-            </p>
-
-            <p>
-              <b>Instructor:</b> {result["Instructor Name"]}
-            </p>
-
+            <p><b>Student Name:</b> {result["Student Name"]}</p>
+            <p><b>Course:</b> {result["Course Name"]}</p>
+            <p><b>Result:</b> {result["Result Status"]}</p>
+            <p><b>Instructor:</b> {result["Instructor Name"]}</p>
           </div>
-
         )}
-
-        {/* NOT FOUND */}
 
         {result === "notfound" && (
-
-          <p className="cert-error">
-            Certificate not found
-          </p>
-
+          <p className="cert-error">Certificate not found</p>
         )}
-
       </div>
-
-    </div>,
-
-    document.body
-
+    </div>
   );
+
+  return isStandalonePage
+  ? modalContent
+  : createPortal(modalContent, document.body);
 
 }
