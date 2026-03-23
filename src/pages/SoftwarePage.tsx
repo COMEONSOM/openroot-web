@@ -79,7 +79,7 @@ export default function SoftwarePage() {
 
         <link rel="canonical" href={url} />
 
-        <meta property="og:title" content={`${tool.name} | Openroot`} />
+        <meta property="og:title" content={`${tool.name} | Openroot Systems`} />
         <meta property="og:description" content={tool.description} />
         <meta property="og:type" content="website" />
         <meta property="og:url" content={url} />

@@ -9,8 +9,7 @@ import Navbar from "./components/Navbar";
 import AboutCompany from "./components/AboutCompany/AboutCompany";
 import Footer from "./components/Footer/Footer";
 
-// PAGES
-import CertificateVerification from "./pages/CertificateVerification";
+import CertificateModal from "./components/CertificateModal";
 import SoftwareHub from "./pages/SoftwareHub";
 import SoftwarePage from "./pages/SoftwarePage";
 
@@ -87,7 +86,7 @@ export default function App() {
           element={
             <>
               <Helmet>
-                <title>Certificate Verification | Openroot</title>
+                <title>Certificate Verification | Openroot Systems</title>
 
                 <meta
                   name="description"
@@ -101,7 +100,9 @@ export default function App() {
               </Helmet>
 
               <Header />
-              <CertificateVerification />
+
+              <CertificateModal isOpen={true} onClose={() => {}} />
+
             </>
           }
         />
@@ -114,7 +115,7 @@ export default function App() {
           element={
             <>
               <Helmet>
-                <title>All Software Tools | Openroot</title>
+                <title>All Software Tools | Openroot Systems</title>
 
                 <meta
                   name="description"
