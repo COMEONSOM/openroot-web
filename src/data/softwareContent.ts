@@ -1,4 +1,6 @@
 import { SoftwareContent } from "../types/software";
+import "../components/styles/softwarePage.css";
+
 
 export const softwareContent: Record<string, SoftwareContent> = {
 
