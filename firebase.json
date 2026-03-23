@@ -8,6 +8,36 @@
       "**/node_modules/**"
     ],
 
+    "headers": [
+      {
+        "source": "**/*.@(js|css)",
+        "headers": [
+          {
+            "key": "Cache-Control",
+            "value": "public, max-age=31536000, immutable"
+          }
+        ]
+      },
+      {
+        "source": "**/*.@(png|jpg|jpeg|gif|svg|webp|ico)",
+        "headers": [
+          {
+            "key": "Cache-Control",
+            "value": "public, max-age=31536000, immutable"
+          }
+        ]
+      },
+      {
+        "source": "/index.html",
+        "headers": [
+          {
+            "key": "Cache-Control",
+            "value": "no-cache"
+          }
+        ]
+      }
+    ],
+
     "redirects": [
       {
         "source": "/openroot-helping-hand/**",
@@ -31,23 +61,19 @@
       },
 
       {
-        "source": "/gold-jewel-price-indicator",
-        "destination": "/",
-        "type": 301
-      },
-      {
-        "source": "/makaut-grade-calculator",
-        "destination": "/",
-        "type": 301
-      },
-      {
-        "source": "/tools",
+        "source": "/tools/**",
         "destination": "/software",
         "type": 301
       },
 
       {
-        "source": "https://www.openroot.in/**",
+        "source": "/**",
+        "has": [
+          {
+            "type": "host",
+            "value": "www.openroot.in"
+          }
+        ],
         "destination": "https://openroot.in/:splat",
         "type": 301
       }
@@ -70,7 +96,6 @@
         "source": "/contact",
         "destination": "/index.html"
       },
-
       {
         "source": "**",
         "destination": "/index.html"

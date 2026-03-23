@@ -16,6 +16,7 @@ import {
 import { onAuthStateChanged, User } from "firebase/auth";
 
 import { auth } from "../lib/firebase";
+import { Link } from "react-router-dom";
 import LoginModal from "./LoginModal";
 import "./styles/Header.css";
 
@@ -126,14 +127,15 @@ const Header = () => {
       <header className="header" role="banner">
         {/* LOGO */}
         <div className="header-logo">
-          <img
-            src="/assets/openroot-white-nobg.avif"
-            alt="Openroot Logo"
-            className="header-logo-img"
-            draggable={false}
-            loading="eager"
-          />
-
+          <Link to="/" aria-label="Go to homepage">
+            <img
+              src="/assets/openroot-white-nobg.avif"
+              alt="Openroot Systems"
+              className="header-logo-img"
+              draggable={false}
+              loading="eager"
+            />
+          </Link>
         </div>
 
         {/* RIGHT SIDE */}
