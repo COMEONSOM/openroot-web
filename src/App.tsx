@@ -115,7 +115,7 @@ export default function App() {
           element={
             <>
               <Helmet>
-                <title>All Software Tools | Openroot Systems</title>
+                <title>All Softwares | Openroot Systems</title>
 
                 <meta
                   name="description"

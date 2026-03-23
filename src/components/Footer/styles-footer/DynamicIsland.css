@@ -196,7 +196,7 @@
   }
 
   .verify-link:hover{
-    transform:translateY(-2px);
+    background:linear-gradient(135deg,#1d4ed8,#1e40af);
   }
 
   .verify-link:active{
