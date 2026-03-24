@@ -61,12 +61,6 @@
       },
 
       {
-        "source": "/tools/**",
-        "destination": "/software",
-        "type": 301
-      },
-
-      {
         "source": "/**",
         "has": [
           {
@@ -80,6 +74,15 @@
     ],
 
     "rewrites": [
+      {
+        "source": "/tools",
+        "destination": "/404.html"
+      },
+      {
+        "source": "/tools/**",
+        "destination": "/404.html"
+      },
+
       {
         "source": "/software/**",
         "destination": "/index.html"

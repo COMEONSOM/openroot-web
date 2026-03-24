@@ -1,12 +1,13 @@
 import { useState, useEffect } from "react";
 import "./styles-footer/DynamicIsland.css";
 import CertificateModal from "../CertificateModal";
+import FaqModal from "../FaqModal";
 
 export default function DynamicIsland() {
 
   const [isOpen, setIsOpen] = useState(false);
   const toggleHeart = () => setIsOpen(prev => !prev);
-
+  const [openFaq, setOpenFaq] = useState(false);
   const [openVerify, setOpenVerify] = useState(false);
 
   useEffect(() => {
@@ -56,15 +57,21 @@ export default function DynamicIsland() {
 
           <div className="footer-links">
 
-            <a href="#released-softwares-section">
-              Released Softwares
-            </a>
-
             <a
               href="https://comeonsom.github.io/openroot-helping-hand/other_files/terms.html"
               rel="external"
             >
               Terms & Conditions
+            </a>
+
+            <a
+              href="#"
+              onClick={(e) => {
+                e.preventDefault();
+                setOpenFaq(true);
+              }}
+            >
+              FAQS
             </a>
 
             <a
@@ -74,10 +81,8 @@ export default function DynamicIsland() {
               Founder Details
             </a>
 
-            <a
-              href="#"
-            >
-              Feedback Form
+            <a href="#released-softwares-section">
+              Released Softwares
             </a>
 
             <a
@@ -168,6 +173,11 @@ export default function DynamicIsland() {
         <CertificateModal
           isOpen={openVerify}
           onClose={() => setOpenVerify(false)}
+        />
+
+        <FaqModal
+          isOpen={openFaq}
+          onClose={() => setOpenFaq(false)}
         />
 
         {/* ======================================================

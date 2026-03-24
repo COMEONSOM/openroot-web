@@ -106,7 +106,9 @@ function OurMission() {
                   Openroot exists to remove barriers
                 </strong>{" "}
                 and make growth more achievable. Let’s grow together,{" "}
-                <strong className="text-accent">let&apos;s choose Openroot.</strong>
+                <strong className="text-accent">
+                  let&apos;s choose Openroot Systems.
+                </strong>
               </p>
             </motion.div>
 
@@ -115,8 +117,8 @@ function OurMission() {
               className={`${styles.missionCTA} btn-stack-mobile`}
               variants={softFade}
             >
-              <a href="/tools" className="btn-pill btn-pill-primary">
-                Explore Our Tools
+              <a href="/software" className="btn-pill btn-pill-primary">
+                Explore Our Softwares
               </a>
 
               <a
