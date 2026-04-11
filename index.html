@@ -3,16 +3,29 @@
 
 <head>
 
+  <!-- THEME — must run before any render to prevent flash -->
+  <script>
+    (function () {
+      try {
+        var saved = localStorage.getItem("ot-theme");
+        var preferred = saved
+          || (window.matchMedia("(prefers-color-scheme: dark)").matches
+            ? "dark"
+            : "light");
+        document.documentElement.setAttribute("data-theme", preferred);
+      } catch (e) {}
+    })();
+  </script>
+
   <meta charset="UTF-8" />
 
-  <!-- ======================================================
-  Viewport
-  ====================================================== -->
+  <!-- Viewport -->
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
 
-  <!-- ======================================================
-  Primary SEO
-  ====================================================== -->
+  <!-- Color scheme — prevents browser UI flash -->
+  <meta name="color-scheme" content="light dark" />
+
+  <!-- Primary SEO -->
   <title>Openroot Systems | AI Tools, Education & Software Solutions</title>
 
   <meta
@@ -22,96 +35,49 @@
 
   <meta name="robots" content="index, follow" />
 
-  <!-- ❌ REMOVED STATIC CANONICAL (IMPORTANT FIX) -->
-
   <!-- Sitemap -->
   <link rel="sitemap" type="application/xml" href="https://openroot.in/sitemap.xml" />
 
-  <!-- ======================================================
-  Favicon
-  ====================================================== -->
-  <link rel="icon" type="image/x-icon" href="https://openroot.in/favicon.ico?v=2">
+  <!-- Favicon -->
+  <link rel="icon" type="image/x-icon" href="https://openroot.in/favicon.ico?v=2" />
+  <link rel="icon" type="image/png" sizes="32x32" href="https://openroot.in/favicon-32x32.png?v=2" />
+  <link rel="icon" type="image/png" sizes="16x16" href="https://openroot.in/favicon-16x16.png?v=2" />
+  <link rel="apple-touch-icon" sizes="180x180" href="https://openroot.in/logo.png?v=2" />
 
-  <link rel="icon" type="image/png" sizes="32x32" href="https://openroot.in/favicon.ico?v=2">
+  <meta name="apple-mobile-web-app-title" content="Openroot Systems" />
+  <meta name="application-name" content="Openroot Systems" />
 
-  <link rel="icon" type="image/png" sizes="16x16" href="https://openroot.in/favicon.ico?v=2">
+  <!-- Theme color — matches --ot-bg in dark mode -->
+  <meta name="theme-color" content="#0a0a0a" />
 
-  <link rel="apple-touch-icon" sizes="180x180" href="https://openroot.in/logo.png?v=2">
+  <!-- Performance -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 
-  <meta name="apple-mobile-web-app-title" content="Openroot Systems">
-  <meta name="application-name" content="Openroot Systems">
-
-  <!-- ======================================================
-  Performance Optimization
-  ====================================================== -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-
-  <!-- ======================================================
-  Fonts
-  ====================================================== -->
+  <!-- Fonts — Inter (matches --ot-font in App.css) -->
   <link
-    href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&display=swap"
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
     rel="stylesheet"
   />
 
-  <!-- ======================================================
-  Theme Color
-  ====================================================== -->
-  <meta name="theme-color" content="#000000" />
-
-  <!-- ======================================================
-  Font Awesome
-  ====================================================== -->
-  <link
-    rel="stylesheet"
-    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
-    crossorigin="anonymous"
-    referrerpolicy="no-referrer"
-  />
-
-  <!-- ======================================================
-  OpenGraph (Social Sharing)
-  ====================================================== -->
+  <!-- OpenGraph -->
   <meta property="og:title" content="Openroot Systems – AI Tools & Software Solutions" />
-
   <meta
     property="og:description"
     content="Explore Openroot tools including NIOR AI, Resource Hub, Travel Expense Manager and digital utilities for students and businesses."
   />
-
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://openroot.in/" />
   <meta property="og:site_name" content="Openroot Systems" />
+  <meta property="og:image" content="https://openroot.in/assets/company-icon.png" />
 
-  <meta
-    property="og:image"
-    content="https://openroot.in/assets/company-icon.png"
-  />
-
-  <!-- ======================================================
-  Twitter Card
-  ====================================================== -->
+  <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Openroot Systems – AI Tools & Software" />
+  <meta name="twitter:description" content="Openroot builds AI tools, productivity software and digital solutions for students and MSMEs." />
+  <meta name="twitter:image" content="https://openroot.in/assets/company-icon.png" />
 
-  <meta
-    name="twitter:title"
-    content="Openroot Systems – AI Tools & Software"
-  />
-
-  <meta
-    name="twitter:description"
-    content="Openroot builds AI tools, productivity software and digital solutions for students and MSMEs."
-  />
-
-  <meta
-    name="twitter:image"
-    content="https://openroot.in/assets/company-icon.png"
-  />
-
-  <!-- ======================================================
-  Organization Schema
-  ====================================================== -->
+  <!-- Organization Schema -->
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -128,9 +94,7 @@
   }
   </script>
 
-  <!-- ======================================================
-  Website Schema
-  ====================================================== -->
+  <!-- Website Schema -->
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",

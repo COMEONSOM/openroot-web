@@ -1,118 +1,93 @@
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo, memo } from "react";
 import { motion, AnimatePresence, Variants, Transition } from "framer-motion";
 import "./styles/Advertisement.css";
 
-/* -----------------------------
-   Shared motion config
------------------------------ */
+
+/* ============================================================
+   MOTION CONFIG — only for mount/unmount (non-looping)
+   Looping animations → CSS @keyframes (zero JS thread cost)
+   ============================================================ */
 
 const bandVariants: Variants = {
-  hidden: { y: -80, opacity: 0 },
+  hidden:  { y: -80, opacity: 0 },
   visible: {
-    y: 0,
-    opacity: 1,
+    y: 0, opacity: 1,
     transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] as Transition["ease"] },
   },
   exit: {
-    y: -80,
-    opacity: 0,
+    y: -80, opacity: 0,
     transition: { duration: 0.4, ease: [0.22, 1, 0.36, 1] as Transition["ease"] },
   },
 };
 
 const subtitleVariants: Variants = {
-  hidden: { opacity: 0, y: -10 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: { delay: 0.2, duration: 0.4, ease: "easeOut" },
-  },
+  hidden:  { opacity: 0, y: -10 },
+  visible: { opacity: 1, y: 0, transition: { delay: 0.2, duration: 0.4, ease: "easeOut" } },
 };
 
 const taglineVariants: Variants = {
-  hidden: { opacity: 0, y: 10 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.4, ease: "easeOut" },
-  },
+  hidden:  { opacity: 0, y: 10 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.4, ease: "easeOut" } },
 };
 
-const cursorBlink: Transition = {
-  duration: 0.8,
-  repeat: Infinity,
-  ease: "linear",
-};
 
-/* -----------------------------
-   Typewriter Text Component
------------------------------ */
+/* ============================================================
+   TYPEWRITER — optimized: single string state (no char-map)
+   Rendering 1 text node instead of N <span> nodes per char
+   cuts paint area dramatically on every keystroke
+   ============================================================ */
 
 interface TypewriterProps {
   text: string;
   onComplete?: () => void;
 }
 
-const TypewriterText = ({ text, onComplete }: TypewriterProps) => {
-  const [displayed, setDisplayed] = useState("");
-  const [isDeleting, setIsDeleting] = useState(false);
+const TYPING_SPEED    = 120;
+const DELETING_SPEED  = 60;   // faster delete = less time animating
+const PAUSE_AFTER     = 3600;
+const PAUSE_BEFORE    = 800;
 
-  const TYPING_SPEED = 120;
-  const DELETING_SPEED = 120;
-  const PAUSE_AFTER_TYPE = 3600;
-  const PAUSE_AFTER_DELETE = 800;
+const TypewriterText = memo(({ text, onComplete }: TypewriterProps) => {
+  const [count,      setCount]      = useState(0);
+  const [isDeleting, setIsDeleting] = useState(false);
 
   useEffect(() => {
     let timer: ReturnType<typeof setTimeout>;
 
-    if (!isDeleting && displayed.length < text.length) {
-      timer = setTimeout(() => {
-        setDisplayed(text.slice(0, displayed.length + 1));
-      }, TYPING_SPEED);
-    } else if (!isDeleting && displayed.length === text.length) {
+    if (!isDeleting && count < text.length) {
+      timer = setTimeout(() => setCount(c => c + 1), TYPING_SPEED);
+
+    } else if (!isDeleting && count === text.length) {
       onComplete?.();
-      timer = setTimeout(() => {
-        setIsDeleting(true);
-      }, PAUSE_AFTER_TYPE);
-    } else if (isDeleting && displayed.length > 0) {
-      timer = setTimeout(() => {
-        setDisplayed(text.slice(0, displayed.length - 1));
-      }, DELETING_SPEED);
-    } else if (isDeleting && displayed.length === 0) {
-      timer = setTimeout(() => {
-        setIsDeleting(false);
-      }, PAUSE_AFTER_DELETE);
+      timer = setTimeout(() => setIsDeleting(true), PAUSE_AFTER);
+
+    } else if (isDeleting && count > 0) {
+      timer = setTimeout(() => setCount(c => c - 1), DELETING_SPEED);
+
+    } else if (isDeleting && count === 0) {
+      timer = setTimeout(() => setIsDeleting(false), PAUSE_BEFORE);
     }
 
     return () => clearTimeout(timer);
-  }, [displayed, isDeleting, text, onComplete]);
+  }, [count, isDeleting, text, onComplete]);
 
+  // Single text node — zero per-character DOM nodes = minimal paint
   return (
     <span className="typewriter-container" aria-label={text}>
-      <span>
-        {displayed.split("").map((char, i) => (
-          <span key={i} className="typewriter-char">
-            {char === " " ? "\u00A0" : char}
-          </span>
-        ))}
-      </span>
-
-      {/* Blinking Cursor */}
-      <motion.span
-        className="typewriter-cursor"
-        aria-hidden="true"
-        animate={{ opacity: [1, 0, 1] }}
-        transition={cursorBlink}
-      >
-        |
-      </motion.span>
+      <span aria-hidden="true">{text.slice(0, count)}</span>
+      {/* Cursor — CSS animation, no framer-motion needed */}
+      <span className="typewriter-cursor" aria-hidden="true" />
     </span>
   );
-};
+});
+TypewriterText.displayName = "TypewriterText";
 
-/* -----------------------------
-   Glowing Particles Background
------------------------------ */
+
+/* ============================================================
+   PARTICLES — pure CSS @keyframes, zero JS animation loop
+   React only sets inline --x/--y/--dur/--delay CSS vars once
+   on mount. The browser handles all animation on the GPU.
+   ============================================================ */
 
 interface ParticleConfig {
   x: string;
@@ -121,48 +96,47 @@ interface ParticleConfig {
   delay: number;
 }
 
+// Reduced count: 12 is visually identical to 20, 40% fewer layers
 const createParticleConfig = (count: number): ParticleConfig[] =>
   Array.from({ length: count }).map(() => ({
-    x: `${Math.random() * 100}%`,
-    y: `${Math.random() * 100}%`,
+    x:        `${Math.random() * 100}%`,
+    y:        `${Math.random() * 100}%`,
     duration: 3 + Math.random() * 2,
-    delay: Math.random() * 3,
+    delay:    Math.random() * 3,
   }));
 
-const GlowParticles = ({ count = 20 }: { count?: number }) => {
+const GlowParticles = memo(({ count = 12 }: { count?: number }) => {
+  // useMemo: config generated once, never on re-render
   const particles = useMemo(() => createParticleConfig(count), [count]);
 
   return (
     <div className="glow-particles" aria-hidden="true">
       {particles.map((p, i) => (
-        <motion.div
+        // Plain <div> — no motion.div, no JS RAF per particle
+        // CSS custom props set once; @keyframes runs on compositor
+        <div
           key={i}
           className="particle"
-          initial={{ x: p.x, y: p.y, scale: 0, opacity: 0 }}
-          animate={{
-            y: ["0%", "-20%"],
-            scale: [0, 1, 0],
-            opacity: [0, 0.6, 0],
-          }}
-          transition={{
-            duration: p.duration,
-            repeat: Infinity,
-            delay: p.delay,
-            ease: "easeOut",
-          }}
+          style={{
+            left:                    p.x,
+            top:                     p.y,
+            animationDuration:       `${p.duration}s`,
+            animationDelay:          `${p.delay}s`,
+          } as React.CSSProperties}
         />
       ))}
     </div>
   );
-};
+});
+GlowParticles.displayName = "GlowParticles";
 
-/* -----------------------------
-   Main Component
------------------------------ */
+
+/* ============================================================
+   MAIN COMPONENT
+   ============================================================ */
 
 export default function Advertisement() {
   const [isTypingComplete, setIsTypingComplete] = useState(false);
-
   const TEXT = "VISION 2047";
 
   return (
@@ -174,30 +148,17 @@ export default function Advertisement() {
         exit="exit"
         variants={bandVariants}
       >
-        {/* Gradient Background */}
+        {/* Static gradient — no animation, no repaint */}
         <div className="gradient-bg" aria-hidden="true" />
 
-        {/* Animated Glow */}
-        <motion.div
-          className="center-glow"
-          aria-hidden="true"
-          animate={{
-            scale: [1, 1.2, 1],
-            opacity: [0.3, 0.6, 0.3],
-          }}
-          transition={{
-            duration: 3,
-            repeat: Infinity,
-            ease: "easeInOut",
-          }}
-        />
+        {/* Glow — CSS animation only, no motion.div */}
+        <div className="center-glow" aria-hidden="true" />
 
-        {/* Particles */}
+        {/* Particles — CSS only */}
         <GlowParticles />
 
-        {/* Main Content */}
+        {/* Content */}
         <div className="advertisement-content">
-          {/* Subtitle */}
           <motion.span
             className="subtitle"
             variants={subtitleVariants}
@@ -207,7 +168,6 @@ export default function Advertisement() {
             INDIA @100
           </motion.span>
 
-          {/* Main Typewriter Text */}
           <h1 className="main-title">
             <TypewriterText
               text={TEXT}
@@ -215,7 +175,6 @@ export default function Advertisement() {
             />
           </h1>
 
-          {/* Tagline - appears after typing completes */}
           <AnimatePresence>
             {isTypingComplete && (
               <motion.p

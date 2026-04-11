@@ -25,25 +25,30 @@ Openroot Helping Hand also includes curated productivity tools, AI platforms, in
 By organizing trusted websites into structured categories, the platform helps users quickly discover useful portals without spending time searching across multiple sources. The initiative reflects Openroot Systems’ mission of supporting digital learning, skill development, and career exploration through practical online tools.`
   },
 
-  "coevas-media-downloader": {
-    overview: `Coevas Panel is a desktop application developed by Openroot Systems and distributed as a Windows executable built using the Electron framework. The software provides a simple interface that allows users to access media downloading functionality through a dedicated desktop environment.
+  "coevas-terminal": {
+    overview: `Coevas Terminal is a desktop application developed by Openroot Systems and distributed as a Windows executable built using the Electron framework. The software provides a clean and efficient interface that enables users to perform media downloading operations through a dedicated desktop environment.
 
-Unlike browser-based tools, Coevas Panel runs as a standalone desktop application that combines modern web technologies with native desktop capabilities. This approach ensures smooth performance while keeping the application lightweight and easy to update.
+  Unlike browser-based tools, Coevas Terminal runs as a standalone application, combining modern web technologies with native desktop capabilities to ensure smooth performance, stability, and ease of use.
 
-The application is distributed through an official download portal maintained by Openroot Systems. This portal ensures that users always receive authentic software builds and the latest available version directly from the official source.`,
+  The application is powered by an internal processing system known as Coevas Panel. While Coevas Terminal serves as the user-facing software, Coevas Panel handles the underlying operations such as media extraction, multi-source handling, and processing workflows.
+
+  All official versions of the application are distributed through GitHub Releases, ensuring that users always download authentic and up-to-date builds directly from the official source.`,
 
     features: [
       "Electron-based Windows desktop application",
-      "Lightweight executable distribution",
-      "Official Openroot software distribution portal",
-      "Automatic listing of the latest software version",
+      "Lightweight and optimized executable",
+      "Powered by Coevas Panel processing system",
+      "Supports media downloading across multiple platforms",
+      "Structured version control via GitHub Releases",
       "Access to previous builds for compatibility",
-      "Secure and controlled software release system"
+      "Secure and transparent software distribution"
     ],
 
-    purpose: `Coevas Panel provides a reliable and controlled distribution system for desktop applications developed by Openroot Systems.
+    purpose: `Coevas Terminal is designed to provide a reliable and efficient desktop environment for media downloading.
 
-By hosting official builds through a dedicated portal, users can safely download authentic executables while developers maintain proper version control, release history, and update management.`
+  By using a structured release system through GitHub, users can access authentic builds while developers maintain proper version control, release history, and update consistency.
+
+  The integration of the Coevas Panel processing system ensures stable performance and efficient handling of complex downloading workflows across different platforms.`
   },
 
   "openroot-classes": {

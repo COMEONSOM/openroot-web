@@ -1,228 +1,199 @@
-/* Advertisement.css
-   Polished styling for Advertisement.tsx
-   - Responsive
-   - Accessible (prefers-reduced-motion)
-   - Uses CSS variables for easy theming
-*/
+/* ============================================================
+   Advertisement.css — Performance-first
+   ─────────────────────────────────────────────────────────
+   RULE: Only transform + opacity in @keyframes.
+   Never animate: width, height, top, left, background,
+   box-shadow, border-radius, filter (on looping animations).
+   contain: strict → paints are scoped to this element only.
+   ============================================================ */
 
-/* -------------------------
-   Theme variables
-------------------------- */
-:root {
-  --bg-start: #000000;
-  --bg-end: #000000;
-  --accent-1: #a3e87b;
-  --accent-2: rgba(160, 64, 255, 0.95);
-  --fg: #ffffff;
-  --muted: rgba(255, 255, 255, 0.85);
-  --glass: rgba(0, 0, 0, 0.347);
-  --band-padding-vertical: 20px;
-  --band-padding-horizontal: 20px;
-  --max-width: 1200px;
-  --font-stack: "Roboto", system-ui, -apple-system, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
 
-  --tw-fast: 0.18s cubic-bezier(.2, .9, .2, 1);
+/* ============================================================
+   SECTION ROOT
+   contain: strict → browser won't repaint outside this box.
+   will-change: transform → promotes to own GPU layer for
+   the framer-motion entry animation, then compositor takes over.
+   ============================================================ */
+.advertisement-band {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  isolation: isolate;
+
+  /* CRITICAL — scopes all repaints inside this element */
+  contain: layout style paint;
+
+  /* Promote to own layer for the mount animation */
+  will-change: transform, opacity;
+
+  /* Remove will-change after mount via animation-fill-mode trick */
+  /* (framer-motion removes it after animation completes) */
 }
 
-/* -------------------------
-   Container / layout
-------------------------- */
-.advertisement-band {
-  width: 100vw;
-  margin-left: calc(50% - 50vw);
-  position: relative;
 
-  display: flex;
-  justify-content: center;
-  align-items: center;
+/* ============================================================
+   BACKGROUND GRADIENT — static, zero repaints
+   ============================================================ */
+.gradient-bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
 
-  margin-bottom: clamp(50px, 8vw, 120px);
-  padding: var(--band-padding-vertical) var(--band-padding-horizontal);
+  /* Static gradient — never animated */
+  background:
+    radial-gradient(ellipse 80% 60% at 50% 50%, rgba(163, 232, 123, 0.08) 0%, transparent 70%),
+    linear-gradient(135deg, #0a0f07 0%, #0e1a09 50%, #060d04 100%);
+}
 
-  background: linear-gradient(
-    90deg,
-    rgba(92, 91, 91, 0.687),
-    rgba(255, 255, 255, 0.02)
+
+/* ============================================================
+   CENTER GLOW — CSS animation replaces motion.div
+   opacity only: compositor-thread, zero paint
+   ============================================================ */
+.center-glow {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+
+  background: radial-gradient(
+    circle 40% at 50% 50%,
+    rgba(163, 232, 123, 0.18) 0%,
+    transparent 70%
   );
 
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-
-  border-top: 1px solid rgba(255, 255, 255, 0.08);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-
-  box-sizing: border-box;
+  /* opacity-only animation = compositor thread only */
+  animation: glow-pulse 3s ease-in-out infinite;
+  will-change: opacity;
 }
 
-/* -------------------------
-   Main content
-------------------------- */
+@keyframes glow-pulse {
+  0%,  100% { opacity: 0.4; }
+  50%        { opacity: 0.9; }
+}
+
+
+/* ============================================================
+   PARTICLES — CSS @keyframes, compositor only
+   transform: translateY + opacity = zero paint per frame
+   ============================================================ */
+.glow-particles {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.particle {
+  position: absolute;
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: #a3e87b;
+
+  /* GPU-promoted layer per particle */
+  will-change: transform, opacity;
+
+  /* animation-duration + animation-delay set via inline style */
+  animation: particle-float linear infinite;
+}
+
+@keyframes particle-float {
+  0%   { transform: translateY(0)    scale(0); opacity: 0;   }
+  15%  { transform: translateY(-8px) scale(1); opacity: 0.7; }
+  85%  { transform: translateY(-52px)scale(1); opacity: 0.5; }
+  100% { transform: translateY(-60px)scale(0); opacity: 0;   }
+}
+
+
+/* ============================================================
+   CONTENT
+   ============================================================ */
 .advertisement-content {
   position: relative;
-  z-index: 3;
-  width: min(100%, var(--max-width));
+  z-index: 1;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 10px;
-  text-align: center;
-  padding: 4px 12px;
-  box-sizing: border-box;
-}
-
-/* small pill subtitle (INDIA @100) */
-.subtitle {
-  display: inline-block;
-  font-weight: 600;
-  font-size: clamp(10px, 1.6vw, 12px);
-  letter-spacing: 1.6px;
-  text-transform: uppercase;
-  color: #000000;
-  background: #a3e87b;
-  padding: 5px 10px;
-  border-radius: 999px;
-  backdrop-filter: blur(6px);
-  border: 1px solid rgba(255, 255, 255, 0.04);
-  box-shadow: 0 6px 18px rgba(2, 6, 15, 0.5);
-}
-
-/* Main heading */
-.main-title {
-  font-family: var(--font-stack);
-  font-weight: 900;
-  margin: 0;
-  font-size: clamp(24px, 5.5vw, 56px);
-  color: var(--fg);
-  line-height: 0.92;
-  letter-spacing: -0.6px;
-  text-shadow:
-    0 8px 30px rgba(2, 6, 15, 0.6),
-    0 2px 8px rgba(0, 0, 0, 0.4);
-  display: inline-flex;
-  align-items: center;
   justify-content: center;
-  gap: 12px;
-  padding: 6px 10px;
+  gap: clamp(0.4rem, 1vw, 0.75rem);
+  padding: clamp(1.5rem, 4vw, 3rem) clamp(1rem, 5vw, 2rem);
+  text-align: center;
 }
 
-/* Tagline */
-.tagline {
+
+/* ============================================================
+   TYPOGRAPHY
+   ============================================================ */
+.subtitle {
+  font-size: clamp(0.65rem, 1.5vw, 0.78rem);
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  color: rgba(163, 232, 123, 0.7);
+  text-transform: uppercase;
+}
+
+.main-title {
+  font-size: clamp(1.6rem, 5vw, 3.5rem);
+  font-weight: 900;
+  letter-spacing: -0.02em;
+  line-height: 1;
+  color: #ffffff;
   margin: 0;
-  font-size: clamp(12px, 2vw, 18px);
-  color: rgba(255, 255, 255, 0.92);
-  font-weight: 500;
-  letter-spacing: 0.1px;
-  opacity: 0.98;
-  transform-origin: center;
 }
 
-/* -------------------------
-   Typewriter specifics
-------------------------- */
+.tagline {
+  font-size: clamp(0.75rem, 1.6vw, 0.9rem);
+  font-weight: 400;
+  letter-spacing: 0.05em;
+  color: rgba(255, 255, 255, 0.55);
+  margin: 0;
+  max-width: 40ch;
+}
+
+
+/* ============================================================
+   TYPEWRITER
+   Cursor = CSS animation, no framer-motion
+   ============================================================ */
 .typewriter-container {
   display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  white-space: nowrap;
-  font-weight: 800;
-  font-size: inherit;
+  align-items: baseline;
+  gap: 2px;
 }
 
-.typewriter-container span {
-  display: inline-flex;
-  align-items: center;
-}
-
-/* each char is a block */
-.typewriter-char {
-  display: inline-block;
-  line-height: 1;
-  transform-origin: center;
-  will-change: transform, opacity;
-  transition:
-    transform var(--tw-fast),
-    opacity var(--tw-fast);
-  color: inherit;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-}
-
-/* cursor style */
+/* Cursor — CSS blink, zero JS */
 .typewriter-cursor {
   display: inline-block;
-  font-weight: 900;
+  width: 2px;
+  height: 0.85em;
+  background: #a3e87b;
+  border-radius: 1px;
+  vertical-align: baseline;
   margin-left: 2px;
-  line-height: 1;
-  font-size: 0.98em;
-  color: var(--accent-1);
-  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.45);
+  animation: cursor-blink 0.8s step-start infinite;
+  will-change: opacity;
 }
 
-/* subtle hover */
-.advertisement-band:hover .typewriter-char {
-  transform: translateY(-1px);
+@keyframes cursor-blink {
+  0%,  100% { opacity: 1; }
+  50%        { opacity: 0; }
 }
 
-/* -------------------------
-   Accessibility: reduce motion
-------------------------- */
+
+/* ============================================================
+   REDUCED MOTION
+   ============================================================ */
 @media (prefers-reduced-motion: reduce) {
-  .typewriter-char,
-  .typewriter-cursor,
-  .advertisement-band {
-    transition: none !important;
+  .center-glow,
+  .particle,
+  .typewriter-cursor {
     animation: none !important;
-    transform: none !important;
-  }
-}
-
-/* -------------------------
-   Utility: pill variant
-------------------------- */
-.advertisement-band.pill {
-  border-radius: 14px;
-  border: 1px solid rgba(255, 255, 255, 0.04);
-  margin: 8px;
-}
-
-/* =========================
-   < 768px (Mobile / Small)
-========================= */
-@media (max-width: 767px) {
-  .advertisement-band {
-    min-height: 180px;
-    height: auto;
-    padding: 12px 10px;
   }
 
-  .main-title {
-    font-size: clamp(20px, 7vw, 32px);
-  }
-}
-
-/* =========================
-   768px – 899px (Tablet)
-========================= */
-@media (min-width: 768px) and (max-width: 899px) {
-  .advertisement-band {
-    min-height: 240px;
-    height: clamp(240px, 30vw, 320px);
-  }
-
-  .main-title {
-    font-size: clamp(28px, 5vw, 44px);
-  }
-}
-
-/* =========================
-   ≥ 900px (Desktop)
-========================= */
-@media (min-width: 900px) {
-  .advertisement-band {
-    max-height: 240px;
-  }
-
-  .main-title {
-    font-size: clamp(24px, 3.2vw, 36px);
-  }
+  .center-glow    { opacity: 0.5; }
+  .particle       { display: none; }
+  .typewriter-cursor { opacity: 1; }
 }

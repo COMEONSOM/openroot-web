@@ -1,0 +1,419 @@
+/* ==========================================================================
+   OPENROOT — FOOTER  |  Footer.css
+   VERSION: 2026.6
+   FIX: Added missing :hover / :active states for .footer-icon-btn
+        and .footer-trust-item — transitions were declared but never triggered.
+   ========================================================================== */
+
+
+/* ============================================================
+   TOKENS — --ft-* namespace
+   ============================================================ */
+
+/* ── Light (default) ── */
+:root,
+[data-theme="light"] {
+  --ft-main-bg-a:      #f2f2f0;
+  --ft-main-bg-b:      #eaeae8;
+  --ft-text:           #0a0a0a;
+  --ft-muted:          #555555;
+  --ft-link:           #111111;
+  --ft-glass:          rgba(0, 0, 0, 0.04);
+  --ft-border:         rgba(0, 0, 0, 0.10);
+
+  --ft-base-bg:        #e4e4e2;
+  --ft-base-border:    rgba(0, 0, 0, 0.08);
+
+  --ft-license-bg:     rgba(0, 0, 0, 0.03);
+  --ft-license-border: rgba(0, 0, 0, 0.07);
+
+  --ft-accent:         #3a7d44;
+  --ft-radius-lg:      22px;
+  --ft-radius-md:      14px;
+  --ft-radius-sm:      10px;
+  --ft-font:           "Inter", "IBM Plex Sans", system-ui, sans-serif;
+  --ft-ease:           0.35s cubic-bezier(0.21, 1.02, 0.73, 1);
+}
+
+/* ── Dark — manual toggle ── */
+[data-theme="dark"] {
+  --ft-main-bg-a:      #0d0d0d;
+  --ft-main-bg-b:      #131313;
+  --ft-text:           #f0f0f0;
+  --ft-muted:          #888888;
+  --ft-link:           #ffffff;
+  --ft-glass:          rgba(255, 255, 255, 0.055);
+  --ft-border:         rgba(255, 255, 255, 0.09);
+
+  --ft-base-bg:        #070707;
+  --ft-base-border:    rgba(255, 255, 255, 0.06);
+
+  --ft-license-bg:     rgba(255, 255, 255, 0.04);
+  --ft-license-border: rgba(255, 255, 255, 0.08);
+
+  --ft-accent:         #a3e87b;
+}
+
+/* ── Dark — system preference ── */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme]) {
+    --ft-main-bg-a:      #0d0d0d;
+    --ft-main-bg-b:      #131313;
+    --ft-text:           #f0f0f0;
+    --ft-muted:          #888888;
+    --ft-link:           #ffffff;
+    --ft-glass:          rgba(255, 255, 255, 0.055);
+    --ft-border:         rgba(255, 255, 255, 0.09);
+
+    --ft-base-bg:        #070707;
+    --ft-base-border:    rgba(255, 255, 255, 0.06);
+
+    --ft-license-bg:     rgba(255, 255, 255, 0.04);
+    --ft-license-border: rgba(255, 255, 255, 0.08);
+
+    --ft-accent:         #a3e87b;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    transition: none !important;
+    animation:  none !important;
+  }
+}
+
+
+/* ============================================================
+   FOOTER ROOT
+   ============================================================ */
+.footer-root {
+  position: relative;
+  width: 100%;
+  font-family: var(--ft-font);
+  color: var(--ft-text);
+  isolation: isolate;
+  overflow: hidden;
+  transition:
+    color            var(--ft-ease),
+    background-color var(--ft-ease);
+}
+
+
+/* ============================================================
+   MAIN SECTION
+   ============================================================ */
+.footer-main {
+  position: relative;
+  background: linear-gradient(158deg, var(--ft-main-bg-a) 0%, var(--ft-main-bg-b) 100%);
+  overflow: hidden;
+  transition: background var(--ft-ease);
+}
+
+/* Dot grid texture */
+.footer-main::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(circle, var(--ft-border) 1px, transparent 1px),
+    url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+  background-size: 22px 22px, 200px 200px;
+  opacity: 0.65;
+  z-index: 0;
+}
+
+/* Top shimmer line */
+.footer-main::after {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent      0%,
+    var(--ft-border) 15%,
+    var(--ft-link)   50%,
+    var(--ft-border) 85%,
+    transparent      100%
+  );
+  opacity: 0.30;
+  z-index: 2;
+}
+
+.footer-grid {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: 1.4fr 1fr 1fr;
+  align-items: start;
+  gap: clamp(2rem, 4vw, 3.5rem);
+  padding: clamp(2.8rem, 6vw, 4.5rem) clamp(1.5rem, 4vw, 3rem);
+}
+
+
+/* ─── Section label ──────────────────────────────────────── */
+.footer-label {
+  display: block;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--ft-muted);
+  opacity: 0.6;
+  margin-bottom: 1rem;
+}
+
+
+/* ─── Sitemap nav ────────────────────────────────────────── */
+.footer-sitemap { display: flex; flex-direction: column; }
+
+.footer-links {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.55rem clamp(1.4rem, 3vw, 2.5rem);
+  align-items: start;
+}
+
+.footer-links a {
+  font-size: 0.875rem;
+  font-weight: 450;
+  text-decoration: none;
+  color: var(--ft-muted);
+  letter-spacing: 0.01em;
+  line-height: 1.5;
+  opacity: 0.85;
+  transition: color var(--ft-ease), transform var(--ft-ease), opacity var(--ft-ease);
+}
+
+.footer-links a:hover {
+  color: var(--ft-link);
+  transform: translateX(3px);
+  opacity: 1;
+}
+
+.footer-links .verify-btn {
+  grid-column: 1 / -1;
+  margin-top: 0.6rem;
+  width: fit-content;
+}
+
+
+/* ─── Verify button ──────────────────────────────────────── */
+.verify-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.55rem 1.1rem;
+  border-radius: var(--ft-radius-sm);
+  border: 1px solid var(--ft-border);
+  background: var(--ft-glass);
+  color: var(--ft-link);
+  font-family: var(--ft-font);
+  font-weight: 600;
+  font-size: 0.8rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  transition: background var(--ft-ease), border-color var(--ft-ease);
+}
+
+.verify-btn::before {
+  content: "";
+  position: absolute;
+  left: 0; top: 20%; bottom: 20%;
+  width: 2px;
+  border-radius: 2px;
+  background: var(--ft-link);
+  opacity: 0.6;
+  transition: opacity var(--ft-ease);
+}
+
+.verify-btn:hover         { background: rgba(128,128,128,0.12); border-color: var(--ft-link); }
+.verify-btn:hover::before { opacity: 1; }
+.verify-btn:active        { transform: scale(0.97); }
+
+
+/* ─── Contact / Follow cards ─────────────────────────────── */
+.footer-card {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1.1rem;
+  padding: 1.6rem;
+  border-radius: var(--ft-radius-lg);
+  background: var(--ft-glass);
+  border: 1px solid var(--ft-border);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  box-shadow:
+    inset 0 1px 0 rgba(128,128,128,0.10),
+    0 2px 16px rgba(0,0,0,0.08);
+  transition:
+    background    var(--ft-ease),
+    border-color  var(--ft-ease),
+    box-shadow    var(--ft-ease);
+}
+
+.footer-icon-row {
+  display: flex;
+  gap: clamp(0.7rem, 2vw, 1.1rem);
+  flex-wrap: wrap;
+}
+
+
+/* ─── Icon buttons ────────────────────────────────────────────
+   FIX: :hover and :active states were completely absent.
+   Transitions for transform/box-shadow/background/border-color
+   were declared but had nothing to transition TO.
+   ─────────────────────────────────────────────────────────── */
+.footer-icon-btn {
+  width: clamp(42px, 6vw, 52px);
+  height: clamp(42px, 6vw, 52px);
+  display: grid;
+  place-items: center;
+  border-radius: var(--ft-radius-md);
+  background: var(--ft-glass);
+  border: 1px solid var(--ft-border);
+  text-decoration: none;
+  position: relative;
+  overflow: hidden;
+  /* Cursor explicitly set — <a> without href loses pointer */
+  cursor: pointer;
+  transition:
+    transform     var(--ft-ease),
+    box-shadow    var(--ft-ease),
+    background    var(--ft-ease),
+    border-color  var(--ft-ease);
+}
+
+.footer-icon-btn::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(135deg, rgba(128,128,128,0.08) 0%, transparent 55%);
+  pointer-events: none;
+}
+
+/* ✓ THE FIX — hover state that was missing */
+@media (hover: hover) and (pointer: fine) {
+  .footer-icon-btn:hover {
+    transform: translateY(-3px);
+    background: rgba(128, 128, 128, 0.13);
+    border-color: var(--ft-muted);
+    box-shadow:
+      0 6px 20px rgba(0, 0, 0, 0.13),
+      inset 0 1px 0 rgba(128, 128, 128, 0.18);
+  }
+}
+
+.footer-icon-btn:active {
+  transform: scale(0.94);
+  box-shadow: none;
+}
+
+.footer-icon-btn:focus-visible {
+  outline: 2px solid var(--ft-link);
+  outline-offset: 3px;
+}
+
+.footer-icon-btn img {
+  width: clamp(18px, 3.5vw, 22px);
+  height: auto;
+  display: block;
+  object-fit: contain;
+  /* Prevents img from swallowing pointer events and breaking hover */
+  pointer-events: none;
+}
+
+
+/* ============================================================
+   BASE SECTION
+   ============================================================ */
+.footer-base {
+  background: var(--ft-base-bg);
+  border-top: 1px solid var(--ft-base-border);
+  transition: background var(--ft-ease), border-color var(--ft-ease);
+}
+
+
+/* ─── Trust badges ───────────────────────────────────────── */
+.footer-trust {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: clamp(1.5rem, 4vw, 3rem);
+  padding: 2rem clamp(1.5rem, 4vw, 3rem) 1.6rem;
+}
+
+.footer-trust-item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0.80;
+  transition: opacity var(--ft-ease), transform var(--ft-ease);
+}
+
+.footer-trust-logo {
+  height: 96px;
+  width: auto;
+  object-fit: contain;
+  pointer-events: none; /* prevent img from eating the hover */
+}
+
+
+/* ─── License strip ──────────────────────────────────────── */
+.footer-license {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.9rem clamp(1.5rem, 4vw, 3rem);
+  flex-wrap: wrap;
+}
+
+.footer-license-text {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.45rem 1.2rem;
+  font-size: 0.78rem;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  color: var(--ft-muted);
+  white-space: nowrap;
+}
+
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+@media (max-width: 899px) {
+  .footer-grid {
+    grid-template-columns: 1fr 1fr;
+    grid-template-areas:
+      "sitemap sitemap"
+      "contact follow";
+    gap: 1.4rem;
+    padding-top: 2rem;
+  }
+
+  .footer-sitemap             { grid-area: sitemap; }
+  .footer-card:nth-of-type(1) { grid-area: contact; }
+  .footer-card:nth-of-type(2) { grid-area: follow;  }
+
+  .footer-links { grid-template-columns: 1fr 1fr; row-gap: 0.85rem; column-gap: 2rem; }
+  .footer-links a { font-size: 0.875rem; }
+  .footer-links .verify-btn { justify-self: start; }
+
+  .footer-trust { gap: 1.5rem; padding-bottom: 1.4rem; }
+  .footer-trust-logo { height: 76px; width: auto; }
+
+  .footer-license { flex-direction: column; align-items: center; gap: 0.75rem; }
+  .footer-license-text { white-space: normal; text-align: center; }
+}
