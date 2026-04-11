@@ -1,262 +1,1031 @@
-/* ================================
-   MAIN CONTAINER
-================================ */
+/* ============================================================
+   SOFTWARE PAGE — Premium Redesign
+   ============================================================ */
 
-.softwareContainer {
-  max-width: 1000px;
-  margin: auto;
-  padding: 60px 20px;
+
+/* ── ROOT ─────────────────────────────────────────────── */
+
+.sp-root {
+  padding: 0;
+  background: var(--ot-bg);
+  color: var(--ot-text);
+  min-height: 100vh;
+  transition: background 0.28s ease, color 0.28s ease;
 }
 
-/* ================================
-   HERO SECTION
-================================ */
-
-.softwareHero {
-  text-align: center;
-  margin-bottom: 40px;
+.sp-not-found {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 60vh;
+  gap: 1rem;
+  color: var(--ot-text-muted);
+  font-size: 0.9rem;
 }
 
-.softwareHero h1 {
-  font-size: 38px;
-  margin-bottom: 10px;
+.sp-back-link {
+  color: var(--nb-green);
+  text-decoration: none;
+  font-weight: 600;
+  transition: opacity 0.2s ease;
 }
 
-.softwareDesc {
-  font-size: 17px;
-  opacity: 0.85;
-  max-width: 750px;
-  margin: auto;
-  line-height: 1.6;
+.sp-back-link:hover { opacity: 0.75; }
+
+
+/* ── HERO ─────────────────────────────────────────────── */
+
+.sp-hero {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: clamp(2.5rem, 5vw, 4rem) clamp(1.25rem, 8vw, 5rem) clamp(2rem, 4vw, 3rem);
+  overflow: hidden;
+  border-bottom: 1px solid var(--ot-border);
 }
 
-/* ================================
-   BUTTON
-================================ */
+/* SPLIT — side by side on desktop */
+.sp-hero--split {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: start;
+  gap: clamp(1.5rem, 3vw, 3rem);
+  padding-right: clamp(1.25rem, 5vw, 3.5rem);
+}
 
-/* CTA BUTTON */
+@media (max-width: 860px) {
+  .sp-hero--split {
+    grid-template-columns: 1fr;
+    padding-right: clamp(1.25rem, 8vw, 5rem);
+  }
+}
 
-.launchBtn {
-  margin-top: 25px;
-  padding: 18px 40px;
-  border-radius: 16px;
-  border: none;
-  background: linear-gradient(135deg, #a3e87b, #7ed957);
-  font-weight: 700;
-  font-size: 18px;
-  cursor: pointer;
-  transition: all 0.3s ease;
+/* Decorative glow blob */
+.sp-hero-glow {
+  position: absolute;
+  top: -60px;
+  left: -40px;
+  width: 400px;
+  height: 320px;
+  border-radius: 50%;
+  background: radial-gradient(ellipse at center, var(--nb-green-dim) 0%, transparent 70%);
+  pointer-events: none;
+  z-index: 0;
+  filter: blur(28px);
+}
+
+/* Subtle grid texture */
+.sp-hero-grid {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(var(--ot-border) 1px, transparent 1px),
+    linear-gradient(90deg, var(--ot-border) 1px, transparent 1px);
+  background-size: 40px 40px;
+  opacity: 0.3;
+  pointer-events: none;
+  z-index: 0;
+  mask-image: radial-gradient(ellipse 70% 60% at 30% 40%, black 0%, transparent 100%);
+  -webkit-mask-image: radial-gradient(ellipse 70% 60% at 30% 40%, black 0%, transparent 100%);
+}
+
+.sp-hero > * { position: relative; z-index: 1; }
+
+/* Text column */
+.sp-hero-text {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding-top: clamp(0.5rem, 2vw, 1.5rem);
+  position: relative;
+  z-index: 1;
+}
+
+.sp-hero-badge {
   display: inline-flex;
   align-items: center;
-  gap: 10px;
-  box-shadow: 0 10px 30px rgba(163, 232, 123, 0.2);
+  gap: 0.4rem;
+  padding: 4px 12px;
+  border-radius: 999px;
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--nb-green);
+  background: var(--nb-green-dim);
+  border: 1px solid var(--nb-green-border);
+  margin-bottom: 1.25rem;
 }
 
-.launchBtn {
+.sp-hero-badge::before {
+  content: "";
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--nb-green);
+  box-shadow: 0 0 8px var(--nb-green-glow);
+  animation: sp-dot-pulse 2.6s ease-in-out infinite;
+}
+
+@keyframes sp-dot-pulse {
+  0%, 100% { opacity: 1;    box-shadow: 0 0 4px  var(--nb-green-glow); }
+  50%       { opacity: 0.7; box-shadow: 0 0 14px var(--nb-green-glow); }
+}
+
+.sp-hero-title {
+  font-size: clamp(2rem, 4.5vw, 3.5rem);
+  font-weight: 900;
+  letter-spacing: -0.04em;
+  line-height: 1.08;
+  color: var(--ot-text);
+  margin: 0 0 1rem;
+  max-width: 16ch;
+}
+
+.sp-hero-title span {
+  background: linear-gradient(110deg, var(--ot-text) 0%, var(--nb-green) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.sp-hero-desc {
+  font-size: clamp(0.88rem, 1.4vw, 1rem);
+  color: var(--ot-text-muted);
+  line-height: 1.75;
+  max-width: 48ch;
+  margin: 0 0 1.75rem;
+}
+
+.sp-hero-actions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+
+/* ── LAUNCH BUTTON ────────────────────────────────────── */
+
+.sp-launch-btn {
   position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  padding: 0 1.6rem 0 0.85rem;
+  height: 46px;
+  border-radius: 999px;
+  background: var(--ot-text);
+  color: var(--ot-bg);
+  font-family: var(--ot-font);
+  font-size: 0.86rem;
+  font-weight: 800;
+  letter-spacing: 0.01em;
+  border: none;
+  cursor: pointer;
   overflow: hidden;
+  transition:
+    transform  0.26s cubic-bezier(0.16, 1, 0.3, 1),
+    box-shadow 0.26s ease;
 }
 
-.launchBtn::after {
+.sp-launch-btn-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--nb-green);
+  color: #000;
+  flex-shrink: 0;
+  transition: transform 0.26s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Shine sweep */
+.sp-launch-btn::before {
   content: "";
   position: absolute;
-  width: 0;
-  height: 0;
-  background: rgba(255,255,255,0.2);
-  border-radius: 50%;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  transition: width 0.4s, height 0.4s;
+  top: 0; left: -100%;
+  width: 60%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.14) 50%, transparent 100%);
+  transition: left 0.45s ease;
+  pointer-events: none;
 }
 
-.launchBtn:hover::after {
-  width: 300px;
-  height: 300px;
+@media (hover: hover) and (pointer: fine) {
+  .sp-launch-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.16);
+  }
+  .sp-launch-btn:hover::before { left: 160%; }
+  .sp-launch-btn:hover .sp-launch-btn-icon { transform: scale(1.1) rotate(-8deg); }
 }
 
-/* NOTE TEXT (NOW PREMIUM) */
+.sp-launch-btn:active { transform: scale(0.96); transition-duration: 0.08s; }
+.sp-launch-btn:focus-visible { outline: 2px solid var(--nb-green); outline-offset: 3px; }
 
-.launchNote {
-  margin-top: 14px;
-  font-size: 14px;
-  color: #aaa;
-  letter-spacing: 0.6px;
-  opacity: 0.85;
-}
-/* ================================
-   SECTIONS
-================================ */
-
-.softwareSection {
-  margin-top: 60px;
+.sp-launch-note {
+  font-size: 0.68rem;
+  color: var(--ot-text-faint);
+  letter-spacing: 0.04em;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin: 0;
 }
 
-.softwareSection h2 {
-  font-size: 26px;
-  margin-bottom: 15px;
+.sp-launch-note::before {
+  content: "";
+  display: inline-block;
+  width: 13px;
+  height: 13px;
+  background-image: url("data:image/svg+xml,%3Csvg width='13' height='13' viewBox='0 0 16 16' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Crect x='3' y='7' width='10' height='8' rx='1.5' stroke='%2371717a' stroke-width='1.5'/%3E%3Cpath d='M5 7V5a3 3 0 0 1 6 0v2' stroke='%2371717a' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-size: contain;
+  flex-shrink: 0;
 }
 
-/* ================================
-   OVERVIEW TEXT
-================================ */
 
-.overviewText {
-  font-size: 16px;
-  line-height: 1.8;
-  color: #ddd;
+/* ── BODY WRAPPER ─────────────────────────────────────── */
+
+.sp-body {
+  max-width: min(860px, 96vw);
+  margin-inline: auto;
+  padding: clamp(2.5rem, 6vw, 4rem) clamp(1.25rem, 5vw, 2.5rem);
+  display: flex;
+  flex-direction: column;
+  gap: clamp(2.5rem, 6vw, 4rem);
 }
 
-/* ================================
-   FEATURES GRID
-================================ */
 
-.featuresGrid {
+/* ── SECTION ──────────────────────────────────────────── */
+
+.sp-section-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.62rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--nb-green);
+  margin-bottom: 0.75rem;
+}
+
+.sp-section-label::before {
+  content: "";
+  width: 18px;
+  height: 1px;
+  background: var(--nb-green);
+  opacity: 0.6;
+}
+
+.sp-section-title {
+  font-size: clamp(1.15rem, 2.2vw, 1.5rem);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  color: var(--ot-text);
+  margin: 0 0 clamp(1.1rem, 2.8vw, 1.6rem);
+  line-height: 1.2;
+}
+
+.sp-para {
+  font-size: clamp(0.85rem, 1.4vw, 0.95rem);
+  color: var(--ot-text-muted);
+  line-height: 1.85;
+  max-width: 68ch;
+  margin: 0 0 0.75rem;
+}
+
+.sp-para:last-child { margin-bottom: 0; }
+
+
+/* ── OVERVIEW ─────────────────────────────────────────── */
+
+.sp-overview {
+  position: relative;
+  padding: clamp(1.25rem, 3vw, 1.75rem);
+  background: var(--ot-surface);
+  border: 1px solid var(--ot-border);
+  border-radius: var(--ot-radius-xl);
+  overflow: hidden;
+}
+
+.sp-overview::before {
+  content: "";
+  position: absolute;
+  top: 20%;
+  left: 0;
+  width: 3px;
+  height: 60%;
+  border-radius: 999px;
+  background: linear-gradient(
+    to bottom,
+    transparent 0%,
+    var(--nb-green) 40%,
+    var(--nb-green) 60%,
+    transparent 100%
+  );
+}
+
+
+/* ── FEATURES GRID ────────────────────────────────────── */
+
+.sp-features-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  gap: 18px;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: clamp(0.65rem, 1.4vw, 0.9rem);
 }
 
-/* FEATURE CARD */
-
-.featureCard {
-  background: #111;
-  border-radius: 10px;
-  padding: 18px;
+.sp-feature-card {
   display: flex;
   align-items: flex-start;
-  gap: 10px;
-  border: 1px solid rgba(255,255,255,0.05);
-  transition: 0.3s;
-}
-
-.featureCard:hover {
-  transform: translateY(-3px);
-  border-color: #a3e87b;
-}
-
-.featureIcon {
-  color: #a3e87b;
-  font-weight: bold;
-}
-
-/* ================================
-   PURPOSE BOX
-================================ */
-
-.purposeBox {
-  background: #111;
-  padding: 22px;
-  border-radius: 10px;
-  line-height: 1.8;
-  border-left: 4px solid #a3e87b;
-  color: #ddd;
-}
-
-/* ================================
-   FAQ SECTION
-================================ */
-
-.softwareSection p {
-  margin-bottom: 10px;
-  line-height: 1.7;
-}
-
-/* ================================
-   INTERNAL LINKS (SUBTLE)
-================================ */
-
-.softwareSection a {
-  font-size: 14px;
-  opacity: 0.7;
-  text-decoration: none;
-  display: inline-block;
-  margin-bottom: 6px;
-  transition: 0.2s;
-}
-
-.softwareSection a:hover {
-  opacity: 1;
-  color: #a3e87b;
-}
-
-/* ================================
-   MOBILE
-================================ */
-
-@media (max-width: 768px) {
-
-  .softwareHero h1 {
-    font-size: 30px;
-  }
-
-  .softwareDesc {
-    font-size: 15px;
-  }
-
-  .softwareSection h2 {
-    font-size: 22px;
-  }
-
-}
-
-/* ================================
-   INTERACTIVE FAQ
-================================ */
-
-.faqSection {
-  margin-top: 60px;
-}
-
-/* FAQ ITEM */
-
-.faqItem {
-  background: #111;
-  border-radius: 10px;
-  padding: 16px 18px;
-  margin-bottom: 12px;
-  cursor: pointer;
-  border: 1px solid rgba(255,255,255,0.05);
-  transition: 0.3s;
-}
-
-.faqItem:hover {
-  border-color: #a3e87b;
-}
-
-/* QUESTION */
-
-.faqQuestion {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  font-weight: 600;
-  font-size: 17px;
-}
-
-/* ICON */
-
-.faqIcon {
-  font-size: 20px;
-  color: #a3e87b;
-}
-
-/* ANSWER (hidden by default) */
-
-.faqAnswer {
-  max-height: 0;
+  gap: 0.75rem;
+  padding: clamp(0.9rem, 2vw, 1.2rem);
+  background: var(--ot-glass-bg);
+  border: 1px solid var(--ot-border);
+  border-radius: var(--ot-radius-lg);
+  position: relative;
   overflow: hidden;
-  opacity: 0;
-  transition: all 0.3s ease;
-  margin-top: 8px;
-  font-size: 15px;
-  line-height: 1.6;
-  color: #ccc;
+  transition:
+    border-color 0.24s ease,
+    background   0.24s ease,
+    transform    0.24s cubic-bezier(0.16, 1, 0.3, 1),
+    box-shadow   0.24s ease;
 }
 
-/* ACTIVE STATE */
+.sp-feature-card::after {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent           0%,
+    var(--ot-border-hard) 40%,
+    var(--ot-border-hard) 60%,
+    transparent           100%
+  );
+  opacity: 0.5;
+  transition: opacity 0.24s ease, background 0.24s ease;
+}
 
-.faqItem.active .faqAnswer {
-  max-height: 200px;
+@media (hover: hover) and (pointer: fine) {
+  .sp-feature-card:hover {
+    border-color: var(--nb-green-border);
+    background: var(--ot-surface);
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px var(--nb-green-dim);
+  }
+  .sp-feature-card:hover::after {
+    opacity: 1;
+    background: linear-gradient(
+      90deg,
+      transparent         0%,
+      var(--nb-green-mid) 25%,
+      var(--nb-green)     50%,
+      var(--nb-green-mid) 75%,
+      transparent         100%
+    );
+  }
+}
+
+.sp-feature-check {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 8px;
+  background: var(--nb-green-dim);
+  border: 1px solid var(--nb-green-border);
+  color: var(--nb-green);
+  margin-top: 1px;
+}
+
+.sp-feature-card p {
+  font-size: clamp(0.78rem, 1.2vw, 0.86rem);
+  color: var(--ot-text-muted);
+  line-height: 1.65;
+  margin: 0;
+}
+
+
+/* ── PURPOSE ──────────────────────────────────────────── */
+
+.sp-purpose {
+  padding: clamp(1.25rem, 3vw, 1.75rem);
+  background: color-mix(in oklch, var(--nb-green) 6%, var(--ot-surface));
+  border: 1px solid var(--nb-green-border);
+  border-radius: var(--ot-radius-xl);
+}
+
+
+/* ── FAQ ──────────────────────────────────────────────── */
+
+.sp-faq-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.sp-faq-item {
+  border-radius: var(--ot-radius-lg);
+  border: 1px solid var(--ot-border);
+  background: var(--ot-glass-bg);
+  overflow: hidden;
+  transition: border-color 0.22s ease, box-shadow 0.22s ease;
+}
+
+.sp-faq-item--open {
+  border-color: var(--nb-green-border);
+  box-shadow: 0 0 0 1px var(--nb-green-dim);
+}
+
+.sp-faq-trigger {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: clamp(0.9rem, 2vw, 1.1rem) clamp(1rem, 2.5vw, 1.3rem);
+  font-family: var(--ot-font);
+  font-size: clamp(0.82rem, 1.4vw, 0.92rem);
+  font-weight: 600;
+  color: var(--ot-text);
+  text-align: left;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  transition: background 0.18s ease;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .sp-faq-trigger:hover { background: var(--ot-surface); }
+}
+
+.sp-faq-trigger:focus-visible {
+  outline: 2px solid var(--nb-green);
+  outline-offset: -2px;
+}
+
+.sp-faq-chevron {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  color: var(--ot-text-faint);
+  background: var(--ot-surface-alt);
+  border: 1px solid var(--ot-border);
+  transition:
+    transform    0.32s cubic-bezier(0.16, 1, 0.3, 1),
+    color        0.22s ease,
+    background   0.22s ease,
+    border-color 0.22s ease;
+}
+
+.sp-faq-item--open .sp-faq-chevron {
+  transform: rotate(180deg);
+  color: var(--nb-green);
+  background: var(--nb-green-dim);
+  border-color: var(--nb-green-border);
+}
+
+.sp-faq-answer {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.32s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.sp-faq-item--open .sp-faq-answer {
+  grid-template-rows: 1fr;
+}
+
+.sp-faq-answer-inner { overflow: hidden; }
+
+.sp-faq-answer-inner p {
+  font-size: clamp(0.78rem, 1.3vw, 0.86rem);
+  color: var(--ot-text-muted);
+  line-height: 1.8;
+  padding: 0 clamp(1rem, 2.5vw, 1.3rem) clamp(0.9rem, 2vw, 1.1rem);
+  margin: 0;
+  max-width: 66ch;
+  border-top: 1px solid var(--ot-border);
+  background: var(--ot-surface);
+}
+
+
+/* ── EXPLORE LINKS ────────────────────────────────────── */
+
+.sp-explore {
+  padding-top: clamp(1.5rem, 3vw, 2rem);
+  border-top: 1px solid var(--ot-border);
+}
+
+.sp-explore-title {
+  font-size: 0.65rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ot-text-faint);
+  margin: 0 0 0.85rem;
+}
+
+.sp-explore-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+}
+
+.sp-explore-link {
+  font-size: 0.73rem;
+  font-weight: 600;
+  color: var(--ot-text-muted);
+  text-decoration: none;
+  padding: 5px 12px;
+  border-radius: 999px;
+  background: var(--ot-surface);
+  border: 1px solid var(--ot-border);
+  transition:
+    color        0.2s ease,
+    background   0.2s ease,
+    border-color 0.2s ease,
+    transform    0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .sp-explore-link:hover {
+    color: var(--nb-green);
+    background: var(--nb-green-dim);
+    border-color: var(--nb-green-border);
+    transform: translateY(-1px);
+  }
+}
+
+
+/* ── DIVIDER ──────────────────────────────────────────── */
+
+.sp-divider {
+  width: 100%;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent      0%,
+    var(--ot-border) 20%,
+    var(--ot-border) 80%,
+    transparent      100%
+  );
+}
+
+
+/* ── VIDEO ────────────────────────────────────────────── */
+
+.sp-hero-video-desktop {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+}
+
+@media (max-width: 860px) {
+  .sp-hero-video-desktop { display: none; }
+}
+
+.sp-hero-video-mobile {
+  display: none;
+  padding: clamp(1rem, 3vw, 1.5rem) clamp(1.25rem, 5vw, 2.5rem) clamp(1.5rem, 4vw, 2.5rem);
+  background: var(--ot-bg);
+}
+
+@media (max-width: 860px) {
+  .sp-hero-video-mobile { display: block; }
+}
+
+.sp-video-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  max-width: 480px;
+  width: 100%;
+}
+
+.sp-video-frame {
+  position: relative;
+  border-radius: 12px;
+  overflow: hidden;
+  background: var(--ot-surface);
+  box-shadow:
+    0 0 0 1px oklch(from var(--ot-text) l c h / 0.08),
+    0 2px 4px oklch(from var(--ot-text) l c h / 0.06),
+    0 8px 24px oklch(from var(--ot-text) l c h / 0.10),
+    0 24px 48px oklch(from var(--ot-text) l c h / 0.08),
+    0 0 40px var(--nb-green-dim);
+  transform: perspective(900px) rotateY(-4deg) rotateX(1.5deg);
+  transform-origin: left center;
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s ease;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .sp-video-frame:hover {
+    transform: perspective(900px) rotateY(-1deg) rotateX(0.5deg) translateY(-4px);
+    box-shadow:
+      0 0 0 1px oklch(from var(--ot-text) l c h / 0.10),
+      0 4px 8px oklch(from var(--ot-text) l c h / 0.08),
+      0 16px 40px oklch(from var(--ot-text) l c h / 0.14),
+      0 32px 64px oklch(from var(--ot-text) l c h / 0.10),
+      0 0 60px var(--nb-green-dim);
+  }
+}
+
+/* macOS chrome bar with traffic-light dots */
+.sp-video-frame::before {
+  content: "";
+  display: block;
+  height: 32px;
+  background: oklch(from var(--ot-text) l c h / 0.92);
+  background-image:
+    radial-gradient(circle, #ff5f56 100%, #ff5f56 100%),
+    radial-gradient(circle, #febc2e 100%, #febc2e 100%),
+    radial-gradient(circle, #28c840 100%, #28c840 100%);
+  background-size: 10px 10px, 10px 10px, 10px 10px;
+  background-position: 12px center, 26px center, 40px center;
+  background-repeat: no-repeat, no-repeat, no-repeat;
+}
+
+/* Green accent stripe under chrome */
+.sp-video-frame::after {
+  content: "";
+  position: absolute;
+  top: 32px; left: 0; right: 0;
+  height: 1px;
+  z-index: 2;
+  pointer-events: none;
+  background: linear-gradient(
+    90deg,
+    transparent            0%,
+    var(--nb-green-border) 25%,
+    var(--nb-green)        50%,
+    var(--nb-green-border) 75%,
+    transparent            100%
+  );
+  opacity: 0.7;
+}
+
+.sp-video {
+  width: 100%;
+  max-height: 260px;
+  object-fit: cover;
+  display: block;
+}
+
+.sp-video-overlay {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  box-shadow: inset 0 0 24px rgba(0,0,0,0.10);
+}
+
+.sp-video-caption {
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ot-text-faint);
+  text-align: center;
+  margin: 0;
+}
+
+@media (max-width: 860px) {
+  .sp-video-frame { transform: none; max-width: 100%; }
+  .sp-video-wrap  { max-width: 100%; }
+  .sp-video       { max-height: 220px; }
+}
+
+
+/* ── REDUCED MOTION ───────────────────────────────────── */
+
+@media (prefers-reduced-motion: reduce) {
+  .sp-hero-badge::before { animation: none !important; }
+
+  .sp-faq-answer,
+  .sp-faq-chevron,
+  .sp-launch-btn,
+  .sp-launch-btn::before,
+  .sp-feature-card,
+  .sp-faq-trigger,
+  .sp-video-frame,
+  .sp-video-frame:hover { transition: none !important; transform: none !important; }
+}
+
+/* ── HERO — gap fix ───────────────────────────────────── */
+
+.sp-hero {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: clamp(2.5rem, 5vw, 4rem) clamp(1.25rem, 8vw, 5rem) clamp(2rem, 4vw, 3rem);
+  overflow: hidden;
+  border-bottom: 1px solid var(--ot-border);
+}
+
+.sp-hero--split {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: start;
+  align-content: start;   /* ← THIS is the fix: kills the inflated row height */
+  gap: clamp(1.5rem, 3vw, 3rem);
+  padding-right: clamp(1.25rem, 5vw, 3.5rem);
+  /* Explicit placement so grid doesn't create phantom rows */
+}
+
+/* Pin each column to row 1 */
+.sp-hero-text {
+  grid-column: 1;
+  grid-row: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding-top: clamp(0.5rem, 2vw, 1.5rem);
+  position: relative;
+  z-index: 1;
+}
+
+.sp-hero-video-desktop {
+  grid-column: 2;
+  grid-row: 1;
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+}
+
+/* Decorative layers — explicitly excluded from grid flow */
+.sp-hero-glow,
+.sp-hero-grid {
+  position: absolute;
+  pointer-events: none;
+  z-index: 0;
+  grid-column: unset;
+  grid-row: unset;
+}
+
+@media (max-width: 860px) {
+  .sp-hero--split {
+    grid-template-columns: 1fr;
+    padding-right: clamp(1.25rem, 8vw, 5rem);
+  }
+  .sp-hero-text        { grid-column: 1; grid-row: 1; }
+  .sp-hero-video-desktop { display: none; }
+}
+
+/* ── VIDEO WINDOW ─────────────────────────────────────── */
+
+.sp-video-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  max-width: 400px;      /* ← was 480px, now smaller */
+  width: 100%;
+}
+
+.sp-video-frame {
+  position: relative;
+  border-radius: 10px;
+  overflow: hidden;
+  background: #1e1e1e;
+
+  /* Default = what was previously the hover state (flat + lifted) */
+  transform: perspective(1000px) rotateY(-1deg) rotateX(0.5deg) translateY(-4px);
+  transform-origin: left center;
+
+  box-shadow:
+    0 0 0 1px rgba(0, 0, 0, 0.18),
+    0 4px 8px rgba(0, 0, 0, 0.10),
+    0 16px 40px rgba(0, 0, 0, 0.14),
+    0 32px 64px rgba(0, 0, 0, 0.08),
+    0 0 60px var(--nb-green-dim);
+
+  /* No hover effect — state is permanent */
+}
+
+/* ── macOS TITLE BAR ──────────────────────────────────── */
+
+.sp-video-frame::before {
+  content: "";
+  display: block;
+  position: relative;
+  height: 38px;                         /* real macOS bar height */
+  background: #323232;                  /* macOS dark titlebar */
+  border-bottom: 1px solid #1a1a1a;    /* subtle separator */
+
+  /* Traffic-light dots: 12px circles, proper macOS spacing */
+  background-image:
+    radial-gradient(circle at center, #ff5f57 5px, transparent 5px),   /* red */
+    radial-gradient(circle at center, #febc2e 5px, transparent 5px),   /* yellow */
+    radial-gradient(circle at center, #28c840 5px, transparent 5px);   /* green */
+  background-size: 12px 38px, 12px 38px, 12px 38px;
+  background-position: 13px center, 33px center, 53px center;
+  background-repeat: no-repeat;
+}
+
+/* Green accent line under the bar */
+.sp-video-frame::after {
+  content: "";
+  position: absolute;
+  top: 38px; left: 0; right: 0;
+  height: 1px;
+  z-index: 2;
+  pointer-events: none;
+  background: linear-gradient(
+    90deg,
+    transparent            0%,
+    var(--nb-green-border) 25%,
+    var(--nb-green)        50%,
+    var(--nb-green-border) 75%,
+    transparent            100%
+  );
+  opacity: 0.6;
+}
+
+.sp-video {
+  width: 100%;
+  max-height: 210px;        /* ← was 260px */
+  object-fit: cover;
+  display: block;
+}
+
+.sp-video-overlay {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.08);
+}
+
+.sp-video-caption {
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ot-text-faint);
+  text-align: center;
+  margin: 0;
+}
+
+/* Mobile — flat, full width */
+@media (max-width: 860px) {
+  .sp-video-frame {
+    transform: none;
+    max-width: 100%;
+  }
+  .sp-video-wrap { max-width: 100%; }
+  .sp-video      { max-height: 200px; }
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .sp-video-frame { transform: none !important; transition: none !important; }
+}
+
+/* ── VIDEO TOGGLE BUTTON ──────────────────────────────── */
+
+.sp-video-toggle {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  z-index: 10;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+
+  background: rgba(0, 0, 0, 0.55);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: rgba(255, 255, 255, 0.75);
+  cursor: pointer;
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+
+  opacity: 0;                               /* hidden by default */
+  transform: scale(0.88);
+  transition:
+    opacity    0.2s ease,
+    transform  0.2s cubic-bezier(0.16, 1, 0.3, 1),
+    background 0.18s ease,
+    color      0.18s ease;
+}
+
+/* Show on hover over the frame */
+.sp-video-frame:hover .sp-video-toggle {
   opacity: 1;
+  transform: scale(1);
+}
+
+/* Always visible when paused — even without hover */
+.sp-video-toggle--paused {
+  opacity: 1 !important;
+  transform: scale(1) !important;
+  background: rgba(0, 0, 0, 0.72);
+  color: #fff;
+  border-color: rgba(255, 255, 255, 0.22);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .sp-video-toggle:hover {
+    background: var(--nb-green);
+    color: #000;
+    border-color: transparent;
+  }
+}
+
+/* Touch devices — always show it */
+@media (hover: none) {
+  .sp-video-toggle { opacity: 1; transform: scale(1); }
+}
+
+/* ── VIDEO FRAME ──────────────────────────────────────── */
+
+.sp-video-frame {
+  position: relative;
+  border-radius: 10px;
+  overflow: hidden;
+  background: #1c1c1e;                  /* macOS window background */
+  transform: perspective(1000px) rotateY(-1deg) rotateX(0.5deg) translateY(-4px);
+  transform-origin: left center;
+  box-shadow:
+    0 0 0 1px rgba(0, 0, 0, 0.22),
+    0 4px 8px  rgba(0, 0, 0, 0.12),
+    0 16px 40px rgba(0, 0, 0, 0.14),
+    0 32px 64px rgba(0, 0, 0, 0.08),
+    0 0 60px var(--nb-green-dim);
+}
+
+/* ── macOS CHROME BAR ─────────────────────────────────── */
+
+.sp-video-chrome {
+  display: flex;
+  align-items: center;
+  gap: 8px;                              /* exact macOS dot gap */
+  height: 36px;
+  padding: 0 14px;
+  background: #2c2c2e;                   /* macOS titlebar — slightly lighter than body */
+  border-bottom: 1px solid #1a1a1a;
+  flex-shrink: 0;
+}
+
+/* Traffic light dots — real elements, crisp rendering */
+.sp-video-dot {
+  display: block;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.sp-video-dot--red    { background: #ff5f57; box-shadow: inset 0 0 0 0.5px rgba(0,0,0,0.18); }
+.sp-video-dot--yellow { background: #ffbd2e; box-shadow: inset 0 0 0 0.5px rgba(0,0,0,0.18); }
+.sp-video-dot--green  { background: #28c840; box-shadow: inset 0 0 0 0.5px rgba(0,0,0,0.18); }
+
+/* Green accent line under the chrome */
+.sp-video-chrome::after {
+  content: "";
+  position: absolute;
+  top: 36px; left: 0; right: 0;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent            0%,
+    var(--nb-green-border) 25%,
+    var(--nb-green)        50%,
+    var(--nb-green-border) 75%,
+    transparent            100%
+  );
+  opacity: 0.55;
+  pointer-events: none;
+}
+
+/* Remove old ::before / ::after on frame */
+.sp-video-frame::before,
+.sp-video-frame::after { display: none; }
+
+.sp-video {
+  width: 100%;
+  max-height: 210px;
+  object-fit: cover;
+  display: block;
 }

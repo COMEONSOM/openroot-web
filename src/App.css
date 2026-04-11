@@ -1,64 +1,422 @@
-/* ==========================================================
-   GLOBAL APP STYLES — OPENROOT
-   Dark Theme Base + Shared Utilities
-========================================================== */
+/* ==========================================================================
+   OPENROOT — GLOBAL APP STYLES
+   B&W Token Architecture — Production Edition
+   VERSION: 2026.4
+   ─────────────────────────────────────────────────────────────────────────
+   DEDUPLICATION AUDIT vs AboutCompany.module.css:
+   ✓ All local --_brand / --_ink tokens live ONLY in .pageRoot scope (module)
+   ✓ Component selectors (.whoSection, .offerCard, .carouselOuter …) live ONLY in module
+   ✓ Global utilities below are SHARED across all pages — not About-only
+   INTERNAL CLEANUP (app.css → app.css):
+   ✗ Removed: .text-gradient-strong (identical to .text-gradient — merged)
+   ✗ Removed: .text-gradient-primary (identical to .text-gradient — merged)
+   ✗ Removed: .card-dark, .card-dark-hover, .card-dark-soft-border (deprecated)
+   ✓ Added:   --sp-4 (1rem/16px) and --sp-8 (2rem/32px) — used in module CSS but missing here
+   ========================================================================== */
 
-/* ===================== Root Theme Variables ===================== */
 
+/* ============================================================
+   DESIGN TOKENS — LIGHT MODE DEFAULT
+   ============================================================ */
 :root {
-  --primary: #2563eb;
-  --secondary: #0f172a;
-  --accent: #38bdf8;
 
-  --bg-main: #000000;
-  --text-main: #f8fafc;
+  /* — Surfaces — */
+  --ot-bg:              #ffffff;
+  --ot-bg-soft:         #f5f5f5;
+  --ot-bg-dim:          #ececec;
+  --ot-surface:         rgba(255, 255, 255, 0.72);
+  --ot-surface-alt:     rgba(0, 0, 0, 0.04);
 
-  --card-dark: #111111;
+  /* — Text — */
+  --ot-text:            #0a0a0a;
+  --ot-text-muted:      #4a4a4a;
+  --ot-text-faint:      #888888;
 
-  --muted: #64748b;
-  --radius: 1rem;
-  --shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
-  --transition: 300ms ease;
+  /* — Borders — */
+  --ot-border:          rgba(0, 0, 0, 0.12);
+  --ot-border-hard:     rgba(0, 0, 0, 0.22);
+  --ot-border-glow:     rgba(0, 0, 0, 0.06);
 
-  --font-main: "Inter", system-ui, -apple-system, sans-serif;
+  /* — Gradient stops — */
+  --ot-grad-from:       #0a0a0a;
+  --ot-grad-mid:        #3a3a3a;
+  --ot-grad-to:         #8a8a8a;
 
-  /* Shared accent + text tones used across sections */
-  --accent-soft: #a3e87b;
-  --text-soft: #e0edff;
-  --text-soft-strong: #cfe2ff;
-  --text-muted-soft: #d1d5db;
+  /* — CTA / buttons — */
+  --ot-cta-bg:          #0a0a0a;
+  --ot-cta-text:        #ffffff;
+  --ot-cta-border:      rgba(0, 0, 0, 0.3);
+  --ot-cta-hover-bg:    #1e1e1e;
+
+  /* — Offer card accent stripes — */
+  --ot-accent-warm:     rgba(0, 0, 0, 0.55);
+  --ot-accent-cool:     rgba(0, 0, 0, 0.28);
+
+  /* — Aurora — */
+  --ot-aurora-1:        rgba(180, 180, 180, 0.45);
+  --ot-aurora-2:        rgba(210, 210, 210, 0.30);
+  --ot-aurora-3:        rgba(240, 240, 240, 0.25);
+
+  /* — Glass — */
+  --ot-glass-bg:        rgba(255, 255, 255, 0.55);
+  --ot-glass-border:    rgba(0, 0, 0, 0.10);
+  --ot-blur:            18px;
+
+  /* — Footer tokens — */
+  --ot-footer-bg-a:     #0a0a0a;
+  --ot-footer-bg-b:     #111111;
+  --ot-footer-text:     #f0f0f0;
+  --ot-footer-muted:    #888888;
+  --ot-footer-link:     #ffffff;
+  --ot-footer-hover:    #cccccc;
+  --ot-footer-glass:    rgba(255, 255, 255, 0.06);
+  --ot-footer-border:   rgba(255, 255, 255, 0.10);
+
+  /* — Icon invert — */
+  --ot-icon-invert:     1;
+
+  /* — Radius — */
+  --ot-radius-xl:       22px;
+  --ot-radius-lg:       16px;
+  --ot-radius-md:       12px;
+  --ot-radius-sm:       8px;
+
+  /* — Shadows — */
+  --ot-shadow-sm:       0 1px 4px rgba(0, 0, 0, 0.05);   
+  --ot-shadow-md:       0 4px 18px rgba(0, 0, 0, 0.07); 
+  --ot-shadow-lg:       0 12px 40px rgba(0, 0, 0, 0.09); 
+  --ot-shadow-xl:       0 24px 64px rgba(0, 0, 0, 0.05); 
+  /* — Motion — */
+  --ot-transition:      0.35s cubic-bezier(.21, 1.02, .73, 1);
+  --ot-transition-fast: 0.18s ease;
+
+  /* — Layout — */
+  --ot-max-w:           1100px;
+  --ot-font:            "Inter", "IBM Plex Sans", system-ui, sans-serif;
+
+
+  /* ┌────────────────────────────────────────────────────────────┐
+     │  CSS MODULE BRIDGE                                          │
+     │  Maps --color-* (used in *.module.css) onto --ot-* tokens. │
+     │  Theme overrides propagate automatically — no duplication.  │
+     └────────────────────────────────────────────────────────────┘ */
+
+  /* Accent */
+  --color-accent:              var(--ot-text);
+  --color-accent-dim:          var(--ot-text-muted);
+  --color-accent-alpha:        var(--ot-surface-alt);
+  --color-accent-alpha-md:     var(--ot-border);
+  --color-accent-gradient:     linear-gradient(
+                                 120deg,
+                                 var(--ot-grad-from) 0%,
+                                 var(--ot-grad-to)   100%
+                               );
+
+  /* Surfaces */
+  --color-surface:             var(--ot-glass-bg);
+  --color-surface-alt:         var(--ot-bg-soft);
+  --color-surface-glass:       var(--ot-glass-bg);
+  --color-surface-glass-hover: var(--ot-surface);
+
+  /* Borders */
+  --color-border:              var(--ot-border);
+  --color-border-strong:       var(--ot-border-hard);
+  --color-border-accent:       var(--ot-border-hard);
+
+  /* Text */
+  --color-text:                var(--ot-text);
+  --color-text-muted:          var(--ot-text-muted);
+  --color-text-subtle:         var(--ot-text-faint);
+
+  /* Decorative backgrounds */
+  --decor-section-grad:        radial-gradient(
+                                 ellipse at 12% 18%,
+                                 var(--ot-aurora-1) 0%,
+                                 transparent 52%
+                               );
+  --decor-card-top:            linear-gradient(
+                                 180deg,
+                                 var(--ot-border-glow) 0%,
+                                 transparent 48%
+                               );
+
+  /* Shadows */
+  --shadow-card:               var(--ot-shadow-md);
+  --shadow-card-hover:         var(--ot-shadow-lg);
+  --shadow-glow:               var(--ot-shadow-sm);
+
+
+  /* ─── Fluid Spacing — 4px grid ───────────────────────────────
+     Semantic scale (2xs→2xl) + numeric aliases (4, 8) used by
+     component modules. Both sets defined once here.             */
+  --sp-2xs: clamp(0.2rem,  0.38vw, 0.3rem);
+  --sp-xs:  clamp(0.3rem,  0.55vw, 0.5rem);
+  --sp-sm:  clamp(0.5rem,  0.85vw, 0.7rem);
+  --sp-md:  clamp(0.7rem,  1.25vw, 1rem);
+  --sp-lg:  clamp(1rem,    1.85vw, 1.5rem);
+  --sp-xl:  clamp(1.2rem,  2.25vw, 1.875rem);
+  --sp-2xl: clamp(1.5rem,  2.9vw,  2.375rem);
+  /* Numeric aliases — 4px grid (Tailwind-compatible naming) */
+  --sp-4:   1rem;    /* 16px */
+  --sp-8:   2rem;    /* 32px */
+
+
+  /* ─── Fluid Typography — 0.72× compact scale ─────────────── */
+  --fz-2xs: clamp(0.4375rem, 0.58vw, 0.5rem);
+  --fz-xs:  clamp(0.5rem,    0.68vw, 0.5625rem);
+  --fz-sm:  clamp(0.5625rem, 0.82vw, 0.625rem);
+  --fz-base:clamp(0.625rem,  0.92vw, 0.6875rem);
+  --fz-md:  clamp(0.6875rem, 1.0vw,  0.75rem);
+  --fz-lg:  clamp(0.8125rem, 1.35vw, 1rem);
+  --fz-xl:  clamp(1rem,      1.8vw,  1.5rem);
+  --fz-2xl: clamp(1.1rem,    2.3vw,  1.9rem);
+
+
+  /* Border Radius */
+  --radius-xs:   4px;
+  --radius-sm:   var(--ot-radius-sm);
+  --radius-md:   var(--ot-radius-md);
+  --radius-lg:   var(--ot-radius-lg);
+  --radius-pill: 9999px;
+
+
+  /* Transitions */
+  --t-snap:   var(--ot-transition-fast);
+  --t-base:   var(--ot-transition);
+  --t-spring: 0.32s cubic-bezier(0.22, 1, 0.36, 1);
+
+
+  /* Layout */
+  --content-max: min(100%, var(--ot-max-w));
+  --card-pad:    clamp(0.75rem, 1.45vw, 1.25rem);
+  --section-gap: clamp(1.4rem,  2.9vw,  2.5rem);
 }
 
-/* ===================== Global Reset ===================== */
 
+/* ============================================================
+   DARK MODE — MANUAL OVERRIDE
+   ============================================================ */
+[data-theme="dark"] {
+  --ot-bg:              #0a0a0a;
+  --ot-bg-soft:         #111111;
+  --ot-bg-dim:          #1a1a1a;
+  --ot-surface:         rgba(20, 20, 20, 0.80);
+  --ot-surface-alt:     rgba(255, 255, 255, 0.04);
+
+  --ot-text:            #f0f0f0;
+  --ot-text-muted:      #aaaaaa;
+  --ot-text-faint:      #666666;
+
+  --ot-border:          rgba(255, 255, 255, 0.10);
+  --ot-border-hard:     rgba(255, 255, 255, 0.18);
+  --ot-border-glow:     rgba(255, 255, 255, 0.04);
+
+  --ot-grad-from:       #ffffff;
+  --ot-grad-mid:        #cccccc;
+  --ot-grad-to:         #888888;
+
+  --ot-cta-bg:          #ffffff;
+  --ot-cta-text:        #0a0a0a;
+  --ot-cta-border:      rgba(255, 255, 255, 0.25);
+  --ot-cta-hover-bg:    #e0e0e0;
+
+  --ot-accent-warm:     rgba(255, 255, 255, 0.55);
+  --ot-accent-cool:     rgba(255, 255, 255, 0.28);
+
+  --ot-aurora-1:        rgba(50, 50, 50, 0.6);
+  --ot-aurora-2:        rgba(30, 30, 30, 0.4);
+  --ot-aurora-3:        rgba(15, 15, 15, 0.3);
+
+  --ot-glass-bg:        rgba(20, 20, 20, 0.65);
+  --ot-glass-border:    rgba(255, 255, 255, 0.08);
+
+  --ot-footer-bg-a:     #f5f5f5;
+  --ot-footer-bg-b:     #e8e8e8;
+  --ot-footer-text:     #0a0a0a;
+  --ot-footer-muted:    #555555;
+  --ot-footer-link:     #0a0a0a;
+  --ot-footer-hover:    #333333;
+  --ot-footer-glass:    rgba(0, 0, 0, 0.07);
+  --ot-footer-border:   rgba(0, 0, 0, 0.12);
+
+  --ot-icon-invert:     0;
+
+  --ot-shadow-sm:       0 1px 4px rgba(0, 0, 0, 0.20);
+  --ot-shadow-md:       0 4px 18px rgba(0, 0, 0, 0.30);
+  --ot-shadow-lg:       0 12px 40px rgba(0, 0, 0, 0.40);
+  --ot-shadow-xl:       0 24px 64px rgba(0, 0, 0, 0.52);
+}
+
+
+/* ============================================================
+   DARK MODE — SYSTEM AUTO
+   ============================================================ */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme]) {
+    --ot-bg:              #0a0a0a;
+    --ot-bg-soft:         #111111;
+    --ot-bg-dim:          #1a1a1a;
+    --ot-surface:         rgba(20, 20, 20, 0.80);
+    --ot-surface-alt:     rgba(255, 255, 255, 0.04);
+
+    --ot-text:            #f0f0f0;
+    --ot-text-muted:      #aaaaaa;
+    --ot-text-faint:      #666666;
+
+    --ot-border:          rgba(255, 255, 255, 0.10);
+    --ot-border-hard:     rgba(255, 255, 255, 0.18);
+    --ot-border-glow:     rgba(255, 255, 255, 0.04);
+
+    --ot-grad-from:       #ffffff;
+    --ot-grad-mid:        #cccccc;
+    --ot-grad-to:         #888888;
+
+    --ot-cta-bg:          #ffffff;
+    --ot-cta-text:        #0a0a0a;
+    --ot-cta-border:      rgba(255, 255, 255, 0.25);
+    --ot-cta-hover-bg:    #e0e0e0;
+
+    --ot-accent-warm:     rgba(255, 255, 255, 0.55);
+    --ot-accent-cool:     rgba(255, 255, 255, 0.28);
+
+    --ot-aurora-1:        rgba(50, 50, 50, 0.6);
+    --ot-aurora-2:        rgba(30, 30, 30, 0.4);
+    --ot-aurora-3:        rgba(15, 15, 15, 0.3);
+
+    --ot-glass-bg:        rgba(20, 20, 20, 0.65);
+    --ot-glass-border:    rgba(255, 255, 255, 0.08);
+
+    --ot-footer-bg-a:     #f5f5f5;
+    --ot-footer-bg-b:     #e8e8e8;
+    --ot-footer-text:     #0a0a0a;
+    --ot-footer-muted:    #555555;
+    --ot-footer-link:     #0a0a0a;
+    --ot-footer-hover:    #333333;
+    --ot-footer-glass:    rgba(0, 0, 0, 0.07);
+    --ot-footer-border:   rgba(0, 0, 0, 0.12);
+
+    --ot-icon-invert:     0;
+
+    --ot-shadow-sm:       0 1px 4px rgba(0, 0, 0, 0.20);
+    --ot-shadow-md:       0 4px 18px rgba(0, 0, 0, 0.30);
+    --ot-shadow-lg:       0 12px 40px rgba(0, 0, 0, 0.40);
+    --ot-shadow-xl:       0 24px 64px rgba(0, 0, 0, 0.52);
+  }
+}
+
+
+/* ============================================================
+   GLOBAL RESET
+   ============================================================ */
 *,
 *::before,
 *::after {
   box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 90%;
+  -webkit-text-size-adjust: none;
+  text-size-adjust: none;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  scroll-behavior: smooth;
+  scroll-padding-top: 80px;
 }
 
 html,
 body {
-  margin: 0;
-  padding: 0;
+  overflow-x: hidden;
   width: 100%;
-  height: 100%;
+  min-height: 100%;
 }
-
-#root {
-  min-height: 100vh;
-}
-
-/* ===================== Global Background ===================== */
 
 body {
-  font-family: var(--font-main);
-  background: #000000;
-  color: var(--text-main);
-  line-height: 1.6;
+  font-family: var(--ot-font);
+  font-size: 0.875rem;
+  line-height: 1.55;
+  background: var(--ot-bg);
+  color: var(--ot-text);
+  transition: background 0.4s ease, color 0.3s ease;
 }
 
-/* ===================== App Wrapper ===================== */
+/* ── Section card: lighter shadow in light mode only ─────── */
+html[data-theme="light"] .ot-section-card,
+:root:not([data-theme="dark"]) .ot-section-card {
+  box-shadow:
+    inset 0 1px 0 var(--ot-border-hard),
+    inset 0 -1px 0 var(--ot-border),
+    0 8px 32px rgba(0, 0, 0, 0.07);
+}
+
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme]) .ot-section-card {
+    box-shadow:
+      inset 0 1px 0 var(--ot-border-hard),
+      inset 0 -1px 0 var(--ot-border),
+      0 8px 32px rgba(0, 0, 0, 0.07);
+  }
+}
+
+img, picture, video, canvas, svg {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+input, button, textarea, select {
+  font: inherit;
+  color: inherit;
+}
+
+ul[role="list"],
+ol[role="list"] {
+  list-style: none;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  text-wrap: balance;
+  line-height: 1.18;
+}
+
+p, li, figcaption {
+  text-wrap: pretty;
+  max-width: 72ch;
+}
+
+button {
+  cursor: pointer;
+  background: none;
+  border: none;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+::selection {
+  background: rgba(127, 127, 127, 0.20);
+  color: var(--ot-text);
+}
+
+:focus-visible {
+  outline: 2px solid var(--ot-text);
+  outline-offset: 3px;
+  border-radius: var(--ot-radius-sm);
+}
+
+
+/* ============================================================
+   APP SHELL
+   ============================================================ */
+#root {
+  min-height: 100vh;
+  isolation: isolate;
+}
 
 .app-wrapper {
   position: relative;
@@ -66,248 +424,406 @@ body {
   width: 100%;
 }
 
-/* ===================== Typography ===================== */
 
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-  color: var(--text-main);
+/* ============================================================
+   TYPOGRAPHY UTILITIES
+   ============================================================ */
+
+/* Primary gradient — used for display headings across all pages.
+   .text-gradient-strong and .text-gradient-primary are semantic
+   aliases for the same gradient — grouped to eliminate redundancy. */
+.text-gradient,
+.text-gradient-strong,
+.text-gradient-primary {
+  background: linear-gradient(
+    120deg,
+    var(--ot-grad-from)  0%,
+    var(--ot-grad-mid)  55%,
+    var(--ot-grad-to)  100%
+  );
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Soft variant — text→muted, lower contrast, for supporting headings */
+.text-gradient-soft {
+  background: linear-gradient(
+    100deg,
+    var(--ot-text)       0%,
+    var(--ot-text-muted) 100%
+  );
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.section-title {
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  text-align: center;
+}
+
+.section-title-left {
+  font-weight: 800;
+  font-size: var(--fz-xl);
+  letter-spacing: -0.03em;
+  text-align: left;
+}
+
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+  color: var(--ot-text-faint);
   margin-bottom: 0.5rem;
 }
 
-p {
-  margin-bottom: 1rem;
-  font-size: 1rem;
-  color: var(--text-muted-soft);
+.eyebrow::before {
+  content: "";
+  display: inline-block;
+  flex-shrink: 0;
+  width: 20px;
+  height: 1.5px;
+  border-radius: 999px;
+  background: var(--ot-text-faint);
+  opacity: 0.7;
+}
+
+.eyebrow-accent {
+  display: inline-block;
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+  color: var(--ot-text-muted);
+  margin-bottom: 0.45rem;
+}
+
+.text-muted {
+  color: var(--ot-text-muted);
+  font-size: 0.875rem;
+  line-height: 1.6;
+}
+
+.text-faint {
+  color: var(--ot-text-faint);
+  font-size: 0.8125rem;
+}
+
+.text-accent {
+  color: var(--ot-text);
+  font-weight: 700;
 }
 
 .read-the-docs {
-  color: var(--muted);
-  font-size: 0.9rem;
-  margin-top: 1rem;
+  color: var(--ot-text-faint);
+  font-size: 0.8125rem;
+  margin-top: 0.875rem;
 }
 
-/* ==========================================================
-   SHARED TYPOGRAPHY UTILITIES
-========================================================== */
 
-/* Gradient titles used across sections */
-.text-gradient-primary {
-  background: linear-gradient(90deg, #ffffff, #cce8ff);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-  -webkit-text-fill-color: transparent;
-}
-
-/* Slightly stronger variant if needed */
-.text-gradient-strong {
-  background: linear-gradient(90deg, #ffffff, #b4e4ff);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-  -webkit-text-fill-color: transparent;
-}
-
-/* Generic section titles */
-.section-title {
-  font-weight: 800;
-  text-align: center;
-  text-shadow: 0 0 10px rgba(255, 255, 255, 0.12);
-}
-
-/* Left-aligned card titles */
-.section-title-left {
-  font-weight: 800;
-  text-align: left;
-  text-shadow: 0 0 10px rgba(255, 255, 255, 0.18);
-}
-
-/* Accent text (green) */
-.text-accent {
-  color: var(--accent-soft);
-  font-weight: 700;
-}
-
-/* Body text variations */
-.text-body-soft {
-  font-size: 1rem;
-  line-height: 1.6;
-  color: var(--text-soft);
-}
-
-.text-body-strong {
-  font-size: 1rem;
-  line-height: 1.6;
-  color: var(--text-soft-strong);
-}
-
-/* Eyebrow label above titles */
-.eyebrow-accent {
-  font-size: 0.85rem;
-  letter-spacing: 1px;
-  font-weight: 600;
-  color: var(--accent-soft);
-}
-
-/* ==========================================================
+/* ============================================================
    CARD / PANEL UTILITIES
-========================================================== */
-
-/* Dark glass card shell used by WhoWeAre, Mission, Offer, etc. */
-.card-dark {
-  border-radius: var(--radius);
-  background: rgba(0, 0, 0, 0.65);
-  border: 1px solid rgba(255, 255, 255, 0.22);
-  box-shadow: var(--shadow);
-  transition: transform var(--transition), box-shadow var(--transition);
-  color: var(--text-main);
+   ============================================================ */
+.card-glass {
+  border-radius: var(--ot-radius-lg);
+  background: var(--ot-glass-bg);
+  border: 1px solid var(--ot-border-hard);
+  backdrop-filter: blur(var(--ot-blur)) saturate(1.4);
+  -webkit-backdrop-filter: blur(var(--ot-blur)) saturate(1.4);
+  box-shadow:
+    inset 0 1px 0 var(--ot-border-hard),
+    var(--ot-shadow-md);
+  transition:
+    box-shadow   var(--ot-transition),
+    border-color var(--ot-transition),
+    transform    var(--ot-transition);
+  color: var(--ot-text);
 }
 
-/* Slight variant with softer border (e.g., OfferSoftware) */
-.card-dark-soft-border {
-  border: 1px solid rgba(148, 163, 184, 0.3);
+.card-surface {
+  border-radius: var(--ot-radius-lg);
+  background: var(--ot-surface);
+  border: 1px solid var(--ot-border);
+  box-shadow: var(--ot-shadow-sm);
+  color: var(--ot-text);
+  transition:
+    box-shadow   var(--ot-transition),
+    border-color var(--ot-transition);
 }
 
-/* Layout helper for card content */
+@media (hover: hover) and (pointer: fine) {
+  .card-hover:hover {
+    transform: translateY(-4px);
+    box-shadow:
+      inset 0 1px 0 var(--ot-border-hard),
+      var(--ot-shadow-lg);
+    border-color: var(--ot-border-hard);
+  }
+}
+
 .card-body {
   display: flex;
   flex-direction: column;
-  gap: 0.9rem;
+  gap: 0.75rem;
+  padding: 1.4rem;
   text-align: left;
-  padding: 1.6rem 1.2rem;
-  box-sizing: border-box;
 }
 
-/* Hover lift for cards */
-@media (hover: hover) and (pointer: fine) {
-  .card-dark-hover:hover {
-    transform: translateY(-6px);
-    box-shadow:
-      inset 0 0 1px rgba(255, 255, 255, 0.16),
-      0 20px 45px rgba(0, 0, 0, 0.55);
-  }
-}
-
-/* Compact padding on small screens for card shells */
 @media (max-width: 420px) {
-  .card-compact-mobile {
-    padding: 1.4rem 1.2rem;
+  .card-body { padding: 1rem; }
+}
+
+
+/* ── Glass shine — reusable ::before layer ────────────────── */
+.ot-glass-shine {
+  position: relative;
+  overflow: hidden;
+}
+
+.ot-glass-shine::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  border-radius: inherit;
+  mix-blend-mode: screen;
+  background:
+    radial-gradient(ellipse at 14% 0%, rgba(255,255,255,0.26) 0%, transparent 52%),
+    linear-gradient(145deg,            rgba(255,255,255,0.10) 0%, transparent 36%);
+  transition: opacity var(--ot-transition);
+}
+
+html[data-theme="light"] .ot-glass-shine::before,
+:root:not([data-theme="dark"]) .ot-glass-shine::before {
+  mix-blend-mode: overlay;
+  opacity: 0.16;
+  background:
+    radial-gradient(ellipse at 14% 0%, rgba(0,0,0,0.05) 0%, transparent 52%),
+    linear-gradient(145deg,            rgba(0,0,0,0.03) 0%, transparent 36%);
+}
+
+html[data-theme="dark"] .ot-glass-shine::before {
+  mix-blend-mode: screen;
+  opacity: 1;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme]) .ot-glass-shine::before {
+    mix-blend-mode: screen;
+    opacity: 1;
   }
 }
 
-/* ==========================================================
-   BADGES, ICONS, BUTTONS
-========================================================== */
-
-/* Rounded icon pill (e.g., WhyChoose icon) */
-.icon-pill {
-  width: 36px;
-  height: 36px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 999px;
-  background: var(--accent-soft);
-  color: #000;
-  flex-shrink: 0;
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme]) .ot-glass-shine::before {
+    mix-blend-mode: overlay;
+    opacity: 0.16;
+  }
 }
 
-/* Generic pill badge for tags (e.g., OfferSoftwareTag, OfferClassTag) */
+
+/* ── Card shimmer hairline ─────────────────────────────────── */
+.ot-card-shimmer {
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 1.5px;
+  z-index: 2;
+  pointer-events: none;
+  background: linear-gradient(
+    90deg,
+    transparent           0%,
+    var(--ot-border-hard) 18%,
+    var(--ot-text-faint)  50%,
+    var(--ot-border-hard) 82%,
+    transparent           100%
+  );
+  opacity: 0.55;
+  transition: opacity var(--ot-transition);
+}
+
+html[data-theme="dark"] .ot-card-shimmer { opacity: 0.85; }
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme]) .ot-card-shimmer { opacity: 0.85; }
+}
+
+
+/* ── Section aurora wrapper ────────────────────────────────── */
+.ot-section-aurora::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse at 12% 18%, var(--ot-aurora-1) 0%, transparent 52%),
+    radial-gradient(ellipse at 88% 82%, var(--ot-aurora-2) 0%, transparent 52%),
+    radial-gradient(ellipse at 50% 50%, var(--ot-aurora-3) 0%, transparent 65%);
+  filter: blur(100px);
+  opacity: 0.55;
+  animation: aurora-drift 28s infinite alternate ease-in-out;
+}
+
+
+/* ============================================================
+   BADGE / PILL UTILITIES
+   ============================================================ */
 .badge-pill {
   display: inline-flex;
   align-items: center;
-  padding: 6px 14px;
-  font-size: 0.8rem;
+  gap: 5px;
+  padding: 4px 10px;
+  font-size: 0.68rem;
   font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
   border-radius: 999px;
-  letter-spacing: 0.5px;
+  border: 1px solid var(--ot-border);
+  background: var(--ot-surface-alt);
+  color: var(--ot-text);
+}
+
+.badge-pill--filled {
+  background: var(--ot-cta-bg);
+  color: var(--ot-cta-text);
+  border-color: transparent;
 }
 
 .badge-pill--accent {
-  background: var(--accent-soft);
-  color: #021b10;
+  background: var(--ot-surface-alt);
+  color: var(--ot-text);
+  border-color: var(--ot-border-hard);
 }
 
-/* Generic pill CTAs (Mission buttons, Heart CTA, etc.) */
+.icon-pill {
+  width: 32px;
+  height: 32px;
+  display: inline-grid;
+  place-items: center;
+  border-radius: 999px;
+  border: 1px solid var(--ot-border);
+  background: var(--ot-surface-alt);
+  color: var(--ot-text);
+  flex-shrink: 0;
+}
+
+
+/* ============================================================
+   BUTTON UTILITIES
+   ============================================================ */
 .btn-pill {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 0.5rem 1.05rem;
-  font-size: 0.88rem;
-  border-radius: 999px;
+  gap: 6px;
+  padding: 0.52rem 1.15rem;
+  font-family: var(--ot-font);
+  font-size: 0.82rem;
   font-weight: 700;
-  text-decoration: none;
+  letter-spacing: 0.01em;
+  border-radius: 999px;
+  border: 1px solid transparent;
   cursor: pointer;
-  transition: transform 0.25s ease, background 0.25s ease, border-color 0.25s ease;
+  text-decoration: none;
+  position: relative;
+  overflow: hidden;
+  transition:
+    background    var(--ot-transition),
+    border-color  var(--ot-transition),
+    transform     0.16s ease,
+    box-shadow    var(--ot-transition);
 }
 
 .btn-pill-primary {
-  background: transparent;
-  border: 1px solid #cbd5e1;
-  color: #ffffff;
+  background: var(--ot-cta-bg);
+  color: var(--ot-cta-text);
+  border-color: transparent;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.12),
+    var(--ot-shadow-md);
 }
 
 .btn-pill-primary:hover {
-  background: rgba(255, 255, 255, 0.12);
-  transform: translateY(-2px);
+  background: var(--ot-cta-hover-bg);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.18),
+    var(--ot-shadow-lg);
 }
 
 .btn-pill-ghost {
-  background: var(--accent-soft);
-  color: #000000;
-  border: none;
+  background: transparent;
+  color: var(--ot-text);
+  border-color: var(--ot-border-hard);
 }
 
 .btn-pill-ghost:hover {
-  transform: translateY(-2px);
+  background: var(--ot-surface-alt);
+  border-color: var(--ot-text);
 }
 
-/* Stack buttons vertically on very small screens */
+@media (hover: hover) and (pointer: fine) {
+  .btn-pill:hover { transform: translateY(-2px); }
+}
+
+.btn-pill:active { transform: scale(0.97); }
+
+.btn-pill:focus-visible {
+  outline: 2px solid var(--ot-text);
+  outline-offset: 3px;
+}
+
 @media (max-width: 420px) {
   .btn-stack-mobile {
     flex-direction: column;
+    width: 100%;
   }
-
   .btn-stack-mobile .btn-pill {
     width: 100%;
-    text-align: center;
+    justify-content: center;
   }
 }
 
-/* ==========================================================
-   LIST / LAYOUT HELPERS
-========================================================== */
 
-/* Spaced vertical list (Offer list, Mission list, etc.) */
+/* ============================================================
+   LIST / LAYOUT HELPERS
+   ============================================================ */
 .list-spaced {
   margin: 0;
-  padding-left: 1.2rem;
+  padding-left: 1.1rem;
   display: flex;
   flex-direction: column;
-  gap: 0.6rem;
+  gap: 0.5rem;
 }
 
-/* Generic flex column block with gap */
 .stack-col {
   display: flex;
   flex-direction: column;
-  gap: 0.9rem;
+  gap: 0.75rem;
 }
 
-/* Centered container with max width if needed */
+.stack-row {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  flex-wrap: wrap;
+}
+
 .max-width-container {
   width: 100%;
-  max-width: 1200px;
+  max-width: var(--ot-max-w);
   margin-inline: auto;
+  padding-inline: clamp(1rem, 4vw, 2rem);
 }
 
-/* Visually hidden (SEO nav links, etc.) */
-.visually-hidden {
+.visually-hidden,
+.sr-only {
   position: absolute;
   width: 1px;
   height: 1px;
@@ -317,47 +833,272 @@ p {
   white-space: nowrap;
 }
 
-/* ==========================================================
+
+/* ============================================================
    NOTE / CALLOUT BOXES
-========================================================== */
+   ============================================================ */
+.note-callout {
+  margin-top: 1.2rem;
+  padding: 12px 16px;
+  border-left: 3px solid var(--ot-border-hard);
+  background: var(--ot-surface-alt);
+  border-radius: 0 var(--ot-radius-sm) var(--ot-radius-sm) 0;
+  font-size: 0.82rem;
+  line-height: 1.65;
+  color: var(--ot-text-muted);
+}
 
-/* Highlight box (companyCredibility, alerts, etc.) */
 .note-accent {
-  margin-top: 1.4rem;
-  padding: 14px 18px;
-  border-left: 4px solid var(--accent-soft);
-  background: rgba(124, 58, 237, 0.06);
-  border-radius: 6px;
-  font-size: 0.9rem;
-  line-height: 1.7;
+  padding: 12px 16px;
+  border-left: 3px solid var(--ot-border-hard);
+  background: var(--ot-surface-alt);
+  border-radius: 0 var(--ot-radius-sm) var(--ot-radius-sm) 0;
+  font-size: 0.82rem;
+  line-height: 1.68;
+  color: var(--ot-text-muted);
+  box-shadow: inset 0 0 0 1px var(--ot-border);
 }
 
-/* ==========================================================
-   Loader Overlay
-========================================================== */
+.divider {
+  height: 1px;
+  border: none;
+  background: linear-gradient(
+    90deg,
+    transparent      0%,
+    var(--ot-border) 20%,
+    var(--ot-border) 80%,
+    transparent      100%
+  );
+  opacity: 0.6;
+  margin-block: 1.25rem;
+}
 
-.loader-overlay {
-  position: fixed;
-  inset: 0;
-  z-index: 9999;
+
+/* ============================================================
+   SHARED SECTION PATTERNS
+   ============================================================ */
+.ot-section {
+  position: relative;
+  width: 100%;
+  padding: clamp(2.5rem, 6vw, 5rem) clamp(1rem, 5vw, 2.5rem);
+  isolation: isolate;
+  overflow: hidden;
+}
+
+.ot-section-card {
+  position: relative;
+  z-index: 1;
+  overflow: hidden;
+  border-radius: var(--ot-radius-xl);
+  backdrop-filter: blur(var(--ot-blur)) saturate(1.6);
+  -webkit-backdrop-filter: blur(var(--ot-blur)) saturate(1.6);
+  background: var(--ot-glass-bg);
+  border: 1px solid var(--ot-border-hard);
+  box-shadow:
+    inset 0 1px 0 var(--ot-border-hard),
+    inset 0 -1px 0 var(--ot-border),
+    var(--ot-shadow-xl);
+  transition:
+    background   var(--ot-transition),
+    border-color var(--ot-transition),
+    box-shadow   var(--ot-transition);
+}
+
+.ot-section-card > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* Shimmer variants — top and bottom use same visual, different edge */
+.ot-section-card--shimmer-top::after,
+.ot-section-card--shimmer-bottom::after {
+  content: "";
+  position: absolute;
+  left: 0; right: 0;
+  height: 2px;
+  z-index: 2;
+  background: linear-gradient(
+    90deg,
+    transparent           0%,
+    var(--ot-border-hard) 15%,
+    var(--ot-text-faint)  50%,
+    var(--ot-border-hard) 85%,
+    transparent           100%
+  );
+}
+
+.ot-section-card--shimmer-top::after    { top: 0; }
+.ot-section-card--shimmer-bottom::after { bottom: 0; }
+
+.ot-section-content {
   display: flex;
-  justify-content: center;
-  align-items: center;
-  background: #000000;
+  flex-direction: column;
+  gap: 1.4rem;
+  padding: clamp(1.75rem, 3.5vw, 2.6rem) clamp(1.4rem, 3.5vw, 2.5rem);
 }
 
-.loader-animation {
-  width: clamp(140px, 25vw, 240px);
-  height: clamp(140px, 25vw, 240px);
+@media (min-width: 1024px) {
+  .ot-section--tight-top {
+    padding-top: clamp(1rem, 2vw, 1.5rem);
+  }
+}
+
+/* ── Numbered feature list ──────────────────────────────────── */
+.ot-feature-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
   display: flex;
-  align-items: center;
-  justify-content: center;
+  flex-direction: column;
+  gap: 0.6rem;
+  counter-reset: ot-feature;
 }
 
-/* ==========================================================
-   Background Animation Layer
-========================================================== */
+.ot-feature-list li {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: 0.875rem;
+  line-height: 1.55;
+  color: var(--ot-text-muted);
+  counter-increment: ot-feature;
+}
 
+.ot-feature-list li > span {
+  flex: 1;
+  min-width: 0;
+}
+
+.ot-feature-list li::before {
+  content: counter(ot-feature, decimal-leading-zero);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin-top: 1px;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 3px;
+  font-size: 0.55rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  border-radius: 999px;
+  border: 1.5px solid var(--ot-border-hard);
+  background: var(--ot-surface-alt);
+  color: var(--ot-text-faint);
+}
+
+
+/* ── Stat row ────────────────────────────────────────────────── */
+.ot-stat-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0;
+  padding-block: 1.2rem;
+  border-top:    1px solid var(--ot-border);
+  border-bottom: 1px solid var(--ot-border);
+}
+
+.ot-stat-row--top-only {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.ot-stat-item {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding-right: clamp(1.25rem, 2.5vw, 2.25rem);
+  margin-right:  clamp(1.25rem, 2.5vw, 2.25rem);
+  border-right:  1px solid var(--ot-border);
+}
+
+.ot-stat-item:first-child { padding-left: 0; }
+
+.ot-stat-item:last-child {
+  border-right: none;
+  padding-right: 0;
+  margin-right: 0;
+}
+
+.ot-stat-value {
+  font-size: clamp(1.4rem, 2.6vw, 1.9rem);
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  line-height: 1;
+  background: linear-gradient(
+    100deg,
+    var(--ot-grad-from) 0%,
+    var(--ot-grad-mid)  100%
+  );
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.ot-stat-label {
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ot-text-faint);
+  margin: 0;
+}
+
+@media (max-width: 560px) {
+  .ot-stat-item {
+    padding-right: clamp(0.875rem, 2.5vw, 1.375rem);
+    margin-right:  clamp(0.875rem, 2.5vw, 1.375rem);
+  }
+}
+
+
+/* ── Quote block ─────────────────────────────────────────────── */
+.ot-quote {
+  position: relative;
+  padding-left: 1.1rem;
+  color: var(--ot-text);
+  font-size: 0.95rem;
+  font-weight: 500;
+  font-style: italic;
+  letter-spacing: -0.01em;
+  max-width: 60ch;
+}
+
+.ot-quote::before {
+  content: "";
+  position: absolute;
+  left: 0; top: 4px; bottom: 4px;
+  width: 3px;
+  border-radius: 999px;
+  background: linear-gradient(180deg, var(--ot-text) 0%, var(--ot-text-faint) 100%);
+}
+
+
+/* ── Corner accent watermark ─────────────────────────────────── */
+.ot-corner-accent {
+  position: absolute;
+  bottom: -1.5rem;
+  right: -1rem;
+  font-size: clamp(6rem, 12vw, 12rem);
+  font-weight: 900;
+  letter-spacing: -0.06em;
+  line-height: 1;
+  color: var(--ot-text);
+  opacity: 0.025;
+  pointer-events: none;
+  user-select: none;
+  z-index: 0;
+}
+
+@media (max-width: 560px) {
+  .ot-corner-accent { display: none; }
+}
+
+
+/* ============================================================
+   BACKGROUND ANIMATION LAYER
+   ============================================================ */
 .background-animation {
   position: fixed;
   inset: 0;
@@ -365,32 +1106,78 @@ p {
   width: 100%;
   height: 100%;
   pointer-events: none;
+  background:
+    url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E"),
+    transparent;
 }
 
-/* ==========================================================
-   Scrollbar
-========================================================== */
-
-::-webkit-scrollbar {
-  width: 8px;
+.background-aurora {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse at 15% 20%, var(--ot-aurora-1) 0%, transparent 55%),
+    radial-gradient(ellipse at 82% 80%, var(--ot-aurora-2) 0%, transparent 55%),
+    radial-gradient(ellipse at 50% 50%, var(--ot-aurora-3) 0%, transparent 60%);
+  filter: blur(80px);
+  opacity: 0.65;
+  animation: aurora-drift 22s infinite alternate ease-in-out;
 }
 
-::-webkit-scrollbar-thumb {
-  background: #2d2f50;
-  border-radius: 10px;
+@keyframes aurora-drift {
+  from { transform: translate(-8%, -8%) scale(1.08); }
+  to   { transform: translate(8%, 6%) scale(1);      }
 }
 
-::-webkit-scrollbar-track {
-  background: #000000;
+
+/* ============================================================
+   LOADER OVERLAY
+   ============================================================ */
+.loader-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 99999;
+  display: grid;
+  place-items: center;
+  background: var(--ot-bg);
+  transition: opacity 0.35s ease;
 }
 
-/* ==========================================================
-   Responsive Wrapper Padding
-========================================================== */
+.loader-overlay--hidden {
+  opacity: 0;
+  pointer-events: none;
+}
 
-@media (max-width: 768px) {
-  #root,
-  .card {
-    padding: 1.5rem;
+.loader-animation {
+  width: clamp(110px, 20vw, 180px);
+  height: clamp(110px, 20vw, 180px);
+  display: grid;
+  place-items: center;
+}
+
+
+/* ============================================================
+   SCROLLBAR
+   ============================================================ */
+::-webkit-scrollbar        { width: 6px; }
+::-webkit-scrollbar-track  { background: var(--ot-bg); }
+::-webkit-scrollbar-thumb  {
+  background: var(--ot-border-hard);
+  border-radius: 999px;
+}
+::-webkit-scrollbar-thumb:hover { background: var(--ot-text-faint); }
+
+
+/* ============================================================
+   REDUCED MOTION
+   ============================================================ */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
   }
 }

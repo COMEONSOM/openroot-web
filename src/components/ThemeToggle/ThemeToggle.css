@@ -1,0 +1,173 @@
+/* ─── ThemeToggle.css ────────────────────────────────────────────────────────
+   Floating fixed-position toggle.
+   Tokens: --ot-* system from App.css.
+   Icon colours mirror the .footer-theme-toggle treatment in DynamicIsland.css.
+   GSAP owns transform — it is intentionally excluded from transition.
+   ────────────────────────────────────────────────────────────────────────── */
+
+/* ── Base ────────────────────────────────────────────────────────────────── */
+.theme-toggle {
+  position: fixed;
+  z-index: 9999;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  min-width: 44px;
+  height: 44px;
+  padding: 0 0.75rem;
+
+  /* Glass surface — matches .card-glass and .heart-band in DynamicIsland.css */
+  background: var(--ot-glass-bg);
+  backdrop-filter: blur(var(--ot-blur)) saturate(1.4);
+  -webkit-backdrop-filter: blur(var(--ot-blur)) saturate(1.4);
+
+  color: var(--ot-text-muted);
+  border: 1px solid var(--ot-border-hard);
+  border-radius: 999px;
+  box-shadow:
+    inset 0 1px 0 var(--ot-border-hard),
+    var(--ot-shadow-md);
+
+  font-family: var(--ot-font);
+  cursor: pointer;
+  white-space: nowrap;
+
+  /* transform excluded — GSAP owns it.
+     background/color/border-color need their own transition here because
+     the body rule only covers background + color, not border-color.       */
+  transition:
+    background   var(--ot-transition),
+    color        var(--ot-transition),
+    border-color var(--ot-transition),
+    box-shadow   var(--ot-transition);
+}
+
+/* ── Hover ───────────────────────────────────────────────────────────────── */
+.theme-toggle:hover {
+  background: var(--ot-surface-alt);
+  color: var(--ot-text);
+  border-color: var(--ot-border-hard);
+  box-shadow:
+    inset 0 1px 0 var(--ot-border-hard),
+    var(--ot-shadow-lg);
+}
+
+/* ── Active tap ──────────────────────────────────────────────────────────── */
+.theme-toggle:active {
+  box-shadow:
+    inset 0 1px 0 var(--ot-border),
+    var(--ot-shadow-sm);
+}
+
+/* ── Focus ring ──────────────────────────────────────────────────────────── */
+.theme-toggle:focus-visible {
+  outline: 2px solid var(--ot-text);
+  outline-offset: 3px;
+  border-radius: var(--ot-radius-sm);
+}
+
+/* ── Icon wrapper ────────────────────────────────────────────────────────── */
+.theme-toggle__icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: color var(--ot-transition);
+}
+
+/* ── Icon colour per resolved theme ─────────────────────────────────────────
+   Mirrors the treatment in .footer-theme-toggle in DynamicIsland.css:
+     light  → warm amber  (#fbbf24)
+     dark   → soft lavender (#a5b4fc)
+     system → neutral muted (inherited from button)
+   ────────────────────────────────────────────────────────────────────────── */
+.theme-toggle[data-resolved="light"] .theme-toggle__icon {
+  color: #fbbf24;
+}
+
+.theme-toggle[data-resolved="dark"] .theme-toggle__icon {
+  color: #a5b4fc;
+}
+
+/* system mode → keep muted, nudge border so user knows OS is in control */
+.theme-toggle[data-mode="system"] {
+  border-color: var(--ot-text-faint);
+}
+
+.theme-toggle[data-mode="system"]:hover {
+  border-color: var(--ot-border-hard);
+}
+
+/* ── Label (showLabel={true}) ────────────────────────────────────────────── */
+.theme-toggle__label {
+  font-size: 0.8125rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  line-height: 1;
+}
+
+/* ── Position variants ───────────────────────────────────────────────────── */
+.theme-toggle--bottom-right {
+  bottom: var(--tt-offset, 24px);
+  right:  var(--tt-offset, 24px);
+}
+
+.theme-toggle--bottom-left {
+  bottom: var(--tt-offset, 24px);
+  left:   var(--tt-offset, 24px);
+}
+
+.theme-toggle--top-right {
+  top:   var(--tt-offset, 24px);
+  right: var(--tt-offset, 24px);
+}
+
+.theme-toggle--top-left {
+  top:  var(--tt-offset, 24px);
+  left: var(--tt-offset, 24px);
+}
+
+.theme-toggle--middle-right {
+  top:   50%;
+  right: var(--tt-offset, 24px);
+  transform: translateY(-50%);
+}
+
+.theme-toggle--middle-left {
+  top:  50%;
+  left: var(--tt-offset, 24px);
+  transform: translateY(-50%);
+}
+
+/* Preserve translateY on hover so GSAP scale doesn't fight the Y offset */
+.theme-toggle--middle-right:hover,
+.theme-toggle--middle-left:hover {
+  transform: translateY(-50%);
+}
+
+/* ── Mobile: icon-only (mirrors .footer-theme-toggle @480px rule) ────────── */
+@media (max-width: 480px) {
+  .theme-toggle__label {
+    display: none;
+  }
+
+  .theme-toggle {
+    padding: 0;
+    width: 44px;
+    border-radius: 50%;
+  }
+}
+
+/* ── Reduced motion ──────────────────────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  .theme-toggle {
+    transition: none !important;
+  }
+
+  .theme-toggle__icon {
+    transition: none !important;
+  }
+}

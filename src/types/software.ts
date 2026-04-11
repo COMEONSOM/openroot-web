@@ -5,6 +5,7 @@ export interface Software {
   url: string;
   seoTitle?: string;
   seoDescription?: string;
+  video?: string;
 }
 
 export interface SoftwareContent {

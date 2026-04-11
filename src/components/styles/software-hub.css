@@ -1,0 +1,238 @@
+/* ============================================================
+   SOFTWARE HUB PAGE
+   All colors via CSS variables — responds to theme toggle.
+   ============================================================ */
+
+
+/* ── ROOT ─────────────────────────────────────────────── */
+
+.sh-root {
+  padding: clamp(3rem, 8vw, 5rem) clamp(1rem, 5vw, 2.5rem);
+  background: var(--ot-bg);
+  color: var(--ot-text);
+  min-height: 100vh;
+  transition: background 0.28s ease, color 0.28s ease;
+}
+
+
+/* ── HEADER ───────────────────────────────────────────── */
+
+.sh-header {
+  text-align: center;
+  max-width: 720px;
+  margin-inline: auto;
+}
+
+.sh-title {
+  font-size: clamp(1.8rem, 5vw, 2.8rem);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1.15;
+
+  /* Green gradient — uses nb-green which already switches per theme */
+  background: linear-gradient(
+    90deg,
+    var(--nb-green) 0%,
+    color-mix(in oklch, var(--nb-green) 70%, #22c55e) 100%
+  );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.sh-subtitle {
+  margin-top: 1rem;
+  font-size: clamp(0.88rem, 1.6vw, 1rem);
+  color: var(--ot-text-muted);
+  line-height: 1.7;
+  max-width: 60ch;
+  margin-inline: auto;
+}
+
+
+/* ── SECTIONS ─────────────────────────────────────────── */
+
+.sh-section {
+  margin-top: clamp(3rem, 7vw, 5rem);
+}
+
+.sh-section--center {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.25rem;
+}
+
+.sh-section-title {
+  font-size: clamp(1.1rem, 2.5vw, 1.6rem);
+  font-weight: 800;
+  letter-spacing: -0.025em;
+  color: var(--ot-text);
+  margin-bottom: clamp(1.25rem, 3vw, 2rem);
+  text-align: center;
+}
+
+
+/* ── GRID ─────────────────────────────────────────────── */
+
+.sh-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: clamp(0.8rem, 1.8vw, 1.25rem);
+}
+
+.sh-grid--featured {
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+}
+
+
+/* ── CARD ─────────────────────────────────────────────── */
+
+.sh-card {
+  position: relative;
+  background: var(--ot-glass-bg);
+  border: 1px solid var(--ot-border);
+  border-radius: var(--ot-radius-lg);
+  padding: clamp(1rem, 2.5vw, 1.4rem);
+  transition:
+    transform     0.26s cubic-bezier(0.16, 1, 0.3, 1),
+    border-color  0.26s ease,
+    box-shadow    0.26s ease,
+    background    0.26s ease;
+  overflow: hidden;
+}
+
+/* Top shimmer hairline — matches navbar card style */
+.sh-card::after {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 1px;
+  pointer-events: none;
+  background: linear-gradient(
+    90deg,
+    transparent          0%,
+    var(--ot-border-hard) 30%,
+    var(--ot-border-hard) 70%,
+    transparent          100%
+  );
+  opacity: 0.5;
+  transition: opacity 0.26s ease, background 0.26s ease;
+}
+
+/* Featured card — slightly elevated */
+.sh-card--featured {
+  border-color: var(--nb-green-border);
+  background: color-mix(in oklch, var(--nb-green) 4%, var(--ot-glass-bg));
+}
+
+/* Hover state */
+@media (hover: hover) and (pointer: fine) {
+  .sh-card:hover,
+  .sh-card--hovered {
+    transform: translateY(-5px);
+    border-color: var(--nb-green-border);
+    background: var(--ot-surface);
+    box-shadow:
+      0 0 0 1px var(--nb-green-dim),
+      0 10px 30px var(--nb-green-dim);
+  }
+
+  .sh-card:hover::after,
+  .sh-card--hovered::after {
+    opacity: 1;
+    background: linear-gradient(
+      90deg,
+      transparent          0%,
+      var(--nb-green-mid)  25%,
+      var(--nb-green)      50%,
+      var(--nb-green-mid)  75%,
+      transparent          100%
+    );
+  }
+}
+
+.sh-card:active {
+  transform: scale(0.97);
+  transition-duration: 0.08s;
+}
+
+
+/* ── CARD TEXT ────────────────────────────────────────── */
+
+.sh-card-name {
+  display: block;
+  font-size: clamp(0.95rem, 1.6vw, 1.1rem);
+  font-weight: 700;
+  color: var(--nb-green);
+  text-decoration: none;
+  letter-spacing: -0.01em;
+  line-height: 1.3;
+  transition: opacity 0.2s ease;
+}
+
+.sh-card-name--featured {
+  font-size: clamp(1.05rem, 1.8vw, 1.25rem);
+  font-weight: 800;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .sh-card-name:hover { opacity: 0.8; }
+}
+
+.sh-card-desc {
+  margin-top: 0.6rem;
+  font-size: clamp(0.75rem, 1.2vw, 0.85rem);
+  color: var(--ot-text-muted);
+  line-height: 1.65;
+  max-width: 52ch;
+}
+
+
+/* ── CTA BUTTON ───────────────────────────────────────── */
+
+.sh-cta-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.75rem 1.75rem;
+  border-radius: var(--ot-radius-lg);
+  background: var(--nb-green);
+  color: #000;
+  font-weight: 800;
+  font-size: 0.88rem;
+  letter-spacing: 0.01em;
+  text-decoration: none;
+  transition:
+    opacity      0.22s ease,
+    transform    0.22s cubic-bezier(0.16, 1, 0.3, 1),
+    box-shadow   0.22s ease;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .sh-cta-btn:hover {
+    opacity: 0.88;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px var(--nb-green-glow);
+  }
+}
+
+.sh-cta-btn:active {
+  transform: scale(0.96);
+  transition-duration: 0.08s;
+}
+
+.sh-cta-btn:focus-visible {
+  outline: 2px solid var(--nb-green);
+  outline-offset: 3px;
+}
+
+
+/* ── REDUCED MOTION ───────────────────────────────────── */
+
+@media (prefers-reduced-motion: reduce) {
+  .sh-card,
+  .sh-card::after,
+  .sh-cta-btn { transition: none !important; }
+}
