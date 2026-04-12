@@ -10,7 +10,7 @@
 //   • will-change applied via CSS only on actively animating elements
 // =============================================================================
 
-import React, { memo } from "react";
+import React, { memo, useEffect, useRef } from "react";
 import { motion, useReducedMotion } from "framer-motion";
 import styles from "../styles/AboutCompany.module.css";
 import { VP } from "../../motion/variants";
@@ -18,8 +18,6 @@ import { PROOF_CARDS, ORBIT_BADGES } from "../../data/aboutdata";
 
 // =============================================================================
 // LOCAL ANIMATION VARIANTS
-// SNAPPIER THAN THE GLOBAL variants.ts — TUNED FOR THIS SECTION SPECIFICALLY
-// SHORTER DURATION + TIGHTER EASING = FAST BUT NOT ABRUPT
 // =============================================================================
 const SNAP: [number, number, number, number] = [0.22, 1, 0.36, 1];
 
@@ -38,14 +36,11 @@ const snapLeft = {
   visible: { opacity: 1, x: 0, transition: { duration: 0.28, ease: SNAP } },
 };
 
-// STAGGER — FASTER INTERVAL (0.07s) + SHORTER DELAY (0.05s) VS GLOBAL (0.1 / 0.06)
 const snapStagger = (delay = 0.05, interval = 0.07) => ({
   hidden:  {},
   visible: { transition: { staggerChildren: interval, delayChildren: delay } },
 });
 
-// BADGE ENTRANCE — ONE-TIME POP IN, NO ONGOING MOTION IN JS
-// CONTINUOUS FLOAT IS HANDLED BY CSS .floatBadge[1-4] ANIMATION-DELAY BELOW
 const badgePop = {
   hidden:  { opacity: 0, scale: 0.75, y: 10 },
   visible: (i: number) => ({
@@ -54,19 +49,9 @@ const badgePop = {
   }),
 };
 
-// VISUAL PANE — ENTRANCE ONLY (scale + fade), FLOAT IS CSS-DRIVEN
 const paneEntrance = {
   hidden:  { opacity: 0, scale: 0.97 },
   visible: { opacity: 1, scale: 1, transition: { duration: 0.45, ease: SNAP } },
-};
-
-// MINI PANEL — SLIDES UP FROM BELOW THE PANE
-const miniPanelEntrance = {
-  hidden:  { opacity: 0, y: 20 },
-  visible: {
-    opacity: 1, y: 0,
-    transition: { delay: 0.5, duration: 0.38, ease: SNAP },
-  },
 };
 
 // =============================================================================
@@ -84,6 +69,51 @@ const ProofCard: React.FC<{ title: string; text: string }> = memo(
   )
 );
 ProofCard.displayName = "ProofCard";
+
+// =============================================================================
+// CREDIBILITY CARD — HIGHLIGHTER PEN STYLE
+// Paper-textured card with marker-highlight animation on key terms.
+// Highlights draw left-to-right via IntersectionObserver (no JS loop).
+// =============================================================================
+const CredibilityCard: React.FC = memo(() => {
+  const cardRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const el = cardRef.current;
+    if (!el) return;
+
+    const obs = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          el.classList.add(styles["cred-inview"]);
+          obs.disconnect();
+        }
+      },
+      { threshold: 0.5 }
+    );
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, []);
+
+  return (
+    <div ref={cardRef} className={styles.credibility}>
+      <p className={styles["credibility-headline"]}>
+        <mark className={styles["cred-mark"]}>Openroot Systems</mark> is a
+        registered MSME under the Government of India with UDYAM Registration
+        Number{" "}
+        <mark className={`${styles["cred-mark"]} ${styles["cred-mark--2"]}`}>
+          UDYAM-WB-14-0263034
+        </mark>
+        . We are also a registered employer on the{" "}
+        <mark className={`${styles["cred-mark"]} ${styles["cred-mark--3"]}`}>
+          National Career Service
+        </mark>{" "}
+        (NCS) portal.
+      </p>
+    </div>
+  );
+});
+CredibilityCard.displayName = "CredibilityCard";
 
 // =============================================================================
 // WHO WE ARE SECTION
@@ -137,15 +167,9 @@ function WhoWeAre() {
             {/* ── LEFT COLUMN ─────────────────────────────────── */}
             <motion.div className={styles.whoLeft} variants={snapUp}>
               <div className={styles.whoTextBlock}>
-                <p className={`${styles.credibility} note-accent`}>
-                  <strong className="text-accent">Openroot Systems</strong> is a
-                  registered MSME under the Government of India with UDYAM
-                  Registration Number{" "}
-                  <strong className="text-accent">UDYAM-WB-14-0263034</strong>.
-                  We are also a registered employer on the{" "}
-                  <strong className="text-accent">National Career Service</strong>{" "}
-                  (NCS) portal.
-                </p>
+
+                {/* ── HIGHLIGHTER CREDIBILITY CARD ── */}
+                <CredibilityCard />
 
                 <p className="text-muted">
                   We build{" "}
@@ -171,94 +195,103 @@ function WhoWeAre() {
               </motion.div>
             </motion.div>
 
-            {/* ── RIGHT COLUMN — STACKED IDENTITY CARDS ───────────────────── */}
+            {/* ── RIGHT COLUMN — STACKED IDENTITY CARDS ───────── */}
             <motion.div
-                className={styles.whoRight}
-                variants={snapUp}
-                style={{ width: "100%", display: "flex", justifyContent: "center" }}
+              className={styles.whoRight}
+              variants={snapUp}
+              style={{ width: "100%", display: "flex", justifyContent: "center" }}
+            >
+              <div className={styles.stackWrapper}>
+
+                {/* Decorative back cards */}
+                <div className={`${styles.stackCard} ${styles.stackCardBack}`}  aria-hidden="true" />
+                <div className={`${styles.stackCard} ${styles.stackCardMid}`}   aria-hidden="true" />
+
+                {/* Front card */}
+                <motion.div
+                  className={`${styles.stackCard} ${styles.stackCardFront}`}
+                  variants={paneEntrance}
+                  initial="hidden"
+                  whileInView="visible"
+                  viewport={{ once: true }}
                 >
-                <div className={styles.stackWrapper}>
 
-                    {/* Decorative back cards — CSS hover fans them out, zero JS */}
-                    <div className={`${styles.stackCard} ${styles.stackCardBack}`}  aria-hidden="true" />
-                    <div className={`${styles.stackCard} ${styles.stackCardMid}`}   aria-hidden="true" />
-
-                    {/* Front card — entrance animation only, no JS loop */}
-                    <motion.div
-                    className={`${styles.stackCard} ${styles.stackCardFront}`}
-                    variants={paneEntrance}
-                    initial="hidden"
-                    whileInView="visible"
-                    viewport={{ once: true }}
+                  {/* ── HEADER ── */}
+                  <div className={styles.stackHeader}>
+                    <div
+                      className={styles.stackBrandMark}
+                      aria-label="Openroot Systems logo"
                     >
-
-                    {/* ── HEADER ── */}
-                    <div className={styles.stackHeader}>
-                        <div className={styles.stackBrandMark} aria-label="Openroot Systems logo">
-                            <img
-                            src="/logo.png"          /* ← update path to your actual logo file */
-                            alt="Openroot Systems"
-                            width={38}
-                            height={38}
-                            loading="eager"
-                            decoding="async"
-                            className={styles.stackLogoImg}
-                            onError={(e) => {
-                                /* If logo fails to load, hide img and show OR text fallback */
-                                const el = e.currentTarget;
-                                el.style.display = "none";
-                                const fallback = el.nextElementSibling as HTMLElement | null;
-                                if (fallback) fallback.style.display = "flex";
-                            }}/>
-                        </div>
-                        <div className={styles.stackMeta}>
-                        <span className={styles.stackCompanyName}>Openroot Systems</span>
-                        <span className={styles.stackLocation}>Kolkata · India</span>
-                        </div>
-                        <div className={styles.stackStatusRow} aria-label="MSME Verified">
-                        <span className={styles.stackStatusDot} aria-hidden="true" />
-                        <span className={styles.stackStatusLabel}>LATEST</span>
-                        </div>
+                      <img
+                        src="/logo.png"
+                        alt="Openroot Systems"
+                        width={38}
+                        height={38}
+                        loading="eager"
+                        decoding="async"
+                        className={styles.stackLogoImg}
+                        onError={(e) => {
+                          const el = e.currentTarget;
+                          el.style.display = "none";
+                          const fallback = el.nextElementSibling as HTMLElement | null;
+                          if (fallback) fallback.style.display = "flex";
+                        }}
+                      />
+                      <span
+                        className={styles.stackBrandFallback}
+                        aria-hidden="true"
+                      >
+                        OR
+                      </span>
                     </div>
-
-                    {/* ── TAGLINE ── */}
-                    <div className={styles.stackTaglineWrap}>
-                        <p className={styles.stackTaglineEyebrow}>Software pricing starts from</p>
-                        <p className={styles.stackTagline}>
-                            <span className={styles.stackTaglineAccent}>₹2,999</span>
-                        </p>
-                        <p className={styles.stackTaglineNote}>
-                            No consultation charges. Ever.
-                        </p>
+                    <div className={styles.stackMeta}>
+                      <span className={styles.stackCompanyName}>Openroot Systems</span>
+                      <span className={styles.stackLocation}>Kolkata · India</span>
                     </div>
-
-                    {/* ── 2×2 FEATURE GRID — uses ORBIT_BADGES labels ── */}
-                    <div className={styles.stackGrid} role="list">
-                        {ORBIT_BADGES.map((b, i) => (
-                        <motion.div
-                            key={b.label}
-                            className={styles.stackChip}
-                            role="listitem"
-                            variants={badgePop}
-                            custom={i}
-                            initial="hidden"
-                            whileInView="visible"
-                            viewport={{ once: true }}
-                        >
-                            <span className={styles.stackChipDot} aria-hidden="true" />
-                            <span className={styles.stackChipLabel}>{b.label}</span>
-                        </motion.div>
-                        ))}
+                    <div className={styles.stackStatusRow} aria-label="MSME Verified">
+                      <span className={styles.stackStatusDot} aria-hidden="true" />
+                      <span className={styles.stackStatusLabel}>LATEST</span>
                     </div>
+                  </div>
 
-                    {/* ── FOOTER — registration number ── */}
-                    <div className={styles.stackFooter}>
-                        <span className={styles.stackFooterLabel}>UDYAM</span>
-                        <span className={styles.stackFooterValue}>WB-14-0263034</span>
-                    </div>
+                  {/* ── TAGLINE ── */}
+                  <div className={styles.stackTaglineWrap}>
+                    <p className={styles.stackTaglineEyebrow}>Software pricing starts from</p>
+                    <p className={styles.stackTagline}>
+                      <span className={styles.stackTaglineAccent}>₹2,999</span>
+                    </p>
+                    <p className={styles.stackTaglineNote}>
+                      No consultation charges. Ever.
+                    </p>
+                  </div>
 
-                    </motion.div>
-                </div>
+                  {/* ── 2×2 FEATURE GRID ── */}
+                  <div className={styles.stackGrid} role="list">
+                    {ORBIT_BADGES.map((b, i) => (
+                      <motion.div
+                        key={b.label}
+                        className={styles.stackChip}
+                        role="listitem"
+                        variants={badgePop}
+                        custom={i}
+                        initial="hidden"
+                        whileInView="visible"
+                        viewport={{ once: true }}
+                      >
+                        <span className={styles.stackChipDot} aria-hidden="true" />
+                        <span className={styles.stackChipLabel}>{b.label}</span>
+                      </motion.div>
+                    ))}
+                  </div>
+
+                  {/* ── FOOTER ── */}
+                  <div className={styles.stackFooter}>
+                    <span className={styles.stackFooterLabel}>UDYAM</span>
+                    <span className={styles.stackFooterValue}>WB-14-0263034</span>
+                  </div>
+
+                </motion.div>
+              </div>
             </motion.div>
 
           </div>

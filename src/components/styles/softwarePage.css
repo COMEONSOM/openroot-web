@@ -1,5 +1,5 @@
 /* ============================================================
-   SOFTWARE PAGE — Premium Redesign
+   SOFTWARE PAGE
    ============================================================ */
 
 
@@ -31,7 +31,9 @@
   transition: opacity 0.2s ease;
 }
 
-.sp-back-link:hover { opacity: 0.75; }
+@media (hover: hover) and (pointer: fine) {
+  .sp-back-link:hover { opacity: 0.75; }
+}
 
 
 /* ── HERO ─────────────────────────────────────────────── */
@@ -44,27 +46,23 @@
   padding: clamp(2.5rem, 5vw, 4rem) clamp(1.25rem, 8vw, 5rem) clamp(2rem, 4vw, 3rem);
   overflow: hidden;
   border-bottom: 1px solid var(--ot-border);
+  /* New stacking context — prevents z-index leaks from global styles */
+  isolation: isolate;
 }
 
-/* SPLIT — side by side on desktop */
 .sp-hero--split {
   display: grid;
   grid-template-columns: 1fr 1fr;
+  grid-template-rows: auto;      /* explicit: prevents phantom rows */
   align-items: start;
+  align-content: start;
   gap: clamp(1.5rem, 3vw, 3rem);
   padding-right: clamp(1.25rem, 5vw, 3.5rem);
 }
 
-@media (max-width: 860px) {
-  .sp-hero--split {
-    grid-template-columns: 1fr;
-    padding-right: clamp(1.25rem, 8vw, 5rem);
-  }
-}
-
-/* Decorative glow blob */
+/* Decorative — always absolute, always out of grid flow */
 .sp-hero-glow {
-  position: absolute;
+  position: absolute !important;
   top: -60px;
   left: -40px;
   width: 400px;
@@ -74,11 +72,11 @@
   pointer-events: none;
   z-index: 0;
   filter: blur(28px);
+  grid-area: unset !important;
 }
 
-/* Subtle grid texture */
 .sp-hero-grid {
-  position: absolute;
+  position: absolute !important;
   inset: 0;
   background-image:
     linear-gradient(var(--ot-border) 1px, transparent 1px),
@@ -89,49 +87,19 @@
   z-index: 0;
   mask-image: radial-gradient(ellipse 70% 60% at 30% 40%, black 0%, transparent 100%);
   -webkit-mask-image: radial-gradient(ellipse 70% 60% at 30% 40%, black 0%, transparent 100%);
+  grid-area: unset !important;
 }
 
-.sp-hero > * { position: relative; z-index: 1; }
-
-/* Text column */
+/* Content columns — explicitly placed */
 .sp-hero-text {
+  grid-column: 1;
+  grid-row: 1;
+  position: relative;
+  z-index: 1;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   padding-top: clamp(0.5rem, 2vw, 1.5rem);
-  position: relative;
-  z-index: 1;
-}
-
-.sp-hero-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.4rem;
-  padding: 4px 12px;
-  border-radius: 999px;
-  font-size: 0.62rem;
-  font-weight: 700;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--nb-green);
-  background: var(--nb-green-dim);
-  border: 1px solid var(--nb-green-border);
-  margin-bottom: 1.25rem;
-}
-
-.sp-hero-badge::before {
-  content: "";
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: var(--nb-green);
-  box-shadow: 0 0 8px var(--nb-green-glow);
-  animation: sp-dot-pulse 2.6s ease-in-out infinite;
-}
-
-@keyframes sp-dot-pulse {
-  0%, 100% { opacity: 1;    box-shadow: 0 0 4px  var(--nb-green-glow); }
-  50%       { opacity: 0.7; box-shadow: 0 0 14px var(--nb-green-glow); }
 }
 
 .sp-hero-title {
@@ -204,7 +172,6 @@
   transition: transform 0.26s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-/* Shine sweep */
 .sp-launch-btn::before {
   content: "";
   position: absolute;
@@ -505,9 +472,7 @@
   transition: grid-template-rows 0.32s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.sp-faq-item--open .sp-faq-answer {
-  grid-template-rows: 1fr;
-}
+.sp-faq-item--open .sp-faq-answer { grid-template-rows: 1fr; }
 
 .sp-faq-answer-inner { overflow: hidden; }
 
@@ -566,7 +531,6 @@
     color: var(--nb-green);
     background: var(--nb-green-dim);
     border-color: var(--nb-green-border);
-    transform: translateY(-1px);
   }
 }
 
@@ -589,179 +553,6 @@
 /* ── VIDEO ────────────────────────────────────────────── */
 
 .sp-hero-video-desktop {
-  position: relative;
-  z-index: 1;
-  display: flex;
-  align-items: flex-start;
-  justify-content: center;
-}
-
-@media (max-width: 860px) {
-  .sp-hero-video-desktop { display: none; }
-}
-
-.sp-hero-video-mobile {
-  display: none;
-  padding: clamp(1rem, 3vw, 1.5rem) clamp(1.25rem, 5vw, 2.5rem) clamp(1.5rem, 4vw, 2.5rem);
-  background: var(--ot-bg);
-}
-
-@media (max-width: 860px) {
-  .sp-hero-video-mobile { display: block; }
-}
-
-.sp-video-wrap {
-  display: flex;
-  flex-direction: column;
-  gap: 0.6rem;
-  max-width: 480px;
-  width: 100%;
-}
-
-.sp-video-frame {
-  position: relative;
-  border-radius: 12px;
-  overflow: hidden;
-  background: var(--ot-surface);
-  box-shadow:
-    0 0 0 1px oklch(from var(--ot-text) l c h / 0.08),
-    0 2px 4px oklch(from var(--ot-text) l c h / 0.06),
-    0 8px 24px oklch(from var(--ot-text) l c h / 0.10),
-    0 24px 48px oklch(from var(--ot-text) l c h / 0.08),
-    0 0 40px var(--nb-green-dim);
-  transform: perspective(900px) rotateY(-4deg) rotateX(1.5deg);
-  transform-origin: left center;
-  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s ease;
-}
-
-@media (hover: hover) and (pointer: fine) {
-  .sp-video-frame:hover {
-    transform: perspective(900px) rotateY(-1deg) rotateX(0.5deg) translateY(-4px);
-    box-shadow:
-      0 0 0 1px oklch(from var(--ot-text) l c h / 0.10),
-      0 4px 8px oklch(from var(--ot-text) l c h / 0.08),
-      0 16px 40px oklch(from var(--ot-text) l c h / 0.14),
-      0 32px 64px oklch(from var(--ot-text) l c h / 0.10),
-      0 0 60px var(--nb-green-dim);
-  }
-}
-
-/* macOS chrome bar with traffic-light dots */
-.sp-video-frame::before {
-  content: "";
-  display: block;
-  height: 32px;
-  background: oklch(from var(--ot-text) l c h / 0.92);
-  background-image:
-    radial-gradient(circle, #ff5f56 100%, #ff5f56 100%),
-    radial-gradient(circle, #febc2e 100%, #febc2e 100%),
-    radial-gradient(circle, #28c840 100%, #28c840 100%);
-  background-size: 10px 10px, 10px 10px, 10px 10px;
-  background-position: 12px center, 26px center, 40px center;
-  background-repeat: no-repeat, no-repeat, no-repeat;
-}
-
-/* Green accent stripe under chrome */
-.sp-video-frame::after {
-  content: "";
-  position: absolute;
-  top: 32px; left: 0; right: 0;
-  height: 1px;
-  z-index: 2;
-  pointer-events: none;
-  background: linear-gradient(
-    90deg,
-    transparent            0%,
-    var(--nb-green-border) 25%,
-    var(--nb-green)        50%,
-    var(--nb-green-border) 75%,
-    transparent            100%
-  );
-  opacity: 0.7;
-}
-
-.sp-video {
-  width: 100%;
-  max-height: 260px;
-  object-fit: cover;
-  display: block;
-}
-
-.sp-video-overlay {
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  pointer-events: none;
-  box-shadow: inset 0 0 24px rgba(0,0,0,0.10);
-}
-
-.sp-video-caption {
-  font-size: 0.62rem;
-  font-weight: 700;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--ot-text-faint);
-  text-align: center;
-  margin: 0;
-}
-
-@media (max-width: 860px) {
-  .sp-video-frame { transform: none; max-width: 100%; }
-  .sp-video-wrap  { max-width: 100%; }
-  .sp-video       { max-height: 220px; }
-}
-
-
-/* ── REDUCED MOTION ───────────────────────────────────── */
-
-@media (prefers-reduced-motion: reduce) {
-  .sp-hero-badge::before { animation: none !important; }
-
-  .sp-faq-answer,
-  .sp-faq-chevron,
-  .sp-launch-btn,
-  .sp-launch-btn::before,
-  .sp-feature-card,
-  .sp-faq-trigger,
-  .sp-video-frame,
-  .sp-video-frame:hover { transition: none !important; transform: none !important; }
-}
-
-/* ── HERO — gap fix ───────────────────────────────────── */
-
-.sp-hero {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  padding: clamp(2.5rem, 5vw, 4rem) clamp(1.25rem, 8vw, 5rem) clamp(2rem, 4vw, 3rem);
-  overflow: hidden;
-  border-bottom: 1px solid var(--ot-border);
-}
-
-.sp-hero--split {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  align-items: start;
-  align-content: start;   /* ← THIS is the fix: kills the inflated row height */
-  gap: clamp(1.5rem, 3vw, 3rem);
-  padding-right: clamp(1.25rem, 5vw, 3.5rem);
-  /* Explicit placement so grid doesn't create phantom rows */
-}
-
-/* Pin each column to row 1 */
-.sp-hero-text {
-  grid-column: 1;
-  grid-row: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  padding-top: clamp(0.5rem, 2vw, 1.5rem);
-  position: relative;
-  z-index: 1;
-}
-
-.sp-hero-video-desktop {
   grid-column: 2;
   grid-row: 1;
   position: relative;
@@ -771,32 +562,17 @@
   justify-content: center;
 }
 
-/* Decorative layers — explicitly excluded from grid flow */
-.sp-hero-glow,
-.sp-hero-grid {
-  position: absolute;
-  pointer-events: none;
-  z-index: 0;
-  grid-column: unset;
-  grid-row: unset;
+.sp-hero-video-mobile {
+  display: none;
+  padding: clamp(1rem, 3vw, 1.5rem) clamp(1.25rem, 5vw, 2.5rem) clamp(1.5rem, 4vw, 2.5rem);
+  background: var(--ot-bg);
 }
-
-@media (max-width: 860px) {
-  .sp-hero--split {
-    grid-template-columns: 1fr;
-    padding-right: clamp(1.25rem, 8vw, 5rem);
-  }
-  .sp-hero-text        { grid-column: 1; grid-row: 1; }
-  .sp-hero-video-desktop { display: none; }
-}
-
-/* ── VIDEO WINDOW ─────────────────────────────────────── */
 
 .sp-video-wrap {
   display: flex;
   flex-direction: column;
   gap: 0.6rem;
-  max-width: 400px;      /* ← was 480px, now smaller */
+  max-width: 400px;
   width: 100%;
 }
 
@@ -804,204 +580,36 @@
   position: relative;
   border-radius: 10px;
   overflow: hidden;
-  background: #1e1e1e;
-
-  /* Default = what was previously the hover state (flat + lifted) */
+  background: #1c1c1e;
   transform: perspective(1000px) rotateY(-1deg) rotateX(0.5deg) translateY(-4px);
   transform-origin: left center;
+  will-change: transform;
 
-  box-shadow:
-    0 0 0 1px rgba(0, 0, 0, 0.18),
-    0 4px 8px rgba(0, 0, 0, 0.10),
-    0 16px 40px rgba(0, 0, 0, 0.14),
-    0 32px 64px rgba(0, 0, 0, 0.08),
-    0 0 60px var(--nb-green-dim);
+  /* Prefixed first (Safari/older Chrome), standard second */
+  -webkit-mask-image: -webkit-radial-gradient(white, black);
+  mask-image: radial-gradient(white, black);
 
-  /* No hover effect — state is permanent */
-}
-
-/* ── macOS TITLE BAR ──────────────────────────────────── */
-
-.sp-video-frame::before {
-  content: "";
-  display: block;
-  position: relative;
-  height: 38px;                         /* real macOS bar height */
-  background: #323232;                  /* macOS dark titlebar */
-  border-bottom: 1px solid #1a1a1a;    /* subtle separator */
-
-  /* Traffic-light dots: 12px circles, proper macOS spacing */
-  background-image:
-    radial-gradient(circle at center, #ff5f57 5px, transparent 5px),   /* red */
-    radial-gradient(circle at center, #febc2e 5px, transparent 5px),   /* yellow */
-    radial-gradient(circle at center, #28c840 5px, transparent 5px);   /* green */
-  background-size: 12px 38px, 12px 38px, 12px 38px;
-  background-position: 13px center, 33px center, 53px center;
-  background-repeat: no-repeat;
-}
-
-/* Green accent line under the bar */
-.sp-video-frame::after {
-  content: "";
-  position: absolute;
-  top: 38px; left: 0; right: 0;
-  height: 1px;
-  z-index: 2;
-  pointer-events: none;
-  background: linear-gradient(
-    90deg,
-    transparent            0%,
-    var(--nb-green-border) 25%,
-    var(--nb-green)        50%,
-    var(--nb-green-border) 75%,
-    transparent            100%
-  );
-  opacity: 0.6;
-}
-
-.sp-video {
-  width: 100%;
-  max-height: 210px;        /* ← was 260px */
-  object-fit: cover;
-  display: block;
-}
-
-.sp-video-overlay {
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  pointer-events: none;
-  box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.08);
-}
-
-.sp-video-caption {
-  font-size: 0.62rem;
-  font-weight: 700;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--ot-text-faint);
-  text-align: center;
-  margin: 0;
-}
-
-/* Mobile — flat, full width */
-@media (max-width: 860px) {
-  .sp-video-frame {
-    transform: none;
-    max-width: 100%;
-  }
-  .sp-video-wrap { max-width: 100%; }
-  .sp-video      { max-height: 200px; }
-}
-
-/* Reduced motion */
-@media (prefers-reduced-motion: reduce) {
-  .sp-video-frame { transform: none !important; transition: none !important; }
-}
-
-/* ── VIDEO TOGGLE BUTTON ──────────────────────────────── */
-
-.sp-video-toggle {
-  position: absolute;
-  bottom: 10px;
-  right: 10px;
-  z-index: 10;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 28px;
-  height: 28px;
-  border-radius: 50%;
-
-  background: rgba(0, 0, 0, 0.55);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  color: rgba(255, 255, 255, 0.75);
-  cursor: pointer;
-  backdrop-filter: blur(6px);
-  -webkit-backdrop-filter: blur(6px);
-
-  opacity: 0;                               /* hidden by default */
-  transform: scale(0.88);
-  transition:
-    opacity    0.2s ease,
-    transform  0.2s cubic-bezier(0.16, 1, 0.3, 1),
-    background 0.18s ease,
-    color      0.18s ease;
-}
-
-/* Show on hover over the frame */
-.sp-video-frame:hover .sp-video-toggle {
-  opacity: 1;
-  transform: scale(1);
-}
-
-/* Always visible when paused — even without hover */
-.sp-video-toggle--paused {
-  opacity: 1 !important;
-  transform: scale(1) !important;
-  background: rgba(0, 0, 0, 0.72);
-  color: #fff;
-  border-color: rgba(255, 255, 255, 0.22);
-}
-
-@media (hover: hover) and (pointer: fine) {
-  .sp-video-toggle:hover {
-    background: var(--nb-green);
-    color: #000;
-    border-color: transparent;
-  }
-}
-
-/* Touch devices — always show it */
-@media (hover: none) {
-  .sp-video-toggle { opacity: 1; transform: scale(1); }
-}
-
-/* ── VIDEO FRAME ──────────────────────────────────────── */
-
-.sp-video-frame {
-  position: relative;
-  border-radius: 10px;
-  overflow: hidden;
-  background: #1c1c1e;                  /* macOS window background */
-  transform: perspective(1000px) rotateY(-1deg) rotateX(0.5deg) translateY(-4px);
-  transform-origin: left center;
   box-shadow:
     0 0 0 1px rgba(0, 0, 0, 0.22),
-    0 4px 8px  rgba(0, 0, 0, 0.12),
+    0 4px 8px   rgba(0, 0, 0, 0.12),
     0 16px 40px rgba(0, 0, 0, 0.14),
     0 32px 64px rgba(0, 0, 0, 0.08),
     0 0 60px var(--nb-green-dim);
 }
 
-/* ── macOS CHROME BAR ─────────────────────────────────── */
-
 .sp-video-chrome {
+  position: relative;
   display: flex;
   align-items: center;
-  gap: 8px;                              /* exact macOS dot gap */
+  gap: 8px;
   height: 36px;
   padding: 0 14px;
-  background: #2c2c2e;                   /* macOS titlebar — slightly lighter than body */
+  background: #2c2c2e;
   border-bottom: 1px solid #1a1a1a;
   flex-shrink: 0;
+  border-radius: 10px 10px 0 0; /* ← top corners match outer frame */
 }
 
-/* Traffic light dots — real elements, crisp rendering */
-.sp-video-dot {
-  display: block;
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
-  flex-shrink: 0;
-}
-
-.sp-video-dot--red    { background: #ff5f57; box-shadow: inset 0 0 0 0.5px rgba(0,0,0,0.18); }
-.sp-video-dot--yellow { background: #ffbd2e; box-shadow: inset 0 0 0 0.5px rgba(0,0,0,0.18); }
-.sp-video-dot--green  { background: #28c840; box-shadow: inset 0 0 0 0.5px rgba(0,0,0,0.18); }
-
-/* Green accent line under the chrome */
 .sp-video-chrome::after {
   content: "";
   position: absolute;
@@ -1019,13 +627,367 @@
   pointer-events: none;
 }
 
-/* Remove old ::before / ::after on frame */
-.sp-video-frame::before,
-.sp-video-frame::after { display: none; }
+.sp-video-dot {
+  display: block;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.sp-video-dot--red    { background: #ff5f57; box-shadow: inset 0 0 0 0.5px rgba(0,0,0,0.18); }
+.sp-video-dot--yellow { background: #ffbd2e; box-shadow: inset 0 0 0 0.5px rgba(0,0,0,0.18); }
+.sp-video-dot--green  { background: #28c840; box-shadow: inset 0 0 0 0.5px rgba(0,0,0,0.18); }
 
 .sp-video {
   width: 100%;
   max-height: 210px;
   object-fit: cover;
   display: block;
+}
+
+.sp-video-overlay {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  box-shadow: inset 0 0 20px rgba(0,0,0,0.08);
+}
+
+.sp-video-caption {
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ot-text-faint);
+  text-align: center;
+  margin: 0;
+}
+
+.sp-video-toggle {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.55);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: rgba(255, 255, 255, 0.75);
+  cursor: pointer;
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  opacity: 0;
+  transform: scale(0.88);
+  transition:
+    opacity    0.2s ease,
+    transform  0.2s cubic-bezier(0.16, 1, 0.3, 1),
+    background 0.18s ease,
+    color      0.18s ease;
+}
+
+.sp-video-frame:hover .sp-video-toggle {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.sp-video-toggle--paused {
+  opacity: 1 !important;
+  transform: scale(1) !important;
+  background: rgba(0, 0, 0, 0.72);
+  color: #fff;
+  border-color: rgba(255, 255, 255, 0.22);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .sp-video-toggle:hover {
+    background: var(--nb-green);
+    color: #000;
+    border-color: transparent;
+  }
+}
+
+
+/* ── RESPONSIVE ───────────────────────────────────────── */
+
+@media (max-width: 860px) {
+  .sp-hero--split {
+    grid-template-columns: 1fr;
+    padding-right: clamp(1.25rem, 8vw, 5rem);
+  }
+  .sp-hero-text          { grid-column: 1; grid-row: 1; }
+  .sp-hero-video-desktop { display: none; }
+  .sp-hero-video-mobile  { display: block; }
+  .sp-video-wrap         { max-width: 100%; }
+  .sp-video-frame        { transform: none; }
+  .sp-video              { max-height: 200px; }
+  .sp-video-toggle       { opacity: 1; transform: scale(1); }
+}
+
+
+/* ── REDUCED MOTION ───────────────────────────────────── */
+
+@media (prefers-reduced-motion: reduce) {
+  .sp-faq-answer,
+  .sp-faq-chevron,
+  .sp-launch-btn,
+  .sp-launch-btn::before,
+  .sp-feature-card,
+  .sp-faq-trigger,
+  .sp-video-frame,
+  .sp-video-toggle {
+    transition: none !important;
+    transform: none !important;
+    animation: none !important;
+  }
+}
+
+/* ── SECTION HEADER — refined spacing + bolder dash ──── */
+
+.sp-section-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  font-size: 0.62rem;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--nb-green);
+  margin-bottom: 0.65rem;
+}
+
+.sp-section-label::before {
+  content: "";
+  width: 22px;
+  height: 2px;           /* UPGRADE: 1px → 2px, more visible dash */
+  border-radius: 999px;
+  background: var(--nb-green);
+  opacity: 0.75;
+}
+
+.sp-section-title {
+  font-size: clamp(1.25rem, 2.4vw, 1.65rem);
+  font-weight: 800;
+  letter-spacing: -0.035em;
+  color: var(--ot-text);
+  margin: 0 0 clamp(1.25rem, 3vw, 1.85rem);
+  line-height: 1.18;
+}
+
+
+/* ── FAQ ──────────────────────────────────────────────── */
+
+/* UPGRADE: counter for numbered questions */
+.sp-faq-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  counter-reset: faq-counter;
+}
+
+.sp-faq-item {
+  counter-increment: faq-counter;
+  position: relative;
+  border-radius: var(--ot-radius-lg);
+  border: 1px solid var(--ot-border);
+  background: var(--ot-glass-bg);
+  overflow: hidden;
+  transition:
+    border-color 0.26s ease,
+    background   0.26s ease,
+    box-shadow   0.26s ease;
+}
+
+/* UPGRADE: left accent bar — scaleY(0) at rest, grows in when open */
+.sp-faq-item::before {
+  content: "";
+  position: absolute;
+  top: 12%;
+  left: 0;
+  width: 3px;
+  height: 76%;
+  border-radius: 0 999px 999px 0;
+  background: linear-gradient(
+    to bottom,
+    transparent       0%,
+    var(--nb-green)  30%,
+    var(--nb-green)  70%,
+    transparent      100%
+  );
+  transform: scaleY(0);
+  transform-origin: center;
+  transition: transform 0.34s cubic-bezier(0.16, 1, 0.3, 1);
+  pointer-events: none;
+  z-index: 2;
+}
+
+/* UPGRADE: open state — tinted bg + green glow shadow + left bar */
+.sp-faq-item--open {
+  border-color: var(--nb-green-border);
+  background: color-mix(in oklch, var(--nb-green) 3%, var(--ot-glass-bg));
+  box-shadow:
+    0 0 0 1px var(--nb-green-dim),
+    0 4px 20px color-mix(in oklch, var(--nb-green) 10%, transparent);
+}
+
+.sp-faq-item--open::before {
+  transform: scaleY(1);
+}
+
+/* UPGRADE: top accent stripe fades in on open (matches feature card pattern) */
+.sp-faq-item::after {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent         0%,
+    var(--nb-green-mid) 25%,
+    var(--nb-green)     50%,
+    var(--nb-green-mid) 75%,
+    transparent         100%
+  );
+  opacity: 0;
+  transition: opacity 0.28s ease;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.sp-faq-item--open::after { opacity: 0.7; }
+
+
+.sp-faq-trigger {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  /* UPGRADE: extra left padding for the accent bar + number */
+  padding: clamp(0.95rem, 2vw, 1.15rem) clamp(1rem, 2.5vw, 1.35rem);
+  padding-left: clamp(1.1rem, 2.5vw, 1.5rem);
+  font-family: var(--ot-font);
+  font-size: clamp(0.82rem, 1.4vw, 0.92rem);
+  font-weight: 600;
+  color: var(--ot-text);
+  text-align: left;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  transition: background 0.18s ease;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .sp-faq-trigger:hover { background: var(--ot-surface); }
+}
+
+.sp-faq-trigger:focus-visible {
+  outline: 2px solid var(--nb-green);
+  outline-offset: -2px;
+}
+
+/* UPGRADE: question text wrapper — left side of trigger */
+.sp-faq-trigger-left {
+  display: flex;
+  align-items: baseline;
+  gap: 0.7rem;
+  flex: 1;
+  min-width: 0;
+}
+
+/* UPGRADE: number pill before question text */
+.sp-faq-trigger-left::before {
+  content: counter(faq-counter, decimal-leading-zero);
+  flex-shrink: 0;
+  font-size: 0.58rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  color: var(--nb-green);
+  opacity: 0.65;
+  font-variant-numeric: tabular-nums;
+  /* Subtle pill background */
+  background: var(--nb-green-dim);
+  border: 1px solid var(--nb-green-border);
+  border-radius: 5px;
+  padding: 2px 6px;
+  line-height: 1.6;
+  transition: opacity 0.22s ease;
+}
+
+.sp-faq-item--open .sp-faq-trigger-left::before {
+  opacity: 1;
+}
+
+/* UPGRADE: question text itself — proper truncation safety */
+.sp-faq-trigger-text {
+  flex: 1;
+  min-width: 0;
+}
+
+
+/* UPGRADE: chevron — slightly larger, better proportions */
+.sp-faq-chevron {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  color: var(--ot-text-faint);
+  background: var(--ot-surface);
+  border: 1px solid var(--ot-border);
+  transition:
+    transform    0.34s cubic-bezier(0.16, 1, 0.3, 1),
+    color        0.22s ease,
+    background   0.22s ease,
+    border-color 0.22s ease;
+}
+
+.sp-faq-item--open .sp-faq-chevron {
+  transform: rotate(180deg);
+  color: var(--nb-green);
+  background: var(--nb-green-dim);
+  border-color: var(--nb-green-border);
+  box-shadow: 0 0 0 3px color-mix(in oklch, var(--nb-green) 8%, transparent);
+}
+
+
+/* Answer reveal — grid trick for smooth height animation */
+.sp-faq-answer {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.34s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.sp-faq-item--open .sp-faq-answer {
+  grid-template-rows: 1fr;
+}
+
+.sp-faq-answer-inner { overflow: hidden; }
+
+/* UPGRADE: answer text — gradient separator instead of hard border-top */
+.sp-faq-answer-inner p {
+  font-size: clamp(0.78rem, 1.3vw, 0.86rem);
+  color: var(--ot-text-muted);
+  line-height: 1.85;
+  padding: clamp(0.85rem, 2vw, 1.1rem) clamp(1.1rem, 2.5vw, 1.5rem) clamp(0.95rem, 2vw, 1.2rem);
+  /* Extra left padding aligns with number pill */
+  padding-left: clamp(1.1rem, 2.5vw, 1.5rem);
+  margin: 0;
+  max-width: 66ch;
+  /* UPGRADE: gradient separator — softer than a solid border-top */
+  border-top: none;
+  background:
+    linear-gradient(
+      to bottom,
+      color-mix(in oklch, var(--nb-green) 4%, var(--ot-surface)) 0%,
+      var(--ot-surface) 100%
+    );
+  /* Fake gradient top edge via box-shadow instead of border-top */
+  box-shadow: inset 0 1px 0 color-mix(in oklch, var(--nb-green) 18%, var(--ot-border));
 }
