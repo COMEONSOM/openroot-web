@@ -1,71 +1,13 @@
 /* ==========================================================================
-   OPENROOT — NAVBAR  |  Navbar.css
-   VERSION: 2026.7
-   ─────────────────────────────────────────────────────────────────────────
-   CRITICAL FIX: Overlay uses createPortal → appended to document.body.
-   Old .software-overlay classes replaced with .nb-* namespace to match.
-   No more stacking context trap from .navbar's isolation:isolate.
+   OPENROOT — NAVBAR | Navbar.css
+   Cleaned to reuse App.css/global utilities
    ========================================================================== */
-
-
-/* ============================================================
-   LOCAL DESIGN TOKENS
-   ============================================================ */
-:root {
-  --nb-green:        #a3e87b;
-  --nb-green-glow:   rgba(163, 232, 123, 0.32);
-  --nb-green-dim:    rgba(163, 232, 123, 0.12);
-  --nb-green-mid:    rgba(163, 232, 123, 0.22);
-  --nb-green-border: rgba(163, 232, 123, 0.28);
-  --nb-icon-bg:      #0e1a09;
-  --nb-ease:         cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-/* ============================================================
-   LIGHT MODE GREEN OVERRIDES
-   Lime #a3e87b is dark-mode only — too washed out on white.
-   #16a34a has proper contrast on light surfaces.
-   ============================================================ */
-
-[data-theme="light"],
-:root:not([data-theme="dark"]) {
-  --nb-green:        #16a34a;
-  --nb-green-glow:   rgba(22, 163, 74, 0.28);
-  --nb-green-dim:    rgba(22, 163, 74, 0.10);
-  --nb-green-mid:    rgba(22, 163, 74, 0.18);
-  --nb-green-border: rgba(22, 163, 74, 0.30);
-  --nb-icon-bg:      #f0fdf4;   /* light green tint for icon bg */
-}
-
-@media (prefers-color-scheme: light) {
-  :root:not([data-theme]) {
-    --nb-green:        #16a34a;
-    --nb-green-glow:   rgba(22, 163, 74, 0.28);
-    --nb-green-dim:    rgba(22, 163, 74, 0.10);
-    --nb-green-mid:    rgba(22, 163, 74, 0.18);
-    --nb-green-border: rgba(22, 163, 74, 0.30);
-    --nb-icon-bg:      #f0fdf4;
-  }
-}
-
-/* ============================================================
-   SEO NAV LINKS
-   ============================================================ */
-.seo-nav-links {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  overflow: hidden;
-  clip: rect(0 0 0 0);
-  clip-path: inset(50%);
-  white-space: nowrap;
-  pointer-events: none;
-}
 
 
 /* ============================================================
    SECTION ROOT
    ============================================================ */
+
 .navbar {
   position: relative;
   width: 100%;
@@ -74,6 +16,7 @@
   overflow: hidden;
 }
 
+/* Top hairline */
 .navbar::before {
   content: "";
   position: absolute;
@@ -93,6 +36,7 @@
 /* ============================================================
    INNER WRAPPER
    ============================================================ */
+
 .navbar-content {
   position: relative;
   z-index: 1;
@@ -108,6 +52,7 @@
 /* ============================================================
    HEADER ROW
    ============================================================ */
+
 .software-header {
   display: flex;
   align-items: center;
@@ -139,25 +84,28 @@
   cursor: pointer;
   flex-shrink: 0;
   transition:
-    color         0.22s ease,
-    background    0.22s ease,
-    border-color  0.22s ease,
-    transform     0.22s var(--nb-ease);
+    color        0.22s ease,
+    background   0.22s ease,
+    border-color 0.22s ease,
+    transform    0.22s var(--ease-spring);
 }
 
 @media (hover: hover) and (pointer: fine) {
   .view-all-link:hover {
     color: var(--ot-text);
-    background: var(--nb-green-dim);
-    border-color: var(--nb-green-border);
+    background: var(--ot-brand-dim);
+    border-color: var(--ot-brand-border);
     transform: translateX(3px);
   }
 }
 
-.view-all-link:active { transform: scale(0.95); transition-duration: 0.08s; }
+.view-all-link:active {
+  transform: scale(0.95);
+  transition-duration: 0.08s;
+}
 
 .view-all-link:focus-visible {
-  outline: 2px solid var(--nb-green);
+  outline: 2px solid var(--ot-brand);
   outline-offset: 3px;
 }
 
@@ -165,6 +113,7 @@
 /* ============================================================
    SOFTWARE ROW — 5-column desktop grid
    ============================================================ */
+
 .released-softwares {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
@@ -176,6 +125,7 @@
 /* ============================================================
    SOFTWARE BUTTON CARD (shared: section row + overlay grid)
    ============================================================ */
+
 .software-btn {
   appearance: none;
   font-family: var(--ot-font);
@@ -198,8 +148,8 @@
   backdrop-filter: blur(8px) saturate(1.3);
   -webkit-backdrop-filter: blur(8px) saturate(1.3);
   transition:
-    transform     0.26s var(--nb-ease),
-    box-shadow    0.26s var(--nb-ease),
+    transform     0.26s var(--ease-spring),
+    box-shadow    0.26s var(--ease-spring),
     border-color  0.26s ease,
     background    0.26s ease;
 }
@@ -215,7 +165,7 @@
   opacity: 0;
   background: radial-gradient(
     circle 110px at var(--x, 50%) var(--y, 50%),
-    rgba(163, 232, 123, 0.13) 0%,
+    var(--ot-brand-dim) 0%,
     transparent 68%
   );
   transition: opacity 0.3s ease;
@@ -238,17 +188,16 @@
   );
   opacity: 0.5;
   transition:
-    opacity    0.26s ease,
+    opacity   0.26s ease,
     background 0.26s ease;
 }
 
-/* Complete hover — all states defined */
 @media (hover: hover) and (pointer: fine) {
   .software-btn:hover {
-    border-color: var(--nb-green-border);
+    border-color: var(--ot-brand-border);
     background: var(--ot-surface);
     box-shadow:
-      0 0 0 1px var(--nb-green-dim),
+      0 0 0 1px var(--ot-brand-dim),
       var(--ot-shadow-md);
   }
 
@@ -259,19 +208,19 @@
     background: linear-gradient(
       90deg,
       transparent          0%,
-      var(--nb-green-mid)  25%,
-      var(--nb-green)      50%,
-      var(--nb-green-mid)  75%,
-      transparent          100%
+      var(--ot-brand-mid) 25%,
+      var(--ot-brand)     50%,
+      var(--ot-brand-mid) 75%,
+      transparent         100%
     );
   }
 
   .software-btn:hover .software-icon {
     transform: scale(1.1);
-    border-color: var(--nb-green-border);
+    border-color: var(--ot-brand-border);
     box-shadow:
-      0 0 0 3px var(--nb-green-dim),
-      0 0 18px var(--nb-green-glow);
+      0 0 0 3px var(--ot-brand-dim),
+      0 0 18px  var(--ot-brand-glow);
   }
 
   .software-btn:hover .software-name {
@@ -287,13 +236,13 @@
 
 @media (hover: none) {
   .software-btn:active {
-    background: var(--nb-green-dim);
-    border-color: var(--nb-green-border);
+    background: var(--ot-brand-dim);
+    border-color: var(--ot-brand-border);
   }
 }
 
 .software-btn:focus-visible {
-  outline: 2px solid var(--nb-green);
+  outline: 2px solid var(--ot-brand);
   outline-offset: 3px;
 }
 
@@ -301,6 +250,7 @@
 /* ============================================================
    ICON WRAPPER — always-dark pill
    ============================================================ */
+
 .software-icon {
   position: relative;
   z-index: 1;
@@ -312,11 +262,11 @@
   border-radius: var(--ot-radius-md);
   flex-shrink: 0;
   pointer-events: none;
-  background: var(--nb-icon-bg);
-  color: var(--nb-green);
-  border: 1px solid rgba(163, 232, 123, 0.2);
+  background: var(--ot-brand-icon-bg);
+  color: var(--ot-brand);
+  border: 1px solid var(--ot-brand-dim);
   transition:
-    transform    0.26s var(--nb-ease),
+    transform    0.26s var(--ease-spring),
     box-shadow   0.26s ease,
     border-color 0.26s ease;
 }
@@ -331,6 +281,7 @@
 /* ============================================================
    APP NAME LABEL
    ============================================================ */
+
 .software-name {
   position: relative;
   z-index: 1;
@@ -351,12 +302,8 @@
 
 /* ============================================================
    OVERLAY BACKDROP — Portal-rendered into document.body
-   ─────────────────────────────────────────────────────────
-   Since this is appended to <body> via createPortal, it has
-   NO parent stacking context to fight. z-index: 9999 is
-   absolute from the root — covers 100% of the page always.
-   backdrop-filter is STATIC (not animated) for performance.
    ============================================================ */
+
 .nb-overlay {
   position: fixed;
   inset: 0;
@@ -366,13 +313,10 @@
   justify-content: center;
   padding: clamp(1rem, 3vw, 2rem);
   cursor: default;
-
-  /* Aggressive triple-layer backdrop — nothing bleeds through */
   background: rgba(0, 0, 0, 0.78);
   backdrop-filter: blur(40px) saturate(0.5) brightness(0.5);
   -webkit-backdrop-filter: blur(40px) saturate(0.5) brightness(0.5);
-
-  animation: nb-overlay-in 0.24s var(--nb-ease) both;
+  animation: nb-overlay-in 0.24s var(--ease-spring) both;
 }
 
 @keyframes nb-overlay-in {
@@ -380,7 +324,6 @@
   to   { opacity: 1; }
 }
 
-/* Mobile: sheet from bottom */
 @media (max-width: 640px) {
   .nb-overlay {
     align-items: flex-end;
@@ -388,7 +331,6 @@
   }
 }
 
-/* Light mode: still dark enough to obscure */
 html[data-theme="light"] .nb-overlay,
 :root:not([data-theme="dark"]) .nb-overlay {
   background: rgba(0, 0, 0, 0.68);
@@ -404,10 +346,11 @@ html[data-theme="light"] .nb-overlay,
 /* ============================================================
    OVERLAY PANEL
    ============================================================ */
+
 .nb-panel {
   position: relative;
   width: 100%;
-  max-width: min(680px, 96vw);   /* Sized for 3-col grid — no orphans */
+  max-width: min(680px, 96vw);
   max-height: 80dvh;
   display: flex;
   flex-direction: column;
@@ -420,8 +363,8 @@ html[data-theme="light"] .nb-overlay,
   -webkit-backdrop-filter: blur(32px) saturate(2);
   box-shadow:
     var(--ot-shadow-xl),
-    0 0 0 1px var(--nb-green-dim);
-  animation: nb-panel-in 0.32s 0.05s var(--nb-ease) both;
+    0 0 0 1px var(--ot-brand-dim);
+  animation: nb-panel-in 0.32s 0.05s var(--ease-spring) both;
 }
 
 @keyframes nb-panel-in {
@@ -429,7 +372,6 @@ html[data-theme="light"] .nb-overlay,
   to   { opacity: 1; transform: scale(1)    translateY(0);    }
 }
 
-/* Mobile: bottom sheet, rounded top only */
 @media (max-width: 640px) {
   .nb-panel {
     max-width: 100%;
@@ -445,7 +387,6 @@ html[data-theme="light"] .nb-overlay,
   to   { opacity: 1; transform: translateY(0);    }
 }
 
-/* Mobile drag handle */
 .nb-panel::before {
   content: "";
   position: absolute;
@@ -464,7 +405,6 @@ html[data-theme="light"] .nb-overlay,
   .nb-panel::before { display: none; }
 }
 
-/* Lime green top accent stripe */
 .nb-panel::after {
   content: "";
   position: absolute;
@@ -474,18 +414,19 @@ html[data-theme="light"] .nb-overlay,
   pointer-events: none;
   background: linear-gradient(
     90deg,
-    transparent              0%,
-    rgba(163, 232, 123, 0.4) 20%,
-    var(--nb-green)          50%,
-    rgba(163, 232, 123, 0.4) 80%,
-    transparent              100%
+    transparent            0%,
+    var(--ot-brand-glow)  20%,
+    var(--ot-brand)       50%,
+    var(--ot-brand-glow)  80%,
+    transparent           100%
   );
 }
 
 
 /* ============================================================
-   PANEL HEADER — sticky within panel scroll context
+   PANEL HEADER
    ============================================================ */
+
 .nb-panel-header {
   position: sticky;
   top: 0;
@@ -506,10 +447,9 @@ html[data-theme="light"] .nb-overlay,
 }
 
 @media (max-width: 640px) {
-  .nb-panel-header { padding-top: clamp(1.6rem, 4vw, 1.9rem); } /* room for drag handle */
+  .nb-panel-header { padding-top: clamp(1.6rem, 4vw, 1.9rem); }
 }
 
-/* Title with pulsing green dot */
 .nb-panel-title {
   display: flex;
   align-items: center;
@@ -528,20 +468,16 @@ html[data-theme="light"] .nb-overlay,
   width: 7px;
   height: 7px;
   border-radius: 999px;
-  background: var(--nb-green);
-  box-shadow: 0 0 8px var(--nb-green-glow);
-  animation: nb-dot-pulse 2.8s ease-in-out infinite;
-}
-
-@keyframes nb-dot-pulse {
-  0%,  100% { box-shadow: 0 0 4px  var(--nb-green-glow); opacity: 1;    }
-  50%       { box-shadow: 0 0 16px var(--nb-green-glow); opacity: 0.75; }
+  background: var(--ot-brand);
+  box-shadow: 0 0 8px var(--ot-brand-glow);
+  animation: ot-dot-pulse 2.8s ease-in-out infinite;
 }
 
 
 /* ============================================================
-   CLOSE BUTTON — position:static, in-flow
+   CLOSE BUTTON
    ============================================================ */
+
 .nb-close-btn {
   position: static;
   display: inline-flex;
@@ -561,11 +497,11 @@ html[data-theme="light"] .nb-overlay,
   color: var(--ot-text-muted);
   cursor: pointer;
   transition:
-    color         0.2s ease,
-    background    0.2s ease,
-    border-color  0.2s ease,
-    box-shadow    0.2s ease,
-    transform     0.2s var(--nb-ease);
+    color        0.2s ease,
+    background   0.2s ease,
+    border-color 0.2s ease,
+    box-shadow   0.2s ease,
+    transform    0.2s var(--ease-spring);
 }
 
 .nb-esc {
@@ -587,17 +523,20 @@ html[data-theme="light"] .nb-overlay,
 
 @media (hover: hover) and (pointer: fine) {
   .nb-close-btn:hover {
-    color: var(--nb-green);
-    background: var(--nb-green-dim);
-    border-color: var(--nb-green-border);
-    box-shadow: 0 0 12px var(--nb-green-dim);
+    color: var(--ot-brand);
+    background: var(--ot-brand-dim);
+    border-color: var(--ot-brand-border);
+    box-shadow: 0 0 12px var(--ot-brand-dim);
   }
 }
 
-.nb-close-btn:active { transform: scale(0.93); transition-duration: 0.08s; }
+.nb-close-btn:active {
+  transform: scale(0.93);
+  transition-duration: 0.08s;
+}
 
 .nb-close-btn:focus-visible {
-  outline: 2px solid var(--nb-green);
+  outline: 2px solid var(--ot-brand);
   outline-offset: 3px;
 }
 
@@ -605,38 +544,29 @@ html[data-theme="light"] .nb-overlay,
 /* ============================================================
    PANEL SCROLL WRAPPER
    ============================================================ */
+
 .nb-panel-scroll {
   overflow-y: auto;
   overflow-x: hidden;
   overscroll-behavior: contain;
   flex: 1;
   padding: clamp(1rem, 2.5vw, 1.3rem);
-  scrollbar-width: thin;
-  scrollbar-color: var(--ot-border-hard) transparent;
-}
-
-.nb-panel-scroll::-webkit-scrollbar       { width: 4px; }
-.nb-panel-scroll::-webkit-scrollbar-track { background: transparent; }
-.nb-panel-scroll::-webkit-scrollbar-thumb {
-  background: var(--ot-border-hard);
-  border-radius: 999px;
 }
 
 
 /* ============================================================
    OVERLAY GRID
-   max-width: 680px panel → 3-col grid = perfect rows, no orphan
    ============================================================ */
+
 .nb-panel-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: clamp(0.6rem, 1.2vw, 0.875rem);
 }
 
-/* Staggered entrance */
 .nb-panel-grid .software-btn {
   min-height: clamp(80px, 10vw, 100px);
-  animation: nb-card-pop 0.36s var(--nb-ease) both;
+  animation: ot-card-pop 0.36s var(--ease-spring) both;
 }
 
 .nb-panel-grid .software-btn:nth-child(1)  { animation-delay: 0.06s; }
@@ -652,19 +582,17 @@ html[data-theme="light"] .nb-overlay,
 .nb-panel-grid .software-btn:nth-child(11) { animation-delay: 0.46s; }
 .nb-panel-grid .software-btn:nth-child(12) { animation-delay: 0.50s; }
 
-@keyframes nb-card-pop {
-  from { opacity: 0; transform: translateY(14px) scale(0.96); }
-  to   { opacity: 1; transform: translateY(0)    scale(1);    }
-}
 
 /* ============================================================
    OVERLAY GRID — 2 columns on screens ≤ 400px
    ============================================================ */
+
 @media (max-width: 400px) {
   .nb-panel-grid {
     grid-template-columns: repeat(2, 1fr);
   }
 }
+
 
 /* ============================================================
    SECTION ROW RESPONSIVE
@@ -688,7 +616,9 @@ html[data-theme="light"] .nb-overlay,
     padding-inline: clamp(1rem, 5vw, 2.5rem);
     padding-bottom: 0.4rem;
   }
+
   .released-softwares::-webkit-scrollbar { display: none; }
+
   .software-btn {
     flex-direction: row;
     align-items: center;
@@ -699,12 +629,17 @@ html[data-theme="light"] .nb-overlay,
     scroll-snap-align: start;
     padding: clamp(0.7rem, 3vw, 0.95rem);
   }
+
   .software-icon {
-    width: 34px; height: 34px;
+    width: 34px;
+    height: 34px;
     flex-shrink: 0;
     border-radius: var(--ot-radius-sm);
   }
-  .software-name { font-size: clamp(0.7rem, 3.2vw, 0.78rem); }
+
+  .software-name {
+    font-size: clamp(0.7rem, 3.2vw, 0.78rem);
+  }
 }
 
 @media (max-width: 480px) {
@@ -725,7 +660,12 @@ html[data-theme="light"] .nb-overlay,
   .navbar         { padding: clamp(3rem, 4vw, 5rem) clamp(2rem, 5vw, 4rem); }
   .navbar-content { max-width: 1400px; }
   .navbar-title   { font-size: clamp(1.5rem, 1.6vw, 2rem); }
-  .software-btn   { min-height: 130px; padding: 1.4rem; gap: 0.9rem; border-radius: var(--ot-radius-xl); }
+  .software-btn   {
+    min-height: 130px;
+    padding: 1.4rem;
+    gap: 0.9rem;
+    border-radius: var(--ot-radius-xl);
+  }
   .software-icon  { width: 50px; height: 50px; }
   .software-name  { font-size: 0.95rem; }
 }
@@ -734,6 +674,7 @@ html[data-theme="light"] .nb-overlay,
 /* ============================================================
    FORCED COLORS
    ============================================================ */
+
 @media (forced-colors: active) {
   .software-btn  { border: 2px solid ButtonText; forced-color-adjust: auto; }
   .software-icon { background: ButtonText; color: ButtonFace; border-color: ButtonText; }
@@ -746,6 +687,7 @@ html[data-theme="light"] .nb-overlay,
 /* ============================================================
    REDUCED MOTION
    ============================================================ */
+
 @media (prefers-reduced-motion: reduce) {
   .nb-overlay,
   .nb-panel,
@@ -753,6 +695,7 @@ html[data-theme="light"] .nb-overlay,
   .nb-panel-grid .software-btn {
     animation: none !important;
   }
+
   .software-btn,
   .software-btn::before,
   .software-btn::after,
@@ -765,52 +708,25 @@ html[data-theme="light"] .nb-overlay,
   }
 }
 
+
 /* ============================================================
    OVERLAY GRID — 401px–640px horizontal scroll FIX
-   Root cause: mask-image on nb-panel-grid conflicts with
-   transform animations on child cards → overlap artifact.
-   Solution: scroll lives on nb-panel-scroll, grid just
-   declares fixed-width columns and lets content flow.
    ============================================================ */
 
 @media (max-width: 640px) and (min-width: 401px) {
-
-  /* ── Scroll lives here now, not on the grid ────────────── */
   .nb-panel-scroll {
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
-    scrollbar-width: thin;
-    scrollbar-color: var(--nb-green-mid) transparent;
+    scroll-snap-type: x proximity;
   }
 
-  .nb-panel-scroll::-webkit-scrollbar       { height: 3px; }
-  .nb-panel-scroll::-webkit-scrollbar-track { background: transparent; }
-  .nb-panel-scroll::-webkit-scrollbar-thumb {
-    background: var(--nb-green-mid);
-    border-radius: 999px;
-  }
-  .nb-panel-scroll::-webkit-scrollbar-thumb:hover {
-    background: var(--nb-green);
-  }
-
-  /* ── Grid — fixed column widths, wider than panel ─────── */
   .nb-panel-grid {
-    /* Fixed px columns so cards never shrink into each other */
     grid-template-columns: repeat(3, 145px);
-    width: max-content;   /* grid is wider than container → parent scrolls */
-    min-width: 100%;      /* still fills panel if content fits */
-
-    /* NO mask-image — that was the overlap culprit */
+    width: max-content;
+    min-width: 100%;
     mask-image: none;
     -webkit-mask-image: none;
-
-    /* Horizontal padding so last card isn't flush against edge */
     padding-right: 16px;
-  }
-
-  /* snap on the scroll container's viewport, not the grid */
-  .nb-panel-scroll {
-    scroll-snap-type: x proximity;
   }
 
   .nb-panel-grid .software-btn {

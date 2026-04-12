@@ -1,5 +1,5 @@
 /* ============================================================
-   HEADER — BIOLUMINESCENT COMMAND BAR  |  Openroot
+   HEADER — BIOLUMINESCENT COMMAND BAR | Openroot
    BLACK ONLY — no theme toggle
 ============================================================ */
 
@@ -21,54 +21,20 @@
   initial-value: 0deg;
 }
 
-
-/* ── DESIGN TOKENS ────────────────────────────────────────── */
-:root {
-  --hdr-bg:           rgba(7, 9, 7, 0.92);
-  --hdr-border:       rgba(255, 255, 255, 0.07);
-  --hdr-aurora-clr:   rgba(163, 232, 123, 0.055);
-  --hdr-aurora-clr-2: rgba(163, 232, 123, 0.02);
-  --hdr-photon-clr:   #a3e87b;
-
-  --login-bg:         rgba(163, 232, 123, 0.07);
-  --login-border:     rgba(163, 232, 123, 0.22);
-  --login-text:       #a3e87b;
-  --login-glow:       rgba(163, 232, 123, 0.18);
-
-  --ring-hi:          #a3e87b;
-  --ring-lo:          rgba(163, 232, 123, 0.0);
-  --ring-mid:         rgba(163, 232, 123, 0.35);
-  --avatar-glow:      rgba(163, 232, 123, 0.28);
-
-  --space-md: 1rem;
-  --space-lg: 1.5rem;
-  --font-size-xs: 0.75rem;
-  --transition-fast:   0.18s ease;
-  --transition-normal: 0.28s ease;
-}
-
-
 /* ── HEADER WRAPPER ─────────────────────────────────────── */
+
 .header {
   position: sticky;
   top: 0;
   z-index: 200;
   width: 100%;
-  padding: 0.4rem var(--space-lg);
+  padding: 0.4rem clamp(1.5rem, 4vw, 2.5rem);
   display: flex;
   justify-content: space-between;
   align-items: center;
   isolation: isolate;
-
-  background: var(--hdr-bg);
-  border-bottom: 1px solid var(--hdr-border);
-}
-
-@keyframes hdr-aurora {
-  0%   { --hdr-aurora-x: 15%; }
-  40%  { --hdr-aurora-x: 32%; }
-  70%  { --hdr-aurora-x: 10%; }
-  100% { --hdr-aurora-x: 15%; }
+  background: rgba(7, 9, 7, 0.92);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
 }
 
 /* Static border under photon trace */
@@ -79,7 +45,7 @@
   height: 1px;
   pointer-events: none;
   z-index: -1;
-  background: var(--hdr-border);
+  background: rgba(255, 255, 255, 0.07);
 }
 
 /* Photon trace along bottom edge */
@@ -87,10 +53,10 @@
   content: "";
   position: absolute;
   bottom: 0; left: 0;
-  width: 100%; height: 1px;
+  width: 100%;
+  height: 1px;
   pointer-events: none;
   z-index: 0;
-
   --hdr-sweep: -12%;
   background: linear-gradient(
     90deg,
@@ -118,8 +84,8 @@
   }
 }
 
-
 /* ── LOGO ─────────────────────────────────────────────────── */
+
 .header-logo {
   display: flex;
   align-items: center;
@@ -146,18 +112,6 @@
   z-index: -1;
 }
 
-@media (hover: hover) and (pointer: fine) {
-  .header-logo:hover::before {
-    opacity: 1;
-    transform: scale(1);
-  }
-
-  .header-logo:hover .header-logo-img {
-    transform: scale(1.03);
-    filter: drop-shadow(0 0 10px rgba(163, 232, 123, 0.35));
-  }
-}
-
 .header-logo-img {
   width: 110px;
   height: auto;
@@ -165,73 +119,62 @@
   user-select: none;
   margin-block: 10px;
   transition:
-    transform var(--transition-normal),
-    filter    var(--transition-normal);
+    transform var(--t-base),
+    filter    var(--t-base);
 }
 
-@media (max-width: 480px)                          { .header-logo-img { width: 70px;  } }
-@media (min-width: 481px)  and (max-width: 767px)  { .header-logo-img { width: 90px;  } }
-@media (min-width: 768px)  and (max-width: 1023px) { .header-logo-img { width: 110px; } }
-@media (min-width: 1024px) and (max-width: 1440px) { .header-logo-img { width: 140px; } }
-@media (min-width: 1441px)                         { .header-logo-img { width: 170px; } }
-
+@media (max-width: 480px)                      { .header-logo-img { width: 70px;  } }
+@media (min-width: 481px)  and (max-width:767px)  { .header-logo-img { width: 90px;  } }
+@media (min-width: 768px)  and (max-width:1023px) { .header-logo-img { width: 110px; } }
+@media (min-width: 1024px) and (max-width:1440px) { .header-logo-img { width: 140px; } }
+@media (min-width: 1441px)                     { .header-logo-img { width: 170px; } }
 
 /* ── RIGHT ACTIONS ──────────────────────────────────────── */
+
 .header-right {
   display: flex;
   align-items: center;
-  gap: var(--space-md);
+  gap: var(--sp-md);
 }
 
-
 /* ── LOGIN — SONAR PULSE PILL ─────────────────────────────── */
+
 .login-animation {
   position: relative;
   display: inline-flex;
   align-items: center;
   gap: 0.45rem;
-  padding: 0.48rem 1.05rem 0.48rem 0.6rem;
-  color: var(--login-text);
-  font-size: var(--font-size-xs);
+  padding: 0; /* no pill */
+  color: var(--ot-brand);
+  font-size: var(--fz-xs);
   font-weight: 700;
   letter-spacing: 0.04em;
   cursor: pointer;
-  overflow: hidden;
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  transform: translateX(0);
   transition:
-    background     0.22s ease,
-    border-color   0.22s ease,
-    box-shadow     0.22s ease,
-    transform      0.22s cubic-bezier(0.16, 1, 0.3, 1);
+    transform 0.22s var(--ease-spring),
+    color     0.22s ease;
 }
 
-/* Shimmer sweep on hover */
+/* remove shimmer */
 .login-animation::after {
-  content: "";
-  position: absolute;
-  top: 0; left: -80%;
-  width: 50%; height: 100%;
-  background: linear-gradient(
-    90deg,
-    transparent                  0%,
-    rgba(163, 232, 123, 0.22)   50%,
-    transparent                 100%
-  );
-  transform: skewX(-16deg);
-  transition: left 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-  pointer-events: none;
+  content: none;
 }
 
 @media (hover: hover) and (pointer: fine) {
   .login-animation:hover {
-    border-color: rgba(163, 232, 123, 0.55);
-    animation: none;
+    transform: translateX(4px);
+    color: var(--ot-brand); /* keep same color */
   }
 }
 
 .login-animation:active {
-  transform: scale(0.95);
+  transform: translateX(2px);
   transition-duration: 0.08s;
 }
 
@@ -244,7 +187,7 @@
 }
 
 .login-hint {
-  font-size: var(--font-size-xs);
+  font-size: var(--fz-xs);
   font-weight: 700;
   letter-spacing: 0.05em;
   text-transform: uppercase;
@@ -259,19 +202,20 @@
   .login-hint   { display: none; }
 }
 
-
 /* ── PROFILE — CONIC ORBITAL RING ─────────────────────────── */
+
 .profile-button {
   position: relative;
   display: grid;
   place-items: center;
-  width: 46px; height: 46px;
+  width: 46px;
+  height: 46px;
   padding: 0;
   border: none;
   background: transparent;
   border-radius: 50%;
   cursor: pointer;
-  transition: transform var(--transition-fast);
+  transition: transform var(--t-snap);
 }
 
 /* Rotating conic ring */
@@ -307,7 +251,7 @@
   position: absolute;
   inset: 0;
   border-radius: 50%;
-  background: var(--hdr-bg);
+  background: rgba(7, 9, 7, 0.92);
   z-index: 1;
   pointer-events: none;
 }
@@ -322,13 +266,12 @@
   background: #111;
   border: 2px solid rgba(255, 255, 255, 0.12);
   transition:
-    border-color var(--transition-fast),
-    box-shadow   var(--transition-fast),
-    transform    var(--transition-fast);
+    border-color var(--t-snap),
+    box-shadow   var(--t-snap),
+    transform    var(--t-snap);
 }
 
 @media (hover: hover) and (pointer: fine) {
-
   .profile-button:hover::before {
     opacity: 1;
     animation-duration: 2s;
@@ -340,7 +283,9 @@
   }
 }
 
-.profile-button:active { transform: scale(0.94); }
+.profile-button:active {
+  transform: scale(0.94);
+}
 
 .profile-button:focus-visible {
   outline: 2px solid #a3e87b;
@@ -355,38 +300,44 @@
   font-weight: 700;
 }
 
-
 /* ── RESPONSIVE AVATAR SIZES ─────────────────────────────── */
+
 @media (max-width: 768px) {
-  .profile-avatar, .avatar-fallback { width: 32px; height: 32px; font-size: 0.8rem; }
-  .profile-button                   { width: 38px; height: 38px; }
+  .profile-avatar,
+  .avatar-fallback { width: 32px; height: 32px; font-size: 0.8rem; }
+  .profile-button  { width: 38px; height: 38px; }
 }
 
 @media (min-width: 769px) and (max-width: 899px) {
-  .profile-avatar, .avatar-fallback { width: 38px; height: 38px; font-size: 0.9rem; }
-  .profile-button                   { width: 44px; height: 44px; }
+  .profile-avatar,
+  .avatar-fallback { width: 38px; height: 38px; font-size: 0.9rem; }
+  .profile-button  { width: 44px; height: 44px; }
 }
 
 @media (min-width: 900px) {
-  .profile-avatar, .avatar-fallback { width: 46px; height: 46px; font-size: 1rem; }
-  .profile-button                   { width: 52px; height: 52px; }
+  .profile-avatar,
+  .avatar-fallback { width: 46px; height: 46px; font-size: 1rem; }
+  .profile-button  { width: 52px; height: 52px; }
 }
 
-
 /* ── REDUCED MOTION ──────────────────────────────────────── */
+
 @media (prefers-reduced-motion: reduce) {
   .header,
   .header::after,
   .header-logo::before,
   .login-animation,
-  .login-animation::before,
-  .profile-button::before { animation: none !important; }
+  .profile-button::before {
+    animation: none !important;
+  }
 
   .header-logo-img,
   .login-animation,
   .profile-button,
   .profile-avatar,
-  .avatar-fallback        { transition: none !important; }
+  .avatar-fallback {
+    transition: none !important;
+  }
 
   .profile-button::before {
     background: conic-gradient(
