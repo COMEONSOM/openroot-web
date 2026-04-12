@@ -6,7 +6,6 @@ import { Helmet } from "react-helmet-async";
 import { SoftwareContent } from "../types/software";
 import "../components/styles/softwarePage.css";
 
-
 /* ── VIDEO PLAYER — defined OUTSIDE to prevent remount on render ── */
 
 interface VideoPlayerProps {
@@ -33,11 +32,10 @@ const VideoPlayer = memo(({ src, label }: VideoPlayerProps) => {
   return (
     <div className="sp-video-wrap">
       <div className="sp-video-frame">
-
         <div className="sp-video-chrome" aria-hidden="true">
-          <span className="sp-video-dot sp-video-dot--red"    />
+          <span className="sp-video-dot sp-video-dot--red" />
           <span className="sp-video-dot sp-video-dot--yellow" />
-          <span className="sp-video-dot sp-video-dot--green"  />
+          <span className="sp-video-dot sp-video-dot--green" />
         </div>
 
         <video
@@ -54,23 +52,36 @@ const VideoPlayer = memo(({ src, label }: VideoPlayerProps) => {
         <div className="sp-video-overlay" aria-hidden="true" />
 
         <button
-          className={`sp-video-toggle${paused ? " sp-video-toggle--paused" : ""}`}
+          className={`sp-video-toggle ot-glass${
+            paused ? " sp-video-toggle--paused" : ""
+          }`}
           onClick={togglePlay}
           aria-label={paused ? "Play video" : "Pause video"}
           type="button"
         >
           {paused ? (
-            <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <svg
+              width="11"
+              height="11"
+              viewBox="0 0 24 24"
+              fill="currentColor"
+              aria-hidden="true"
+            >
               <polygon points="5 3 19 12 5 21 5 3" />
             </svg>
           ) : (
-            <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-              <rect x="6"  y="4" width="4" height="16" rx="1" />
+            <svg
+              width="11"
+              height="11"
+              viewBox="0 0 24 24"
+              fill="currentColor"
+              aria-hidden="true"
+            >
+              <rect x="6" y="4" width="4" height="16" rx="1" />
               <rect x="14" y="4" width="4" height="16" rx="1" />
             </svg>
           )}
         </button>
-
       </div>
       <p className="sp-video-caption">See it in action</p>
     </div>
@@ -78,7 +89,6 @@ const VideoPlayer = memo(({ src, label }: VideoPlayerProps) => {
 });
 
 VideoPlayer.displayName = "VideoPlayer";
-
 
 /* ── MAIN PAGE ────────────────────────────────────────── */
 
@@ -97,7 +107,9 @@ export default function SoftwarePage() {
     return (
       <div className="sp-not-found">
         <p>Tool not found.</p>
-        <Link to="/software" className="sp-back-link">← Back to Software Hub</Link>
+        <Link to="/software" className="sp-back-link">
+          ← Back to Software Hub
+        </Link>
       </div>
     );
   }
@@ -105,15 +117,17 @@ export default function SoftwarePage() {
   const content: SoftwareContent = softwareContent[slug!] ?? {
     overview: tool.description,
     features: [],
-    purpose:  "",
+    purpose: "",
   };
 
   const formatText = (text: string) =>
     text.split("\n\n").map((p, i) => (
-      <p key={i} className="sp-para">{p}</p>
+      <p key={i} className="sp-para">
+        {p}
+      </p>
     ));
 
-  const pageUrl  = `https://openroot.in/software/${tool.slug}`;
+  const pageUrl = `https://openroot.in/software/${tool.slug}`;
   const videoSrc = (tool as any).video as string | undefined;
   const hasVideo = Boolean(videoSrc);
 
@@ -153,36 +167,58 @@ export default function SoftwarePage() {
   ];
 
   const exploreLinks = [
-    { href: "/software/openroot-classes",                                label: "Openroot Classes"           },
-    { href: "/software/nior-ai",                                         label: "NIOR AI"                    },
-    { href: "/software/travel-expense-manager",                          label: "Travel Expense Manager"     },
-    { href: "/certificate-verification",                                 label: "Certificate Verification"   },
-    { href: "/software/helping-hand",                                    label: "Resource Hub & Job Updates" },
-    { href: "/software/openroot-makaut_grade_and_percentage-calculator", label: "Makaut Grade Calculator"    },
-    { href: "/software/coevas-terminal",                                 label: "Coevas Terminal"            },
+    {
+      href: "/software/openroot-classes",
+      label: "Openroot Classes",
+    },
+    { href: "/software/nior-ai", label: "NIOR AI" },
+    {
+      href: "/software/travel-expense-manager",
+      label: "Travel Expense Manager",
+    },
+    {
+      href: "/certificate-verification",
+      label: "Certificate Verification",
+    },
+    {
+      href: "/software/helping-hand",
+      label: "Resource Hub & Job Updates",
+    },
+    {
+      href: "/software/openroot-makaut_grade_and_percentage-calculator",
+      label: "Makaut Grade Calculator",
+    },
+    { href: "/software/coevas-terminal", label: "Coevas Terminal" },
   ];
 
   return (
     <div className="sp-root">
-
       <Helmet>
         <title>{`${tool.name} – Free Tool by Openroot Systems`}</title>
-        <meta name="description"        content={tool.seoDescription || tool.description} />
-        <link rel="canonical"           href={pageUrl} />
-        <meta property="og:title"       content={`${tool.name} | Openroot Systems`} />
+        <meta
+          name="description"
+          content={tool.seoDescription || tool.description}
+        />
+        <link rel="canonical" href={pageUrl} />
+        <meta property="og:title" content={`${tool.name} | Openroot Systems`} />
         <meta property="og:description" content={tool.description} />
-        <meta property="og:type"        content="website" />
-        <meta property="og:url"         content={pageUrl} />
-        <meta property="og:image"       content="https://openroot.in/assets/company-icon.png" />
-        <meta name="twitter:card"        content="summary_large_image" />
-        <meta name="twitter:title"       content={tool.name} />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content={pageUrl} />
+        <meta
+          property="og:image"
+          content="https://openroot.in/assets/company-icon.png"
+        />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content={tool.name} />
         <meta name="twitter:description" content={tool.description} />
-        <meta name="twitter:image"       content="https://openroot.in/assets/company-icon.png" />
+        <meta
+          name="twitter:image"
+          content="https://openroot.in/assets/company-icon.png"
+        />
       </Helmet>
 
       {/* ── HERO ──────────────────────────────────── */}
       <header className={`sp-hero${hasVideo ? " sp-hero--split" : ""}`}>
-
         <div className="sp-hero-glow" aria-hidden="true" />
         <div className="sp-hero-grid" aria-hidden="true" />
 
@@ -194,11 +230,22 @@ export default function SoftwarePage() {
           <p className="sp-hero-desc">{tool.description}</p>
 
           <div className="sp-hero-actions">
-            <button className="sp-launch-btn" onClick={launch} type="button">
+            <button
+              className="sp-launch-btn ot-active-scale ot-focus-brand"
+              onClick={launch}
+              type="button"
+            >
               <span className="sp-launch-btn-icon" aria-hidden="true">
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="none"
-                  stroke="currentColor" strokeWidth="2.2"
-                  strokeLinecap="round" strokeLinejoin="round">
+                <svg
+                  width="15"
+                  height="15"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2.2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
                   <polygon points="5 3 19 12 5 21 5 3" />
                 </svg>
               </span>
@@ -214,7 +261,6 @@ export default function SoftwarePage() {
             <VideoPlayer src={videoSrc} label={`${tool.name} demo video`} />
           </div>
         )}
-
       </header>
 
       {/* Video — mobile only (between hero and body) */}
@@ -226,10 +272,11 @@ export default function SoftwarePage() {
 
       {/* ── BODY ──────────────────────────────────── */}
       <div className="sp-body">
-
         {/* Overview */}
         <section className="sp-section">
-          <p className="sp-section-label">Overview</p>
+          <p className="ot-kicker ot-kicker--brand sp-section-label">
+            Overview
+          </p>
           <h2 className="sp-section-title">What is {tool.name}?</h2>
           <div className="sp-overview">{formatText(content.overview)}</div>
         </section>
@@ -237,15 +284,28 @@ export default function SoftwarePage() {
         {/* Features */}
         {content.features.length > 0 && (
           <section className="sp-section">
-            <p className="sp-section-label">Capabilities</p>
+            <p className="ot-kicker ot-kicker--brand sp-section-label">
+              Capabilities
+            </p>
             <h2 className="sp-section-title">Key Features</h2>
             <div className="sp-features-grid">
               {content.features.map((f, i) => (
-                <div key={i} className="sp-feature-card">
-                  <span className="sp-feature-check" aria-hidden="true">
+                <div
+                  key={i}
+                  className="sp-feature-card ot-card-lift ot-card-lift--brand"
+                >
+                  <span
+                    className="sp-feature-check ot-brand-icon"
+                    aria-hidden="true"
+                  >
                     <svg width="13" height="13" viewBox="0 0 16 16" fill="none">
-                      <path d="M3 8L6.5 11.5L13 4.5" stroke="currentColor"
-                        strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                      <path
+                        d="M3 8L6.5 11.5L13 4.5"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
                     </svg>
                   </span>
                   <p>{f}</p>
@@ -258,7 +318,9 @@ export default function SoftwarePage() {
         {/* Purpose */}
         {content.purpose && (
           <section className="sp-section">
-            <p className="sp-section-label">Purpose</p>
+            <p className="ot-kicker ot-kicker--brand sp-section-label">
+              Purpose
+            </p>
             <h2 className="sp-section-title">Why it exists</h2>
             <div className="sp-purpose">{formatText(content.purpose)}</div>
           </section>
@@ -266,29 +328,45 @@ export default function SoftwarePage() {
 
         {/* FAQ */}
         <section className="sp-section">
-          <p className="sp-section-label">FAQ</p>
+          <p className="ot-kicker ot-kicker--brand sp-section-label">FAQ</p>
           <h2 className="sp-section-title">Common Questions</h2>
           <div className="sp-faq-list">
             {faqs.map((item, index) => (
               <div
                 key={index}
-                className={`sp-faq-item${activeIndex === index ? " sp-faq-item--open" : ""}`}
+                className={`sp-faq-item ot-accent-bar-left ot-accent-bar-left--animate${
+                  activeIndex === index
+                    ? " sp-faq-item--open ot-accent-bar-left--active"
+                    : ""
+                }`}
               >
                 <button
-                  className="sp-faq-trigger"
+                  className="sp-faq-trigger ot-focus-brand"
                   onClick={() => toggleFAQ(index)}
                   aria-expanded={activeIndex === index}
                   type="button"
                 >
-                  <span>{item.q}</span>
+                  <span className="sp-faq-trigger-left sp-faq-trigger-text">
+                    {item.q}
+                  </span>
                   <span className="sp-faq-chevron" aria-hidden="true">
                     <svg width="12" height="12" viewBox="0 0 16 16" fill="none">
-                      <path d="M3 6L8 11L13 6" stroke="currentColor"
-                        strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                      <path
+                        d="M3 6L8 11L13 6"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
                     </svg>
                   </span>
                 </button>
-                <div className="sp-faq-answer" role="region">
+                <div
+                  className={`sp-faq-answer ot-accordion-body${
+                    activeIndex === index ? " ot-accordion-body--open" : ""
+                  }`}
+                  role="region"
+                >
                   <div className="sp-faq-answer-inner">
                     <p>{item.a}</p>
                   </div>
@@ -298,7 +376,7 @@ export default function SoftwarePage() {
           </div>
         </section>
 
-        <div className="sp-divider" />
+        <hr className="divider" />
 
         {/* Explore */}
         <section className="sp-explore">
@@ -311,7 +389,6 @@ export default function SoftwarePage() {
             ))}
           </div>
         </section>
-
       </div>
     </div>
   );

@@ -1,18 +1,68 @@
 /* ==========================================================================
    OPENROOT — GLOBAL APP STYLES
-   B&W Token Architecture — Production Edition
-   VERSION: 2026.4
+   B&W + Brand Token Architecture — Production Edition
+   VERSION: 2026.7
    ─────────────────────────────────────────────────────────────────────────
-   DEDUPLICATION AUDIT vs AboutCompany.module.css:
-   ✓ All local --_brand / --_ink tokens live ONLY in .pageRoot scope (module)
-   ✓ Component selectors (.whoSection, .offerCard, .carouselOuter …) live ONLY in module
-   ✓ Global utilities below are SHARED across all pages — not About-only
-   INTERNAL CLEANUP (app.css → app.css):
-   ✗ Removed: .text-gradient-strong (identical to .text-gradient — merged)
-   ✗ Removed: .text-gradient-primary (identical to .text-gradient — merged)
+   CROSS-FILE CONSOLIDATION AUDIT (2026.7)
+   ✓ --ot-brand-*   green tokens promoted globally
+                    was --nb-green (Navbar.css) + --_brand (AboutCompany)
+                    → eliminates 18+ scattered rgba values across 3 files
+
+   ✓ --ease-spring / --ease-spring-soft  two spring easings as tokens
+                    was cubic-bezier(0.16,1,0.3,1) hardcoded 15×
+                        cubic-bezier(0.22,1,0.36,1) hardcoded 10×
+
+   ✓ --t-spring-fast  new transition token: 0.26s var(--ease-spring)
+
+   ✓ NEW UTILITY CLASSES  (extracted from 27 cross-file repeated patterns)
+       .ot-stripe-top        top gradient hairline ::before  (was 10×)
+       .ot-stripe-top--brand brand-colored variant
+       .ot-card-lift         translateY hover lift            (was  5×)
+       .ot-card-lift--brand  brand shadow + border variant
+       .ot-stripe-reveal     scaleX bottom-stripe on hover    (was  2×)
+       .ot-brand-pill        dim-bg + brand-border pill base  (was  7×)
+       .ot-kicker            tiny uppercase section label     (was  9×)
+       .ot-kicker--brand     brand-tinted kicker variant
+       .ot-body-copy         fz-md / 1.65lh / text-muted     (was  7×)
+       .ot-section-header    centered flex-col header block   (was  2×)
+       .ot-focus-brand       brand focus-visible ring         (was  5×)
+       .ot-active-scale      :active scale-down + fast dur    (was  4×)
+       .ot-glass             standalone backdrop-filter util  (was  5×)
+       .ot-glass--dark       dark-mode glass overlay
+       .ot-accent-bar-left   absolute left gradient bar       (was  2×)
+       .ot-accordion-body    CSS grid 0fr→1fr expand util     (was  2×)
+       .ot-dot-pulse         pulsing dot animation class      (was  2 files)
+       .scrollbar-thin       4px scrollbar util               (was  2×)
+
+   ✓ .note-callout / .note-accent  shared base extracted
+     diverge only in margin-top and box-shadow
+
+   ✓ Global keyframes: ot-dot-pulse, ot-card-pop, ot-swipe-hint,
+                       aurora-drift  (was duplicated per-file)
+
+   ✗ Removed: .text-gradient-strong, .text-gradient-primary  (merged v2026.4)
    ✗ Removed: .card-dark, .card-dark-hover, .card-dark-soft-border (deprecated)
-   ✓ Added:   --sp-4 (1rem/16px) and --sp-8 (2rem/32px) — used in module CSS but missing here
+
+   ─────────────────────────────────────────────────────────────────────────
+   MIGRATION CHEATSHEET — update component modules after this upgrade:
+     --nb-green        → var(--ot-brand)
+     --nb-green-dim    → var(--ot-brand-dim)
+     --nb-green-mid    → var(--ot-brand-mid)
+     --nb-green-glow   → var(--ot-brand-glow)
+     --nb-green-border → var(--ot-brand-border)
+     --_brand          → var(--ot-brand)
+     --_brand-ui       → var(--ot-brand)
+     --_brand-soft     → var(--ot-brand-soft)
+     --_glow-mid       → var(--ot-brand-mid)
+     --_glow-strong    → var(--ot-brand-glow)
+     --nb-ease         → var(--ease-spring)
+     cubic-bezier(0.16, 1, 0.3,  1) → var(--ease-spring)
+     cubic-bezier(0.22, 1, 0.36, 1) → var(--ease-spring-soft)
+     @keyframes dotPulse / nb-dot-pulse → class .ot-dot-pulse
+     @keyframes nb-card-pop             → class .ot-anim-card-pop
+     @keyframes swipeHint               → class .ot-anim-swipe-hint
    ========================================================================== */
+
 
 
 /* ============================================================
@@ -82,24 +132,58 @@
   --ot-radius-sm:       8px;
 
   /* — Shadows — */
-  --ot-shadow-sm:       0 1px 4px rgba(0, 0, 0, 0.05);   
-  --ot-shadow-md:       0 4px 18px rgba(0, 0, 0, 0.07); 
-  --ot-shadow-lg:       0 12px 40px rgba(0, 0, 0, 0.09); 
-  --ot-shadow-xl:       0 24px 64px rgba(0, 0, 0, 0.05); 
+  --ot-shadow-sm:       0 1px 4px rgba(0, 0, 0, 0.05);
+  --ot-shadow-md:       0 4px 18px rgba(0, 0, 0, 0.07);
+  --ot-shadow-lg:       0 12px 40px rgba(0, 0, 0, 0.09);
+  --ot-shadow-xl:       0 24px 64px rgba(0, 0, 0, 0.05);
+
   /* — Motion — */
   --ot-transition:      0.35s cubic-bezier(.21, 1.02, .73, 1);
   --ot-transition-fast: 0.18s ease;
+
+  /*
+   * UNIFIED EASING TOKENS
+   * Replaces two hardcoded cubic-bezier values scattered across files.
+   *
+   * --ease-spring      "fast out" spring — snappy UI interactions
+   *                    was cubic-bezier(0.16, 1, 0.3, 1) in Navbar + SoftwarePage (15×)
+   *
+   * --ease-spring-soft  relaxed spring — card animations, slower reveals
+   *                    was cubic-bezier(0.22, 1, 0.36, 1) in AboutCompany (10×)
+   */
+  --ease-spring:        cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-spring-soft:   cubic-bezier(0.22, 1, 0.36, 1);
 
   /* — Layout — */
   --ot-max-w:           1100px;
   --ot-font:            "Inter", "IBM Plex Sans", system-ui, sans-serif;
 
 
-  /* ┌────────────────────────────────────────────────────────────┐
-     │  CSS MODULE BRIDGE                                          │
-     │  Maps --color-* (used in *.module.css) onto --ot-* tokens. │
-     │  Theme overrides propagate automatically — no duplication.  │
-     └────────────────────────────────────────────────────────────┘ */
+  /* ┌──────────────────────────────────────────────────────────────────┐
+     │  BRAND ACCENT TOKENS — GREEN                                     │
+     │                                                                  │
+     │  Promoted from Navbar.css (--nb-green-*) and                     │
+     │  AboutCompany.module.css (--_brand-*, --_glow-*).                │
+     │  One canonical definition replaces ~18 scattered rgba values.    │
+     │                                                                  │
+     │  Light mode : #16a34a — dark green, AA-contrast on white         │
+     │  Dark  mode : #a3e87b — lime green, AA-contrast on dark          │
+     │               → overridden in [data-theme="dark"] below          │
+     └──────────────────────────────────────────────────────────────────┘ */
+  --ot-brand:           #16a34a;
+  --ot-brand-glow:      rgba(22, 163, 74, 0.28);
+  --ot-brand-mid:       rgba(22, 163, 74, 0.18);
+  --ot-brand-dim:       rgba(22, 163, 74, 0.10);
+  --ot-brand-border:    rgba(22, 163, 74, 0.30);
+  --ot-brand-soft:      rgba(22, 163, 74, 0.08);
+  --ot-brand-icon-bg:   #f0fdf4;
+
+
+  /* ┌──────────────────────────────────────────────────────────────────┐
+     │  CSS MODULE BRIDGE                                               │
+     │  Maps --color-* (used in *.module.css) onto --ot-* tokens.       │
+     │  Theme overrides propagate automatically — no duplication.       │
+     └──────────────────────────────────────────────────────────────────┘ */
 
   /* Accent */
   --color-accent:              var(--ot-text);
@@ -146,9 +230,9 @@
   --shadow-glow:               var(--ot-shadow-sm);
 
 
-  /* ─── Fluid Spacing — 4px grid ───────────────────────────────
-     Semantic scale (2xs→2xl) + numeric aliases (4, 8) used by
-     component modules. Both sets defined once here.             */
+  /* ─── Fluid Spacing — 4px grid ─────────────────────────────────────
+     Semantic scale (2xs → 2xl) + numeric aliases (4, 8) used by
+     component modules. Both sets defined once here.                   */
   --sp-2xs: clamp(0.2rem,  0.38vw, 0.3rem);
   --sp-xs:  clamp(0.3rem,  0.55vw, 0.5rem);
   --sp-sm:  clamp(0.5rem,  0.85vw, 0.7rem);
@@ -161,7 +245,7 @@
   --sp-8:   2rem;    /* 32px */
 
 
-  /* ─── Fluid Typography — 0.72× compact scale ─────────────── */
+  /* ─── Fluid Typography — 0.72× compact scale ───────────────────── */
   --fz-2xs: clamp(0.4375rem, 0.58vw, 0.5rem);
   --fz-xs:  clamp(0.5rem,    0.68vw, 0.5625rem);
   --fz-sm:  clamp(0.5625rem, 0.82vw, 0.625rem);
@@ -172,7 +256,7 @@
   --fz-2xl: clamp(1.1rem,    2.3vw,  1.9rem);
 
 
-  /* Border Radius */
+  /* — Radius aliases — */
   --radius-xs:   4px;
   --radius-sm:   var(--ot-radius-sm);
   --radius-md:   var(--ot-radius-md);
@@ -180,17 +264,19 @@
   --radius-pill: 9999px;
 
 
-  /* Transitions */
-  --t-snap:   var(--ot-transition-fast);
-  --t-base:   var(--ot-transition);
-  --t-spring: 0.32s cubic-bezier(0.22, 1, 0.36, 1);
+  /* — Transition aliases — */
+  --t-snap:        var(--ot-transition-fast);
+  --t-base:        var(--ot-transition);
+  --t-spring:      0.32s var(--ease-spring-soft);
+  --t-spring-fast: 0.26s var(--ease-spring);   /* NEW — replaces hardcoded 0.26s cubic-bezier(0.16,1,0.3,1) */
 
 
-  /* Layout */
+  /* — Layout — */
   --content-max: min(100%, var(--ot-max-w));
   --card-pad:    clamp(0.75rem, 1.45vw, 1.25rem);
   --section-gap: clamp(1.4rem,  2.9vw,  2.5rem);
 }
+
 
 
 /* ============================================================
@@ -245,11 +331,23 @@
   --ot-shadow-md:       0 4px 18px rgba(0, 0, 0, 0.30);
   --ot-shadow-lg:       0 12px 40px rgba(0, 0, 0, 0.40);
   --ot-shadow-xl:       0 24px 64px rgba(0, 0, 0, 0.52);
+
+  /* Brand green — dark mode: lime on dark (AA-pass) */
+  --ot-brand:           #a3e87b;
+  --ot-brand-glow:      rgba(163, 232, 123, 0.32);
+  --ot-brand-mid:       rgba(163, 232, 123, 0.22);
+  --ot-brand-dim:       rgba(163, 232, 123, 0.12);
+  --ot-brand-border:    rgba(163, 232, 123, 0.28);
+  --ot-brand-soft:      rgba(163, 232, 123, 0.10);
+  --ot-brand-icon-bg:   #0e1a09;
 }
+
 
 
 /* ============================================================
    DARK MODE — SYSTEM AUTO
+   (Duplicates [data-theme="dark"] — required for system-pref
+    users who haven't manually toggled. Both blocks must exist.)
    ============================================================ */
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme]) {
@@ -301,8 +399,17 @@
     --ot-shadow-md:       0 4px 18px rgba(0, 0, 0, 0.30);
     --ot-shadow-lg:       0 12px 40px rgba(0, 0, 0, 0.40);
     --ot-shadow-xl:       0 24px 64px rgba(0, 0, 0, 0.52);
+
+    --ot-brand:           #a3e87b;
+    --ot-brand-glow:      rgba(163, 232, 123, 0.32);
+    --ot-brand-mid:       rgba(163, 232, 123, 0.22);
+    --ot-brand-dim:       rgba(163, 232, 123, 0.12);
+    --ot-brand-border:    rgba(163, 232, 123, 0.28);
+    --ot-brand-soft:      rgba(163, 232, 123, 0.10);
+    --ot-brand-icon-bg:   #0e1a09;
   }
 }
+
 
 
 /* ============================================================
@@ -341,24 +448,6 @@ body {
   background: var(--ot-bg);
   color: var(--ot-text);
   transition: background 0.4s ease, color 0.3s ease;
-}
-
-/* ── Section card: lighter shadow in light mode only ─────── */
-html[data-theme="light"] .ot-section-card,
-:root:not([data-theme="dark"]) .ot-section-card {
-  box-shadow:
-    inset 0 1px 0 var(--ot-border-hard),
-    inset 0 -1px 0 var(--ot-border),
-    0 8px 32px rgba(0, 0, 0, 0.07);
-}
-
-@media (prefers-color-scheme: light) {
-  :root:not([data-theme]) .ot-section-card {
-    box-shadow:
-      inset 0 1px 0 var(--ot-border-hard),
-      inset 0 -1px 0 var(--ot-border),
-      0 8px 32px rgba(0, 0, 0, 0.07);
-  }
 }
 
 img, picture, video, canvas, svg {
@@ -410,6 +499,7 @@ a {
 }
 
 
+
 /* ============================================================
    APP SHELL
    ============================================================ */
@@ -425,13 +515,16 @@ a {
 }
 
 
+
 /* ============================================================
    TYPOGRAPHY UTILITIES
    ============================================================ */
 
-/* Primary gradient — used for display headings across all pages.
-   .text-gradient-strong and .text-gradient-primary are semantic
-   aliases for the same gradient — grouped to eliminate redundancy. */
+/*
+ * Primary gradient — display headings across all pages.
+ * .text-gradient-strong and .text-gradient-primary are kept as
+ * aliases for backward-compat but share the same rule block.
+ */
 .text-gradient,
 .text-gradient-strong,
 .text-gradient-primary {
@@ -446,7 +539,7 @@ a {
   -webkit-text-fill-color: transparent;
 }
 
-/* Soft variant — text→muted, lower contrast, for supporting headings */
+/* Soft variant — lower contrast, for supporting headings */
 .text-gradient-soft {
   background: linear-gradient(
     100deg,
@@ -471,6 +564,11 @@ a {
   text-align: left;
 }
 
+/*
+ * .eyebrow — neutral section label with dash
+ * .eyebrow-accent — simpler inline variant, no dash
+ * Use .ot-kicker / .ot-kicker--brand for brand-colored variants (new).
+ */
 .eyebrow {
   display: inline-flex;
   align-items: center;
@@ -527,6 +625,7 @@ a {
 }
 
 
+
 /* ============================================================
    CARD / PANEL UTILITIES
    ============================================================ */
@@ -557,6 +656,10 @@ a {
     border-color var(--ot-transition);
 }
 
+/*
+ * .card-hover — generic neutral lift (4px, border-hard)
+ * .ot-card-lift--brand — brand-tinted version (see below)
+ */
 @media (hover: hover) and (pointer: fine) {
   .card-hover:hover {
     transform: translateY(-4px);
@@ -577,6 +680,25 @@ a {
 
 @media (max-width: 420px) {
   .card-body { padding: 1rem; }
+}
+
+
+/* ── Section card: lighter shadow in light mode only ─────── */
+html[data-theme="light"] .ot-section-card,
+:root:not([data-theme="dark"]) .ot-section-card {
+  box-shadow:
+    inset 0 1px 0 var(--ot-border-hard),
+    inset 0 -1px 0 var(--ot-border),
+    0 8px 32px rgba(0, 0, 0, 0.07);
+}
+
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme]) .ot-section-card {
+    box-shadow:
+      inset 0 1px 0 var(--ot-border-hard),
+      inset 0 -1px 0 var(--ot-border),
+      0 8px 32px rgba(0, 0, 0, 0.07);
+  }
 }
 
 
@@ -609,23 +731,14 @@ html[data-theme="light"] .ot-glass-shine::before,
     linear-gradient(145deg,            rgba(0,0,0,0.03) 0%, transparent 36%);
 }
 
-html[data-theme="dark"] .ot-glass-shine::before {
-  mix-blend-mode: screen;
-  opacity: 1;
-}
+html[data-theme="dark"] .ot-glass-shine::before { mix-blend-mode: screen; opacity: 1; }
 
 @media (prefers-color-scheme: dark) {
-  :root:not([data-theme]) .ot-glass-shine::before {
-    mix-blend-mode: screen;
-    opacity: 1;
-  }
+  :root:not([data-theme]) .ot-glass-shine::before { mix-blend-mode: screen; opacity: 1; }
 }
 
 @media (prefers-color-scheme: light) {
-  :root:not([data-theme]) .ot-glass-shine::before {
-    mix-blend-mode: overlay;
-    opacity: 0.16;
-  }
+  :root:not([data-theme]) .ot-glass-shine::before { mix-blend-mode: overlay; opacity: 0.16; }
 }
 
 
@@ -672,6 +785,7 @@ html[data-theme="dark"] .ot-card-shimmer { opacity: 0.85; }
 }
 
 
+
 /* ============================================================
    BADGE / PILL UTILITIES
    ============================================================ */
@@ -713,6 +827,7 @@ html[data-theme="dark"] .ot-card-shimmer { opacity: 0.85; }
   color: var(--ot-text);
   flex-shrink: 0;
 }
+
 
 
 /* ============================================================
@@ -780,15 +895,10 @@ html[data-theme="dark"] .ot-card-shimmer { opacity: 0.85; }
 }
 
 @media (max-width: 420px) {
-  .btn-stack-mobile {
-    flex-direction: column;
-    width: 100%;
-  }
-  .btn-stack-mobile .btn-pill {
-    width: 100%;
-    justify-content: center;
-  }
+  .btn-stack-mobile { flex-direction: column; width: 100%; }
+  .btn-stack-mobile .btn-pill { width: 100%; justify-content: center; }
 }
+
 
 
 /* ============================================================
@@ -834,11 +944,14 @@ html[data-theme="dark"] .ot-card-shimmer { opacity: 0.85; }
 }
 
 
+
 /* ============================================================
    NOTE / CALLOUT BOXES
+   Shared base — .note-callout and .note-accent diverge only
+   in margin-top and inner box-shadow.
    ============================================================ */
-.note-callout {
-  margin-top: 1.2rem;
+.note-callout,
+.note-accent {
   padding: 12px 16px;
   border-left: 3px solid var(--ot-border-hard);
   background: var(--ot-surface-alt);
@@ -848,14 +961,10 @@ html[data-theme="dark"] .ot-card-shimmer { opacity: 0.85; }
   color: var(--ot-text-muted);
 }
 
+.note-callout { margin-top: 1.2rem; }
+
 .note-accent {
-  padding: 12px 16px;
-  border-left: 3px solid var(--ot-border-hard);
-  background: var(--ot-surface-alt);
-  border-radius: 0 var(--ot-radius-sm) var(--ot-radius-sm) 0;
-  font-size: 0.82rem;
   line-height: 1.68;
-  color: var(--ot-text-muted);
   box-shadow: inset 0 0 0 1px var(--ot-border);
 }
 
@@ -872,6 +981,7 @@ html[data-theme="dark"] .ot-card-shimmer { opacity: 0.85; }
   opacity: 0.6;
   margin-block: 1.25rem;
 }
+
 
 
 /* ============================================================
@@ -909,7 +1019,7 @@ html[data-theme="dark"] .ot-card-shimmer { opacity: 0.85; }
   z-index: 1;
 }
 
-/* Shimmer variants — top and bottom use same visual, different edge */
+/* Shimmer variants — top and bottom edges */
 .ot-section-card--shimmer-top::after,
 .ot-section-card--shimmer-bottom::after {
   content: "";
@@ -938,10 +1048,9 @@ html[data-theme="dark"] .ot-card-shimmer { opacity: 0.85; }
 }
 
 @media (min-width: 1024px) {
-  .ot-section--tight-top {
-    padding-top: clamp(1rem, 2vw, 1.5rem);
-  }
+  .ot-section--tight-top { padding-top: clamp(1rem, 2vw, 1.5rem); }
 }
+
 
 /* ── Numbered feature list ──────────────────────────────────── */
 .ot-feature-list {
@@ -964,10 +1073,7 @@ html[data-theme="dark"] .ot-card-shimmer { opacity: 0.85; }
   counter-increment: ot-feature;
 }
 
-.ot-feature-list li > span {
-  flex: 1;
-  min-width: 0;
-}
+.ot-feature-list li > span { flex: 1; min-width: 0; }
 
 .ot-feature-list li::before {
   content: counter(ot-feature, decimal-leading-zero);
@@ -999,10 +1105,7 @@ html[data-theme="dark"] .ot-card-shimmer { opacity: 0.85; }
   border-bottom: 1px solid var(--ot-border);
 }
 
-.ot-stat-row--top-only {
-  border-bottom: none;
-  padding-bottom: 0;
-}
+.ot-stat-row--top-only { border-bottom: none; padding-bottom: 0; }
 
 .ot-stat-item {
   display: flex;
@@ -1091,9 +1194,360 @@ html[data-theme="dark"] .ot-card-shimmer { opacity: 0.85; }
   z-index: 0;
 }
 
-@media (max-width: 560px) {
-  .ot-corner-accent { display: none; }
+@media (max-width: 560px) { .ot-corner-accent { display: none; } }
+
+
+
+/* ============================================================
+   ★ NEW SHARED UTILITIES
+   Extracted from 27 repeated patterns across
+   AboutCompany.module.css · Navbar.css · SoftwarePage.css
+   ============================================================ */
+
+
+/* ── P1/P15 · Top Gradient Hairline ──────────────────────────
+   Replaces 10× identical ::before/::after pseudo blocks.
+   Add .ot-stripe-top to any position:relative container.
+   The pseudo is already positioned; add position:relative
+   + overflow:hidden to the host if not already present.
+   ─────────────────────────────────────────────────────────── */
+.ot-stripe-top {
+  position: relative;
+  overflow: hidden;
 }
+
+.ot-stripe-top::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  z-index: 2;
+  pointer-events: none;
+  background: linear-gradient(
+    90deg,
+    transparent           0%,
+    var(--ot-border-hard) 15%,
+    var(--ot-text-faint)  50%,
+    var(--ot-border-hard) 85%,
+    transparent           100%
+  );
+}
+
+/* Brand variant — used on green-accented cards */
+.ot-stripe-top--brand::before {
+  background: linear-gradient(
+    90deg,
+    transparent               0%,
+    var(--ot-brand-border)    20%,
+    var(--ot-brand)           50%,
+    var(--ot-brand-border)    80%,
+    transparent               100%
+  );
+}
+
+
+/* ── P5 · Card Lift Hover ─────────────────────────────────────
+   Replaces 5× identical translateY(-Xpx) + box-shadow hover.
+   Use .ot-card-lift for neutral; .ot-card-lift--brand for
+   green-tinted shadow.
+   ─────────────────────────────────────────────────────────── */
+@media (hover: hover) and (pointer: fine) {
+  .ot-card-lift:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--ot-shadow-lg);
+    border-color: var(--ot-border-hard);
+  }
+
+  .ot-card-lift--brand:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px var(--ot-brand-mid);
+    border-color: var(--ot-brand);
+  }
+}
+
+
+/* ── P6 · scaleX Bottom Stripe Reveal ────────────────────────
+   Replaces 2× scaleX(0)→scaleX(1) bottom accent on hover.
+   Host needs position:relative; overflow:hidden.
+   ─────────────────────────────────────────────────────────── */
+.ot-stripe-reveal {
+  position: relative;
+  overflow: hidden;
+}
+
+.ot-stripe-reveal::after {
+  content: "";
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 1.5px;
+  background: linear-gradient(
+    90deg,
+    var(--ot-brand-border) 0%,
+    var(--ot-brand)        50%,
+    var(--ot-brand-border) 100%
+  );
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 200ms var(--ease-spring-soft);
+  pointer-events: none;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .ot-stripe-reveal:hover::after { transform: scaleX(1); }
+}
+
+.ot-stripe-reveal--active::after { transform: scaleX(1); }
+
+
+/* ── P7 · Kicker / Eyebrow Label ─────────────────────────────
+   Replaces 9× tiny uppercase label with dash prefix.
+   Neutral: .ot-kicker   Brand-colored: .ot-kicker--brand
+   ─────────────────────────────────────────────────────────── */
+.ot-kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.62rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ot-text-faint);
+  margin-bottom: 0.5rem;
+}
+
+.ot-kicker::before {
+  content: "";
+  flex-shrink: 0;
+  width: 20px;
+  height: 1.5px;
+  border-radius: 999px;
+  background: currentColor;
+  opacity: 0.65;
+}
+
+.ot-kicker--brand {
+  color: var(--ot-brand);
+}
+
+
+/* ── P8 · Body Copy ───────────────────────────────────────────
+   Replaces 7× identical font-size/line-height/color combo.
+   ─────────────────────────────────────────────────────────── */
+.ot-body-copy {
+  font-size: var(--fz-md);
+  line-height: 1.65;
+  margin: 0;
+  color: var(--ot-text-muted);
+}
+
+
+/* ── P9 · Centered Section Header Block ──────────────────────
+   Replaces 2× flex-col centered header with max-width + gap.
+   ─────────────────────────────────────────────────────────── */
+.ot-section-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: var(--sp-xs);
+  max-width: 500px;
+  margin-inline: auto;
+  margin-bottom: var(--sp-lg);
+}
+
+
+/* ── P10 · Brand Pill Base ────────────────────────────────────
+   Replaces 7× brand-dim bg + brand-border + brand-color pill.
+   Apply to tags, counter badges, chip buttons.
+   ─────────────────────────────────────────────────────────── */
+.ot-brand-pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  border: 1.5px solid var(--ot-brand-border);
+  background-color: var(--ot-brand-soft);
+  color: var(--ot-brand);
+  font-weight: 700;
+  transition:
+    background-color 200ms ease,
+    border-color     200ms ease,
+    color            200ms ease;
+}
+
+
+/* ── P12 · Brand Focus-Visible Ring ──────────────────────────
+   Replaces 5× outline: 2px solid var(--brand); offset: 3px.
+   Use alongside existing :focus-visible (which uses --ot-text).
+   ─────────────────────────────────────────────────────────── */
+.ot-focus-brand:focus-visible {
+  outline: 2px solid var(--ot-brand);
+  outline-offset: 3px;
+  border-radius: var(--ot-radius-sm);
+}
+
+
+/* ── P14 · :active Scale-Down ────────────────────────────────
+   Replaces 4× transform: scale(0.95/0.96) + fast duration.
+   Compose with .btn-pill or any interactive element.
+   ─────────────────────────────────────────────────────────── */
+.ot-active-scale:active {
+  transform: scale(0.96) !important;
+  transition-duration: 0.08s !important;
+}
+
+
+/* ── P16 · Standalone Backdrop Glass ─────────────────────────
+   Replaces 5× backdrop-filter: blur + saturate pairs.
+   .ot-glass       — standard frosted glass (light + dark)
+   .ot-glass--dark — reinforced dark overlay (modals, overlays)
+   ─────────────────────────────────────────────────────────── */
+.ot-glass {
+  backdrop-filter: blur(12px) saturate(1.6);
+  -webkit-backdrop-filter: blur(12px) saturate(1.6);
+}
+
+.ot-glass--dark {
+  background: rgba(0, 0, 0, 0.78);
+  backdrop-filter: blur(40px) saturate(0.5) brightness(0.5);
+  -webkit-backdrop-filter: blur(40px) saturate(0.5) brightness(0.5);
+}
+
+html[data-theme="light"] .ot-glass--dark,
+:root:not([data-theme="dark"]) .ot-glass--dark {
+  background: rgba(0, 0, 0, 0.68);
+}
+
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme]) .ot-glass--dark { background: rgba(0, 0, 0, 0.68); }
+}
+
+
+/* ── P18 · Thin Scrollbar ─────────────────────────────────────
+   Replaces 2× component-local scrollbar overrides.
+   .scrollbar-thin  — neutral (uses border-hard)
+   .scrollbar-brand — brand-tinted thumb
+   ─────────────────────────────────────────────────────────── */
+.scrollbar-thin {
+  scrollbar-width: thin;
+  scrollbar-color: var(--ot-border-hard) transparent;
+}
+
+.scrollbar-thin::-webkit-scrollbar       { width: 4px; height: 4px; }
+.scrollbar-thin::-webkit-scrollbar-track { background: transparent; }
+.scrollbar-thin::-webkit-scrollbar-thumb {
+  background: var(--ot-border-hard);
+  border-radius: 999px;
+}
+.scrollbar-thin::-webkit-scrollbar-thumb:hover { background: var(--ot-text-faint); }
+
+.scrollbar-brand {
+  scrollbar-width: thin;
+  scrollbar-color: var(--ot-brand-mid) transparent;
+}
+
+.scrollbar-brand::-webkit-scrollbar       { width: 4px; height: 3px; }
+.scrollbar-brand::-webkit-scrollbar-track { background: transparent; }
+.scrollbar-brand::-webkit-scrollbar-thumb {
+  background: var(--ot-brand-mid);
+  border-radius: 999px;
+}
+.scrollbar-brand::-webkit-scrollbar-thumb:hover { background: var(--ot-brand); }
+
+
+/* ── P22 · Vertical Left Accent Bar ──────────────────────────
+   Replaces 2× absolute left-edge gradient bar.
+   Static: .ot-accent-bar-left (always visible)
+   Animated: .ot-accent-bar-left--animate + --active state
+   ─────────────────────────────────────────────────────────── */
+.ot-accent-bar-left { position: relative; }
+
+.ot-accent-bar-left::before {
+  content: "";
+  position: absolute;
+  top: 12%; left: 0;
+  width: 3px;
+  height: 76%;
+  border-radius: 0 999px 999px 0;
+  background: linear-gradient(
+    to bottom,
+    transparent        0%,
+    var(--ot-brand)   30%,
+    var(--ot-brand)   70%,
+    transparent       100%
+  );
+  pointer-events: none;
+  z-index: 2;
+}
+
+.ot-accent-bar-left--animate::before {
+  transform: scaleY(0);
+  transform-origin: center;
+  transition: transform 0.34s var(--ease-spring);
+}
+
+.ot-accent-bar-left--animate.ot-accent-bar-left--active::before {
+  transform: scaleY(1);
+}
+
+
+/* ── P23 · CSS Grid Accordion (0fr → 1fr) ────────────────────
+   Replaces 2× grid-template-rows expand pattern (FAQ, etc.).
+   Usage: add .ot-accordion-body to the wrapper, then toggle
+   .ot-accordion-body--open via JS. Inner child needs
+   overflow:hidden.
+   ─────────────────────────────────────────────────────────── */
+.ot-accordion-body {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.34s var(--ease-spring);
+}
+
+.ot-accordion-body--open {
+  grid-template-rows: 1fr;
+}
+
+.ot-accordion-body > * {
+  overflow: hidden;
+}
+
+
+/* ── P17 · Pulsing Dot ────────────────────────────────────────
+   Replaces 2 per-file @keyframes (dotPulse, nb-dot-pulse).
+   Usage: add .ot-dot-pulse to a dot element; ensure it has
+   a background: var(--ot-brand) set on the host.
+   ─────────────────────────────────────────────────────────── */
+.ot-dot-pulse {
+  animation: ot-dot-pulse 2.6s ease-in-out infinite;
+}
+
+/* Brand icon container — always-dark pill, adapts via --ot-brand-icon-bg */
+.ot-brand-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--ot-brand-icon-bg);
+  color: var(--ot-brand);
+  border: 1px solid var(--ot-brand-border);
+  border-radius: var(--ot-radius-md);
+  flex-shrink: 0;
+  transition:
+    transform    var(--t-spring-fast),
+    box-shadow   var(--t-spring-fast),
+    border-color 0.26s ease;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .ot-brand-icon-hover:hover .ot-brand-icon,
+  .ot-brand-icon:hover {
+    transform: scale(1.1);
+    border-color: var(--ot-brand-border);
+    box-shadow:
+      0 0 0 3px var(--ot-brand-dim),
+      0 0 18px  var(--ot-brand-glow);
+  }
+}
+
 
 
 /* ============================================================
@@ -1124,10 +1578,6 @@ html[data-theme="dark"] .ot-card-shimmer { opacity: 0.85; }
   animation: aurora-drift 22s infinite alternate ease-in-out;
 }
 
-@keyframes aurora-drift {
-  from { transform: translate(-8%, -8%) scale(1.08); }
-  to   { transform: translate(8%, 6%) scale(1);      }
-}
 
 
 /* ============================================================
@@ -1156,8 +1606,9 @@ html[data-theme="dark"] .ot-card-shimmer { opacity: 0.85; }
 }
 
 
+
 /* ============================================================
-   SCROLLBAR
+   GLOBAL SCROLLBAR
    ============================================================ */
 ::-webkit-scrollbar        { width: 6px; }
 ::-webkit-scrollbar-track  { background: var(--ot-bg); }
@@ -1166,6 +1617,7 @@ html[data-theme="dark"] .ot-card-shimmer { opacity: 0.85; }
   border-radius: 999px;
 }
 ::-webkit-scrollbar-thumb:hover { background: var(--ot-text-faint); }
+
 
 
 /* ============================================================
@@ -1180,4 +1632,43 @@ html[data-theme="dark"] .ot-card-shimmer { opacity: 0.85; }
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
   }
+}
+
+
+
+/* ============================================================
+   GLOBAL KEYFRAMES
+   Centralised here — remove per-file duplicates:
+     AboutCompany: @keyframes dotPulse   → ot-dot-pulse
+     Navbar:       @keyframes nb-dot-pulse → ot-dot-pulse
+     Navbar:       @keyframes nb-card-pop  → ot-card-pop
+     AboutCompany: @keyframes swipeHint   → ot-swipe-hint
+   ============================================================ */
+
+/* Pulsing status dot — used via .ot-dot-pulse class */
+@keyframes ot-dot-pulse {
+  0%,  100% { box-shadow: 0 0 4px  var(--ot-brand-dim);  opacity: 1;    }
+  50%       { box-shadow: 0 0 16px var(--ot-brand-glow); opacity: 0.75; }
+}
+
+/* Staggered card entrance — reference with animation-name: ot-card-pop */
+@keyframes ot-card-pop {
+  from { opacity: 0; transform: translateY(14px) scale(0.96); }
+  to   { opacity: 1; transform: translateY(0)    scale(1);    }
+}
+
+/* Swipe hint nudge — reference with animation-name: ot-swipe-hint */
+@keyframes ot-swipe-hint {
+  0%   { transform: translateX(0);     }
+  20%  { transform: translateX(-10px); }
+  40%  { transform: translateX(4px);   }
+  60%  { transform: translateX(-6px);  }
+  80%  { transform: translateX(2px);   }
+  100% { transform: translateX(0);     }
+}
+
+/* Ambient aurora drift — used by .background-aurora + .ot-section-aurora */
+@keyframes aurora-drift {
+  from { transform: translate(-8%, -8%) scale(1.08); }
+  to   { transform: translate(8%, 6%)  scale(1);     }
 }
