@@ -1,14 +1,14 @@
 /* ==========================================================================
    OPENROOT — CERTIFICATE MODAL
    Professional Glass System — Aligned with B&W Token Architecture
-   VERSION: 2026.1
+   VERSION: 2026.2 — PREMIUM EDITION
    ========================================================================== */
 
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap");
 
+
 /* ============================================================
    LOCAL TOKEN BRIDGE
-   Inherits from global --ot-* system, falls back to standalone values
    ============================================================ */
 .cert-overlay,
 .cert-modal {
@@ -27,16 +27,18 @@
   --cm-grad-to:        var(--ot-grad-to, #8a8a8a);
   --cm-cta-bg:         var(--ot-cta-bg, #0a0a0a);
   --cm-cta-text:       var(--ot-cta-text, #ffffff);
-  --cm-cta-hover:      var(--ot-cta-hover-bg, #222222);
+  --cm-cta-hover:      var(--ot-cta-hover-bg, #1a1a1a);
   --cm-blur:           var(--ot-blur, 20px);
   --cm-radius-xl:      22px;
   --cm-radius-lg:      16px;
   --cm-radius-md:      12px;
   --cm-radius-sm:      8px;
   --cm-transition:     var(--ot-transition, 0.32s cubic-bezier(.21, 1.02, .73, 1));
+  /* NEW: shimmer color tokens for the button sweep */
+  --cm-shimmer:        rgba(255, 255, 255, 0.22);
+  --cm-glow-soft:      rgba(0, 0, 0, 0.04);
 }
 
-/* Dark mode token overrides — cascade from global [data-theme="dark"] */
 [data-theme="dark"] .cert-overlay,
 [data-theme="dark"] .cert-modal {
   --cm-surface:        var(--ot-glass-bg, rgba(18, 18, 18, 0.82));
@@ -50,6 +52,9 @@
   --cm-cta-bg:         var(--ot-cta-bg, #f3f3f3);
   --cm-cta-text:       var(--ot-cta-text, #0a0a0a);
   --cm-cta-hover:      var(--ot-cta-hover-bg, #dedede);
+  /* UPGRADE: dark mode shimmer is light */
+  --cm-shimmer:        rgba(255, 255, 255, 0.18);
+  --cm-glow-soft:      rgba(255, 255, 255, 0.03);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -66,12 +71,16 @@
     --cm-cta-bg:        #f3f3f3;
     --cm-cta-text:      #0a0a0a;
     --cm-cta-hover:     #dedede;
+    --cm-shimmer:       rgba(255, 255, 255, 0.18);
+    --cm-glow-soft:     rgba(255, 255, 255, 0.03);
   }
 }
 
 
 /* ============================================================
-   OVERLAY — Full viewport scrim
+   OVERLAY
+   UPGRADE: richer grain (0.85→0.92 baseFrequency, 0.035→0.045 opacity)
+            + centered spotlight radial
    ============================================================ */
 .cert-overlay {
   position: fixed;
@@ -81,19 +90,23 @@
   align-items: center;
   justify-content: center;
   padding: clamp(16px, 4vw, 40px);
-  /* Layered backdrop: grain + radial highlight + dark tint */
   background:
-    url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E"),
-    radial-gradient(ellipse at 50% 30%, rgba(255,255,255,0.04), transparent 60%),
-    rgba(0, 0, 0, 0.60);
-  backdrop-filter: blur(10px) saturate(0.8);
-  -webkit-backdrop-filter: blur(10px) saturate(0.8);
+    /* UPGRADE: finer grain texture */
+    url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.92' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.045'/%3E%3C/svg%3E"),
+    /* UPGRADE: centered spotlight — pulls eye to the modal */
+    radial-gradient(ellipse 70% 60% at 50% 42%, rgba(255,255,255,0.07) 0%, transparent 100%),
+    /* Soft vignette from edges */
+    radial-gradient(ellipse 100% 100% at 50% 50%, transparent 40%, rgba(0,0,0,0.35) 100%),
+    rgba(0, 0, 0, 0.62);
+  backdrop-filter: blur(10px) saturate(0.75);
+  -webkit-backdrop-filter: blur(10px) saturate(0.75);
   animation: cm-overlay-in 0.22s ease both;
 }
 
 
 /* ============================================================
    MODAL SHELL
+   UPGRADE: 6-layer shadow stack + outer white ring + subtler blur entry
    ============================================================ */
 .cert-modal {
   position: relative;
@@ -105,21 +118,22 @@
   isolation: isolate;
   overflow: hidden;
 
-  /* Glass surface */
   background: var(--cm-surface);
   border: 1px solid var(--cm-border);
-  backdrop-filter: blur(var(--cm-blur)) saturate(1.5);
-  -webkit-backdrop-filter: blur(var(--cm-blur)) saturate(1.5);
+  backdrop-filter: blur(var(--cm-blur)) saturate(1.6);
+  -webkit-backdrop-filter: blur(var(--cm-blur)) saturate(1.6);
 
-  /* Depth layering */
+  /* UPGRADE: 6-layer shadow — contact + lift + depth + atmosphere + outer glow ring */
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.18),
-    inset 0 -1px 0 rgba(0, 0, 0, 0.06),
-    0 4px 8px rgba(0, 0, 0, 0.06),
-    0 12px 32px rgba(0, 0, 0, 0.14),
-    0 40px 80px rgba(0, 0, 0, 0.18);
+    0 0 0 1px var(--cm-glow-soft),           /* outer micro-ring */
+    inset 0 1px 0 rgba(255, 255, 255, 0.22), /* top inner highlight */
+    inset 0 -1px 0 rgba(0, 0, 0, 0.08),      /* bottom inner shadow */
+    0 2px 4px rgba(0, 0, 0, 0.05),           /* contact */
+    0 8px 24px rgba(0, 0, 0, 0.12),          /* lift */
+    0 28px 56px rgba(0, 0, 0, 0.18),         /* depth */
+    0 60px 100px rgba(0, 0, 0, 0.16);        /* atmosphere */
 
-  animation: cm-modal-in 0.30s cubic-bezier(.21, 1.02, .73, 1) both;
+  animation: cm-modal-in 0.36s cubic-bezier(.21, 1.02, .73, 1) both;
 }
 
 /* Top-left interior shine */
@@ -131,16 +145,18 @@
   pointer-events: none;
   border-radius: inherit;
   background:
-    radial-gradient(circle at 18% 12%, rgba(255,255,255,0.14), transparent 45%),
-    linear-gradient(180deg, rgba(255,255,255,0.08) 0%, transparent 28%);
+    /* UPGRADE: larger, more dramatic corner catch-light */
+    radial-gradient(circle at 15% 10%, rgba(255,255,255,0.18), transparent 50%),
+    radial-gradient(circle at 85% 90%, rgba(255,255,255,0.05), transparent 40%),
+    linear-gradient(180deg, rgba(255,255,255,0.10) 0%, transparent 32%);
 }
 
-/* Isolate content above the shine layer */
 .cert-modal > * { position: relative; z-index: 1; }
 
 
 /* ============================================================
    CLOSE BUTTON
+   UPGRADE: rotate(90deg) on hover — intentional, satisfying
    ============================================================ */
 .cert-close {
   position: absolute;
@@ -159,19 +175,24 @@
   font-size: 1rem;
   line-height: 1;
   transition:
-    background var(--cm-transition),
-    border-color var(--cm-transition),
-    color var(--cm-transition),
-    transform 0.16s ease;
+    background  0.22s ease,
+    border-color 0.22s ease,
+    color        0.22s ease,
+    /* UPGRADE: rotate + scale on hover */
+    transform    0.28s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
 .cert-close:hover {
   background: rgba(127, 127, 127, 0.15);
   border-color: var(--cm-border);
   color: var(--cm-text);
+  /* UPGRADE: 90° rotation with a slight scale pop */
+  transform: rotate(90deg) scale(1.08);
 }
 
-.cert-close:active   { transform: scale(0.93); }
+.cert-close:active {
+  transform: rotate(90deg) scale(0.94);
+}
 
 .cert-close:focus-visible {
   outline: 2px solid var(--cm-text);
@@ -182,8 +203,6 @@
 /* ============================================================
    MODAL HEADER
    ============================================================ */
-
-/* Optional icon slot above title */
 .cert-icon-slot {
   width: 52px;
   height: 52px;
@@ -193,9 +212,22 @@
   display: grid;
   place-items: center;
   margin: 0 auto 16px;
+  /* UPGRADE: stronger inner glow */
   box-shadow:
-    inset 0 1px 0 rgba(255,255,255,0.10),
-    0 2px 8px rgba(0,0,0,0.08);
+    inset 0 1px 0 rgba(255,255,255,0.14),
+    0 2px 12px rgba(0,0,0,0.10),
+    0 1px 3px rgba(0,0,0,0.06);
+  transition: transform 0.28s cubic-bezier(0.34, 1.56, 0.64, 1),
+              box-shadow 0.28s ease;
+}
+
+/* UPGRADE: icon slot gently lifts on modal hover for depth */
+.cert-modal:hover .cert-icon-slot {
+  transform: translateY(-2px);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.18),
+    0 6px 20px rgba(0,0,0,0.14),
+    0 2px 6px rgba(0,0,0,0.08);
 }
 
 .cert-icon-slot svg,
@@ -205,17 +237,33 @@
   object-fit: contain;
 }
 
+/* UPGRADE: animated gradient — light sweeps across title text */
 .cert-title {
   margin: 0 0 6px;
   font-size: clamp(1.3rem, 2.5vw, 1.6rem);
   font-weight: 800;
   letter-spacing: -0.035em;
   line-height: 1.18;
-  /* Gradient text matching global heading style */
-  background: linear-gradient(120deg, var(--cm-grad-from) 0%, var(--cm-grad-mid) 55%, var(--cm-grad-to) 100%);
+  background: linear-gradient(
+    120deg,
+    var(--cm-grad-from)  0%,
+    var(--cm-grad-mid)  35%,
+    var(--cm-grad-to)   60%,
+    var(--cm-grad-mid)  80%,
+    var(--cm-grad-from) 100%
+  );
+  /* UPGRADE: 300% wide so the keyframe sweep has room */
+  background-size: 300% 100%;
   background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
+  animation: cm-gradient-shift 8s ease-in-out infinite;
+}
+
+@keyframes cm-gradient-shift {
+  0%   { background-position: 0%   50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 0%   50%; }
 }
 
 .cert-subtitle {
@@ -268,8 +316,8 @@
   outline: none;
   transition:
     border-color var(--cm-transition),
-    box-shadow var(--cm-transition),
-    background var(--cm-transition);
+    box-shadow   var(--cm-transition),
+    background   var(--cm-transition);
   box-shadow: inset 0 1px 3px rgba(0,0,0,0.05);
 }
 
@@ -278,15 +326,17 @@
   font-weight: 400;
 }
 
+/* UPGRADE: deeper focus ring with blurred glow layer */
 .cert-input-row input:focus {
   border-color: var(--cm-border);
   background: var(--cm-surface);
   box-shadow:
     inset 0 1px 3px rgba(0,0,0,0.04),
-    0 0 0 3px rgba(127, 127, 127, 0.12);
+    0 0 0 3px rgba(127, 127, 127, 0.13),
+    0 0 18px rgba(127, 127, 127, 0.08);   /* UPGRADE: soft outer glow */
 }
 
-/* Verify button */
+/* ── Verify Button ──────────────────────────────────────── */
 .cert-input-row button {
   padding: 13px 22px;
   border-radius: var(--cm-radius-md);
@@ -302,32 +352,62 @@
   position: relative;
   overflow: hidden;
   transition:
-    background var(--cm-transition),
-    box-shadow var(--cm-transition),
-    transform 0.14s ease;
+    background   var(--cm-transition),
+    box-shadow   var(--cm-transition),
+    transform    0.14s ease;
   box-shadow:
     inset 0 1px 0 rgba(255,255,255,0.14),
-    0 4px 14px rgba(0, 0, 0, 0.18);
+    0 2px 6px rgba(0, 0, 0, 0.14),
+    0 6px 20px rgba(0, 0, 0, 0.18);
 }
 
-/* Button inner shine */
+/* UPGRADE: top-left static shine — replaces the flat ::before gradient */
 .cert-input-row button::before {
   content: "";
   position: absolute;
   inset: 0;
   border-radius: inherit;
-  background: linear-gradient(140deg, rgba(255,255,255,0.10) 0%, transparent 55%);
+  background: linear-gradient(140deg, rgba(255,255,255,0.12) 0%, transparent 55%);
   pointer-events: none;
+  z-index: 1;
+}
+
+/* UPGRADE: shimmer sweep — slides across on hover */
+.cert-input-row button::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -75%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent               0%,
+    var(--cm-shimmer)         50%,
+    transparent               100%
+  );
+  transform: skewX(-18deg);
+  transition: left 0.55s cubic-bezier(0.16, 1, 0.3, 1);
+  z-index: 2;
+  pointer-events: none;
+}
+
+.cert-input-row button:hover::after {
+  left: 135%;   /* sweeps all the way across */
 }
 
 .cert-input-row button:hover {
   background: var(--cm-cta-hover);
   box-shadow:
     inset 0 1px 0 rgba(255,255,255,0.18),
-    0 8px 24px rgba(0, 0, 0, 0.26);
+    0 4px 12px rgba(0, 0, 0, 0.20),
+    0 12px 32px rgba(0, 0, 0, 0.28);
 }
 
-.cert-input-row button:active { transform: scale(0.97); }
+.cert-input-row button:active {
+  transform: scale(0.97);
+  transition-duration: 0.08s;
+}
 
 .cert-input-row button:focus-visible {
   outline: 2px solid var(--cm-cta-bg);
@@ -337,27 +417,54 @@
 
 /* ============================================================
    RESULT CARD
+   UPGRADE: ::before catch-light + hover lift + stronger shadow
    ============================================================ */
 .cert-result-card {
+  position: relative;
   margin-top: 20px;
   padding: 20px;
   text-align: left;
   border-radius: var(--cm-radius-lg);
   border: 1px solid var(--cm-border-soft);
   background:
-    linear-gradient(160deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02)),
+    linear-gradient(160deg, rgba(255,255,255,0.07), rgba(255,255,255,0.02)),
     var(--cm-surface-inset);
+  overflow: hidden;
   box-shadow:
-    inset 0 1px 0 rgba(255,255,255,0.10),
-    inset 0 -1px 0 rgba(0,0,0,0.04),
-    0 2px 8px rgba(0,0,0,0.06);
-  animation: cm-result-in 0.24s ease both;
+    inset 0 1px 0 rgba(255,255,255,0.12),
+    inset 0 -1px 0 rgba(0,0,0,0.05),
+    0 2px 8px rgba(0,0,0,0.06),
+    0 8px 24px rgba(0,0,0,0.08);
+  transition: box-shadow 0.28s ease, transform 0.28s cubic-bezier(0.34, 1.56, 0.64, 1);
+  animation: cm-result-in 0.28s cubic-bezier(.21, 1.02, .73, 1) both;
 }
 
-/* Divider between badge and details */
-.cert-result-card > * + * {
-  margin-top: 6px;
+/* UPGRADE: top-left corner catch-light on result card */
+.cert-result-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 60%;
+  height: 50%;
+  background: radial-gradient(circle at 10% 5%, rgba(255,255,255,0.10), transparent 70%);
+  pointer-events: none;
+  border-radius: inherit;
 }
+
+/* UPGRADE: card lifts on hover — tactile feel */
+@media (hover: hover) and (pointer: fine) {
+  .cert-result-card:hover {
+    transform: translateY(-2px);
+    box-shadow:
+      inset 0 1px 0 rgba(255,255,255,0.14),
+      inset 0 -1px 0 rgba(0,0,0,0.05),
+      0 4px 12px rgba(0,0,0,0.10),
+      0 16px 36px rgba(0,0,0,0.14);
+  }
+}
+
+.cert-result-card > * + * { margin-top: 6px; }
 
 .cert-result-card h3 {
   margin: 0;
@@ -387,7 +494,6 @@
   letter-spacing: 0.01em;
 }
 
-/* Dot bullet before date */
 .cert-result-card .cert-date::before {
   content: "";
   display: inline-block;
@@ -402,6 +508,7 @@
 
 /* ============================================================
    STATUS BADGE
+   UPGRADE: glow-ring pulse instead of opacity fade — more "live"
    ============================================================ */
 .cert-badge {
   display: inline-flex;
@@ -417,22 +524,31 @@
   text-transform: uppercase;
   color: var(--cm-text);
   margin-bottom: 10px;
+  /* UPGRADE: subtle lift shadow on the badge itself */
+  box-shadow: 0 1px 4px rgba(0,0,0,0.06);
 }
 
-/* Animated pulse dot */
+/* UPGRADE: pulse dot now expands a ring outward instead of fading */
 .cert-badge::before {
   content: "";
   width: 7px;
   height: 7px;
   border-radius: 999px;
   background: var(--cm-text);
-  opacity: 0.65;
-  animation: cm-pulse 2.2s ease-in-out infinite;
+  opacity: 0.7;
+  flex-shrink: 0;
+  animation: cm-pulse-ring 2.4s ease-in-out infinite;
 }
 
-@keyframes cm-pulse {
-  0%, 100% { opacity: 0.65; transform: scale(1);    }
-  50%       { opacity: 0.30; transform: scale(0.85); }
+@keyframes cm-pulse-ring {
+  0%, 100% {
+    box-shadow: 0 0 0 0px rgba(127, 127, 127, 0.5);
+    opacity: 0.70;
+  }
+  50% {
+    box-shadow: 0 0 0 4px rgba(127, 127, 127, 0);
+    opacity: 0.40;
+  }
 }
 
 
@@ -452,7 +568,6 @@
   animation: cm-shake 0.38s cubic-bezier(.36,.07,.19,.97) both;
 }
 
-/* Warning icon slot */
 .cert-error::before {
   content: "!";
   display: grid;
@@ -477,7 +592,7 @@
 
 
 /* ============================================================
-   LOADING STATE — Pulsing skeleton
+   LOADING STATE
    ============================================================ */
 .cert-loading {
   margin-top: 16px;
@@ -503,32 +618,46 @@
 .cert-loading-bar:nth-child(3) { width: 55%; animation-delay: 0.16s; }
 
 @keyframes cm-shimmer {
-  0%   { background-position: 200% 0; }
+  0%   { background-position:  200% 0; }
   100% { background-position: -200% 0; }
 }
 
 
 /* ============================================================
-   MOBILE — Bottom sheet pattern (≤ 560px)
+   MOBILE — Bottom sheet (≤ 560px)
    ============================================================ */
 @media (max-width: 560px) {
   .cert-overlay {
     align-items: flex-end;
     padding: 0;
     background:
-      url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E"),
-      rgba(0, 0, 0, 0.55);
+      url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.92' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E"),
+      rgba(0, 0, 0, 0.58);
   }
 
   .cert-modal {
     width: 100%;
     max-width: 100%;
     border-radius: 26px 26px 0 0;
-    padding: 24px 20px 36px;  /* extra bottom for home bar */
-    animation: cm-sheet-in 0.32s cubic-bezier(.21, 1.02, .73, 1) both;
+    padding: 28px 20px 40px; /* 40px bottom for home bar */
+    padding-bottom: calc(36px + env(safe-area-inset-bottom, 0px));
+    animation: cm-sheet-in 0.34s cubic-bezier(.21, 1.02, .73, 1) both;
+    /* UPGRADE: stronger sheet shadow on mobile */
+    box-shadow:
+      0 0 0 1px var(--cm-glow-soft),
+      inset 0 1px 0 rgba(255,255,255,0.18),
+      0 -8px 40px rgba(0, 0, 0, 0.22),
+      0 -24px 64px rgba(0, 0, 0, 0.18);
   }
 
-  /* Drag handle */
+  /* UPGRADE: accent stripe on top of the sheet */
+  .cert-modal::before {
+    background:
+      linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.12) 40%, transparent 100%),
+      radial-gradient(circle at 15% 10%, rgba(255,255,255,0.16), transparent 50%);
+  }
+
+  /* Drag handle — uses ::after (clear of ::before which is the shine) */
   .cert-modal::after {
     content: "";
     position: absolute;
@@ -540,20 +669,14 @@
     border-radius: 999px;
     background: var(--cm-border);
     pointer-events: none;
-    opacity: 0.6;
+    opacity: 0.7;
+    z-index: 99;
   }
 
-  .cert-input-row {
-    grid-template-columns: 1fr;
-  }
-
-  .cert-input-row button {
-    width: 100%;
-    justify-content: center;
-  }
-
-  .cert-title    { font-size: 1.25rem; }
-  .cert-subtitle { font-size: 0.875rem; }
+  .cert-input-row          { grid-template-columns: 1fr; }
+  .cert-input-row button   { width: 100%; justify-content: center; }
+  .cert-title              { font-size: 1.25rem; }
+  .cert-subtitle           { font-size: 0.875rem; }
 }
 
 
@@ -565,11 +688,12 @@
   to   { opacity: 1; }
 }
 
+/* UPGRADE: entrance — more dramatic scale + blur combo */
 @keyframes cm-modal-in {
   from {
     opacity: 0;
-    transform: translateY(12px) scale(0.982);
-    filter: blur(4px);
+    transform: translateY(16px) scale(0.96);
+    filter: blur(6px);
   }
   to {
     opacity: 1;
@@ -579,27 +703,28 @@
 }
 
 @keyframes cm-sheet-in {
-  from { transform: translateY(100%); }
-  to   { transform: translateY(0); }
+  from { transform: translateY(100%); opacity: 0.6; }
+  to   { transform: translateY(0);    opacity: 1; }
 }
 
+/* UPGRADE: result card enters with a spring */
 @keyframes cm-result-in {
   from {
     opacity: 0;
-    transform: translateY(6px);
+    transform: translateY(10px) scale(0.98);
   }
   to {
     opacity: 1;
-    transform: translateY(0);
+    transform: translateY(0) scale(1);
   }
 }
 
 @keyframes cm-shake {
-  0%, 100% { transform: translateX(0);  }
+  0%, 100% { transform: translateX(0); }
   18%       { transform: translateX(-5px); }
-  36%       { transform: translateX(5px);  }
+  36%       { transform: translateX(5px); }
   54%       { transform: translateX(-3px); }
-  72%       { transform: translateX(3px);  }
+  72%       { transform: translateX(3px); }
 }
 
 
@@ -613,9 +738,15 @@
   .cert-badge::before,
   .cert-loading-bar,
   .cert-result-card,
-  .cert-error {
+  .cert-error,
+  .cert-title {
     animation: none !important;
     transition: none !important;
     filter: none !important;
+  }
+
+  /* Keep gradient text visible even without animation */
+  .cert-title {
+    background-position: 0% 50%;
   }
 }

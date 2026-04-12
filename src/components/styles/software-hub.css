@@ -1,6 +1,5 @@
 /* ============================================================
-   SOFTWARE HUB PAGE
-   All colors via CSS variables — responds to theme toggle.
+   SOFTWARE HUB PAGE — PREMIUM EDITION
    ============================================================ */
 
 
@@ -23,30 +22,69 @@
   margin-inline: auto;
 }
 
+/* UPGRADE: section label above title — matches rest of Openroot brand */
+.sh-header-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  font-size: 0.62rem;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--nb-green);
+  margin-bottom: 0.75rem;
+}
+
+.sh-header-label::before {
+  content: "";
+  width: 22px;
+  height: 2px;
+  border-radius: 999px;
+  background: var(--nb-green);
+  opacity: 0.75;
+}
+
+/* UPGRADE: animated gradient sweep — same technique as cert modal title */
 .sh-title {
   font-size: clamp(1.8rem, 5vw, 2.8rem);
   font-weight: 800;
-  letter-spacing: -0.03em;
-  line-height: 1.15;
-
-  /* Green gradient — uses nb-green which already switches per theme */
+  letter-spacing: -0.035em;
+  line-height: 1.12;
   background: linear-gradient(
-    90deg,
-    var(--nb-green) 0%,
-    color-mix(in oklch, var(--nb-green) 70%, #22c55e) 100%
+    110deg,
+    var(--nb-green)                                     0%,
+    color-mix(in oklch, var(--nb-green) 70%, #22c55e)  35%,
+    var(--ot-text)                                      55%,
+    color-mix(in oklch, var(--nb-green) 70%, #22c55e)  78%,
+    var(--nb-green)                                    100%
   );
+  background-size: 300% 100%;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
+  animation: sh-title-shift 9s ease-in-out infinite;
 }
 
+@keyframes sh-title-shift {
+  0%   { background-position:   0% 50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position:   0% 50%; }
+}
+
+/* UPGRADE: subtitle fades up on load */
 .sh-subtitle {
   margin-top: 1rem;
   font-size: clamp(0.88rem, 1.6vw, 1rem);
   color: var(--ot-text-muted);
-  line-height: 1.7;
+  line-height: 1.75;
   max-width: 60ch;
   margin-inline: auto;
+  animation: sh-fade-up 0.6s 0.15s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes sh-fade-up {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
 
 
@@ -64,13 +102,42 @@
   gap: 1.25rem;
 }
 
+/* UPGRADE: section title with left dash prefix */
 .sh-section-title {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
   font-size: clamp(1.1rem, 2.5vw, 1.6rem);
   font-weight: 800;
-  letter-spacing: -0.025em;
+  letter-spacing: -0.03em;
   color: var(--ot-text);
   margin-bottom: clamp(1.25rem, 3vw, 2rem);
   text-align: center;
+}
+
+/* Subtle accent dash flanking the title */
+.sh-section-title::before,
+.sh-section-title::after {
+  content: "";
+  flex: 1;
+  max-width: 48px;
+  height: 1px;
+  border-radius: 999px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    var(--nb-green-border) 100%
+  );
+  opacity: 0.6;
+}
+
+.sh-section-title::after {
+  background: linear-gradient(
+    90deg,
+    var(--nb-green-border) 0%,
+    transparent 100%
+  );
 }
 
 
@@ -86,6 +153,20 @@
   grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
 }
 
+/* UPGRADE: staggered entrance for cards */
+.sh-grid .sh-card:nth-child(1)  { animation-delay: 0.05s; }
+.sh-grid .sh-card:nth-child(2)  { animation-delay: 0.10s; }
+.sh-grid .sh-card:nth-child(3)  { animation-delay: 0.15s; }
+.sh-grid .sh-card:nth-child(4)  { animation-delay: 0.20s; }
+.sh-grid .sh-card:nth-child(5)  { animation-delay: 0.25s; }
+.sh-grid .sh-card:nth-child(6)  { animation-delay: 0.30s; }
+.sh-grid .sh-card:nth-child(7)  { animation-delay: 0.35s; }
+.sh-grid .sh-card:nth-child(8)  { animation-delay: 0.40s; }
+.sh-grid .sh-card:nth-child(9)  { animation-delay: 0.45s; }
+.sh-grid .sh-card:nth-child(10) { animation-delay: 0.50s; }
+.sh-grid .sh-card:nth-child(11) { animation-delay: 0.55s; }
+.sh-grid .sh-card:nth-child(12) { animation-delay: 0.60s; }
+
 
 /* ── CARD ─────────────────────────────────────────────── */
 
@@ -95,52 +176,108 @@
   border: 1px solid var(--ot-border);
   border-radius: var(--ot-radius-lg);
   padding: clamp(1rem, 2.5vw, 1.4rem);
-  transition:
-    transform     0.26s cubic-bezier(0.16, 1, 0.3, 1),
-    border-color  0.26s ease,
-    box-shadow    0.26s ease,
-    background    0.26s ease;
   overflow: hidden;
+  isolation: isolate;
+  /* UPGRADE: 3-layer shadow for depth at rest */
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.06),
+    0 1px 2px rgba(0, 0, 0, 0.04),
+    0 4px 12px rgba(0, 0, 0, 0.06);
+  transition:
+    transform     0.28s cubic-bezier(0.16, 1, 0.3, 1),
+    border-color  0.28s ease,
+    box-shadow    0.28s ease,
+    background    0.28s ease;
+  /* UPGRADE: entrance animation */
+  animation: sh-card-in 0.42s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
-/* Top shimmer hairline — matches navbar card style */
+@keyframes sh-card-in {
+  from { opacity: 0; transform: translateY(16px) scale(0.97); }
+  to   { opacity: 1; transform: translateY(0)    scale(1);    }
+}
+
+/* UPGRADE: cursor spotlight — same pattern as .software-btn in navbar */
+.sh-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0;
+  background: radial-gradient(
+    circle 120px at var(--x, 50%) var(--y, 50%),
+    var(--nb-green-dim) 0%,
+    transparent 70%
+  );
+  transition: opacity 0.32s ease;
+}
+
+/* Top shimmer hairline */
 .sh-card::after {
   content: "";
   position: absolute;
   top: 0; left: 0; right: 0;
   height: 1px;
   pointer-events: none;
+  z-index: 0;
   background: linear-gradient(
     90deg,
-    transparent          0%,
+    transparent           0%,
     var(--ot-border-hard) 30%,
     var(--ot-border-hard) 70%,
-    transparent          100%
+    transparent           100%
   );
   opacity: 0.5;
-  transition: opacity 0.26s ease, background 0.26s ease;
+  transition: opacity 0.28s ease, background 0.28s ease;
 }
 
-/* Featured card — slightly elevated */
+/* UPGRADE: featured card — tinted surface + left accent bar */
 .sh-card--featured {
   border-color: var(--nb-green-border);
   background: color-mix(in oklch, var(--nb-green) 4%, var(--ot-glass-bg));
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.08),
+    0 0 0 1px var(--nb-green-dim),
+    0 4px 16px color-mix(in oklch, var(--nb-green) 10%, transparent);
 }
 
-/* Hover state */
+/* Left accent bar on featured */
+.sh-card--featured > .sh-card-accent-bar {
+  position: absolute;
+  top: 12%;
+  left: 0;
+  width: 3px;
+  height: 76%;
+  border-radius: 0 999px 999px 0;
+  background: linear-gradient(
+    to bottom,
+    transparent    0%,
+    var(--nb-green) 30%,
+    var(--nb-green) 70%,
+    transparent    100%
+  );
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* UPGRADE: hover — spotlight activates + dramatic lift */
 @media (hover: hover) and (pointer: fine) {
-  .sh-card:hover,
-  .sh-card--hovered {
-    transform: translateY(-5px);
+  .sh-card:hover {
+    transform: translateY(-6px);
     border-color: var(--nb-green-border);
     background: var(--ot-surface);
     box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.10),
       0 0 0 1px var(--nb-green-dim),
-      0 10px 30px var(--nb-green-dim);
+      0 8px 24px rgba(0, 0, 0, 0.10),
+      0 20px 48px color-mix(in oklch, var(--nb-green) 12%, transparent);
   }
 
-  .sh-card:hover::after,
-  .sh-card--hovered::after {
+  .sh-card:hover::before { opacity: 1; }
+
+  .sh-card:hover::after {
     opacity: 1;
     background: linear-gradient(
       90deg,
@@ -151,6 +288,11 @@
       transparent          100%
     );
   }
+
+  /* UPGRADE: name color brightens on card hover, not just name hover */
+  .sh-card:hover .sh-card-name {
+    opacity: 0.9;
+  }
 }
 
 .sh-card:active {
@@ -159,7 +301,15 @@
 }
 
 
-/* ── CARD TEXT ────────────────────────────────────────── */
+/* ── CARD CONTENT ─────────────────────────────────────── */
+
+/* Ensure text renders above the spotlight pseudo-element */
+.sh-card-name,
+.sh-card-desc,
+.sh-card-meta {
+  position: relative;
+  z-index: 1;
+}
 
 .sh-card-name {
   display: block;
@@ -167,55 +317,148 @@
   font-weight: 700;
   color: var(--nb-green);
   text-decoration: none;
-  letter-spacing: -0.01em;
+  letter-spacing: -0.015em;
   line-height: 1.3;
-  transition: opacity 0.2s ease;
+  transition: opacity 0.22s ease;
 }
 
 .sh-card-name--featured {
   font-size: clamp(1.05rem, 1.8vw, 1.25rem);
   font-weight: 800;
-}
-
-@media (hover: hover) and (pointer: fine) {
-  .sh-card-name:hover { opacity: 0.8; }
+  /* UPGRADE: featured name gets the animated gradient treatment */
+  background: linear-gradient(
+    110deg,
+    var(--nb-green) 0%,
+    color-mix(in oklch, var(--nb-green) 60%, #fff) 50%,
+    var(--nb-green) 100%
+  );
+  background-size: 200% 100%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: sh-title-shift 7s ease-in-out infinite;
 }
 
 .sh-card-desc {
   margin-top: 0.6rem;
   font-size: clamp(0.75rem, 1.2vw, 0.85rem);
   color: var(--ot-text-muted);
-  line-height: 1.65;
+  line-height: 1.7;
   max-width: 52ch;
+}
+
+/* UPGRADE: optional meta row — category tag or status badge */
+.sh-card-meta {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.9rem;
+  flex-wrap: wrap;
+}
+
+.sh-card-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--nb-green);
+  background: var(--nb-green-dim);
+  border: 1px solid var(--nb-green-border);
+  border-radius: 999px;
+  padding: 3px 10px;
+  /* Pulse dot */
+  position: relative;
+}
+
+/* UPGRADE: live dot on active/featured tags */
+.sh-card-tag--live::before {
+  content: "";
+  width: 5px;
+  height: 5px;
+  border-radius: 999px;
+  background: var(--nb-green);
+  flex-shrink: 0;
+  animation: sh-dot-pulse 2.6s ease-in-out infinite;
+}
+
+@keyframes sh-dot-pulse {
+  0%, 100% { box-shadow: 0 0 0 0 var(--nb-green-glow); opacity: 1; }
+  50%       { box-shadow: 0 0 0 4px transparent;       opacity: 0.5; }
 }
 
 
 /* ── CTA BUTTON ───────────────────────────────────────── */
 
 .sh-cta-btn {
+  position: relative;
   display: inline-flex;
   align-items: center;
-  gap: 0.4rem;
-  padding: 0.75rem 1.75rem;
+  gap: 0.45rem;
+  padding: 0.78rem 1.85rem;
   border-radius: var(--ot-radius-lg);
   background: var(--nb-green);
   color: #000;
+  font-family: var(--ot-font);
   font-weight: 800;
   font-size: 0.88rem;
   letter-spacing: 0.01em;
   text-decoration: none;
+  overflow: hidden;
+  /* UPGRADE: multi-layer shadow at rest */
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.28),
+    0 2px 6px rgba(0, 0, 0, 0.12),
+    0 6px 20px var(--nb-green-dim);
   transition:
     opacity      0.22s ease,
-    transform    0.22s cubic-bezier(0.16, 1, 0.3, 1),
-    box-shadow   0.22s ease;
+    transform    0.26s cubic-bezier(0.16, 1, 0.3, 1),
+    box-shadow   0.26s ease;
+}
+
+/* Static top-left shine */
+.sh-cta-btn::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(140deg, rgba(255,255,255,0.18) 0%, transparent 55%);
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* UPGRADE: shimmer sweep on hover */
+.sh-cta-btn::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -80%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent                0%,
+    rgba(255, 255, 255, 0.30) 50%,
+    transparent                100%
+  );
+  transform: skewX(-18deg);
+  transition: left 0.55s cubic-bezier(0.16, 1, 0.3, 1);
+  z-index: 2;
+  pointer-events: none;
 }
 
 @media (hover: hover) and (pointer: fine) {
   .sh-cta-btn:hover {
-    opacity: 0.88;
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px var(--nb-green-glow);
+    opacity: 0.92;
+    transform: translateY(-3px);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.28),
+      0 4px 12px rgba(0, 0, 0, 0.16),
+      0 12px 32px var(--nb-green-glow);
   }
+  .sh-cta-btn:hover::after { left: 140%; }
 }
 
 .sh-cta-btn:active {
@@ -232,7 +475,17 @@
 /* ── REDUCED MOTION ───────────────────────────────────── */
 
 @media (prefers-reduced-motion: reduce) {
+  .sh-title,
+  .sh-card-name--featured { animation: none !important; background-position: 0% 50%; }
+
+  .sh-subtitle,
+  .sh-card              { animation: none !important; }
+
   .sh-card,
+  .sh-card::before,
   .sh-card::after,
-  .sh-cta-btn { transition: none !important; }
+  .sh-cta-btn,
+  .sh-cta-btn::after    { transition: none !important; }
+
+  .sh-card-tag--live::before { animation: none !important; }
 }

@@ -765,3 +765,57 @@ html[data-theme="light"] .nb-overlay,
   }
 }
 
+/* ============================================================
+   OVERLAY GRID — 401px–640px horizontal scroll FIX
+   Root cause: mask-image on nb-panel-grid conflicts with
+   transform animations on child cards → overlap artifact.
+   Solution: scroll lives on nb-panel-scroll, grid just
+   declares fixed-width columns and lets content flow.
+   ============================================================ */
+
+@media (max-width: 640px) and (min-width: 401px) {
+
+  /* ── Scroll lives here now, not on the grid ────────────── */
+  .nb-panel-scroll {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin;
+    scrollbar-color: var(--nb-green-mid) transparent;
+  }
+
+  .nb-panel-scroll::-webkit-scrollbar       { height: 3px; }
+  .nb-panel-scroll::-webkit-scrollbar-track { background: transparent; }
+  .nb-panel-scroll::-webkit-scrollbar-thumb {
+    background: var(--nb-green-mid);
+    border-radius: 999px;
+  }
+  .nb-panel-scroll::-webkit-scrollbar-thumb:hover {
+    background: var(--nb-green);
+  }
+
+  /* ── Grid — fixed column widths, wider than panel ─────── */
+  .nb-panel-grid {
+    /* Fixed px columns so cards never shrink into each other */
+    grid-template-columns: repeat(3, 145px);
+    width: max-content;   /* grid is wider than container → parent scrolls */
+    min-width: 100%;      /* still fills panel if content fits */
+
+    /* NO mask-image — that was the overlap culprit */
+    mask-image: none;
+    -webkit-mask-image: none;
+
+    /* Horizontal padding so last card isn't flush against edge */
+    padding-right: 16px;
+  }
+
+  /* snap on the scroll container's viewport, not the grid */
+  .nb-panel-scroll {
+    scroll-snap-type: x proximity;
+  }
+
+  .nb-panel-grid .software-btn {
+    scroll-snap-align: start;
+    width: 145px;
+    flex-shrink: 0;
+  }
+}

@@ -1,218 +1,400 @@
 /* ============================================================
-   HEADER — OPENROOT PREMIUM UI (SYNCED WITH TSX + LOTTIE)
+   HEADER — BIOLUMINESCENT COMMAND BAR  |  Openroot
+   BLACK ONLY — no theme toggle
 ============================================================ */
 
-/* ===============================
-   DESIGN TOKENS (Header Scope)
-================================ */
-:root {
-  --color-primary: #2563eb;
-  --color-primary-hover: #1e40af;
-  --color-white: #ffffff;
-  --color-bg-header: rgba(0, 0, 0, 0.88);
-  --color-border: rgba(255, 255, 255, 0.16);
-  --color-text: #ffffff;
-
-  --space-xs: 0.35rem;
-  --space-sm: 0.65rem;
-  --space-md: 1rem;
-  --space-lg: 1.5rem;
-
-  --font-size-xs: 0.75rem;
-  --font-size-sm: 0.9rem;
-  --font-size-md: 1rem;
-
-  --radius-md: 0.5rem;
-  --radius-round: 50%;
-
-  --transition-fast: 0.18s ease;
-  --transition-normal: 0.28s ease;
-
-  /* Logo sizes */
-  --logo-mobile: 78px;
-  --logo-tablet: 100px;
-  --logo-desktop: 128px;
+@property --hdr-aurora-x {
+  syntax: "<percentage>";
+  inherits: false;
+  initial-value: 22%;
 }
 
-/* ===============================
-   HEADER WRAPPER
-================================ */
-.header {width: 100%;padding: 0.4rem var(--space-lg);display: flex;justify-content: space-between;align-items: center;background: var(--color-bg-header);backdrop-filter: blur(8px);border-bottom: 1px solid var(--color-border);position: sticky;top: 0;z-index: 200;}
+@property --hdr-sweep {
+  syntax: "<percentage>";
+  inherits: false;
+  initial-value: -12%;
+}
 
-/* ===============================
-   LOGO AREA
-================================ */
-.header-logo {display: flex;align-items: center;text-decoration: none;}
-.header-logo-img {width: 110px;height: auto;object-fit: contain;transition: transform var(--transition-normal);user-select: none;margin-bottom: 10px;margin-top: 10px;}
+@property --ring-angle {
+  syntax: "<angle>";
+  inherits: false;
+  initial-value: 0deg;
+}
 
-@media (max-width: 480px) { .header-logo-img { width: 70px; } }
-@media (min-width: 481px) and (max-width: 767px) { .header-logo-img { width: 90px; } }
-@media (min-width: 768px) and (max-width: 1023px) { .header-logo-img { width: 110px; } }
+
+/* ── DESIGN TOKENS ────────────────────────────────────────── */
+:root {
+  --hdr-bg:           rgba(7, 9, 7, 0.92);
+  --hdr-border:       rgba(255, 255, 255, 0.07);
+  --hdr-aurora-clr:   rgba(163, 232, 123, 0.055);
+  --hdr-aurora-clr-2: rgba(163, 232, 123, 0.02);
+  --hdr-photon-clr:   #a3e87b;
+
+  --login-bg:         rgba(163, 232, 123, 0.07);
+  --login-border:     rgba(163, 232, 123, 0.22);
+  --login-text:       #a3e87b;
+  --login-glow:       rgba(163, 232, 123, 0.18);
+
+  --ring-hi:          #a3e87b;
+  --ring-lo:          rgba(163, 232, 123, 0.0);
+  --ring-mid:         rgba(163, 232, 123, 0.35);
+  --avatar-glow:      rgba(163, 232, 123, 0.28);
+
+  --space-md: 1rem;
+  --space-lg: 1.5rem;
+  --font-size-xs: 0.75rem;
+  --transition-fast:   0.18s ease;
+  --transition-normal: 0.28s ease;
+}
+
+
+/* ── HEADER WRAPPER ─────────────────────────────────────── */
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 200;
+  width: 100%;
+  padding: 0.4rem var(--space-lg);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  isolation: isolate;
+
+  background: var(--hdr-bg);
+  border-bottom: 1px solid var(--hdr-border);
+}
+
+@keyframes hdr-aurora {
+  0%   { --hdr-aurora-x: 15%; }
+  40%  { --hdr-aurora-x: 32%; }
+  70%  { --hdr-aurora-x: 10%; }
+  100% { --hdr-aurora-x: 15%; }
+}
+
+/* Static border under photon trace */
+.header::before {
+  content: "";
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 1px;
+  pointer-events: none;
+  z-index: -1;
+  background: var(--hdr-border);
+}
+
+/* Photon trace along bottom edge */
+.header::after {
+  content: "";
+  position: absolute;
+  bottom: 0; left: 0;
+  width: 100%; height: 1px;
+  pointer-events: none;
+  z-index: 0;
+
+  --hdr-sweep: -12%;
+  background: linear-gradient(
+    90deg,
+    transparent                         0%,
+    transparent                         calc(var(--hdr-sweep) - 1%),
+    rgba(163, 232, 123, 0.22)           calc(var(--hdr-sweep) + 1%),
+    #a3e87b                             calc(var(--hdr-sweep) + 3%),
+    rgba(163, 232, 123, 0.22)           calc(var(--hdr-sweep) + 5%),
+    transparent                         calc(var(--hdr-sweep) + 7%),
+    transparent                         100%
+  );
+  animation: hdr-photon 5s cubic-bezier(0.4, 0, 0.55, 1) infinite;
+}
+
+@keyframes hdr-photon {
+  0%   { --hdr-sweep: -8%;  }
+  100% { --hdr-sweep: 108%; }
+}
+
+@media (max-width: 899px) {
+  .header {
+    width: 100vw;
+    max-width: 100vw;
+    margin-inline: calc(50% - 50vw);
+  }
+}
+
+
+/* ── LOGO ─────────────────────────────────────────────────── */
+.header-logo {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  position: relative;
+}
+
+.header-logo::before {
+  content: "";
+  position: absolute;
+  inset: -12px -16px;
+  border-radius: 50%;
+  background: radial-gradient(
+    ellipse at center,
+    rgba(163, 232, 123, 0.14) 0%,
+    transparent 70%
+  );
+  opacity: 0;
+  transform: scale(0.7);
+  transition:
+    opacity   0.4s ease,
+    transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  pointer-events: none;
+  z-index: -1;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .header-logo:hover::before {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  .header-logo:hover .header-logo-img {
+    transform: scale(1.03);
+    filter: drop-shadow(0 0 10px rgba(163, 232, 123, 0.35));
+  }
+}
+
+.header-logo-img {
+  width: 110px;
+  height: auto;
+  object-fit: contain;
+  user-select: none;
+  margin-block: 10px;
+  transition:
+    transform var(--transition-normal),
+    filter    var(--transition-normal);
+}
+
+@media (max-width: 480px)                          { .header-logo-img { width: 70px;  } }
+@media (min-width: 481px)  and (max-width: 767px)  { .header-logo-img { width: 90px;  } }
+@media (min-width: 768px)  and (max-width: 1023px) { .header-logo-img { width: 110px; } }
 @media (min-width: 1024px) and (max-width: 1440px) { .header-logo-img { width: 140px; } }
-@media (min-width: 1441px) { .header-logo-img { width: 170px; } }
-@media (max-width: 899px) {.header {width: 100vw;max-width: 100vw;margin-left: calc(50% - 50vw);margin-right: calc(50% - 50vw);margin-top: calc(50% - 50vw);}}
+@media (min-width: 1441px)                         { .header-logo-img { width: 170px; } }
 
 
-/* ===============================
-   RIGHT SIDE ACTIONS
-================================ */
+/* ── RIGHT ACTIONS ──────────────────────────────────────── */
 .header-right {
   display: flex;
   align-items: center;
   gap: var(--space-md);
 }
 
-/* ============================================================
-   🔑 LOGIN BUTTON WITH LOTTIE
-============================================================ */
 
+/* ── LOGIN — SONAR PULSE PILL ─────────────────────────────── */
 .login-animation {
-  display: flex;
+  position: relative;
+  display: inline-flex;
   align-items: center;
-  gap: 0.35rem;
-  background: transparent;
-  border: none;
+  gap: 0.45rem;
+  padding: 0.48rem 1.05rem 0.48rem 0.6rem;
+  color: var(--login-text);
+  font-size: var(--font-size-xs);
+  font-weight: 700;
+  letter-spacing: 0.04em;
   cursor: pointer;
-  padding: 0;
-  color: var(--color-white);
-  transition: transform var(--transition-fast),
-    filter var(--transition-fast);
+  overflow: hidden;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  transition:
+    background     0.22s ease,
+    border-color   0.22s ease,
+    box-shadow     0.22s ease,
+    transform      0.22s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.login-animation:hover {
-  transform: translateY(-1px) scale(1.05);
-  filter: brightness(1.08);
-}
-
-.login-animation:focus-visible {
-  outline: 2px solid var(--color-primary);
-  outline-offset: 3px;
-}
-
-/* Lottie icon */
-.login-lottie {
-  width: 48px;
-  height: 48px;
+/* Shimmer sweep on hover */
+.login-animation::after {
+  content: "";
+  position: absolute;
+  top: 0; left: -80%;
+  width: 50%; height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent                  0%,
+    rgba(163, 232, 123, 0.22)   50%,
+    transparent                 100%
+  );
+  transform: skewX(-16deg);
+  transition: left 0.5s cubic-bezier(0.16, 1, 0.3, 1);
   pointer-events: none;
 }
 
-/* Text hint */
+@media (hover: hover) and (pointer: fine) {
+  .login-animation:hover {
+    border-color: rgba(163, 232, 123, 0.55);
+    animation: none;
+  }
+}
+
+.login-animation:active {
+  transform: scale(0.95);
+  transition-duration: 0.08s;
+}
+
+.login-lottie {
+  width: 44px;
+  height: 44px;
+  pointer-events: none;
+  position: relative;
+  z-index: 1;
+}
+
 .login-hint {
   font-size: var(--font-size-xs);
-  font-weight: 600;
-  letter-spacing: 0.03em;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
   white-space: nowrap;
   user-select: none;
-  opacity: 0.9;
+  position: relative;
+  z-index: 1;
 }
 
-/* Smaller on mobile */
 @media (max-width: 480px) {
-  .login-lottie {
-    width: 40px;
-    height: 40px;
-  }
-
-  .login-hint {
-    display: none;
-  }
+  .login-lottie { width: 38px; height: 38px; }
+  .login-hint   { display: none; }
 }
 
-/* ============================================================
-   👤 PROFILE BUTTON
-============================================================ */
 
+/* ── PROFILE — CONIC ORBITAL RING ─────────────────────────── */
 .profile-button {
-  background: transparent;
-  border: none;
-  padding: 0;
-  cursor: pointer;
+  position: relative;
   display: grid;
   place-items: center;
+  width: 46px; height: 46px;
+  padding: 0;
+  border: none;
+  background: transparent;
   border-radius: 50%;
+  cursor: pointer;
   transition: transform var(--transition-fast);
-  width: 42px;height: 42px;
 }
 
-.profile-button:hover {
-  transform: scale(1.08);
+/* Rotating conic ring */
+.profile-button::before {
+  content: "";
+  position: absolute;
+  inset: -3px;
+  border-radius: 50%;
+  --ring-angle: 0deg;
+  background: conic-gradient(
+    from var(--ring-angle),
+    var(--ring-lo)  0deg,
+    var(--ring-mid) 60deg,
+    var(--ring-hi)  90deg,
+    var(--ring-mid) 120deg,
+    var(--ring-lo)  160deg,
+    var(--ring-lo)  360deg
+  );
+  animation: ring-orbit 4s linear infinite;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.75;
+  transition: opacity 0.3s ease, animation-duration 0.3s ease;
 }
 
-.profile-button:focus-visible {
-  outline: 2px solid var(--color-primary);
-  outline-offset: 3px;
+@keyframes ring-orbit {
+  to { --ring-angle: 360deg; }
 }
 
-/* ============================================================
-   PROFILE AVATAR
-============================================================ */
+/* Mask that creates ring gap */
+.profile-button::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: var(--hdr-bg);
+  z-index: 1;
+  pointer-events: none;
+}
 
-.profile-avatar {
+.profile-avatar,
+.avatar-fallback {
+  position: relative;
+  z-index: 2;
   display: block;
   object-fit: cover;
   border-radius: 50%;
   background: #111;
-  border: 2px solid rgba(255,255,255,0.35);
-  transition: border-color var(--transition-fast),
-    box-shadow var(--transition-fast);
+  border: 2px solid rgba(255, 255, 255, 0.12);
+  transition:
+    border-color var(--transition-fast),
+    box-shadow   var(--transition-fast),
+    transform    var(--transition-fast);
 }
 
-.profile-button:hover .profile-avatar {
-  border-color: var(--color-primary);
-  box-shadow: 0 0 0 3px rgba(37,99,235,0.35);
+@media (hover: hover) and (pointer: fine) {
+
+  .profile-button:hover::before {
+    opacity: 1;
+    animation-duration: 2s;
+  }
+
+  .profile-button:hover .profile-avatar,
+  .profile-button:hover .avatar-fallback {
+    border-color: rgba(42, 26, 215, 0.76);
+  }
 }
 
-/* Fallback initials */
+.profile-button:active { transform: scale(0.94); }
+
+.profile-button:focus-visible {
+  outline: 2px solid #a3e87b;
+  outline-offset: 4px;
+}
+
 .avatar-fallback {
   display: grid;
   place-items: center;
-  border-radius: 50%;
-  background: linear-gradient(135deg, #6366f1, #4338ca);
-  color: #fff;
+  background: linear-gradient(135deg, #1a3a14, #0e1a09);
+  color: #a3e87b;
   font-weight: 700;
 }
 
-/* ===============================
-   RESPONSIVE AVATAR SIZES
-================================ */
 
-/* Mobile */
+/* ── RESPONSIVE AVATAR SIZES ─────────────────────────────── */
 @media (max-width: 768px) {
-  .profile-avatar,
-  .avatar-fallback {
-    width: 32px;
-    height: 32px;
-    font-size: 0.8rem;
-  }
+  .profile-avatar, .avatar-fallback { width: 32px; height: 32px; font-size: 0.8rem; }
+  .profile-button                   { width: 38px; height: 38px; }
 }
 
-/* Tablet */
 @media (min-width: 769px) and (max-width: 899px) {
-  .profile-avatar,
-  .avatar-fallback {
-    width: 38px;
-    height: 38px;
-    font-size: 0.9rem;
-  }
+  .profile-avatar, .avatar-fallback { width: 38px; height: 38px; font-size: 0.9rem; }
+  .profile-button                   { width: 44px; height: 44px; }
 }
 
-/* Desktop */
 @media (min-width: 900px) {
-  .profile-avatar,
-  .avatar-fallback {
-    width: 46px;
-    height: 46px;
-    font-size: 1rem;
-  }
+  .profile-avatar, .avatar-fallback { width: 46px; height: 46px; font-size: 1rem; }
+  .profile-button                   { width: 52px; height: 52px; }
 }
 
-/* ===============================
-   ACCESSIBILITY
-================================ */
+
+/* ── REDUCED MOTION ──────────────────────────────────────── */
 @media (prefers-reduced-motion: reduce) {
-  * {
-    transition: none !important;
-    animation: none !important;
+  .header,
+  .header::after,
+  .header-logo::before,
+  .login-animation,
+  .login-animation::before,
+  .profile-button::before { animation: none !important; }
+
+  .header-logo-img,
+  .login-animation,
+  .profile-button,
+  .profile-avatar,
+  .avatar-fallback        { transition: none !important; }
+
+  .profile-button::before {
+    background: conic-gradient(
+      from 45deg,
+      var(--ring-lo) 0deg,
+      var(--ring-hi) 90deg,
+      var(--ring-lo) 160deg,
+      var(--ring-lo) 360deg
+    );
   }
 }
-

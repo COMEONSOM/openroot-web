@@ -7,12 +7,9 @@
 
 /* ============================================================
    LOCAL TOKENS
-   All colors defined here. Light mode is the default.
-   Dark mode overrides via [data-theme="dark"] or prefers.
    ============================================================ */
 
 .faq-fullscreen {
-  /* Light mode values */
   --faq-bg:           #ffffff;
   --faq-surface:      #f4f4f5;
   --faq-surface-alt:  #e4e4e7;
@@ -21,17 +18,18 @@
   --faq-text:         #0f0f0f;
   --faq-text-muted:   #3f3f46;
   --faq-text-faint:   #71717a;
-  --faq-accent:       #16a34a;          /* green — matches lime theme */
-  --faq-accent-dim:   rgba(22,163,74, 0.10);
-  --faq-accent-border:rgba(22,163,74, 0.30);
+  --faq-accent:       #16a34a;
+  --faq-accent-dim:   rgba(22, 163, 74, 0.10);
+  --faq-accent-border:rgba(22, 163, 74, 0.30);
   --faq-backdrop:     rgba(0, 0, 0, 0.55);
   --faq-shadow:
-    0 8px 32px rgba(0,0,0,0.12),
-    0 2px 8px  rgba(0,0,0,0.08);
+    0 8px 32px rgba(0, 0, 0, 0.12),
+    0 2px 8px  rgba(0, 0, 0, 0.08);
+  /* Dot pulse glow — defined as tokens so @keyframes can use them */
+  --faq-dot-glow-soft:   rgba(22, 163, 74, 0.35);
+  --faq-dot-glow-strong: rgba(22, 163, 74, 0.70);
 }
 
-/* Dark mode override — matches Openroot dark theme */
-/* ── DARK MODE via manual toggle ─────────────────────── */
 [data-theme="dark"] .faq-fullscreen {
   --faq-bg:            #18181b;
   --faq-surface:       #27272a;
@@ -48,11 +46,12 @@
   --faq-shadow:
     0 8px 32px rgba(0, 0, 0, 0.5),
     0 2px 8px  rgba(0, 0, 0, 0.3);
+  --faq-dot-glow-soft:   rgba(163, 232, 123, 0.35);
+  --faq-dot-glow-strong: rgba(163, 232, 123, 0.70);
 }
 
-/* ── DARK MODE via OS system preference ───────────────── */
 @media (prefers-color-scheme: dark) {
-  .faq-fullscreen {
+  .faq-fullscreen:not([data-theme-handled]) {
     --faq-bg:            #18181b;
     --faq-surface:       #27272a;
     --faq-surface-alt:   #3f3f46;
@@ -68,10 +67,11 @@
     --faq-shadow:
       0 8px 32px rgba(0, 0, 0, 0.5),
       0 2px 8px  rgba(0, 0, 0, 0.3);
+    --faq-dot-glow-soft:   rgba(163, 232, 123, 0.35);
+    --faq-dot-glow-strong: rgba(163, 232, 123, 0.70);
   }
 }
 
-/* ── Force light mode when user explicitly toggled light ─ */
 [data-theme="light"] .faq-fullscreen {
   --faq-bg:           #ffffff;
   --faq-surface:      #f4f4f5;
@@ -88,8 +88,9 @@
   --faq-shadow:
     0 8px 32px rgba(0, 0, 0, 0.12),
     0 2px 8px  rgba(0, 0, 0, 0.08);
+  --faq-dot-glow-soft:   rgba(22, 163, 74, 0.35);
+  --faq-dot-glow-strong: rgba(22, 163, 74, 0.70);
 }
-
 
 
 /* ============================================================
@@ -104,7 +105,7 @@
   align-items: center;
   justify-content: center;
   padding: clamp(1rem, 3vw, 2rem);
-  animation: faq-overlay-in 0.22s cubic-bezier(0.16,1,0.3,1) both;
+  animation: faq-overlay-in 0.22s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
 @keyframes faq-overlay-in {
@@ -112,18 +113,13 @@
   to   { opacity: 1; }
 }
 
-/* Backdrop — no pointer events, purely visual */
 .faq-backdrop {
   position: absolute;
   inset: 0;
   background: var(--faq-backdrop);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  pointer-events: none;   /* ← cannot be clicked */
-}
-
-@media (max-width: 640px) {
-  .faq-fullscreen { align-items: flex-end; padding: 0; }
+  pointer-events: none;
 }
 
 
@@ -156,20 +152,12 @@
   pointer-events: none;
   background: linear-gradient(
     90deg,
-    transparent          0%,
+    transparent              0%,
     var(--faq-accent-border) 20%,
-    var(--faq-accent)    50%,
+    var(--faq-accent)        50%,
     var(--faq-accent-border) 80%,
-    transparent          100%
+    transparent              100%
   );
-}
-
-@media (max-width: 640px) {
-  .faq-panel {
-    max-width: 100%;
-    max-height: 92dvh;
-    border-radius: 16px 16px 0 0;
-  }
 }
 
 
@@ -182,7 +170,7 @@
   display: flex;
   align-items: center;
   gap: 0.75rem;
-  padding: clamp(0.85rem,2vw,1.1rem) clamp(1rem,2.5vw,1.4rem);
+  padding: clamp(0.85rem, 2vw, 1.1rem) clamp(1rem, 2.5vw, 1.4rem);
   background: var(--faq-bg);
   border-bottom: 1px solid var(--faq-border);
 }
@@ -194,6 +182,7 @@
   flex-shrink: 0;
 }
 
+/* FIX: dot pulse now uses CSS variable tokens — no hardcoded rgba per mode */
 .faq-live-dot {
   width: 7px;
   height: 7px;
@@ -204,21 +193,15 @@
 }
 
 @keyframes faq-dot-pulse {
-  0%,100% { box-shadow: 0 0 4px  rgba(22,163,74,0.4); }
-  50%     { box-shadow: 0 0 12px rgba(22,163,74,0.7); }
+  0%,100% { box-shadow: 0 0 4px  var(--faq-dot-glow-soft); }
+  50%     { box-shadow: 0 0 12px var(--faq-dot-glow-strong); }
 }
 
-[data-theme="dark"] .faq-live-dot {
-  animation-name: faq-dot-pulse-dark;
-}
-
-@keyframes faq-dot-pulse-dark {
-  0%,100% { box-shadow: 0 0 4px  rgba(163,232,123,0.4); }
-  50%     { box-shadow: 0 0 12px rgba(163,232,123,0.7); }
-}
+/* FIX: removed duplicate [data-theme="dark"] keyframe —
+   token --faq-dot-glow-* handles both modes automatically */
 
 .faq-header-title {
-  font-size: clamp(0.82rem,1.6vw,0.92rem);
+  font-size: clamp(0.82rem, 1.6vw, 0.92rem);
   font-weight: 800;
   letter-spacing: -0.02em;
   color: var(--faq-text);
@@ -278,7 +261,7 @@
 .faq-search:focus {
   border-color: var(--faq-accent-border);
   background: var(--faq-bg);
-  outline: none;
+  outline: none; /* FIX: explicit outline:none stops browser black ring */
   box-shadow: 0 0 0 3px var(--faq-accent-dim);
 }
 
@@ -319,6 +302,9 @@
   gap: 0.38rem;
   flex-shrink: 0;
   padding: 0.36rem 0.85rem;
+  /* FIX: min-height for touch target compliance */
+  min-height: 36px;
+  margin-left: auto;
   font-family: inherit;
   font-size: 0.68rem;
   font-weight: 700;
@@ -332,7 +318,7 @@
   cursor: pointer;
   transition:
     color 0.2s ease, background 0.2s ease,
-    border-color 0.2s ease, transform 0.2s cubic-bezier(0.16,1,0.3,1);
+    border-color 0.2s ease, transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .faq-esc-badge {
@@ -349,8 +335,9 @@
   border: 1px solid var(--faq-border-hard);
 }
 
-@media (max-width: 380px) { .faq-esc-badge { display: none; } }
-@media (max-width: 480px) { .faq-close-btn span:last-child { display: none; } }
+/* FIX: target explicit class instead of fragile :last-child */
+@media (max-width: 380px) { .faq-esc-badge         { display: none; } }
+@media (max-width: 480px) { .faq-close-btn-label   { display: none; } }
 
 @media (hover: hover) and (pointer: fine) {
   .faq-close-btn:hover {
@@ -386,10 +373,11 @@
   display: flex;
   flex-direction: column;
   gap: 0.2rem;
-  padding: clamp(0.75rem,1.5vw,1rem);
+  padding: clamp(0.75rem, 1.5vw, 1rem);
   border-right: 1px solid var(--faq-border);
   background: var(--faq-surface);
   overflow-y: auto;
+  -webkit-overflow-scrolling: touch; /* FIX: momentum scroll on iOS */
   scrollbar-width: none;
 }
 
@@ -402,6 +390,8 @@
   align-items: center;
   gap: 0.5rem;
   padding: 0.58rem 0.7rem;
+  /* FIX: min-height for touch target compliance */
+  min-height: 44px;
   border-radius: 8px;
   background: transparent;
   border: 1px solid transparent;
@@ -447,7 +437,7 @@
   flex: 1;
   position: relative;
   z-index: 1;
-  font-size: clamp(0.7rem,1.2vw,0.78rem);
+  font-size: clamp(0.7rem, 1.2vw, 0.78rem);
   font-weight: 600;
   color: var(--faq-text-muted);
   letter-spacing: -0.01em;
@@ -514,7 +504,8 @@
   overflow-y: auto;
   overflow-x: hidden;
   overscroll-behavior: contain;
-  padding: clamp(0.75rem,1.8vw,1.1rem);
+  -webkit-overflow-scrolling: touch; /* FIX: momentum scroll on iOS */
+  padding: clamp(0.75rem, 1.8vw, 1.1rem);
   scrollbar-width: thin;
   scrollbar-color: var(--faq-border-hard) transparent;
 }
@@ -548,7 +539,7 @@
 }
 
 .faq-section-heading-title {
-  font-size: clamp(0.82rem,1.5vw,0.92rem);
+  font-size: clamp(0.82rem, 1.5vw, 0.92rem);
   font-weight: 800;
   color: var(--faq-text);
   letter-spacing: -0.02em;
@@ -626,7 +617,9 @@
   display: flex;
   align-items: center;
   gap: 0.65rem;
-  padding: clamp(0.72rem,1.5vw,0.88rem) clamp(0.85rem,2vw,1.05rem);
+  padding: clamp(0.72rem, 1.5vw, 0.88rem) clamp(0.85rem, 2vw, 1.05rem);
+  /* FIX: guarantee 44px touch target */
+  min-height: 44px;
   font-family: inherit;
   cursor: pointer;
   background: transparent;
@@ -662,7 +655,7 @@
 }
 
 .faq-item-question {
-  font-size: clamp(0.76rem,1.35vw,0.84rem);
+  font-size: clamp(0.76rem, 1.35vw, 0.84rem);
   font-weight: 600;
   color: var(--faq-text);
   line-height: 1.4;
@@ -681,7 +674,7 @@
   background: var(--faq-surface);
   border: 1px solid var(--faq-border);
   transition:
-    transform    0.3s cubic-bezier(0.16,1,0.3,1),
+    transform    0.3s cubic-bezier(0.16, 1, 0.3, 1),
     color        0.22s ease,
     background   0.22s ease,
     border-color 0.22s ease;
@@ -697,15 +690,15 @@
 .faq-item-answer {
   padding:
     0
-    clamp(0.85rem,2vw,1.05rem)
-    clamp(0.75rem,1.8vw,0.9rem)
-    clamp(0.85rem,2vw,1.05rem);
+    clamp(0.85rem, 2vw, 1.05rem)
+    clamp(0.75rem, 1.8vw, 0.9rem)
+    clamp(0.85rem, 2vw, 1.05rem);
   border-top: 1px solid var(--faq-border);
   background: var(--faq-surface);
 }
 
 .faq-item-answer-para {
-  font-size: clamp(0.73rem,1.3vw,0.81rem);
+  font-size: clamp(0.73rem, 1.3vw, 0.81rem);
   font-weight: 400;
   line-height: 1.75;
   color: var(--faq-text-muted);
@@ -723,40 +716,168 @@
 
 
 /* ============================================================
-   MOBILE — horizontal pill tabs
+   MOBILE ≤ 640px — BOTTOM SHEET
    ============================================================ */
 
 @media (max-width: 640px) {
+
+  /* ── Overlay — anchor to bottom ──────────────────────────── */
+  .faq-fullscreen {
+    align-items: flex-end;
+    padding: 0;
+  }
+
+  /* ── Panel — full-width bottom sheet ─────────────────────── */
+  .faq-panel {
+    max-width: 100%;
+    width: 100%;
+    max-height: 92dvh;
+    border-radius: 20px 20px 0 0;
+    /* FIX: safe area inset — prevents content hiding behind home bar */
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+    animation: faq-sheet-up 0.28s cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+
+  @keyframes faq-sheet-up {
+    from { transform: translateY(40px); opacity: 0; }
+    to   { transform: translateY(0);    opacity: 1; }
+  }
+
+  /* FIX: top accent stripe — border-radius is now 20px, stripe must match */
+  .faq-panel::after {
+    border-radius: 20px 20px 0 0;
+  }
+
+  /* ── Drag handle — visual affordance for bottom sheet ─────── */
+  /* Injected as a ::before on the header so it doesn't conflict
+     with ::after (accent stripe) on the panel itself */
+  .faq-header::before {
+    content: "";
+    position: absolute;
+    top: -14px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 36px;
+    height: 4px;
+    border-radius: 999px;
+    background: var(--faq-border-hard);
+    pointer-events: none;
+  }
+
+  /* Header needs relative so the drag handle ::before positions correctly */
+  .faq-header {
+    position: relative;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    padding: 0.75rem 0.85rem 0.65rem;
+  }
+
+  /* Search bar drops to its own full-width row */
+  .faq-search-wrap {
+    order: 3;
+    flex-basis: 100%;
+  }
+
+  /* Close button — icon-only on mobile, keep min touch size */
+  .faq-close-btn {
+    padding: 0.36rem 0.65rem;
+    min-height: 36px;
+    min-width: 44px;
+    justify-content: center;
+  }
+
+  /* ── Body — stack sidebar above content ──────────────────── */
   .faq-body { flex-direction: column; }
 
+  /* ── Sidebar — horizontal scrolling pill tabs ─────────────── */
   .faq-sidebar {
     width: 100%;
     flex-direction: row;
     gap: 0.4rem;
-    padding: 0.6rem 0.75rem;
+    padding: 0.55rem 0.75rem;
     overflow-x: auto;
     overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
     border-right: none;
     border-bottom: 1px solid var(--faq-border);
-    scrollbar-width: none;
+    /* Fade out edges to hint more content */
+    mask-image: linear-gradient(
+      to right,
+      transparent 0px,
+      black 16px,
+      black calc(100% - 16px),
+      transparent 100%
+    );
+    -webkit-mask-image: linear-gradient(
+      to right,
+      transparent 0px,
+      black 16px,
+      black calc(100% - 16px),
+      transparent 100%
+    );
   }
-
-  .faq-sidebar::-webkit-scrollbar { display: none; }
 
   .faq-tab {
     flex-shrink: 0;
-    padding: 0.38rem 0.75rem;
+    padding: 0.38rem 0.85rem;
     border-radius: 999px;
+    min-height: 36px;
+    min-width: 44px;
+    width: auto;
     gap: 0.35rem;
   }
 
-  .faq-tab-count  { display: none; }
   .faq-tab-indicator { border-radius: 999px; }
-  .faq-sidebar-help  { display: none; }
-  .faq-content       { padding: 0.65rem; }
 
-  .faq-header { flex-wrap: wrap; gap: 0.5rem; }
-  .faq-search-wrap { order: 3; flex-basis: 100%; }
+  /* Count badges + help section not needed in pill row */
+  .faq-tab-count   { display: none; }
+  .faq-sidebar-help { display: none; }
+
+  /* ── Content ──────────────────────────────────────────────── */
+  .faq-content { padding: 0.65rem; }
+
+  /* FIX: max-width: 60ch on answer para causes horizontal scroll
+     at 320px — reset to 100% inside the modal on mobile */
+  .faq-item-answer-para { max-width: 100%; }
+
+  /* FIX: section heading vertical padding trimmed — space is precious */
+  .faq-section-heading {
+    padding-top: 0.25rem;
+    padding-bottom: 0.55rem;
+    margin-bottom: 0.2rem;
+  }
+
+  /* FIX: sub-label under section heading hidden — too much vertical space */
+  .faq-section-heading-sub { display: none; }
+
+  /* Empty state padding trimmed on mobile */
+  .faq-empty { padding: 2rem 1rem; }
+}
+
+
+/* ============================================================
+   VERY SMALL SCREENS — 320px
+   ============================================================ */
+
+@media (max-width: 360px) {
+
+  .faq-header-count { display: none; }
+
+  .faq-item-trigger {
+    padding-left: 0.65rem;
+    padding-right: 0.65rem;
+    gap: 0.45rem;
+  }
+
+  .faq-item-answer {
+    padding-left: 0.65rem;
+    padding-right: 0.65rem;
+  }
+
+  .faq-sidebar {
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+  }
 }
 
 

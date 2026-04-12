@@ -1,52 +1,69 @@
 /* ═══════════════════════════════════════════════════════════════
    AboutCompany.module.css
    Range: 320px → 2560px  ·  Grid: 4px  ·  Fluid: clamp()
-   Colors: #a3e87b (lime-green accent) · #0a0a0a (ink) · #fff
+   Colors: #16a34a (light) · #a3e87b (dark) · #0a0a0a (ink)
+   ═══════════════════════════════════════════════════════════════
+   CLEANUP v2 — 2026.4
+   ✓ --_brand-ui adaptive token eliminates 8 scattered dark overrides
+   ✓ cred-mark cascade fixed — soft-green shadow block removed
+   ✓ :global() selector fixed on system-pref media query fallbacks
+   ✓ .note-callout / .note-accent / .divider reused from app.css (global)
    ═══════════════════════════════════════════════════════════════ */
 
 
-/* ── Local brand tokens ─────────────────────────────────────────
-   Scoped to .pageRoot. Never bleeds into global scope.          */
+/* ── Local brand tokens — LIGHT MODE (default) ────────────────── */
 .pageRoot {
-  --_brand:         #a3e87b;
-  --_brand-mid:     #8dd45f;
-  --_brand-dark:    #6ab83e;
-  --_brand-soft:    rgba(163, 232, 123, 0.10);
-  --_brand-text:    #1a3a08;
+  --_brand:         #16a34a;
+  --_brand-mid:     #15803d;
+  --_brand-dark:    #166534;
+  --_brand-soft:    rgba(22, 163, 74, 0.10);
+  --_brand-text:    #052e16;
+
+  /*
+   * --_brand-ui — ADAPTIVE ACCENT
+   * Light: dark-green (#166534) for text on white  → readable, AA-pass
+   * Dark:  bright-green (#a3e87b) for text on dark → readable, AA-pass
+   * Use this everywhere a color was being duplicated in dark-mode overrides.
+   */
+  --_brand-ui:      #166534;
 
   --_ink:           #0a0a0a;
   --_ink-muted:     #3d3d3d;
   --_ink-faint:     #7a7a7a;
 
   --_surface-0:     #ffffff;
-  --_surface-1:     #f7faf4;
-  --_surface-2:     #eef5e8;
+  --_surface-1:     #f0fdf4;
+  --_surface-2:     #dcfce7;
 
   --_border:        rgba(0, 0, 0, 0.08);
   --_border-mid:    rgba(0, 0, 0, 0.14);
   --_border-strong: rgba(0, 0, 0, 0.22);
 
-  --_glow:          rgba(163, 232, 123, 0.07);
-  --_glow-mid:      rgba(163, 232, 123, 0.14);
-  --_glow-strong:   rgba(163, 232, 123, 0.24);
+  --_glow:          rgba(22, 163, 74, 0.07);
+  --_glow-mid:      rgba(22, 163, 74, 0.14);
+  --_glow-strong:   rgba(22, 163, 74, 0.24);
+
+  --_hl-green:      rgba(22, 163, 74, 0.22);
+  --_hl-green-edge: rgba(22, 163, 74, 0.08);
 }
 
 
 /* ── Dark mode — manual toggle ──────────────────────────────── */
 :global([data-theme="dark"]) .pageRoot {
   --_brand:         #a3e87b;
-  --_brand-mid:     #b8f08e;
-  --_brand-dark:    #7bc94d;
+  --_brand-mid:     #8dd45f;
+  --_brand-dark:    #6ab83e;
   --_brand-soft:    rgba(163, 232, 123, 0.10);
   --_brand-text:    #0a1e04;
+  --_brand-ui:      #a3e87b;   /* flips to bright green in dark */
 
   --_ink:           #f0f0f0;
   --_ink-muted:     #a8a8a8;
   --_ink-faint:     #5c5c5c;
 
   --_surface-0:     #0d0d0d;
-  --_surface-1:     #131313;
-  --_surface-2:     #1a1a1a;
+  --_surface-1:     #131a14;
+  --_surface-2:     #1a251b;
 
   --_border:        rgba(255, 255, 255, 0.07);
   --_border-mid:    rgba(255, 255, 255, 0.12);
@@ -55,6 +72,9 @@
   --_glow:          rgba(163, 232, 123, 0.06);
   --_glow-mid:      rgba(163, 232, 123, 0.12);
   --_glow-strong:   rgba(163, 232, 123, 0.20);
+
+  --_hl-green:      rgba(163, 232, 123, 0.18);
+  --_hl-green-edge: rgba(163, 232, 123, 0.06);
 }
 
 
@@ -62,18 +82,19 @@
 @media (prefers-color-scheme: dark) {
   :global(:root:not([data-theme])) .pageRoot {
     --_brand:         #a3e87b;
-    --_brand-mid:     #b8f08e;
-    --_brand-dark:    #7bc94d;
+    --_brand-mid:     #8dd45f;
+    --_brand-dark:    #6ab83e;
     --_brand-soft:    rgba(163, 232, 123, 0.10);
     --_brand-text:    #0a1e04;
+    --_brand-ui:      #a3e87b;
 
     --_ink:           #f0f0f0;
     --_ink-muted:     #a8a8a8;
     --_ink-faint:     #5c5c5c;
 
     --_surface-0:     #0d0d0d;
-    --_surface-1:     #131313;
-    --_surface-2:     #1a1a1a;
+    --_surface-1:     #131a14;
+    --_surface-2:     #1a251b;
 
     --_border:        rgba(255, 255, 255, 0.07);
     --_border-mid:    rgba(255, 255, 255, 0.12);
@@ -82,10 +103,11 @@
     --_glow:          rgba(163, 232, 123, 0.06);
     --_glow-mid:      rgba(163, 232, 123, 0.12);
     --_glow-strong:   rgba(163, 232, 123, 0.20);
+
+    --_hl-green:      rgba(163, 232, 123, 0.18);
+    --_hl-green-edge: rgba(163, 232, 123, 0.06);
   }
 }
-
-
 
 
 /* ╔═══════════════════════════════════════════════════════════════╗
@@ -98,8 +120,6 @@
   color: var(--_ink);
   background-color: transparent;
 }
-
-
 
 
 /* ╔═══════════════════════════════════════════════════════════════╗
@@ -156,7 +176,7 @@
 }
 
 
-/* ── Split layout ────────────────────────────────────────────── */
+/* ── Split layout ─────────────────────────────────────────────── */
 .whoSplit {
   display: grid;
   grid-template-columns: 1fr;
@@ -169,7 +189,7 @@
 }
 
 
-/* ── Left column ─────────────────────────────────────────────── */
+/* ── Left column ──────────────────────────────────────────────── */
 .whoLeft {
   display: flex;
   flex-direction: column;
@@ -182,17 +202,108 @@
   gap: var(--sp-xs);
 }
 
+
+/* ── CREDIBILITY — Highlighter Paper Card ─────────────────────── */
 .credibility {
-  font-size: var(--fz-md);
-  line-height: 1.7;
-  color: var(--_ink-muted);
-  padding: var(--sp-sm) var(--sp-md);
-  background-color: var(--_surface-1);
-  border-left: 3px solid var(--_brand);
-  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
-  transition: background-color 200ms ease;
+  position: relative;
+  padding: 18px 20px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--_border-mid);
+  background-color: #fafaf7;
+  background-image: repeating-linear-gradient(
+    transparent,
+    transparent 27px,
+    rgba(0, 0, 0, 0.042) 28px
+  );
+  box-shadow: 0 1px 2px rgba(0,0,0,0.04), 0 3px 10px rgba(0,0,0,0.06);
 }
 
+:global([data-theme="dark"]) .credibility,
+:global(:root:not([data-theme="light"])) .credibility {
+  background-color: #1c1b18;
+  background-image: repeating-linear-gradient(
+    transparent,
+    transparent 27px,
+    rgba(255, 255, 255, 0.032) 28px
+  );
+  border-color: var(--_border-mid);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.25), 0 4px 14px rgba(0,0,0,0.32);
+}
+
+.credibility-headline {
+  font-size: var(--fz-md);
+  line-height: 2;
+  color: var(--_ink-muted);
+  margin: 0;
+  max-width: none;
+  background: none;
+  border: none;
+  padding: 0;
+}
+
+
+/* ── HIGHLIGHT MARK ────────────────────────────────────────────── */
+/*
+ * Light mode: yellow highlighter (DrawOnScroll via .cred-inview)
+ * Dark mode:  neon lime — overridden below, declared AFTER base rule
+ *             so it wins in the cascade without needing !important.
+ */
+.cred-mark {
+  position: relative;
+  display: inline;
+  font-weight: 700;
+  color: var(--_ink);
+  background-color: transparent;
+  padding: 0 3px;
+
+  background-image: linear-gradient(
+    104deg,
+    transparent              0%,
+    rgba(210, 255, 60, 0)    2%,
+    rgba(210, 255, 60, 0.58) 4%,
+    rgba(210, 255, 60, 0.50) 93%,
+    rgba(210, 255, 60, 0.15) 97%,
+    transparent              100%
+  );
+  background-repeat: no-repeat;
+  background-size: 0% 70%;
+  background-position: 0% 82%;
+  border-radius: 1px;
+  transition: background-size 0.52s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* Dark mode — neon lime, fully visible on dark paper.
+   MUST stay after the base .cred-mark rule so cascade is correct. */
+:global([data-theme="dark"]) .cred-mark,
+:global(:root:not([data-theme="light"])) .cred-mark {
+  color: #f0ffd6;
+  background-image: linear-gradient(
+    104deg,
+    transparent                0%,
+    rgba(130, 230, 40, 0)      2%,
+    rgba(130, 230, 40, 0.72)   4%,
+    rgba(130, 230, 40, 0.62)   93%,
+    rgba(130, 230, 40, 0.18)   97%,
+    transparent                100%
+  );
+}
+
+/* Staggered delays — feels like scanning & highlighting manually */
+.cred-mark--2 { transition-delay: 0.18s; }
+.cred-mark--3 { transition-delay: 0.34s; }
+
+/* Trigger: IntersectionObserver adds .cred-inview to the card */
+.cred-inview .cred-mark { background-size: 100% 70%; }
+
+@media (prefers-reduced-motion: reduce) {
+  .cred-mark {
+    background-size: 100% 70% !important;
+    transition: none !important;
+  }
+}
+
+
+/* ── Proof grid ───────────────────────────────────────────────── */
 .proofGrid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -239,17 +350,13 @@
 
 .proofCard:hover::after { transform: scaleX(1); }
 
+/* --_brand-ui auto-adapts: dark green in light, bright green in dark */
 .proofKicker {
   font-size: var(--fz-xs);
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.1em;
-  color: var(--_brand-dark);
-}
-
-:global([data-theme="dark"]) .proofKicker,
-:global(:root:not([data-theme])) .proofKicker {
-  color: var(--_brand);
+  color: var(--_brand-ui);
 }
 
 .proofText {
@@ -339,7 +446,7 @@
 }
 
 
-/* ── Front card internals ────────────────────────────────────── */
+/* ── Front card internals ─────────────────────────────────────── */
 .stackHeader {
   display: flex;
   align-items: center;
@@ -418,17 +525,13 @@
   animation: dotPulse 2.4s ease-in-out infinite;
 }
 
+/* --_brand-ui: dark-green on light, bright-green on dark */
 .stackStatusLabel {
   font-size: var(--fz-2xs);
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.08em;
-  color: var(--_brand-dark);
-}
-
-:global([data-theme="dark"]) .stackStatusLabel,
-:global(:root:not([data-theme])) .stackStatusLabel {
-  color: var(--_brand);
+  color: var(--_brand-ui);
 }
 
 .stackTaglineWrap {
@@ -474,12 +577,8 @@
   z-index: 1;
 }
 
-.stackTaglineAccent { color: var(--_brand-dark); }
-
-:global([data-theme="dark"]) .stackTaglineAccent,
-:global(:root:not([data-theme])) .stackTaglineAccent {
-  color: var(--_brand);
-}
+/* --_brand-ui handles the light/dark flip automatically */
+.stackTaglineAccent { color: var(--_brand-ui); }
 
 .stackTaglineNote {
   font-size: var(--fz-sm);
@@ -554,15 +653,8 @@
   font-weight: 600;
   font-family: ui-monospace, "Cascadia Code", monospace;
   letter-spacing: 0.06em;
-  color: var(--_brand-dark);
+  color: var(--_brand-ui);
 }
-
-:global([data-theme="dark"]) .stackFooterValue,
-:global(:root:not([data-theme])) .stackFooterValue {
-  color: var(--_brand);
-}
-
-
 
 
 /* ╔═══════════════════════════════════════════════════════════════╗
@@ -613,7 +705,7 @@
 }
 
 
-/* ── Offer card ──────────────────────────────────────────────── */
+/* ── Offer card ───────────────────────────────────────────────── */
 .offerCard {
   position: relative;
   display: flex;
@@ -635,7 +727,6 @@
   align-self: stretch;
 }
 
-/* Single canonical definition — no duplicate below */
 .offerBody {
   display: flex;
   flex-direction: column;
@@ -645,28 +736,28 @@
   min-width: 0;
 }
 
+/* Reuse global app.css utilities — no local override needed */
 .offerBody :global(.divider)      { margin-block: 0; opacity: 0.2; border-color: var(--_border-mid); }
 .offerBody :global(.note-callout) { margin-top: 0; }
 
+
+/* ── Offer tag ────────────────────────────────────────────────── */
 .offerTag {
   align-self: flex-start;
   font-size: 0.6rem;
   font-weight: 800;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  padding: 3px 10px;
+  padding: 4px 12px;
   border-radius: 999px;
-  background-color: var(--_surface-2);
-  border: 1px solid var(--_border-mid);
-  color: var(--_brand-dark);
-  transition: background-color 200ms ease;
+  background-color: var(--_brand-soft);
+  border: 1.5px solid var(--_brand-ui);
+  color: var(--_brand-ui);
+  transition: background-color 200ms ease, border-color 200ms ease;
 }
 
-:global([data-theme="dark"]) .offerTag,
-:global(:root:not([data-theme])) .offerTag {
-  color: var(--_brand);
-}
 
+/* ── Offer title / intro / subheading ────────────────────────── */
 .offerTitle {
   font-size: var(--fz-lg);
   line-height: 1.2;
@@ -690,6 +781,8 @@
   margin: 0;
 }
 
+
+/* ── Offer list ───────────────────────────────────────────────── */
 .offerList {
   list-style: none !important;
   padding: 0 !important;
@@ -722,14 +815,9 @@
   font-size: 0.58rem;
   font-weight: 800;
   border-radius: var(--radius-pill);
-  border: 1.5px solid var(--_border-strong);
-  background-color: var(--_surface-2);
-  color: var(--_brand-dark);
-}
-
-:global([data-theme="dark"]) .offerList li::before,
-:global(:root:not([data-theme])) .offerList li::before {
-  color: var(--_brand);
+  border: 1.5px solid var(--_brand-ui);
+  background-color: var(--_brand-soft);
+  color: var(--_brand-ui);
 }
 
 .offerList li > span { flex: 1; min-width: 0; }
@@ -746,7 +834,7 @@
 }
 
 
-/* ── Offer image panel — desktop only ───────────────────────── */
+/* ── Offer image panel — desktop only ────────────────────────── */
 .offerImagePanel { display: none; }
 
 @media (min-width: 768px) {
@@ -820,23 +908,22 @@
 .offerHighlightChip {
   display: inline-flex;
   align-items: center;
-  gap: 5px;
+  gap: 6px;
   font-size: 0.62rem;
   font-weight: 700;
-  letter-spacing: 0.07em;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
-  padding: 4px 10px;
+  padding: 5px 12px;
   border-radius: 999px;
-  background-color: var(--_surface-2);
-  border: 1.5px solid var(--_border-strong);
-  color: var(--_brand-dark);
+  background-color: transparent;
+  border: 1.5px solid var(--_border-mid);
+  color: var(--_ink-muted);
   white-space: nowrap;
-  transition: background-color 150ms ease, border-color 150ms ease;
-}
-
-:global([data-theme="dark"]) .offerHighlightChip,
-:global(:root:not([data-theme])) .offerHighlightChip {
-  color: var(--_brand);
+  transition:
+    background-color 160ms ease,
+    border-color     160ms ease,
+    color            160ms ease,
+    transform        160ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .offerHighlightChip::before {
@@ -846,16 +933,15 @@
   height: 5px;
   border-radius: 50%;
   background: var(--_brand);
-  opacity: 0.9;
   flex-shrink: 0;
 }
 
 .offerHighlightChip:hover {
   background-color: var(--_brand-soft);
   border-color: var(--_brand);
+  color: var(--_brand-ui);   /* auto-adapts — no dark override needed */
+  transform: translateY(-1px);
 }
-
-
 
 
 /* ╔═══════════════════════════════════════════════════════════════╗
@@ -873,7 +959,6 @@
   outline: none;
 }
 
-/* CAROUSEL ROW — relative anchor for desktop floating arrows */
 .carouselRow {
   position: relative;
   width: 100%;
@@ -896,17 +981,12 @@
 
 .carouselTrack:active { cursor: grabbing; }
 
-/* Swipe hint — fires once on first slide, mobile only (gated in media query) */
-/*.carouselTrackHint { /* see @media (max-width: 767px) block }*/ 
-
 .carouselSlide {
   flex-shrink: 0;
   display: flex;
   flex-direction: column;
   height: auto;
 }
-
-
 
 
 /* ╔═══════════════════════════════════════════════════════════════╗
@@ -938,8 +1018,9 @@
     opacity          160ms ease;
 }
 
+/* Glass treatment in dark — surface change, not a brand color, keep as override */
 :global([data-theme="dark"]) .arrowBtn,
-:global(:root:not([data-theme])) .arrowBtn {
+:global(:root:not([data-theme="light"])) .arrowBtn {
   background-color: rgba(18, 18, 18, 0.85);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
@@ -992,7 +1073,7 @@
 }
 
 :global([data-theme="dark"]) .arrowBtn:hover:not(:disabled),
-:global(:root:not([data-theme])) .arrowBtn:hover:not(:disabled) {
+:global(:root:not([data-theme="light"])) .arrowBtn:hover:not(:disabled) {
   background-color: rgba(30, 30, 30, 0.92);
 }
 
@@ -1010,9 +1091,7 @@
 }
 
 
-
-
-/* ── Dot indicators ──────────────────────────────────────────── */
+/* ── Dot indicators ───────────────────────────────────────────── */
 .carouselDots {
   display: flex;
   align-items: center;
@@ -1040,7 +1119,7 @@
 }
 
 
-/* ── Progress bar ────────────────────────────────────────────── */
+/* ── Progress bar ─────────────────────────────────────────────── */
 .carouselProgress {
   height: 1.5px;
   background: var(--_border);
@@ -1056,8 +1135,7 @@
 }
 
 
-/* ── Mobile bottom nav ───────────────────────────────────────── */
-/* Hidden on desktop; shown on mobile in place of floating arrows */
+/* ── Mobile bottom nav ────────────────────────────────────────── */
 .carouselBottomNav { display: none; }
 
 .carouselNavBtn {
@@ -1095,8 +1173,6 @@
 }
 
 .carouselCounter span { color: var(--_brand); }
-
-
 
 
 /* ╔═══════════════════════════════════════════════════════════════╗
@@ -1311,13 +1387,8 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  color: var(--_brand-dark);
+  color: var(--_brand-ui);   /* auto-adapts — no dark override needed */
   transition: background-color 180ms ease, border-color 180ms ease;
-}
-
-:global([data-theme="dark"]) .reasonIcon,
-:global(:root:not([data-theme])) .reasonIcon {
-  color: var(--_brand);
 }
 
 .reasonCard:hover .reasonIcon {
@@ -1336,8 +1407,6 @@
 }
 
 
-
-
 /* ╔═══════════════════════════════════════════════════════════════╗
    ║  TV / ULTRA-WIDE ≥ 2200px                                      ║
    ╚═══════════════════════════════════════════════════════════════╝ */
@@ -1347,8 +1416,6 @@
   .missionWrapper,
   .carouselOuter { width: 100%; }
 }
-
-
 
 
 /* ╔═══════════════════════════════════════════════════════════════╗
@@ -1370,22 +1437,17 @@
 }
 
 
-
-
 /* ╔═══════════════════════════════════════════════════════════════╗
    ║  MOBILE — CONSOLIDATED  ≤ 767px                                ║
-   ║  All mobile overrides in one block — no scattered duplicates  ║
    ╚═══════════════════════════════════════════════════════════════╝ */
 
 @media (max-width: 767px) {
 
-  /* Section clips the peek bleed from overflow:visible viewport */
   .offersSection {
     padding-inline: 0 !important;
     overflow: hidden;
   }
 
-  /* Gutter padding moves to the outer shell, not the section */
   .carouselOuter {
     width: 100%;
     margin-inline: 0;
@@ -1393,21 +1455,17 @@
     box-sizing: border-box;
   }
 
-  /* Viewport bleeds right so next card peek is always visible */
   .carouselViewport {
     width: 100%;
     overflow: visible;
   }
 
-  /* Swipe hint nudges left on first load to signal more cards exist */
   .carouselTrackHint {
     animation: swipeHint 0.9s cubic-bezier(0.22, 1, 0.36, 1) 1.2s both;
   }
 
-  /* Hide desktop floating arrow capsule entirely */
   .arrowBtn { display: none; }
 
-  /* Show bottom prev/next nav in place of arrows */
   .carouselBottomNav {
     display: flex;
     align-items: center;
@@ -1417,9 +1475,7 @@
     gap: var(--sp-sm);
   }
 
-  /* Hide dots — counter in bottom nav replaces them */
   .carouselDots { display: none; }
 
-  /* Keep progress bar but align with card gutters */
   .carouselProgress { margin-inline: var(--sp-4); }
 }
