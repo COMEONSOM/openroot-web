@@ -50,7 +50,8 @@ export const OFFER_CARDS: OfferCard[] = [
     tag:        "Openroot Classes",
     title:      "Learn Skills That Actually Help",
     accentVar:  "var(--ot-accent-warm, #f59e0b)",
-    image:     "/images/offers/openroot-classes.webp",
+    image:     "/assets/openroot-classes.avif",
+    link: "/software/openroot-classes",
     highlights: ["Preminum Content","Affordable Pricing","100% Online Live Classes"],
     intro: (
       <>
@@ -103,7 +104,8 @@ export const OFFER_CARDS: OfferCard[] = [
     tag:        "Software Solutions",
     title:      "Software Built for Real-World Businesses",
     accentVar:  "var(--ot-accent-cool, #6366f1)",
-    image:     "/images/offers/software-solutions.webp",
+    image:     "/assets/software-solutions.avif",
+    link: "/software-solutions",
     highlights: ["Custom Built", "MSME-Focused", "Scalable", "Maintainable"],
     intro: (
       <>

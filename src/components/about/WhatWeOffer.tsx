@@ -8,7 +8,8 @@
 // MOBILE: floating arrows hidden → replaced by bottom prev/next nav + counter
 // =============================================================================
 
-import { memo } from "react";
+import { memo, useCallback } from "react";
+import { useNavigate } from "react-router-dom";
 import { motion, useReducedMotion } from "framer-motion";
 import styles from "../styles/AboutCompany.module.css";
 import { fadeIn, fadeUp, EASE_SOFT, VP } from "../../motion/variants";
@@ -54,6 +55,9 @@ function ChevronRight() {
 // reduced:     DISABLES ALL MOTION WHEN prefers-reduced-motion IS ACTIVE
 // "--_accent"  CUSTOM PROPERTY DRIVES THE LEFT STRIPE COLOR VIA CSS MODULE
 // tabIndex=-1  REMOVES INACTIVE CARDS FROM TAB ORDER
+// CLICKING AN ACTIVE CARD NAVIGATES TO card.link:
+//   - EXTERNAL (starts with "http") → opens in same tab via window.location.href
+//   - INTERNAL → useNavigate() for SPA navigation (no reload)
 // =============================================================================
 interface OfferCardItemProps {
   card:     OfferCard;
@@ -61,86 +65,111 @@ interface OfferCardItemProps {
   reduced:  boolean;
 }
 
-const OfferCardItem = memo(({ card, isActive, reduced }: OfferCardItemProps) => (
-  <motion.article
-    className={`${styles.offerCard} card-glass ot-glass-shine`}
-    animate={
-      reduced ? {} : {
-        scale:   isActive ? 1           : 0.94,
-        opacity: isActive ? 1           : 0.48,
-        filter:  isActive ? "blur(0px)" : "blur(1px)",
-      }
+const OfferCardItem = memo(({ card, isActive, reduced }: OfferCardItemProps) => {
+  const navigate = useNavigate();
+
+  // Handles both external URLs and internal routes
+  const handleCardClick = useCallback(() => {
+    if (!isActive) return;
+    window.scrollTo({ top: 0, behavior: "instant" }); 
+    if (card.link.startsWith("http")) {
+      window.location.href = card.link; // same tab for external
+    } else {
+      navigate(card.link);              // SPA navigation for internal routes
     }
-    transition={{ duration: 0.4, ease: EASE_SOFT }}
-    style={{ "--_accent": card.accentVar } as WithVars}
-    tabIndex={isActive ? undefined : -1}
-  >
-    {/* TOP SHIMMER HAIRLINE — PURELY DECORATIVE */}
-    <span className="ot-card-shimmer" aria-hidden="true" />
+  }, [card.link, isActive, navigate]);
 
-    {/* LEFT ACCENT STRIPE — COLOR DRIVEN BY "--_accent" CSS CUSTOM PROPERTY */}
-    <div className={styles.offerStripe} aria-hidden="true" />
+  return (
+    <motion.article
+      className={`${styles.offerCard} card-glass ot-glass-shine`}
+      animate={
+        reduced ? {} : {
+          scale:   isActive ? 1           : 0.94,
+          opacity: isActive ? 1           : 0.48,
+          filter:  isActive ? "blur(0px)" : "blur(1px)",
+        }
+      }
+      transition={{ duration: 0.4, ease: EASE_SOFT }}
+      style={{ "--_accent": card.accentVar, cursor: isActive ? "pointer" : "default" } as WithVars}
+      tabIndex={isActive ? 0 : -1}
+      onClick={isActive ? handleCardClick : undefined}
+      onKeyDown={(e) => {
+        if (isActive && (e.key === "Enter" || e.key === " ")) {
+          e.preventDefault();
+          handleCardClick();
+        }
+      }}
+      role="button"
+      aria-label={`Go to ${card.tag}`}
+      whileHover={!reduced && isActive ? { y: -4 } : {}}
+    >
+      {/* TOP SHIMMER HAIRLINE — PURELY DECORATIVE */}
+      <span className="ot-card-shimmer" aria-hidden="true" />
 
-    <div className={styles.offerBody}>
+      {/* LEFT ACCENT STRIPE — COLOR DRIVEN BY "--_accent" CSS CUSTOM PROPERTY */}
+      <div className={styles.offerStripe} aria-hidden="true" />
 
-      {/* CATEGORY BADGE */}
-      <span className={`${styles.offerTag} badge-pill`}>{card.tag}</span>
+      <div className={styles.offerBody}>
 
-      {/* CARD HEADLINE */}
-      <h3 className={`${styles.offerTitle} section-title-left text-gradient`}>
-        {card.title}
-      </h3>
+        {/* CATEGORY BADGE */}
+        <span className={`${styles.offerTag} badge-pill`}>{card.tag}</span>
 
-      <hr className="divider" />
+        {/* CARD HEADLINE */}
+        <h3 className={`${styles.offerTitle} section-title-left text-gradient`}>
+          {card.title}
+        </h3>
 
-      {/* HIGHLIGHT CHIPS */}
-      <div className={styles.offerHighlights} aria-label="Key features">
-        {card.highlights.map((h) => (
-          <span key={h} className={styles.offerHighlightChip}>{h}</span>
-        ))}
+        <hr className="divider" />
+
+        {/* HIGHLIGHT CHIPS */}
+        <div className={styles.offerHighlights} aria-label="Key features">
+          {card.highlights.map((h) => (
+            <span key={h} className={styles.offerHighlightChip}>{h}</span>
+          ))}
+        </div>
+
+        {/* INTRO PARAGRAPH */}
+        <p className={`${styles.offerIntro} text-muted`}>{card.intro}</p>
+
+        {/* SUBHEADING ABOVE BULLET LIST */}
+        <p className={styles.offerSubheading}>
+          <strong className="text-accent">{card.subheading}</strong>
+        </p>
+
+        {/* FEATURE BULLET LIST */}
+        <ul className={`${styles.offerList} ot-feature-list`}>
+          {card.items.map((item, i) => (
+            <li key={i}><span>{item}</span></li>
+          ))}
+        </ul>
+
+        {/* BOTTOM CALLOUT NOTE */}
+        <p className={`${styles.offerNote} note-callout`}>{card.note}</p>
+
       </div>
 
-      {/* INTRO PARAGRAPH */}
-      <p className={`${styles.offerIntro} text-muted`}>{card.intro}</p>
+      {/* RIGHT IMAGE PANEL — hidden on mobile via CSS, visible ≥768px */}
+      <div className={styles.offerImagePanel} aria-hidden="true">
+        {card.image ? (
+          <img
+            src={card.image}
+            alt=""
+            className={styles.offerImageEl}
+            loading="lazy"
+            decoding="async"
+            draggable={false}
+          />
+        ) : (
+          <div className={styles.offerImagePlaceholder}>
+            <span className={styles.offerImagePlaceholderIcon}>◈</span>
+            <span className={styles.offerImagePlaceholderLabel}>{card.tag}</span>
+          </div>
+        )}
+      </div>
 
-      {/* SUBHEADING ABOVE BULLET LIST */}
-      <p className={styles.offerSubheading}>
-        <strong className="text-accent">{card.subheading}</strong>
-      </p>
-
-      {/* FEATURE BULLET LIST */}
-      <ul className={`${styles.offerList} ot-feature-list`}>
-        {card.items.map((item, i) => (
-          <li key={i}><span>{item}</span></li>
-        ))}
-      </ul>
-
-      {/* BOTTOM CALLOUT NOTE */}
-      <p className={`${styles.offerNote} note-callout`}>{card.note}</p>
-
-    </div>
-
-    {/* RIGHT IMAGE PANEL — hidden on mobile via CSS, visible ≥768px */}
-    <div className={styles.offerImagePanel} aria-hidden="true">
-      {card.image ? (
-        <img
-          src={card.image}
-          alt=""
-          className={styles.offerImageEl}
-          loading="lazy"
-          decoding="async"
-          draggable={false}
-        />
-      ) : (
-        <div className={styles.offerImagePlaceholder}>
-          <span className={styles.offerImagePlaceholderIcon}>◈</span>
-          <span className={styles.offerImagePlaceholderLabel}>{card.tag}</span>
-        </div>
-      )}
-    </div>
-
-  </motion.article>
-));
+    </motion.article>
+  );
+});
 OfferCardItem.displayName = "OfferCardItem";
 
 

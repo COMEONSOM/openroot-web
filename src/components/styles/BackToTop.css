@@ -1,0 +1,112 @@
+/* ─── Back To Top Button ───────────────────────── */
+
+.back-to-top {
+  position: fixed;
+  right: 24px;
+  bottom: 24px;
+  z-index: 9999;
+
+  width: 46px;
+  height: 46px;
+
+  border: none;
+  border-radius: 50%;
+
+  background: #070707;
+  color: #ffffff;
+
+  font-size: 18px;
+  font-weight: 700;
+
+  cursor: pointer;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  /* Hidden initially */
+  opacity: 0;
+  visibility: hidden;
+
+  transform: translateY(20px) scale(0.9);
+
+  /* Smooth animation */
+  transition:
+    opacity 0.3s ease,
+    transform 0.3s ease,
+    background 0.25s ease,
+    color 0.25s ease,
+    box-shadow 0.25s ease;
+    
+  /* Subtle shadow */
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
+}
+
+
+/* ── Visible state */
+.back-to-top.show {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0) scale(1);
+}
+
+
+/* ── Hover effect */
+.back-to-top:hover {
+  background: #000000;
+  transform: translateY(-2px) scale(1.05);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.35);
+}
+
+
+/* ── Active click */
+.back-to-top:active {
+  transform: scale(0.95);
+}
+
+
+/* ── Focus (accessibility) */
+.back-to-top:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 3px;
+}
+
+
+/* ── Dark theme */
+[data-theme="dark"] .back-to-top,
+body.dark .back-to-top {
+  background: #ffffff;
+  color: #000000;
+  box-shadow: 0 4px 14px rgba(255, 255, 255, 0.15);
+}
+
+
+/* ── Auto/System mode fix (IMPORTANT) */
+.back-to-top[data-mode="system"][data-resolved="dark"] {
+  background: #ffffff;
+  color: #000000;
+}
+
+.back-to-top[data-mode="system"][data-resolved="light"] {
+  background: #070707;
+  color: #ffffff;
+}
+
+
+/* ── Mobile tweak */
+@media (max-width: 480px) {
+  .back-to-top {
+    right: 16px;
+    bottom: 16px;
+    width: 42px;
+    height: 42px;
+  }
+}
+
+
+/* ── Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .back-to-top {
+    transition: none !important;
+  }
+}

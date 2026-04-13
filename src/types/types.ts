@@ -21,6 +21,7 @@ export interface OfferCard {
   note:       ReactNode;    // BOTTOM CALLOUT NOTE — JSX SUPPORTED
   accentVar:  string;       // CSS VARIABLE STRING e.g. "var(--ot-accent-warm)"
   image?:     string;       // OPTIONAL HERO IMAGE PATH — RESERVED FOR FUTURE USE
+  link:      string;      // LINK PATH FOR "LEARN MORE" BUTTON
 }
 
 // REASON CARD DATA SHAPE — USED IN WhyWeImportant.tsx AND data.tsx

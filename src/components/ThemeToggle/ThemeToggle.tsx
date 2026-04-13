@@ -1,15 +1,16 @@
 // ============================================================
-// FLOATING THEME TOGGLE
+// FLOATING THEME TOGGLE — vertical sticky tab (LOGIN-style)
 // Consumes useTheme() from ThemeContext.
 // CSS in ./ThemeToggle.css — uses --ot-* tokens from App.css.
 // GSAP owns transform; CSS transition intentionally excludes it.
 // ============================================================
 
-import { useRef, useCallback }        from "react";
-import gsap                            from "gsap";
-import { useTheme }                    from "../../context/ThemeContext";
-import type { ThemeMode }              from "../../context/ThemeContext";
+import { useRef, useCallback }   from "react";
+import gsap                       from "gsap";
+import { useTheme }               from "../../context/ThemeContext";
+import type { ThemeMode }         from "../../context/ThemeContext";
 import "./ThemeToggle.css";
+
 
 // ─── Types ────────────────────────────────────────────────
 type Position =
@@ -18,13 +19,14 @@ type Position =
   | "middle-right" | "middle-left";
 
 interface ThemeToggleProps {
-  position?:  Position;
-  offset?:    number;
+  position?: Position;
+  offset?:   number;   // vertical offset (px) for top/bottom variants
 }
+
 
 // ─── Icons ────────────────────────────────────────────────
 const SunIcon = () => (
-  <svg width="18" height="18" viewBox="0 0 24 24" fill="none"
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
     stroke="currentColor" strokeWidth="2"
     strokeLinecap="round" strokeLinejoin="round"
     aria-hidden="true">
@@ -41,7 +43,7 @@ const SunIcon = () => (
 );
 
 const MoonIcon = () => (
-  <svg width="18" height="18" viewBox="0 0 24 24" fill="none"
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
     stroke="currentColor" strokeWidth="2"
     strokeLinecap="round" strokeLinejoin="round"
     aria-hidden="true">
@@ -50,7 +52,7 @@ const MoonIcon = () => (
 );
 
 const SystemIcon = () => (
-  <svg width="18" height="18" viewBox="0 0 24 24" fill="none"
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
     stroke="currentColor" strokeWidth="2"
     strokeLinecap="round" strokeLinejoin="round"
     aria-hidden="true">
@@ -60,27 +62,29 @@ const SystemIcon = () => (
   </svg>
 );
 
-// ─── Meta — icon + labels keyed by mode ───────────────────
+
+// ─── Meta keyed by mode ───────────────────────────────────
 const THEME_META: Record<ThemeMode, {
   icon:  React.ReactElement;
-  next:  string;
+  label: string;           // short vertical label — max 5 chars
+  next:  string;           // aria-label for NEXT state
 }> = {
-  light:  { icon: <SunIcon />, next: "Switch to dark mode"   },
-  dark:   { icon: <MoonIcon />, next: "Switch to system mode" },
-  system: { icon: <SystemIcon />, next: "Switch to light mode"  },
+  light:  { icon: <SunIcon />,    label: "LIGHT", next: "Switch to dark mode"   },
+  dark:   { icon: <MoonIcon />,   label: "DARK",  next: "Switch to system mode" },
+  system: { icon: <SystemIcon />, label: "AUTO",  next: "Switch to light mode"  },
 };
 
-// ─── Component ────────────────────────────────────────────
+
 export function ThemeToggle({
-  position  = "bottom-right",
-  offset    = 24,
+  position = "middle-right",
+  offset = 0,
 }: ThemeToggleProps) {
   const { mode, resolved, cycleTheme } = useTheme();
   const btnRef = useRef<HTMLButtonElement | null>(null);
 
   const meta = THEME_META[mode];
+  const side = position.endsWith("left") ? "left" : "right";
 
-  // GSAP press-feedback — scale bounce on click
   const handleClick = useCallback(() => {
     if (btnRef.current) {
       gsap.fromTo(
@@ -88,7 +92,7 @@ export function ThemeToggle({
         { scale: 1 },
         {
           scale: 0.91,
-          duration: 0.10,
+          duration: 0.1,
           ease: "power2.in",
           onComplete: () => {
             gsap.to(btnRef.current, {
@@ -106,7 +110,11 @@ export function ThemeToggle({
   return (
     <button
       ref={btnRef}
-      className={`theme-toggle theme-toggle--${position}`}
+      className={[
+        "theme-toggle",
+        `theme-toggle--${position}`,
+        `theme-toggle--side-${side}`,
+      ].join(" ")}
       style={{ "--tt-offset": `${offset}px` } as React.CSSProperties}
       onClick={handleClick}
       aria-label={meta.next}
@@ -116,6 +124,7 @@ export function ThemeToggle({
       type="button"
     >
       <span className="theme-toggle__icon">{meta.icon}</span>
+      <span className="theme-toggle__label">{meta.label}</span>
     </button>
   );
 }

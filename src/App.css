@@ -3,66 +3,6 @@
    B&W + Brand Token Architecture — Production Edition
    VERSION: 2026.7
    ─────────────────────────────────────────────────────────────────────────
-   CROSS-FILE CONSOLIDATION AUDIT (2026.7)
-   ✓ --ot-brand-*   green tokens promoted globally
-                    was --nb-green (Navbar.css) + --_brand (AboutCompany)
-                    → eliminates 18+ scattered rgba values across 3 files
-
-   ✓ --ease-spring / --ease-spring-soft  two spring easings as tokens
-                    was cubic-bezier(0.16,1,0.3,1) hardcoded 15×
-                        cubic-bezier(0.22,1,0.36,1) hardcoded 10×
-
-   ✓ --t-spring-fast  new transition token: 0.26s var(--ease-spring)
-
-   ✓ NEW UTILITY CLASSES  (extracted from 27 cross-file repeated patterns)
-       .ot-stripe-top        top gradient hairline ::before  (was 10×)
-       .ot-stripe-top--brand brand-colored variant
-       .ot-card-lift         translateY hover lift            (was  5×)
-       .ot-card-lift--brand  brand shadow + border variant
-       .ot-stripe-reveal     scaleX bottom-stripe on hover    (was  2×)
-       .ot-brand-pill        dim-bg + brand-border pill base  (was  7×)
-       .ot-kicker            tiny uppercase section label     (was  9×)
-       .ot-kicker--brand     brand-tinted kicker variant
-       .ot-body-copy         fz-md / 1.65lh / text-muted     (was  7×)
-       .ot-section-header    centered flex-col header block   (was  2×)
-       .ot-focus-brand       brand focus-visible ring         (was  5×)
-       .ot-active-scale      :active scale-down + fast dur    (was  4×)
-       .ot-glass             standalone backdrop-filter util  (was  5×)
-       .ot-glass--dark       dark-mode glass overlay
-       .ot-accent-bar-left   absolute left gradient bar       (was  2×)
-       .ot-accordion-body    CSS grid 0fr→1fr expand util     (was  2×)
-       .ot-dot-pulse         pulsing dot animation class      (was  2 files)
-       .scrollbar-thin       4px scrollbar util               (was  2×)
-
-   ✓ .note-callout / .note-accent  shared base extracted
-     diverge only in margin-top and box-shadow
-
-   ✓ Global keyframes: ot-dot-pulse, ot-card-pop, ot-swipe-hint,
-                       aurora-drift  (was duplicated per-file)
-
-   ✗ Removed: .text-gradient-strong, .text-gradient-primary  (merged v2026.4)
-   ✗ Removed: .card-dark, .card-dark-hover, .card-dark-soft-border (deprecated)
-
-   ─────────────────────────────────────────────────────────────────────────
-   MIGRATION CHEATSHEET — update component modules after this upgrade:
-     --nb-green        → var(--ot-brand)
-     --nb-green-dim    → var(--ot-brand-dim)
-     --nb-green-mid    → var(--ot-brand-mid)
-     --nb-green-glow   → var(--ot-brand-glow)
-     --nb-green-border → var(--ot-brand-border)
-     --_brand          → var(--ot-brand)
-     --_brand-ui       → var(--ot-brand)
-     --_brand-soft     → var(--ot-brand-soft)
-     --_glow-mid       → var(--ot-brand-mid)
-     --_glow-strong    → var(--ot-brand-glow)
-     --nb-ease         → var(--ease-spring)
-     cubic-bezier(0.16, 1, 0.3,  1) → var(--ease-spring)
-     cubic-bezier(0.22, 1, 0.36, 1) → var(--ease-spring-soft)
-     @keyframes dotPulse / nb-dot-pulse → class .ot-dot-pulse
-     @keyframes nb-card-pop             → class .ot-anim-card-pop
-     @keyframes swipeHint               → class .ot-anim-swipe-hint
-   ========================================================================== */
-
 
 
 /* ============================================================
@@ -140,17 +80,6 @@
   /* — Motion — */
   --ot-transition:      0.35s cubic-bezier(.21, 1.02, .73, 1);
   --ot-transition-fast: 0.18s ease;
-
-  /*
-   * UNIFIED EASING TOKENS
-   * Replaces two hardcoded cubic-bezier values scattered across files.
-   *
-   * --ease-spring      "fast out" spring — snappy UI interactions
-   *                    was cubic-bezier(0.16, 1, 0.3, 1) in Navbar + SoftwarePage (15×)
-   *
-   * --ease-spring-soft  relaxed spring — card animations, slower reveals
-   *                    was cubic-bezier(0.22, 1, 0.36, 1) in AboutCompany (10×)
-   */
   --ease-spring:        cubic-bezier(0.16, 1, 0.3, 1);
   --ease-spring-soft:   cubic-bezier(0.22, 1, 0.36, 1);
 

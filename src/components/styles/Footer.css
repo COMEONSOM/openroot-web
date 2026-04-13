@@ -1,9 +1,11 @@
 /* ==========================================================================
    OPENROOT — FOOTER  |  Footer.css
-   VERSION: 2026.6
-   FIX: Added missing :hover / :active states for .footer-icon-btn
-        and .footer-trust-item — transitions were declared but never triggered.
+   VERSION: 2026.8
+   Keep : animated dot-grid · scan lines · OPENROOT wordmark · top shimmer
+   Revert: links hover · cards · icon-btns · trust · license → v2026.6
    ========================================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=JetBrains+Mono:wght@300;400;600&display=swap');
 
 
 /* ============================================================
@@ -28,10 +30,15 @@
   --ft-license-border: rgba(0, 0, 0, 0.07);
 
   --ft-accent:         #3a7d44;
+  --ft-accent-faint:   rgba(58, 125, 68, 0.05);
+  --ft-dot:            rgba(0, 0, 0, 0.10);
+  --ft-scan:           rgba(0, 0, 0, 0.025);
+
   --ft-radius-lg:      22px;
   --ft-radius-md:      14px;
   --ft-radius-sm:      10px;
-  --ft-font:           "Inter", "IBM Plex Sans", system-ui, sans-serif;
+  --ft-font:           "Syne", "IBM Plex Sans", system-ui, sans-serif;
+  --ft-mono:           "JetBrains Mono", "Fira Code", monospace;
   --ft-ease:           0.35s cubic-bezier(0.21, 1.02, 0.73, 1);
 }
 
@@ -52,6 +59,9 @@
   --ft-license-border: rgba(255, 255, 255, 0.08);
 
   --ft-accent:         #a3e87b;
+  --ft-accent-faint:   rgba(163, 232, 123, 0.05);
+  --ft-dot:            rgba(163, 232, 123, 0.09);
+  --ft-scan:           rgba(163, 232, 123, 0.018);
 }
 
 /* ── Dark — system preference ── */
@@ -72,6 +82,9 @@
     --ft-license-border: rgba(255, 255, 255, 0.08);
 
     --ft-accent:         #a3e87b;
+    --ft-accent-faint:   rgba(163, 232, 123, 0.05);
+    --ft-dot:            rgba(163, 232, 123, 0.09);
+    --ft-scan:           rgba(163, 232, 123, 0.018);
   }
 }
 
@@ -109,22 +122,56 @@
   transition: background var(--ft-ease);
 }
 
-/* Dot grid texture */
+/* ── Animated dot grid ── */
 .footer-main::before {
   content: "";
   position: absolute;
   inset: 0;
   pointer-events: none;
-  background:
-    radial-gradient(circle, var(--ft-border) 1px, transparent 1px),
-    url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
-  background-size: 22px 22px, 200px 200px;
-  opacity: 0.65;
   z-index: 0;
+  background-image: radial-gradient(circle, var(--ft-dot) 1px, transparent 1px);
+  background-size: 24px 24px;
+  animation: ft-grid-drift 38s linear infinite;
+  opacity: 0.7;
+}
+
+/* ── Horizontal scan lines ── */
+.footer-main::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background-image: repeating-linear-gradient(
+    0deg,
+    var(--ft-scan) 0px,
+    var(--ft-scan) 1px,
+    transparent    1px,
+    transparent    4px
+  );
+}
+
+@keyframes ft-grid-drift {
+  from { background-position: 0 0; }
+  to   { background-position: 24px 24px; }
+}
+
+
+/* ============================================================
+   GRID
+   ============================================================ */
+.footer-grid {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: 1.4fr 1fr 1fr;
+  align-items: start;
+  gap: clamp(2rem, 4vw, 3.5rem);
+  padding: clamp(2.8rem, 6vw, 4.5rem) clamp(1.5rem, 4vw, 3rem);
 }
 
 /* Top shimmer line */
-.footer-main::after {
+.footer-grid::before {
   content: "";
   position: absolute;
   top: 0; left: 0; right: 0;
@@ -141,16 +188,30 @@
   z-index: 2;
 }
 
-.footer-grid {
-  position: relative;
-  z-index: 1;
-  display: grid;
-  grid-template-columns: 1.4fr 1fr 1fr;
-  align-items: start;
-  gap: clamp(2rem, 4vw, 3.5rem);
-  padding: clamp(2.8rem, 6vw, 4.5rem) clamp(1.5rem, 4vw, 3rem);
+/* Background glow orb */
+.footer-grid::after {
+  content: "";
+  position: absolute;
+  top: -80px; left: -60px;
+  width: 420px; height: 420px;
+  border-radius: 50%;
+  background: radial-gradient(circle, var(--ft-accent-faint) 0%, transparent 70%);
+  pointer-events: none;
+  z-index: 0;
+  animation: ft-orb-breathe 7s ease-in-out infinite;
 }
 
+@keyframes ft-orb-breathe {
+  0%, 100% { opacity: 0.6; transform: scale(1); }
+  50%      { opacity: 1;   transform: scale(1.06); }
+}
+
+
+/* ─── Sitemap column ─────────────────────────────────────── */
+.footer-sitemap {
+  display: flex;
+  flex-direction: column;
+}
 
 /* ─── Section label ──────────────────────────────────────── */
 .footer-label {
@@ -164,10 +225,14 @@
   margin-bottom: 1rem;
 }
 
+.footer-logo-img {
+  width: 180px;     /* adjust */
+  height: auto;
+  margin-bottom: 1.4rem;
+  object-fit: contain;
+}
 
 /* ─── Sitemap nav ────────────────────────────────────────── */
-.footer-sitemap { display: flex; flex-direction: column; }
-
 .footer-links {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -238,7 +303,7 @@
 .verify-btn:active        { transform: scale(0.97); }
 
 
-/* ─── Contact / Follow cards ─────────────────────────────── */
+/* ─── Cards ──────────────────────────────────────────────── */
 .footer-card {
   display: flex;
   flex-direction: column;
@@ -266,11 +331,7 @@
 }
 
 
-/* ─── Icon buttons ────────────────────────────────────────────
-   FIX: :hover and :active states were completely absent.
-   Transitions for transform/box-shadow/background/border-color
-   were declared but had nothing to transition TO.
-   ─────────────────────────────────────────────────────────── */
+/* ─── Icon buttons ────────────────────────────────────────── */
 .footer-icon-btn {
   width: clamp(42px, 6vw, 52px);
   height: clamp(42px, 6vw, 52px);
@@ -282,7 +343,6 @@
   text-decoration: none;
   position: relative;
   overflow: hidden;
-  /* Cursor explicitly set — <a> without href loses pointer */
   cursor: pointer;
   transition:
     transform     var(--ft-ease),
@@ -300,7 +360,6 @@
   pointer-events: none;
 }
 
-/* ✓ THE FIX — hover state that was missing */
 @media (hover: hover) and (pointer: fine) {
   .footer-icon-btn:hover {
     transform: translateY(-3px);
@@ -327,7 +386,6 @@
   height: auto;
   display: block;
   object-fit: contain;
-  /* Prevents img from swallowing pointer events and breaking hover */
   pointer-events: none;
 }
 
@@ -342,7 +400,7 @@
 }
 
 
-/* ─── Trust badges ───────────────────────────────────────── */
+/* ─── Trust badges — plain, no effects ──────────────────── */
 .footer-trust {
   display: flex;
   justify-content: center;
@@ -357,18 +415,17 @@
   align-items: center;
   justify-content: center;
   opacity: 0.80;
-  transition: opacity var(--ft-ease), transform var(--ft-ease);
 }
 
 .footer-trust-logo {
   height: 96px;
   width: auto;
   object-fit: contain;
-  pointer-events: none; /* prevent img from eating the hover */
+  pointer-events: none;
 }
 
 
-/* ─── License strip ──────────────────────────────────────── */
+/* ─── License strip — plain, no box ─────────────────────── */
 .footer-license {
   display: flex;
   justify-content: center;

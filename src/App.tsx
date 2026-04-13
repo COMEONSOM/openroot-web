@@ -6,6 +6,9 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { ThemeProvider } from "./context/ThemeContext";
 import { ThemeToggle }   from "./components/ThemeToggle/ThemeToggle";
 
+import BackToTop from "./context/BackToTop";
+import SoftwareSolutions from "./pages/SoftwareSolutions";
+
 // COMPONENTS
 import Header          from "./components/Header";
 import Advertisement   from "./components/Advertisement";
@@ -90,6 +93,7 @@ export default function App() {
                 <Navbar />
                 <AboutCompany />
                 <Footer />
+                <BackToTop />
               </>
             }
           />
@@ -153,6 +157,7 @@ export default function App() {
               </>
             }
           />
+          <Route path="/software-solutions" element={<SoftwareSolutions />} />
 
           {/* ═══════════════════════════════════════════════
               404
