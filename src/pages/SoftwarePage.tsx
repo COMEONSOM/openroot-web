@@ -1,5 +1,5 @@
 import { useParams, Link } from "react-router-dom";
-import { useState, useRef, useCallback, memo } from "react";
+import { useState, useRef, useCallback, useEffect, memo } from "react";
 import { softwareList } from "../data/softwareList";
 import { softwareContent } from "../data/softwareContent";
 import { Helmet } from "react-helmet-async";
@@ -16,6 +16,29 @@ interface VideoPlayerProps {
 const VideoPlayer = memo(({ src, label }: VideoPlayerProps) => {
   const [paused, setPaused] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
+
+  // Force play on mount — fixes Android/iOS autoplay suppression
+  useEffect(() => {
+    const vid = videoRef.current;
+    if (!vid) return;
+
+    const tryPlay = () => {
+      vid.play().catch(() => {
+        // Autoplay still blocked — show play button so user can tap manually
+        setPaused(true);
+      });
+    };
+
+    if (vid.readyState >= 3) {
+      tryPlay();
+    } else {
+      vid.addEventListener("canplay", tryPlay, { once: true });
+    }
+
+    return () => {
+      vid.removeEventListener("canplay", tryPlay);
+    };
+  }, [src]);
 
   const togglePlay = useCallback(() => {
     const vid = videoRef.current;
@@ -41,10 +64,10 @@ const VideoPlayer = memo(({ src, label }: VideoPlayerProps) => {
         <video
           ref={videoRef}
           src={src}
-          autoPlay
           muted
           loop
           playsInline
+          preload="auto"
           className="sp-video"
           aria-label={label}
         />

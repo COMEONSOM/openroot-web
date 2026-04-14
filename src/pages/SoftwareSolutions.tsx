@@ -107,9 +107,9 @@ const SoftwareSolutions: React.FC = () => {
   }, []);
 
   const handleWhatsApp = () => {
-    window.open("https://wa.me/91XXXXXXXXXX?text=Hi%20Openroot!%20I%20want%20to%20discuss%20a%20project.", "_blank", "noopener,noreferrer");
+    window.open("https://wa.me/917866049865?text=Hi%20There!%20I%20want%20to%20discuss%20a%20project.", "_blank", "noopener,noreferrer");
   };
-
+ 
   return (
     <main className="ss-page">
 
