@@ -215,7 +215,7 @@ export default function Navbar() {
               {softwareList.map((app) => (
                 <button
                   key={app.slug}
-                  className="software-btn"
+                  className="software-btn ot-focus-brand ot-active-scale"
                   role="listitem"
                   onClick={() => {
                     closeOverlay();
@@ -269,7 +269,7 @@ export default function Navbar() {
           <div className="software-header">
             <h2 className="navbar-title">Released Softwares</h2>
             <button
-              className="view-all-link"
+              className="view-all-link ot-focus-brand ot-active-scale"
               onClick={openOverlay}
               aria-haspopup="dialog"
               aria-expanded={showAllSoftware}
@@ -283,7 +283,7 @@ export default function Navbar() {
             {visibleSoftwares.map((app) => (
               <button
                 key={app.slug}
-                className="software-btn"
+                className="software-btn ot-focus-brand ot-active-scale"
                 role="listitem"
                 onClick={() => goTo(app.slug)}
                 onMouseMove={handleMouseMove}

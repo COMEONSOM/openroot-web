@@ -58,7 +58,10 @@ export default function SoftwareHub() {
       {/* ── SERVICES ──────────────────────────────── */}
       <section className="sh-section sh-section--center">
         <h2 className="sh-section-title">Important Services</h2>
-        <Link to="/certificate-verification" className="sh-cta-btn">
+        <Link
+          to="/certificate-verification"
+          className="sh-cta-btn ot-focus-brand ot-active-scale"
+        >
           Verify Certificates Online
         </Link>
       </section>

@@ -171,13 +171,7 @@
 /* ── CARD ─────────────────────────────────────────────── */
 
 .sh-card {
-  position: relative;
-  background: var(--ot-glass-bg);
-  border: 1px solid var(--ot-border);
-  border-radius: var(--ot-radius-lg);
   padding: clamp(1rem, 2.5vw, 1.4rem);
-  overflow: hidden;
-  isolation: isolate;
   /* UPGRADE: 3-layer shadow for depth at rest */
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.06),
@@ -195,42 +189,6 @@
 @keyframes sh-card-in {
   from { opacity: 0; transform: translateY(16px) scale(0.97); }
   to   { opacity: 1; transform: translateY(0)    scale(1);    }
-}
-
-/* UPGRADE: cursor spotlight — same pattern as .software-btn in navbar */
-.sh-card::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  pointer-events: none;
-  z-index: 0;
-  opacity: 0;
-  background: radial-gradient(
-    circle 120px at var(--x, 50%) var(--y, 50%),
-    var(--nb-green-dim) 0%,
-    transparent 70%
-  );
-  transition: opacity 0.32s ease;
-}
-
-/* Top shimmer hairline */
-.sh-card::after {
-  content: "";
-  position: absolute;
-  top: 0; left: 0; right: 0;
-  height: 1px;
-  pointer-events: none;
-  z-index: 0;
-  background: linear-gradient(
-    90deg,
-    transparent           0%,
-    var(--ot-border-hard) 30%,
-    var(--ot-border-hard) 70%,
-    transparent           100%
-  );
-  opacity: 0.5;
-  transition: opacity 0.28s ease, background 0.28s ease;
 }
 
 /* UPGRADE: featured card — tinted surface + left accent bar */
@@ -275,10 +233,7 @@
       0 20px 48px color-mix(in oklch, var(--nb-green) 12%, transparent);
   }
 
-  .sh-card:hover::before { opacity: 1; }
-
   .sh-card:hover::after {
-    opacity: 1;
     background: linear-gradient(
       90deg,
       transparent          0%,
@@ -459,16 +414,6 @@
       0 12px 32px var(--nb-green-glow);
   }
   .sh-cta-btn:hover::after { left: 140%; }
-}
-
-.sh-cta-btn:active {
-  transform: scale(0.96);
-  transition-duration: 0.08s;
-}
-
-.sh-cta-btn:focus-visible {
-  outline: 2px solid var(--nb-green);
-  outline-offset: 3px;
 }
 
 
