@@ -20,6 +20,7 @@ import SoftwareHub     from "./pages/SoftwareHub";
 import SoftwarePage    from "./pages/SoftwarePage";
 
 import "./App.css";
+import PrivacyPolicy from "./pages/privacy-policy";
 
 
 // ─── 404 ─────────────────────────────────────────────────────────────────────
@@ -158,6 +159,7 @@ export default function App() {
             }
           />
           <Route path="/software-solutions" element={<SoftwareSolutions />} />
+          <Route path="/privacy-policy" element={<PrivacyPolicy />} />
 
           {/* ═══════════════════════════════════════════════
               404
