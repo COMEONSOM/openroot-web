@@ -10,6 +10,7 @@ import "../components/styles/softwarePage.css";
 // Maps slug → internal React Router path used AFTER login check
 const INTERNAL_ROUTES: Record<string, string> = {
   "resource-hub": "/resource-hub",
+  "coevas-terminal": "/coevas-terminal",
 };
 
 /* ── VIDEO PLAYER ── */

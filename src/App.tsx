@@ -20,8 +20,14 @@ import SoftwareHub     from "./pages/SoftwareHub";
 import SoftwarePage    from "./pages/SoftwarePage";
 
 import "./App.css";
+
+//support pages
 import PrivacyPolicy from "./pages/privacy-policy";
+import OpenrootGDriveSupport from "./pages/openroot-GDrive-support";
+
+//softwares
 import ResourceHub from './pages/resourcehub';
+import CoeasTerminal from './pages/coevas';
 
 
 // ─── 404 ─────────────────────────────────────────────────────────────────────
@@ -167,7 +173,9 @@ export default function App() {
             <iframe src="/terms.html" style={{ width: "100%", height: "100vh", border: "none" }} />
           } />
           <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+          <Route path="/support" element={<OpenrootGDriveSupport />} />
           <Route path="/resource-hub" element={<ResourceHub />} />
+          <Route path="/coevas-terminal" element={<CoeasTerminal />} />
 
           {/* ═══════════════════════════════════════════════
               404

@@ -56,7 +56,7 @@ export const softwareList: Software[] = [
     name: "Coevas Media Downloader",
     shortName: "Coevas",
     slug: "coevas-terminal",
-    url: "https://openroot.in/Coevas-Systems-Openroot/",
+    url: "/coevas-terminal",
     video: `${CLOUD}/coevas-demo_fidh0m.mp4`,
     description: "Download video/audio/posts instantly from multiple platforms including YouTube, Instagram, Facebook, Threads.",
     seoTitle: "Coevas Terminal – Download Videos & Audio Easily",
