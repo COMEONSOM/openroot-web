@@ -5,11 +5,18 @@
 // GSAP owns transform; CSS transition intentionally excludes it.
 // ============================================================
 
-import { useRef, useCallback }   from "react";
-import gsap                       from "gsap";
-import { useTheme }               from "../../context/ThemeContext";
-import type { ThemeMode }         from "../../context/ThemeContext";
+import { useRef, useCallback }        from "react";
+import { useLocation }                from "react-router-dom";   // ← added
+import gsap                           from "gsap";
+import { useTheme }                   from "../../context/ThemeContext";
+import type { ThemeMode }             from "../../context/ThemeContext";
 import "./ThemeToggle.css";
+
+
+// ─── Routes where the toggle is allowed ───────────────────
+// Add more paths here as the app grows — no other file needs
+// to be touched.
+const ALLOWED_PATHS = ["/", "/software"] as const;
 
 
 // ─── Types ────────────────────────────────────────────────
@@ -20,7 +27,7 @@ type Position =
 
 interface ThemeToggleProps {
   position?: Position;
-  offset?:   number;   // vertical offset (px) for top/bottom variants
+  offset?:   number;
 }
 
 
@@ -66,8 +73,8 @@ const SystemIcon = () => (
 // ─── Meta keyed by mode ───────────────────────────────────
 const THEME_META: Record<ThemeMode, {
   icon:  React.ReactElement;
-  label: string;           // short vertical label — max 5 chars
-  next:  string;           // aria-label for NEXT state
+  label: string;
+  next:  string;
 }> = {
   light:  { icon: <SunIcon />,    label: "LIGHT", next: "Switch to dark mode"   },
   dark:   { icon: <MoonIcon />,   label: "DARK",  next: "Switch to system mode" },
@@ -75,10 +82,19 @@ const THEME_META: Record<ThemeMode, {
 };
 
 
+// ─── Component ────────────────────────────────────────────
 export function ThemeToggle({
   position = "middle-right",
-  offset = 0,
+  offset   = 0,
 }: ThemeToggleProps) {
+
+  // ── Route guard — must be called before any early return ──
+  const { pathname } = useLocation();
+  const isAllowed = ALLOWED_PATHS.some(
+    (p) => pathname === p || pathname.startsWith(p + "/")
+  );
+  if (!isAllowed) return null;                              // ← gate
+
   const { mode, resolved, cycleTheme } = useTheme();
   const btnRef = useRef<HTMLButtonElement | null>(null);
 

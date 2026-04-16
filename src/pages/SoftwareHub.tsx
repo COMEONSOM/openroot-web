@@ -13,8 +13,6 @@ export default function SoftwareHub() {
 
   return (
     <div className="sh-root">
-
-      {/* ── SEO ───────────────────────────────────── */}
       <Helmet>
         <title>Openroot Software Hub – AI Tools, Job Updates & Productivity Apps</title>
         <link rel="canonical" href="https://openroot.in/software" />
@@ -24,7 +22,6 @@ export default function SoftwareHub() {
         />
       </Helmet>
 
-      {/* ── HEADER ────────────────────────────────── */}
       <div className="sh-header">
         <h1 className="sh-title">Openroot Software Hub</h1>
         <p className="sh-subtitle">
@@ -33,7 +30,6 @@ export default function SoftwareHub() {
         </p>
       </div>
 
-      {/* ── FEATURED ──────────────────────────────── */}
       <section className="sh-section">
         <h2 className="sh-section-title">Popular Softwares</h2>
         <div className="sh-grid sh-grid--featured">
@@ -45,7 +41,6 @@ export default function SoftwareHub() {
         </div>
       </section>
 
-      {/* ── ALL TOOLS ─────────────────────────────── */}
       <section className="sh-section">
         <h2 className="sh-section-title">All Free Softwares</h2>
         <div className="sh-grid">
@@ -55,22 +50,16 @@ export default function SoftwareHub() {
         </div>
       </section>
 
-      {/* ── SERVICES ──────────────────────────────── */}
       <section className="sh-section sh-section--center">
         <h2 className="sh-section-title">Important Services</h2>
-        <Link
-          to="/certificate-verification"
-          className="sh-cta-btn ot-focus-brand ot-active-scale"
-        >
+        <Link to="/certificate-verification" className="sh-cta-btn ot-focus-brand ot-active-scale">
           Verify Certificates Online
         </Link>
       </section>
-
     </div>
   );
 }
 
-/* ── Card sub-component ────────────────────────────────── */
 interface CardProps {
   tool: { slug: string; name: string; description: string };
   featured?: boolean;
@@ -84,6 +73,7 @@ function SoftwareCard({ tool, featured }: CardProps) {
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
     >
+      {/* ✅ All cards go to /software/:slug — launch logic lives in SoftwarePage */}
       <Link
         to={`/software/${tool.slug}`}
         className={`sh-card-name${featured ? " sh-card-name--featured" : ""}`}

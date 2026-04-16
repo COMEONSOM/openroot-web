@@ -4,12 +4,12 @@ import "../components/styles/softwarePage.css";
 
 export const softwareContent: Record<string, SoftwareContent> = {
 
-  "helping-hand": {
-    overview: `Openroot Helping Hand — Resource Hub & Job Updates is a centralized digital platform designed to simplify access to essential online resources for students, professionals, and job seekers. Many learners struggle to find reliable educational portals, government services, and productivity tools scattered across the internet. This platform solves that problem by organizing important websites into structured categories so users can access them quickly from one place.
+  "resource-hub": {
+    overview: `Openroot Resource Hub — Resource Hub & Job Updates is a centralized digital platform designed to simplify access to essential online resources for students, professionals, and job seekers. Many learners struggle to find reliable educational portals, government services, and productivity tools scattered across the internet. This platform solves that problem by organizing important websites into structured categories so users can access them quickly from one place.
 
 The platform is especially useful for students pursuing ITI, Diploma, and undergraduate or postgraduate education. Instead of navigating dozens of unrelated websites, learners can directly access academic portals, scholarship platforms, examination systems, and skill-development resources through a clean and organized interface.
 
-Openroot Helping Hand also includes curated productivity tools, AI platforms, investing resources, and government job portals. By bringing these resources together into a structured interface, the platform reduces information overload and helps users discover valuable digital tools more efficiently.`,
+Openroot Resource Hub also includes curated productivity tools, AI platforms, investing resources, and government job portals. By bringing these resources together into a structured interface, the platform reduces information overload and helps users discover valuable digital tools more efficiently.`,
 
     features: [
       "Centralized resource hub for students, professionals, and job seekers",

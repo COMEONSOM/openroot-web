@@ -18,14 +18,12 @@ const TRUST_BADGES = [
 
 const SITEMAP_LINKS = [
   {
-    label:  "Terms & Conditions",
-    href:   "https://comeonsom.github.io/openroot-helping-hand/other_files/terms.html",
-    rel:    "external" as const,
+    label: "Terms & Conditions",
+    href:  "/terms",
   },
   {
-    label:  "Founder Details",
-    href:   "https://comeonsom.github.io/openroot-helping-hand/other_files/founder.html",
-    rel:    "external" as const,
+    label: "Founder Details",
+    href:  "/founder",
   },
   {
     label:  "Released Softwares",

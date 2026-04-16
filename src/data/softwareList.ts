@@ -19,8 +19,8 @@ export const softwareList: Software[] = [
   {
     name: "Resource Hub & Job Updates",
     shortName: "Resource Hub",
-    slug: "helping-hand",
-    url: "https://openroot.in/openroot-helping-hand/",
+    slug: "resource-hub",
+    url: "/resource-hub",
     video: `${CLOUD}/resource-hub-demo_rlkmkr.mp4`,
     description: "A curated collection of important websites, tools and job updates for students and learners.",
     seoTitle: "Resource Hub & Job Updates for Students | Openroot",

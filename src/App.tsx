@@ -21,6 +21,7 @@ import SoftwarePage    from "./pages/SoftwarePage";
 
 import "./App.css";
 import PrivacyPolicy from "./pages/privacy-policy";
+import ResourceHub from './pages/resourcehub';
 
 
 // ─── 404 ─────────────────────────────────────────────────────────────────────
@@ -159,7 +160,14 @@ export default function App() {
             }
           />
           <Route path="/software-solutions" element={<SoftwareSolutions />} />
+          <Route path="/founder" element={
+            <iframe src="/founder.html" style={{ width: "100%", height: "100vh", border: "none" }} />
+          } />
+          <Route path="/terms" element={
+            <iframe src="/terms.html" style={{ width: "100%", height: "100vh", border: "none" }} />
+          } />
           <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+          <Route path="/resource-hub" element={<ResourceHub />} />
 
           {/* ═══════════════════════════════════════════════
               404
