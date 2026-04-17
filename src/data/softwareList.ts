@@ -65,10 +65,10 @@ export const softwareList: Software[] = [
   },
 
   {
-    name: "Makaut GPA Percentage Calculator",
+    name: "Makaut GradeCalculator",
     shortName: "makaut",
-    slug: "openroot-makaut_grade_and_percentage-calculator",
-    url: "https://openroot.in/openroot-makaut_grade_and_percentage-calculator/",
+    slug: "makaut-grade-pro",
+    url: "/makaut-grade-pro",
     video: `${CLOUD}/makaut-calculator-demo_uwyfuj.mp4`,
     description: "Grade and Percentage Calculator for MAKAUT students to easily calculate their GPA and percentage based on their marks.",
     seoTitle: "MAKAUT GPA to Percentage Calculator | Openroot Tool",

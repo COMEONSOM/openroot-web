@@ -66,7 +66,7 @@ const iconMap: Record<string, React.ReactNode> = {
   "resource-hub": Icons.resourcehub,
   "openroot-classes": Icons.Classes,
   "coevas-terminal": Icons.Coevas,
-  "openroot-makaut_grade_and_percentage-calculator": Icons.makaut,
+  "makaut-grade-pro": Icons.makaut,
 };
 
 export default function Navbar() {
@@ -146,7 +146,7 @@ export default function Navbar() {
           <Link to="/software/travel-expense-manager">Travel Expense Manager</Link>
           <Link to="/software/openroot-classes">Openroot Classes</Link>
           <Link to="/software/coevas-terminal">Coevas Terminal</Link>
-          <Link to="/software/openroot-makaut_grade_and_percentage-calculator">MAKAUT GPA Percentage Calculator</Link>
+          <Link to="/software/makaut-grade-pro">MAKAUT Grade Calculator</Link>
           <Link to="/certificate-verification">Certificate Verification</Link>
         </div>
 

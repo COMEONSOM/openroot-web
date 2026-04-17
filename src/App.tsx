@@ -28,6 +28,7 @@ import OpenrootGDriveSupport from "./pages/openroot-GDrive-support";
 //softwares
 import ResourceHub from './pages/resourcehub';
 import CoeasTerminal from './pages/coevas';
+import Makaut from "./pages/makaut";
 
 
 // ─── 404 ─────────────────────────────────────────────────────────────────────
@@ -176,6 +177,7 @@ export default function App() {
           <Route path="/support" element={<OpenrootGDriveSupport />} />
           <Route path="/resource-hub" element={<ResourceHub />} />
           <Route path="/coevas-terminal" element={<CoeasTerminal />} />
+          <Route path="/makaut-grade-pro" element={<Makaut />} />
 
           {/* ═══════════════════════════════════════════════
               404

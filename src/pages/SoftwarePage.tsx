@@ -11,6 +11,7 @@ import "../components/styles/softwarePage.css";
 const INTERNAL_ROUTES: Record<string, string> = {
   "resource-hub": "/resource-hub",
   "coevas-terminal": "/coevas-terminal",
+  "makaut-grade-pro": "/makaut-grade-pro",
 };
 
 /* ── VIDEO PLAYER ── */
