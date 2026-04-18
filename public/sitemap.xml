@@ -1,64 +1,120 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
-  <!-- 🔥 MAIN HOMEPAGE (HIGHEST PRIORITY) -->
+  <!-- ═══════════════════════════════════════════════
+       HOME — highest priority, crawled most often
+  ═══════════════════════════════════════════════ -->
   <url>
     <loc>https://openroot.in/</loc>
-    <lastmod>2026-03-23</lastmod>
+    <lastmod>2026-04-18</lastmod>
+    <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
 
-  <!-- 🚀 VERY IMPORTANT TOOL (SECOND PRIORITY) -->
+  <!-- ═══════════════════════════════════════════════
+       SOFTWARE HUB — second most important page
+  ═══════════════════════════════════════════════ -->
   <url>
-    <loc>https://openroot.in/certificate-verification</loc>
-    <lastmod>2026-03-23</lastmod>
+    <loc>https://openroot.in/software</loc>
+    <lastmod>2026-04-18</lastmod>
+    <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
 
-  <!-- 📦 SOFTWARE HUB (CATEGORY PAGE) -->
-  <url>
-    <loc>https://openroot.in/software</loc>
-    <lastmod>2026-03-23</lastmod>
-    <priority>0.75</priority>
-  </url>
-
-  <!-- 🔥 TOP SOFTWARE (HIGH VALUE PAGES) -->
+  <!-- ═══════════════════════════════════════════════
+       INDIVIDUAL SOFTWARE PAGES
+       These are the pages Google shows as sitelinks.
+       Priority 0.8 signals they are core pages.
+  ═══════════════════════════════════════════════ -->
   <url>
     <loc>https://openroot.in/software/nior-ai</loc>
-    <lastmod>2026-03-23</lastmod>
-    <priority>0.7</priority>
+    <lastmod>2026-04-18</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://openroot.in/software/resource-hub</loc>
+    <lastmod>2026-04-18</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://openroot.in/software/makaut-grade-pro</loc>
+    <lastmod>2026-04-18</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
   </url>
 
   <url>
     <loc>https://openroot.in/software/travel-expense-manager</loc>
-    <lastmod>2026-03-23</lastmod>
-    <priority>0.7</priority>
-  </url>
-
-  <url>
-    <loc>https://openroot.in/software/helping-hand</loc>
-    <lastmod>2026-03-23</lastmod>
-    <priority>0.7</priority>
+    <lastmod>2026-04-18</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
   </url>
 
   <url>
     <loc>https://openroot.in/software/openroot-classes</loc>
-    <lastmod>2026-03-23</lastmod>
-    <priority>0.65</priority>
+    <lastmod>2026-04-18</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
   </url>
 
-  <!-- 🧰 OTHER SOFTWARE -->
   <url>
     <loc>https://openroot.in/software/coevas-terminal</loc>
-    <lastmod>2026-03-23</lastmod>
+    <lastmod>2026-04-18</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- ═══════════════════════════════════════════════
+       CERTIFICATE VERIFICATION — important service
+  ═══════════════════════════════════════════════ -->
+  <url>
+    <loc>https://openroot.in/certificate-verification</loc>
+    <lastmod>2026-04-18</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <!-- ═══════════════════════════════════════════════
+       SUPPORT & LEGAL PAGES
+       Lower priority — crawled less often
+  ═══════════════════════════════════════════════ -->
+  <url>
+    <loc>https://openroot.in/software-solutions</loc>
+    <lastmod>2026-04-18</lastmod>
+    <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
 
   <url>
-    <loc>https://openroot.in/software/openroot-makaut_grade_and_percentage-calculator</loc>
-    <lastmod>2026-03-23</lastmod>
-    <priority>0.6</priority>
+    <loc>https://openroot.in/founder</loc>
+    <lastmod>2026-04-18</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.5</priority>
+  </url>
+
+  <url>
+    <loc>https://openroot.in/privacy-policy</loc>
+    <lastmod>2026-04-18</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.4</priority>
+  </url>
+
+  <url>
+    <loc>https://openroot.in/terms</loc>
+    <lastmod>2026-04-18</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.4</priority>
+  </url>
+
+  <url>
+    <loc>https://openroot.in/support</loc>
+    <lastmod>2026-04-18</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.4</priority>
   </url>
 
 </urlset>

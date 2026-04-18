@@ -1,6 +1,6 @@
 // ============================================================
-// NAVBAR COMPONENT — FINAL STABLE VERSION
-// VERSION: 2026.9 (helping-hand back to /software/:slug flow)
+// NAVBAR COMPONENT — SEO ENHANCED
+// VERSION: 2026.10 (SiteNavigationElement schema for Google Sitelinks)
 // ============================================================
 
 import "./styles/Navbar.css";
@@ -8,6 +8,7 @@ import { softwareList } from "../data/softwareList";
 import { useState, useEffect, useCallback } from "react";
 import { createPortal } from "react-dom";
 import { Link, useNavigate } from "react-router-dom";
+import { Helmet } from "react-helmet-async";
 import React from "react";
 
 const Icons = {
@@ -62,11 +63,53 @@ const Icons = {
 
 const iconMap: Record<string, React.ReactNode> = {
   "travel-expense-manager": Icons.travelExpense,
-  "nior-ai": Icons.timeAI,
-  "resource-hub": Icons.resourcehub,
-  "openroot-classes": Icons.Classes,
-  "coevas-terminal": Icons.Coevas,
-  "makaut-grade-pro": Icons.makaut,
+  "nior-ai":                Icons.timeAI,
+  "resource-hub":           Icons.resourcehub,
+  "openroot-classes":       Icons.Classes,
+  "coevas-terminal":        Icons.Coevas,
+  "makaut-grade-pro":       Icons.makaut,
+};
+
+// ── These are the pages Google should show as sitelinks ──────────────────────
+// Position order matters — Google tends to pick top items first.
+// Keep the most important / most-searched pages at the top.
+const SITELINK_PAGES = [
+  { name: "NIOR AI",                    url: "https://openroot.in/software/nior-ai" },
+  { name: "Resource Hub & Job Updates", url: "https://openroot.in/software/resource-hub" },
+  { name: "MAKAUT Grade Calculator",    url: "https://openroot.in/software/makaut-grade-pro" },
+  { name: "Travel Expense Manager",     url: "https://openroot.in/software/travel-expense-manager" },
+  { name: "Openroot Classes",           url: "https://openroot.in/software/openroot-classes" },
+  { name: "Coevas Terminal",            url: "https://openroot.in/software/coevas-terminal" },
+  { name: "Certificate Verification",   url: "https://openroot.in/certificate-verification" },
+  { name: "Software Hub",               url: "https://openroot.in/software" },
+];
+
+// SiteNavigationElement schema — tells Google exactly what your nav links are.
+// This is the primary signal for sitelinks.
+const siteNavSchema = {
+  "@context": "https://schema.org",
+  "@type": "SiteLinksSearchBox",   // bonus: enables search box in SERP
+  "url": "https://openroot.in",
+  "potentialAction": {
+    "@type": "SearchAction",
+    "target": {
+      "@type": "EntryPoint",
+      "urlTemplate": "https://openroot.in/software?q={search_term_string}"
+    },
+    "query-input": "required name=search_term_string"
+  }
+};
+
+const siteNavigationSchema = {
+  "@context": "https://schema.org",
+  "@type": "ItemList",
+  "name": "Openroot Systems – Main Navigation",
+  "itemListElement": SITELINK_PAGES.map((page, i) => ({
+    "@type": "SiteNavigationElement",
+    "position": i + 1,
+    "name": page.name,
+    "url": page.url,
+  })),
 };
 
 export default function Navbar() {
@@ -96,8 +139,6 @@ export default function Navbar() {
     e.currentTarget.style.setProperty("--y", `${e.clientY - rect.top}px`);
   }, []);
 
-  // ✅ All slugs go to /software/:slug — no exceptions here
-  // The detail page (SoftwarePage) handles the final destination on Launch
   const goTo = useCallback(
     (slug: string) => navigate(`/software/${slug}`),
     [navigate]
@@ -139,15 +180,20 @@ export default function Navbar() {
 
   return (
     <>
+      {/* ── Inject nav schemas once, globally via Navbar ── */}
+      <Helmet>
+        <script type="application/ld+json">{JSON.stringify(siteNavSchema)}</script>
+        <script type="application/ld+json">{JSON.stringify(siteNavigationSchema)}</script>
+      </Helmet>
+
       <nav id="released-softwares-section" className="navbar" aria-label="Released Softwares">
+
+        {/* ── Semantic nav links for crawlers (visually hidden) ── */}
+        {/* Google reads these as the definitive internal link structure */}
         <div className="sr-only" aria-hidden="true">
-          <Link to="/software/nior-ai">NIOR AI</Link>
-          <Link to="/software/resource-hub">Resource Hub &amp; Job Updates</Link>
-          <Link to="/software/travel-expense-manager">Travel Expense Manager</Link>
-          <Link to="/software/openroot-classes">Openroot Classes</Link>
-          <Link to="/software/coevas-terminal">Coevas Terminal</Link>
-          <Link to="/software/makaut-grade-pro">MAKAUT Grade Calculator</Link>
-          <Link to="/certificate-verification">Certificate Verification</Link>
+          {SITELINK_PAGES.map((page) => (
+            <a key={page.url} href={page.url}>{page.name}</a>
+          ))}
         </div>
 
         <div className="navbar-content">

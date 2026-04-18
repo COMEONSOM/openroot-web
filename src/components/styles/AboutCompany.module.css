@@ -733,6 +733,7 @@
   gap: var(--sp-sm);
   padding: var(--card-pad);
   flex: 1;
+  
   min-width: 0;
 }
 

@@ -13,10 +13,12 @@ import { useNavigate } from "react-router-dom";
 import { motion, useReducedMotion } from "framer-motion";
 import styles from "../styles/AboutCompany.module.css";
 import { fadeIn, fadeUp, EASE_SOFT, VP } from "../../motion/variants";
-import { OFFER_CARDS } from "../../data/aboutdata";
+import { OFFER_CARDS as ORIGINAL_CARDS } from "../../data/aboutdata";
 import { useCarousel, CAROUSEL_SPRING } from "../../motion/useCarousel";
 import type { OfferCard, WithVars } from "../../types/types";
 
+// Swap the position of the two cards so Software Solutions is first
+const OFFER_CARDS = [...ORIGINAL_CARDS].reverse();
 
 // =============================================================================
 // ICON COMPONENTS — INLINE SVG CHEVRONS FOR CAROUSEL ARROW BUTTONS
@@ -84,8 +86,8 @@ const OfferCardItem = memo(({ card, isActive, reduced }: OfferCardItemProps) => 
       className={`${styles.offerCard} card-glass ot-glass-shine`}
       animate={
         reduced ? {} : {
-          scale:   isActive ? 1           : 0.94,
-          opacity: isActive ? 1           : 0.48,
+          scale:   isActive ? 1          : 0.94,
+          opacity: isActive ? 1          : 0.48,
           filter:  isActive ? "blur(0px)" : "blur(1px)",
         }
       }
@@ -298,7 +300,7 @@ function WhatWeOffer() {
         {/* ── MOBILE BOTTOM NAV ─────────────────────────────────────
             Hidden on desktop via CSS (display:none above 767px).
             Replaces the floating capsule arrows on small screens.
-            [← Prev]  ·  1 / 2  ·  [Next →]                        */}
+            [← Prev]  ·  1 / 2  ·  [Next →]                         */}
         <div className={styles.carouselBottomNav}>
           <button
             className={styles.carouselNavBtn}
