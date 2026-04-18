@@ -8,7 +8,7 @@ export const softwareList: Software[] = [
     name: "Travel Expense Manager",
     shortName: "Travel Manager",
     slug: "travel-expense-manager",
-    url: "https://openroot.in/openroot-travel-expense-manager/",
+    url: "/travel-expense-manager",
     video: `${CLOUD}/travel-expense-manager-demo_yg1yif.mp4`,
     description: "Track group travel expenses and automatically calculate who owes whom during trips.",
     seoTitle: "Travel Expense Manager | Split Trip Expenses Easily",

@@ -57,6 +57,9 @@ const UGPG_CARDS: CardData[] = [
 const GOVT_CARDS: CardData[] = [
   { id: 'govt-1', url: 'https://uidai.gov.in/', imgSrc: '/assets-rh/uidai.avif', imgAlt: 'UIDAI' },
   { id: 'govt-2', url: 'https://voters.eci.gov.in/', imgSrc: '/assets-rh/voters.avif', imgAlt: 'Voter Registration' },
+  { id: 'govt-3', url: 'https://unifiedportal-mem.epfindia.gov.in/', imgSrc: '/assets-rh/unifiedportal.avif', imgAlt: 'Unified Portal' },
+  { id: 'govt-4', url: 'https://passbook.epfindia.gov.in/MemberPassBook/login', imgSrc: '/assets-rh/PFpassbook.avif', imgAlt: 'PFpassbook' },
+  { id: 'govt-5', url: 'https://portal.esic.gov.in/EmployeePortal/login.aspx', imgSrc: '/assets-rh/esic.avif', imgAlt: 'ESIC' },
 ];
 
 const AI_CARDS: CardData[] = [

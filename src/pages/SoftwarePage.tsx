@@ -12,6 +12,7 @@ const INTERNAL_ROUTES: Record<string, string> = {
   "resource-hub": "/resource-hub",
   "coevas-terminal": "/coevas-terminal",
   "makaut-grade-pro": "/makaut-grade-pro",
+  "travel-expense-manager": "/travel-expense-manager",
 };
 
 /* ── VIDEO PLAYER ── */

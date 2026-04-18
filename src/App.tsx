@@ -29,6 +29,7 @@ import OpenrootGDriveSupport from "./pages/openroot-GDrive-support";
 import ResourceHub from './pages/resourcehub';
 import CoeasTerminal from './pages/coevas';
 import Makaut from "./pages/makaut";
+import TravelExpenseManager from "./pages/TravelExpenseManager";
 
 
 // ─── 404 ─────────────────────────────────────────────────────────────────────
@@ -178,6 +179,7 @@ export default function App() {
           <Route path="/resource-hub" element={<ResourceHub />} />
           <Route path="/coevas-terminal" element={<CoeasTerminal />} />
           <Route path="/makaut-grade-pro" element={<Makaut />} />
+          <Route path="/travel-expense-manager" element={<TravelExpenseManager />} />
 
           {/* ═══════════════════════════════════════════════
               404
