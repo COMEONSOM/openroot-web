@@ -44,7 +44,7 @@ export const softwareList: Software[] = [
     name: "Openroot Classes",
     shortName: "Classes",
     slug: "openroot-classes",
-    url: "https://openroot-classes-firebase.web.app/",
+    url: "/openroot-classes",
     video: `${CLOUD}/openroot-classes-demo_pbjffx.mp4`,
     description: "Online learning platform providing training in prompt engineering, financial literacy and productivity skills.",
     seoTitle: "Openroot Classes – Learn AI, Finance & Productivity Skills",

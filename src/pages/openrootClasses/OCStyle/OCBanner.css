@@ -1,0 +1,237 @@
+/* ============================================================
+   BANNER STYLES — VERSION 2025.8
+   SCOPED UNDER .home-banner — NO GLOBAL CONFLICTS
+   ============================================================ */
+
+/* ───────────────────────────────────────────────
+   Scoped Theme Tokens
+   (moved from :root so they don't leak globally)
+────────────────────────────────────────────── */
+.home-banner {
+  /* Colors */
+  --banner-bg: #f3f4f6;
+  --text-color: #ffffff;
+  --text-hover: #111827;
+  --arrow-bg: rgba(0, 0, 0, 0.6);
+  --arrow-bg-hover: rgba(255, 255, 255, 0.9);
+  --dot-color: rgba(0, 0, 0, 0.4);
+  --dot-active-color: #2563eb;
+
+  /* Sizes */
+  --arrow-size: 42px;
+  --dot-size: 12px;
+  --banner-max-height: 75vh;
+
+  /* Spacing */
+  --banner-margin-lg: 40px;
+  --banner-padding-lg: 20px;
+  --spacing-md: 15px;
+  --spacing-sm: 10px;
+
+  /* Radius & Shadows */
+  --border-radius-sm: 6px;
+  --border-radius-md: 12px;
+  --shadow-md: 0 6px 18px rgba(0, 0, 0, 0.15);
+
+  /* Transitions */
+  --transition-speed: 0.6s;
+  --hover-speed: 0.3s;
+
+  /* Z-index */
+  --z-arrows: 10;
+  --z-dots: 5;
+}
+
+/* ───────────────────────────────────────────────
+   Banner Wrapper
+────────────────────────────────────────────── */
+.home-banner {
+  position: relative;
+  overflow: hidden;
+  margin-top: 76px;
+  padding: var(--banner-padding-lg);
+  background: var(--banner-bg);
+  border-radius: var(--border-radius-md);
+  box-shadow: var(--shadow-md);
+  box-sizing: border-box;
+}
+
+/* ───────────────────────────────────────────────
+   Decorative Background Layer
+   (aria-hidden, purely visual fill)
+────────────────────────────────────────────── */
+.home-banner .hero-bg {
+  position: absolute;
+  inset: 0;
+  background: var(--banner-bg);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ───────────────────────────────────────────────
+   16:9 Safe Center Frame
+   (wraps the sliding banner-container)
+────────────────────────────────────────────── */
+.home-banner .hero-center-frame {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  overflow: hidden;
+}
+
+/* ───────────────────────────────────────────────
+   Banner Slide Container
+────────────────────────────────────────────── */
+.home-banner .banner-container {
+  display: flex;
+  width: 95%;
+  height: auto;
+  transition: transform var(--transition-speed) ease-in-out;
+  will-change: transform;
+}
+
+/* ───────────────────────────────────────────────
+   Individual Slide
+────────────────────────────────────────────── */
+.home-banner .banner-slide {
+  flex: 0 0 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0 var(--spacing-md);
+  height: auto;
+  box-sizing: border-box;
+}
+
+.home-banner .banner-image {
+  width: 100%;
+  height: auto;
+  max-height: var(--banner-max-height);
+  object-fit: contain;
+  border-radius: var(--border-radius-md);
+  box-shadow: var(--shadow-md);
+  transition: transform var(--hover-speed) ease,
+              box-shadow var(--hover-speed) ease;
+}
+
+.home-banner .banner-image:hover {
+  transform: scale(1.02);
+}
+
+/* ───────────────────────────────────────────────
+   Empty / Placeholder State
+────────────────────────────────────────────── */
+.home-banner.placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 200px;
+}
+
+.home-banner .banner-placeholder {
+  font-size: 1rem;
+  color: #6b7280;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+}
+
+/* ───────────────────────────────────────────────
+   Arrow Buttons
+────────────────────────────────────────────── */
+.home-banner .arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 52px;
+  height: 52px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-radius: 50%;
+  background: rgba(15, 23, 42, 0.8);
+  color: #e5e7eb;
+  font-size: 1.8rem;
+  cursor: pointer;
+  z-index: var(--z-arrows);
+  transition: background  0.25s cubic-bezier(0.22, 1, 0.36, 1),
+              transform   0.25s cubic-bezier(0.22, 1, 0.36, 1),
+              opacity     0.25s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.home-banner .left-arrow {
+  left: 16px;
+}
+
+.home-banner .right-arrow {
+  right: 16px;
+}
+
+.home-banner .arrow:hover {
+  background: #7c3aed;
+  transform: translateY(-50%) scale(1.08);
+}
+
+/* ───────────────────────────────────────────────
+   Dots Navigation
+────────────────────────────────────────────── */
+.home-banner .dots-container {
+  position: absolute;
+  left: 50%;
+  bottom: 16px;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  z-index: var(--z-dots);
+}
+
+.home-banner .dot {
+  width: 9px;
+  height: 8px;
+  border-radius: 999px;
+  border: none;
+  cursor: pointer;
+  background: rgba(148, 163, 184, 0.7);
+  transition: all 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.home-banner .dot.active {
+  width: 26px;
+  background: #7c3aed;
+}
+
+.home-banner .dot:hover {
+  transform: scale(1.15);
+}
+
+/* ───────────────────────────────────────────────
+   Responsive Design
+────────────────────────────────────────────── */
+@media (max-width: 1024px) {
+  .home-banner {
+    --arrow-size: 38px;
+    --dot-size: 10px;
+    --banner-margin-lg: 30px;
+    --banner-padding-lg: 15px;
+  }
+}
+
+@media (max-width: 768px) {
+  .home-banner {
+    --arrow-size: 34px;
+    --dot-size: 10px;
+    --banner-margin-lg: 20px;
+    --banner-padding-lg: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .home-banner {
+    --arrow-size: 30px;
+    --dot-size: 8px;
+    --banner-margin-lg: 10px;
+    --banner-padding-lg: 8px;
+  }
+}

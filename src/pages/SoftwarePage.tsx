@@ -12,6 +12,7 @@ const INTERNAL_ROUTES: Record<string, string> = {
   "coevas-terminal": "/coevas-terminal",
   "makaut-grade-pro": "/makaut-grade-pro",
   "travel-expense-manager": "/travel-expense-manager",
+  "openroot-classes": "/openroot-classes",
 };
 
 // ── SEO keyword map: add / extend per tool slug ──────────────────────────────
@@ -201,7 +202,7 @@ export default function SoftwarePage() {
     { href: "/software/travel-expense-manager", label: "Travel Expense Manager" },
     { href: "/certificate-verification",         label: "Certificate Verification" },
     { href: "/software/resource-hub",            label: "Resource Hub & Job Updates" },
-    { href: "/software/openroot-makaut_grade_and_percentage-calculator", label: "Makaut Grade Calculator" },
+    { href: "/software/makaut-grade-pro", label: "Makaut Grade Calculator" },
     { href: "/software/coevas-terminal",         label: "Coevas Terminal" },
   ];
 

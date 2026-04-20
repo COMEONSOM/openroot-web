@@ -1,0 +1,287 @@
+/* ───────────────────────────────────────
+   FILE PATH: src/openrootClasses/OCStyle/OCFreeContent.css
+   VERSION 2025.10 — SCOPED UNDER #free-content
+   NO GLOBAL CONFLICTS
+─────────────────────────────────────── */
+
+/* ───────────────────────────────────────
+   Scoped Theme Tokens
+   (moved from :root so they don't leak globally)
+─────────────────────────────────────── */
+#free-content {
+  /* Color Palette */
+  --fc-color-bg-body: #f8fafc;
+  --fc-color-bg-container: #e1e1e1;
+  --fc-color-bg-card: #ffffff;
+  --fc-color-text: #000000;
+  --fc-color-heading: #333333;
+  --fc-color-overlay: rgba(0, 0, 0, 0.35);
+  --fc-color-button: rgba(255, 255, 255, 0.9);
+  --fc-color-button-hover: #ffffff;
+  --fc-color-shadow-light: rgba(0, 0, 0, 0.1);
+  --fc-color-shadow-medium: rgba(0, 0, 0, 0.15);
+  --fc-color-shadow-heavy: rgba(0, 0, 0, 0.25);
+
+  /* Spacing */
+  --fc-space-lg: 40px;
+  --fc-space-md: 32px;
+  --fc-space-sm: 16px;
+  --fc-space-xs: 10px;
+
+  /* Radius */
+  --fc-radius-md: 10px;
+  --fc-radius-sm: 6px;
+  --fc-radius-lg: 20px;
+
+  /* Font */
+  --fc-font-main: "Segoe UI", system-ui, -apple-system, sans-serif;
+
+  /* Animation */
+  --fc-transition-fast: 0.2s ease;
+  --fc-transition-medium: 0.3s ease-in-out;
+}
+
+/* ───────────────────────────────────────
+   Scoped box-sizing reset
+   (replaces the global * { box-sizing } rule)
+─────────────────────────────────────── */
+#free-content,
+#free-content *,
+#free-content *::before,
+#free-content *::after {
+  box-sizing: border-box;
+}
+
+/* ───────────────────────────────────────
+   Container
+   (the body { font-family, margin, padding } rule
+    is intentionally removed — it was overriding
+    the global body style. font-family is set here
+    on the component root instead.)
+─────────────────────────────────────── */
+#free-content.free-content-container {
+  font-family: var(--fc-font-main);
+  color: var(--fc-color-text);
+  margin: var(--fc-space-md);
+  padding: var(--fc-space-md);
+  border-radius: var(--fc-radius-md);
+  background-color: var(--fc-color-bg-container);
+  position: relative;
+  overflow: hidden;
+}
+
+#free-content h2 {
+  font-weight: 800;
+  text-align: center;
+  color: #7c3aed;
+  margin-bottom: 2rem;
+  letter-spacing: 0.5px;
+}
+
+/* ───────────────────────────────────────
+   Horizontal Scroll Layout
+─────────────────────────────────────── */
+#free-content .scroll-wrapper {
+  position: relative;
+}
+
+#free-content .video-scroll-container {
+  display: flex;
+  gap: var(--fc-space-sm);
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  padding-bottom: 10px;
+}
+
+#free-content .video-scroll-container::-webkit-scrollbar {
+  display: none;
+}
+
+/* ───────────────────────────────────────
+   Video Card
+─────────────────────────────────────── */
+#free-content .video-card {
+  background-color: var(--fc-color-bg-card);
+  border-radius: var(--fc-radius-sm);
+  box-shadow: 0 2px 6px var(--fc-color-shadow-light);
+  flex-shrink: 0;
+  width: 240px;
+  transition: transform var(--fc-transition-fast),
+              box-shadow var(--fc-transition-fast);
+  animation: fc-fadeIn 0.4s ease-out;
+}
+
+#free-content .video-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 14px var(--fc-color-shadow-medium);
+}
+
+/* Large screen: 5 visible */
+@media (min-width: 1025px) {
+  #free-content .video-card {
+    width: calc((100% - 4 * var(--fc-space-sm)) / 5);
+  }
+}
+
+/* Tablet */
+@media (min-width: 641px) and (max-width: 1024px) {
+  #free-content .video-card {
+    width: 45%;
+  }
+}
+
+/* Mobile: 1 visible */
+@media (max-width: 640px) {
+  #free-content .video-card {
+    width: 90%;
+  }
+}
+
+/* ───────────────────────────────────────
+   Thumbnail
+─────────────────────────────────────── */
+#free-content .thumbnail-container {
+  position: relative;
+  width: 100%;
+  padding-top: 56.25%;
+}
+
+#free-content .thumbnail-container img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: var(--fc-radius-sm);
+}
+
+/* Overlay */
+#free-content .video-overlay {
+  position: absolute;
+  inset: 0;
+  background: var(--fc-color-overlay);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  opacity: 0;
+  transition: opacity var(--fc-transition-medium);
+}
+
+#free-content .video-card:hover .video-overlay {
+  opacity: 1;
+}
+
+#free-content .video-play-button {
+  width: 50px;
+  height: 50px;
+  background: var(--fc-color-button);
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 4px 10px var(--fc-color-shadow-heavy);
+  transition: background var(--fc-transition-medium);
+}
+
+#free-content .video-play-button::before {
+  content: "▶";
+  font-size: 18px;
+  color: var(--fc-color-heading);
+}
+
+#free-content .video-play-button:hover {
+  background: var(--fc-color-button-hover);
+}
+
+/* Title */
+#free-content .video-card h3 {
+  padding: var(--fc-space-xs);
+  font-size: 0.95rem;
+  color: var(--fc-color-heading);
+}
+
+/* ───────────────────────────────────────
+   View All Card
+─────────────────────────────────────── */
+#free-content .view-all-card {
+  width: 200px;
+  flex-shrink: 0;
+  background: #7c3aed;
+  color: white;
+  border-radius: var(--fc-radius-sm);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  font-weight: 600;
+  transition: transform var(--fc-transition-fast);
+}
+
+#free-content .view-all-card:hover {
+  transform: scale(1.05);
+}
+
+/* ───────────────────────────────────────
+   Expanded View
+─────────────────────────────────────── */
+#free-content .expanded-view {
+  animation: fc-fadeIn 0.3s ease;
+}
+
+#free-content .back-btn {
+  background: #7c3aed;
+  color: white;
+  border: none;
+  padding: 8px 18px;
+  border-radius: var(--fc-radius-lg);
+  cursor: pointer;
+  margin-bottom: 20px;
+  font-weight: 600;
+  transition: background var(--fc-transition-fast);
+}
+
+#free-content .back-btn:hover {
+  background: #6d28d9;
+}
+
+#free-content .expanded-grid {
+  display: grid;
+  gap: var(--fc-space-sm);
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+}
+
+/* Mobile Expanded: 2 per row */
+@media (max-width: 640px) {
+  #free-content .expanded-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* Large screen Expanded: 5 per row */
+@media (min-width: 1200px) {
+  #free-content .expanded-grid {
+    grid-template-columns: repeat(5, 1fr);
+  }
+}
+
+/* Reset card width inside expanded grid */
+#free-content .expanded-grid .video-card {
+  width: 100% !important;
+}
+
+/* ───────────────────────────────────────
+   Animation
+   (namespaced as fc-fadeIn to avoid
+    colliding with any global fadeIn keyframe)
+─────────────────────────────────────── */
+@keyframes fc-fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

@@ -1,0 +1,174 @@
+/* ============================================================
+   STUDY MATERIAL STYLES — SCOPED VERSION
+   SAME LOOK, NO GLOBAL CSS CONFLICTS
+   ============================================================ */
+
+.study-material {
+  --study-bg: #f8fafc;
+  --study-card-bg: #ffffff;
+  --study-text: #1a202c;
+  --study-hover: #7c3aed;
+  --study-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+
+  --border-radius-lg: 20px;
+
+  --font-size-md: 1rem;
+  --font-size-lg: 1.1rem;
+
+  --spacing-md: 12px;
+  --spacing-lg: 20px;
+  --spacing-xl: 32px;
+
+  --font: "Poppins", "Segoe UI", system-ui, -apple-system, sans-serif;
+
+  background: var(--study-bg);
+  padding: var(--spacing-xl);
+  text-align: center;
+  margin-bottom: 40px;
+  box-sizing: border-box;
+}
+
+.study-material .study-title {
+  font-family: var(--font);
+  font-weight: 900;
+  margin-bottom: 40px;
+  color: #7c3aed;
+  font-size: 2rem;
+  letter-spacing: 0.3px;
+}
+
+/* ============ GRID ============ */
+.study-material .study-grid {
+  display: grid;
+  gap: 28px;
+  justify-content: center;
+  justify-items: center;
+  align-items: stretch;
+}
+
+/* ============ CARD BASE ============ */
+.study-material .study-card {
+  background: var(--study-card-bg);
+  border-radius: var(--border-radius-lg);
+  width: 100%;
+  max-width: 230px;
+  height: 200px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  box-shadow: var(--study-shadow);
+  cursor: pointer;
+  border: none;
+  transition: all 0.25s ease;
+  padding: 16px;
+  position: relative;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+.study-material .study-card:hover {
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: 0 14px 30px rgba(124, 58, 237, 0.15);
+}
+
+.study-material .study-card:focus-visible {
+  outline: 2px solid rgba(124, 58, 237, 0.35);
+  outline-offset: 3px;
+}
+
+/* ============ LOTTIE NORMALIZER ============ */
+.study-material .study-animation {
+  width: 140px;
+  height: 110px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 10px;
+  flex: 0 0 auto;
+}
+
+.study-material .study-animation > * {
+  width: 100% !important;
+  height: 100% !important;
+  max-width: 140px;
+  max-height: 110px;
+}
+
+/* ============ TEXT ============ */
+.study-material .study-label {
+  font-size: var(--font-size-lg);
+  font-weight: 700;
+  color: var(--study-text);
+  pointer-events: none;
+  text-align: center;
+  line-height: 1.2;
+  margin-top: 6px;
+}
+
+/* ============ VIEW MORE TILE ============ */
+.study-material #view-more-card {
+  background: linear-gradient(135deg, #7c3aed, #5b21b6);
+  color: white;
+  font-size: var(--font-size-md);
+  font-weight: 700;
+}
+
+.study-material #view-more-card:hover {
+  background: linear-gradient(135deg, #6d28d9, #4c1d95);
+}
+
+.study-material #view-more-card .study-label {
+  color: white;
+}
+
+/* ============ RESPONSIVE ============ */
+
+/* Mobile */
+@media (max-width: 640px) {
+  .study-material {
+    padding: 24px 16px;
+  }
+
+  .study-material .study-card {
+    height: 180px;
+  }
+
+  .study-material .study-animation {
+    width: 120px;
+    height: 95px;
+  }
+
+  .study-material .study-title {
+    font-size: 1.6rem;
+  }
+
+  .study-material .study-label {
+    font-size: 0.875rem;
+  }
+}
+
+/* Tablet */
+@media (min-width: 641px) and (max-width: 1024px) {
+  .study-material .study-card {
+    height: 190px;
+  }
+}
+
+/* Desktop */
+@media (min-width: 1025px) {
+  .study-material .study-card {
+    height: 200px;
+  }
+}
+
+/* ============ REDUCED MOTION ============ */
+@media (prefers-reduced-motion: reduce) {
+  .study-material .study-card {
+    transition: none;
+  }
+
+  .study-material .study-card:hover {
+    transform: none;
+  }
+}

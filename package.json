@@ -19,6 +19,7 @@
     "firebase": "^11.9.1",
     "framer-motion": "^12.23.26",
     "gsap": "^3.15.0",
+    "jspdf": "^4.2.1",
     "lottie-react": "^2.4.1",
     "lucide-react": "^0.523.0",
     "prop-types": "^15.8.1",

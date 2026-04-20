@@ -1,0 +1,485 @@
+/* ============================================================
+   HEADER + NAVBAR COMBINED
+   STICKY • RIGHT-ALIGNED NAV • MOBILE HAMBURGER FAR RIGHT
+   FIX: .header-navbar-wrapper is position: fixed (immune to
+        ancestor overflow). .topbar is position: relative.
+   ============================================================ */
+
+.header-navbar-wrapper {
+  --header-bg: rgb(0, 0, 0);
+  --header-border: rgba(255, 255, 255, 0.08);
+  --header-text: #eaf2ff;
+  --navbar-text: #e8f0ff;
+  --navbar-hover: #ffffff;
+  --navbar-active: #ffffff;
+  --navbar-focus: #e7e7e7;
+  --glass-blur: blur(20px) saturate(180%);
+  --accent-gradient: linear-gradient(90deg, #00ff80, #61a0ff);
+  --glass-tint: rgba(0, 0, 0, 0.06);
+  --glass-border: rgba(255, 255, 255, 0.12);
+  --glass-specular: linear-gradient(
+    135deg,
+    rgba(0, 0, 0, 0.486) 0%,
+    rgba(0, 0, 0, 0.486) 100%,
+    transparent 70%
+  );
+  --font-family: "Inter", "Helvetica", sans-serif;
+  --font-size-xs: 0.75rem;
+  --font-size-sm: 0.85rem;
+  --font-size-md: 1rem;
+  --font-size-lg: 1.1rem;
+  --font-size-xl: 1.25rem;
+  --spacing-xs: 4px;
+  --spacing-sm: 8px;
+  --spacing-md: 12px;
+  --spacing-lg: 16px;
+  --spacing-xl: 24px;
+  --spacing-xxl: 32px;
+  --border-radius: 10px;
+  --transition-fast: 0.2s ease;
+  --transition-medium: 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-slow: 0.55s cubic-bezier(0.23, 1, 0.32, 1);
+
+  /* ── FIX ──────────────────────────────────────────────────
+     position: fixed on the wrapper is the only approach
+     immune to ancestor overflow:hidden/auto/scroll rules
+     that silently break position: sticky.
+     left: 0 + right: 0 keeps it full-width without width:100%.
+  ─────────────────────────────────────────────────────────── */
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 9999;
+
+  background: #000;
+  box-sizing: border-box;
+  isolation: isolate;
+}
+
+/* ── PAGE CONTENT OFFSET ──────────────────────────────────────
+   Pushes the first element after the wrapper down so content
+   doesn't hide behind the fixed bar. 72px = topbar min-height.
+   On mobile (<900px) topbar shrinks, offset adjusts to 54px.
+
+   Also add scroll-margin-top to each section's own CSS file
+   so scrollIntoView() lands below the bar:
+     #available-courses { scroll-margin-top: 72px; }
+     #free-content      { scroll-margin-top: 72px; }
+     #study-material    { scroll-margin-top: 72px; }
+──────────────────────────────────────────────────────────── */
+.header-navbar-wrapper + * {
+  padding-top: 72px;
+}
+
+/* =========================
+   TOP BAR
+   ========================= */
+
+.header-navbar-wrapper .topbar {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: var(--spacing-md) var(--spacing-xl);
+  box-sizing: border-box;
+  background: var(--header-bg);
+  border-bottom: 1px solid var(--header-border);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+
+  /* position: relative — wrapper handles the fixed sticking */
+  position: relative;
+  z-index: 1;
+  overflow: visible;
+  min-height: 72px;
+}
+
+.header-navbar-wrapper .topbar::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(120deg, rgba(0, 0, 0, 0.15), transparent 40%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.header-navbar-wrapper .topbar > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* =========================
+   BRAND
+   ========================= */
+
+.header-navbar-wrapper .company-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+  min-width: 0;
+}
+
+.header-navbar-wrapper .company-logo {
+  width: clamp(70px, 8vw, 120px);
+  height: auto;
+  object-fit: contain;
+  transition: transform var(--transition-medium), filter var(--transition-medium);
+  user-select: none;
+}
+
+.header-navbar-wrapper .company-logo:hover {
+  filter: drop-shadow(0 6px 16px rgba(97, 160, 255, 0.25));
+}
+
+.header-navbar-wrapper .brand-tag {
+  font-family: "Poppins", "Inter", sans-serif;
+  font-weight: 500;
+  color: var(--header-text);
+  font-size: clamp(1rem, 2vw, 1.6rem);
+  letter-spacing: 0.5px;
+  position: relative;
+  transition: color var(--transition-medium);
+  user-select: none;
+  white-space: nowrap;
+}
+
+.header-navbar-wrapper .brand-tag::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -4px;
+  width: 100%;
+  height: 2px;
+  background: var(--accent-gradient);
+  transform: scaleX(0.6);
+  transform-origin: left;
+  opacity: 0.7;
+  transition: transform var(--transition-medium), opacity var(--transition-medium);
+}
+
+.header-navbar-wrapper .brand-tag:hover {
+  color: #ffffff;
+}
+
+.header-navbar-wrapper .brand-tag:hover::after {
+  transform: scaleX(1);
+  opacity: 1;
+}
+
+/* =========================
+   DESKTOP NAV
+   ========================= */
+
+.header-navbar-wrapper .desktop-nav {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  flex: 1;
+  margin-left: auto;
+  min-width: 0;
+}
+
+.header-navbar-wrapper .nav-buttons {
+  display: flex;
+  gap: var(--spacing-lg);
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.header-navbar-wrapper .nav-button {
+  background: transparent;
+  color: var(--navbar-text);
+  border: 1px solid transparent;
+  font-size: var(--font-size-md);
+  padding: var(--spacing-sm) var(--spacing-lg);
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  position: relative;
+  outline: none;
+  overflow: hidden;
+  letter-spacing: 0.02em;
+  transition:
+    color var(--transition-medium),
+    border-color var(--transition-medium),
+    box-shadow var(--transition-medium),
+    transform var(--transition-fast),
+    background var(--transition-medium);
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.header-navbar-wrapper .nav-button:focus-visible {
+  box-shadow:
+    0 0 0 3px var(--navbar-focus),
+    inset 0 0 10px rgba(140, 98, 239, 0.1);
+}
+
+.header-navbar-wrapper .nav-button::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.1) 0%,
+    rgba(144, 100, 255, 0.08) 50%,
+    transparent 100%
+  );
+  opacity: 0;
+  transition: opacity var(--transition-medium);
+  border-radius: inherit;
+  z-index: 0;
+}
+
+.header-navbar-wrapper .nav-button::after {
+  content: "";
+  position: absolute;
+  left: 10%;
+  bottom: 5px;
+  height: 1.5px;
+  width: 80%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--navbar-hover),
+    transparent
+  );
+  transform: scaleX(0);
+  transform-origin: center;
+  transition: transform var(--transition-medium);
+  border-radius: 2px;
+  z-index: 1;
+}
+
+.header-navbar-wrapper .nav-button > * {
+  position: relative;
+  z-index: 2;
+}
+
+.header-navbar-wrapper .nav-button:hover {
+  color: var(--navbar-hover);
+  background: rgba(255, 255, 255, 0.06);
+  border-color: var(--glass-border);
+  transform: translateY(-2px);
+  box-shadow:
+    0 4px 16px rgba(134, 100, 255, 0.15),
+    inset 0 1px 0 rgba(255, 255, 255, 0.12);
+  user-select: none;
+}
+
+.header-navbar-wrapper .nav-button:hover::before { opacity: 1; }
+.header-navbar-wrapper .nav-button:hover::after  { transform: scaleX(1); }
+
+.header-navbar-wrapper .nav-button:active {
+  color: var(--navbar-active);
+  transform: translateY(0) scale(0.97);
+  background: rgba(82, 26, 224, 0.15);
+  box-shadow:
+    inset 0 2px 8px rgba(0, 0, 0, 0.2),
+    0 0 12px rgba(149, 100, 255, 0.1);
+  border-color: rgba(69, 0, 179, 0.3);
+}
+
+.header-navbar-wrapper .nav-button:active::after {
+  transform: scaleX(0.6);
+  opacity: 0.5;
+}
+
+/* =========================
+   HAMBURGER
+   ========================= */
+
+.header-navbar-wrapper .hamburger-btn {
+  display: none;
+  width: 46px;
+  height: 42px;
+  border: 1px solid var(--glass-border);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.06);
+  cursor: pointer;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  flex-direction: column;
+  transition: transform var(--transition-fast), background var(--transition-medium);
+  -webkit-tap-highlight-color: transparent;
+  flex-shrink: 0;
+  margin-left: auto;
+}
+
+.header-navbar-wrapper .hamburger-btn span {
+  display: block;
+  width: 20px;
+  height: 2px;
+  border-radius: 999px;
+  background: #ffffff;
+  transition: transform var(--transition-medium), opacity var(--transition-medium);
+}
+
+.header-navbar-wrapper .hamburger-btn:hover {
+  transform: translateY(-1px);
+  background: rgba(255, 255, 255, 0.1);
+}
+
+/* =========================
+   MOBILE MODAL
+   (position: fixed — already escapes wrapper, no change needed)
+   ========================= */
+
+.mobile-menu-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 99999;
+  background: rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 84px 16px 16px;
+  box-sizing: border-box;
+}
+
+.mobile-menu {
+  width: min(92vw, 420px);
+  background: #0b0f19;
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 22px;
+  box-shadow: 0 18px 50px rgba(0, 0, 0, 0.45);
+  padding: 18px;
+  box-sizing: border-box;
+  animation: mobileMenuIn 0.2s ease-out;
+}
+
+.mobile-menu-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 18px;
+}
+
+.mobile-menu-title {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.mobile-close-btn {
+  width: 38px;
+  height: 38px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.06);
+  color: #ffffff;
+  font-size: 1.5rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.mobile-menu-links {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.mobile-menu-link {
+  width: 100%;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.05);
+  color: #ffffff;
+  padding: 14px 16px;
+  border-radius: 14px;
+  font-size: 1rem;
+  text-align: left;
+  cursor: pointer;
+  transition: background var(--transition-medium), transform var(--transition-fast);
+}
+
+.mobile-menu-link:hover {
+  background: rgba(255, 255, 255, 0.1);
+  transform: translateX(2px);
+}
+
+@keyframes mobileMenuIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* =========================
+   RESPONSIVE BREAKPOINTS
+   ========================= */
+
+@media (max-width: 899px) {
+  .header-navbar-wrapper .desktop-nav {
+    display: none;
+  }
+
+  .header-navbar-wrapper .hamburger-btn {
+    display: inline-flex;
+    margin-left: auto;
+  }
+
+  .header-navbar-wrapper .topbar {
+    padding: 10px 14px;
+    min-height: 54px;
+  }
+
+  .header-navbar-wrapper .brand-tag {
+    font-size: 0.95rem;
+  }
+
+  /* Tighter offset on mobile */
+  .header-navbar-wrapper + * {
+    padding-top: 54px;
+  }
+}
+
+@media (min-width: 900px) {
+  .mobile-menu-overlay {
+    display: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .mobile-menu {
+    width: 100%;
+    border-radius: 18px;
+  }
+
+  .header-navbar-wrapper .topbar {
+    padding: 10px 12px;
+  }
+
+  .header-navbar-wrapper .brand-tag {
+    font-size: 0.9rem;
+  }
+
+  .header-navbar-wrapper .company-logo {
+    width: 66px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .header-navbar-wrapper .company-logo,
+  .header-navbar-wrapper .brand-tag,
+  .header-navbar-wrapper .brand-tag::after,
+  .header-navbar-wrapper .nav-button,
+  .header-navbar-wrapper .nav-button::before,
+  .header-navbar-wrapper .nav-button::after,
+  .header-navbar-wrapper .hamburger-btn,
+  .mobile-menu,
+  .mobile-menu-link {
+    transition: none;
+    animation: none;
+  }
+}
