@@ -2,6 +2,8 @@ import { Software } from "../types/software";
 
 const CLOUD = "https://res.cloudinary.com/dydh05l1u/video/upload";  // aryan cloudinary account for hosting software demo videos
 
+// Get-ChildItem *.mp4 | ForEach-Object {ffmpeg -i "$($_.Name)" -vcodec libx264 -crf 23 -preset medium -pix_fmt yuv420p -movflags +faststart -vf "scale=1280:-2" -acodec aac -b:a 128k "compressed_$($_.Name)"} 
+
 export const softwareList: Software[] = [
 
   {
@@ -74,6 +76,20 @@ export const softwareList: Software[] = [
     seoTitle: "MAKAUT GPA to Percentage Calculator | Openroot Tool",
     seoDescription: "Convert GPA to percentage easily with Openroot MAKAUT calculator. Supports SGPA, CGPA, DGPA with accurate results.",
     category: "Education Platform"
-  }
+  },
+
+  {
+  name: "Openroot GDrive Automation",
+  shortName: "GDrive Automation",
+  slug: "gdrive-web-extension",
+  url: "/gdrive-web-extension",
+  video: `${CLOUD}/compressed_gdriveautomation_cbsmjs.mp4`,
+  description:
+    "A guided Chrome extension software page that helps users install and use the GDrive automation tool.",
+  seoTitle: "Openroot GDrive Automation | Chrome Extension Guide",
+  seoDescription:
+    "Learn how to install, pin, and use the Openroot GDrive Automation Chrome extension with a simple guided interface.",
+  category: "Automation Utility"
+}
 
 ];

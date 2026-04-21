@@ -27,6 +27,7 @@ const CoeasTerminal         = lazy(() => import("./pages/coevas"));
 const Makaut                = lazy(() => import("./pages/makaut"));
 const TravelExpenseManager  = lazy(() => import("./pages/TravelExpenseManager"));
 const OCLayout              = lazy(() => import("./pages/openrootClasses/OCLayout"));
+const GDrive                = lazy(() => import("./pages/GDrive"));
 
 // ── Minimal loading fallback — no heavy imports, no animations ───────────────
 function PageLoader() {
@@ -231,6 +232,7 @@ export default function App() {
             <Route path="/makaut-grade-pro"       element={<Makaut />} />
             <Route path="/travel-expense-manager" element={<TravelExpenseManager />} />
             <Route path="/openroot-classes" element={<OCLayout />} />
+            <Route path="/gdrive-web-extension" element={<GDrive />} />
 
             {/* ═══════════════════════════════════════════════
                 404

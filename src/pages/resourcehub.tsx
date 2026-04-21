@@ -26,6 +26,9 @@ const MAX_STARS = 5;
 const SAVE_DEBOUNCE_MS = 300;
 const DESKTOP_BREAKPOINT = 900; // px — must match CSS
 
+const IMG_CLOUD = "https://res.cloudinary.com/dydh05l1u/image/upload";
+const img = (publicId: string) => `${IMG_CLOUD}/q_auto,f_auto/${publicId}`;
+
 // ─── Types ───────────────────────────────────────────────────
 type JobType = 'central' | 'state' | 'psu';
 type FilterType = 'all' | JobType;
@@ -41,61 +44,61 @@ interface CardData {
 
 // ─── Section Data ─────────────────────────────────────────────
 const ITI_CARDS: CardData[] = [
-  { id: 'iti-1', url: 'https://admission-tetsd.wb.gov.in/', imgSrc: '/assets-rh/common.avif', imgAlt: 'ITI admission' },
-  { id: 'iti-2', url: 'https://www.skillindiadigital.gov.in/home', imgSrc: '/assets-rh/skillindia.avif', imgAlt: 'Skill India' },
-  { id: 'iti-3', url: 'https://webscte.co.in/', imgSrc: '/assets-rh/diploma.avif', imgAlt: 'WEBSCTE' },
-  { id: 'iti-4', url: 'https://minemountain.in/website/mining_e_library/', imgSrc: '/assets-rh/mining.avif', imgAlt: 'Mining books' },
+  { id: 'iti-1', url: 'https://admission-tetsd.wb.gov.in/', imgSrc: img('assets-rh/common_foq6po'), imgAlt: 'ITI admission' },
+  { id: 'iti-2', url: 'https://www.skillindiadigital.gov.in/home', imgSrc: img('assets-rh/skillindia_ubhpv1'), imgAlt: 'Skill India' },
+  { id: 'iti-3', url: 'https://webscte.co.in/', imgSrc: img('assets-rh/diploma_hgwjew'), imgAlt: 'WEBSCTE' },
+  { id: 'iti-4', url: 'https://minemountain.in/website/mining_e_library/', imgSrc: img('assets-rh/mining_ufhv7s'), imgAlt: 'Mining books' },
 ];
 
 const UGPG_CARDS: CardData[] = [
-  { id: 'ugpg-1', url: 'https://makaut1.ucanapply.com/smartexam/public/student', imgSrc: '/assets-rh/makaut.avif', imgAlt: 'MAKAUT' },
-  { id: 'ugpg-2', url: 'https://svmcm.wb.gov.in/', imgSrc: '/assets-rh/svmcm.avif', imgAlt: 'SVMCM' },
-  { id: 'ugpg-3', url: 'https://www.nism.ac.in/', imgSrc: '/assets-rh/nism.avif', imgAlt: 'NISM' },
-  { id: 'ugpg-4', url: 'https://admissionju.jadavpuruniversity.in/fengadmission/', imgSrc: '/assets-rh/ju.avif', imgAlt: 'Jadavpur University' },
+  { id: 'ugpg-1', url: 'https://makaut1.ucanapply.com/smartexam/public/student', imgSrc: img('assets-rh/makaut_pnoufn'), imgAlt: 'MAKAUT' },
+  { id: 'ugpg-2', url: 'https://svmcm.wb.gov.in/', imgSrc: img('assets-rh/svmcm_wguoxv'), imgAlt: 'SVMCM' },
+  { id: 'ugpg-3', url: 'https://www.nism.ac.in/', imgSrc: img('assets-rh/nism_okw994'), imgAlt: 'NISM' },
+  { id: 'ugpg-4', url: 'https://admissionju.jadavpuruniversity.in/fengadmission/', imgSrc: img('assets-rh/ju_r2vgcv'), imgAlt: 'Jadavpur University' },
 ];
 
 const GOVT_CARDS: CardData[] = [
-  { id: 'govt-1', url: 'https://uidai.gov.in/', imgSrc: '/assets-rh/uidai.avif', imgAlt: 'UIDAI' },
-  { id: 'govt-2', url: 'https://voters.eci.gov.in/', imgSrc: '/assets-rh/voters.avif', imgAlt: 'Voter Registration' },
-  { id: 'govt-3', url: 'https://unifiedportal-mem.epfindia.gov.in/', imgSrc: '/assets-rh/unifiedportal.avif', imgAlt: 'Unified Portal' },
-  { id: 'govt-4', url: 'https://passbook.epfindia.gov.in/MemberPassBook/login', imgSrc: '/assets-rh/PFpassbook.avif', imgAlt: 'PFpassbook' },
-  { id: 'govt-5', url: 'https://portal.esic.gov.in/EmployeePortal/login.aspx', imgSrc: '/assets-rh/esic.avif', imgAlt: 'ESIC' },
+  { id: 'govt-1', url: 'https://uidai.gov.in/', imgSrc: img('assets-rh/uidai_xwbq1i'), imgAlt: 'UIDAI' },
+  { id: 'govt-2', url: 'https://voters.eci.gov.in/', imgSrc: img('assets-rh/voters_zvsfda'), imgAlt: 'Voter Registration' },
+  { id: 'govt-3', url: 'https://unifiedportal-mem.epfindia.gov.in/', imgSrc: img('assets-rh/unifiedportal_rmfgqt'), imgAlt: 'Unified Portal' },
+  { id: 'govt-4', url: 'https://passbook.epfindia.gov.in/MemberPassBook/login', imgSrc: img('assets-rh/PFpassbook_gjxnhk'), imgAlt: 'PFpassbook' },
+  { id: 'govt-5', url: 'https://portal.esic.gov.in/EmployeePortal/login.aspx', imgSrc: img('assets-rh/esic_jd3ynx'), imgAlt: 'ESIC' },
 ];
 
 const AI_CARDS: CardData[] = [
-  { id: 'ai-1',  url: 'https://app.flowcv.com/resumes',          imgSrc: '/assets-rh/resume.avif',          imgAlt: 'resume' },
-  { id: 'ai-2',  url: 'https://playground.com/',                  imgSrc: '/assets-rh/playground.avif',      imgAlt: 'Playground' },
-  { id: 'ai-3',  url: 'https://icons8.com/',                      imgSrc: '/assets-rh/icons8.avif',          imgAlt: 'icons8' },
-  { id: 'ai-4',  url: 'https://www.widecanvas.ai/',               imgSrc: '/assets-rh/wide.avif',            imgAlt: 'WideCanvas' },
-  { id: 'ai-5',  url: 'https://squoosh.app/',                     imgSrc: '/assets-rh/squoosh.avif',         imgAlt: 'squoosh' },
-  { id: 'ai-6',  url: 'https://animegenius.live3d.io/',           imgSrc: '/assets-rh/anime.avif',           imgAlt: 'Anime Maker' },
-  { id: 'ai-7',  url: 'https://www.oxaam.com/',                   imgSrc: '/assets-rh/oxii.avif',            imgAlt: 'ox' },
-  { id: 'ai-8',  url: 'https://lottiefiles.com/',                 imgSrc: '/assets-rh/lottie.avif',          imgAlt: 'lottie' },
-  { id: 'ai-9',  url: 'https://reactbits.dev/',                   imgSrc: '/assets-rh/reactbits.avif',       imgAlt: 'reactbits' },
-  { id: 'ai-10', url: 'https://gradienty.codes/',                 imgSrc: '/assets-rh/gradienty.avif',       imgAlt: 'gradienty' },
-  { id: 'ai-11', url: 'https://spline.design/',                   imgSrc: '/assets-rh/spline.avif',          imgAlt: 'spline' },
-  { id: 'ai-12', url: 'https://www.cloudflare.com/en-in/',        imgSrc: '/assets-rh/cloudflare.avif',      imgAlt: 'Cloudflare' },
-  { id: 'ai-13', url: 'https://console.cloud.google.com/',        imgSrc: '/assets-rh/google-console.avif', imgAlt: 'console.cloud.google' },
-  { id: 'ai-14', url: 'https://skillshop.withgoogle.com/',        imgSrc: '/assets-rh/google-skillshop.avif', imgAlt: 'skillshop.withgoogle' },
+  { id: 'ai-1',  url: 'https://app.flowcv.com/resumes',          imgSrc: img('assets-rh/resume_hw2yh7'),          imgAlt: 'resume' },
+  { id: 'ai-2',  url: 'https://playground.com/',                  imgSrc: img('assets-rh/playground_zco9cz'),      imgAlt: 'Playground' },
+  { id: 'ai-3',  url: 'https://icons8.com/',                      imgSrc: img('assets-rh/icons8_sxvnp8'),          imgAlt: 'icons8' },
+  { id: 'ai-4',  url: 'https://www.widecanvas.ai/',               imgSrc: img('assets-rh/wide_mggcdb.avif'),            imgAlt: 'WideCanvas' },
+  { id: 'ai-5',  url: 'https://squoosh.app/',                     imgSrc: img('assets-rh/squoosh_dwhzif'),         imgAlt: 'squoosh' },
+  { id: 'ai-6',  url: 'https://animegenius.live3d.io/',           imgSrc: img('assets-rh/anime_eevsei'),           imgAlt: 'Anime Maker' },
+  { id: 'ai-7',  url: 'https://www.oxaam.com/',                   imgSrc: img('assets-rh/oxii_pizjy7'),            imgAlt: 'ox' },
+  { id: 'ai-8',  url: 'https://lottiefiles.com/',                 imgSrc: img('assets-rh/lottie_onkqtq'),          imgAlt: 'lottie' },
+  { id: 'ai-9',  url: 'https://reactbits.dev/',                   imgSrc: img('assets-rh/reactbits_k3mckb'),       imgAlt: 'reactbits' },
+  { id: 'ai-10', url: 'https://gradienty.codes/',                 imgSrc: img('assets-rh/gradienty_lrfznd'),       imgAlt: 'gradienty' },
+  { id: 'ai-11', url: 'https://spline.design/',                   imgSrc: img('assets-rh/spline_kcutlx'),          imgAlt: 'spline' },
+  { id: 'ai-12', url: 'https://www.cloudflare.com/en-in/',        imgSrc: img('assets-rh/cloudflare_bnfm30'),      imgAlt: 'Cloudflare' },
+  { id: 'ai-13', url: 'https://console.cloud.google.com/',        imgSrc: img('assets-rh/google-console_rjtqct'), imgAlt: 'console.cloud.google' },
+  { id: 'ai-14', url: 'https://skillshop.withgoogle.com/',        imgSrc: img('assets-rh/google-skillshop_oqqxw1'), imgAlt: 'skillshop.withgoogle' },
 ];
 
 const INVEST_CARDS: CardData[] = [
-  { id: 'inv-1', url: 'https://zerodha.com/brokerage-calculator/',              imgSrc: '/assets-rh/zerodha.avif',       imgAlt: 'deductions' },
-  { id: 'inv-2', url: 'https://klasterme.in/upcoming-dividends',                imgSrc: '/assets-rh/dividendstock.avif', imgAlt: 'dividends', isLive: true },
-  { id: 'inv-3', url: 'https://zerodha.com/ipo/',                               imgSrc: '/assets-rh/ipo.avif',           imgAlt: 'ipos',      isLive: true },
-  { id: 'inv-4', url: 'https://www.investorgain.com/report/live-ipo-gmp/331/',  imgSrc: '/assets-rh/gmp.avif',           imgAlt: 'gmp',       isLive: true },
-  { id: 'inv-5', url: 'https://www.nseindia.com/',                              imgSrc: '/assets-rh/nse.avif',           imgAlt: 'nse',       isLive: true },
-  { id: 'inv-6', url: 'https://tradingeconomics.com/united-states/stock-market',imgSrc: '/assets-rh/nasdaq.avif',        imgAlt: 'nasdaq',    isLive: true },
+  { id: 'inv-1', url: 'https://zerodha.com/brokerage-calculator/',              imgSrc: img('assets-rh/zerodha_xqjzvf'),       imgAlt: 'deductions' },
+  { id: 'inv-2', url: 'https://klasterme.in/upcoming-dividends',                imgSrc: img('assets-rh/dividendstock_wwfkh3'), imgAlt: 'dividends', isLive: true },
+  { id: 'inv-3', url: 'https://zerodha.com/ipo/',                               imgSrc: img('assets-rh/ipo_whvx3z'),           imgAlt: 'ipos',      isLive: true },
+  { id: 'inv-4', url: 'https://www.investorgain.com/report/live-ipo-gmp/331/',  imgSrc: img('assets-rh/gmp_p3eyet'),           imgAlt: 'gmp',       isLive: true },
+  { id: 'inv-5', url: 'https://www.nseindia.com/',                              imgSrc: img('assets-rh/nse_wpjy53'),           imgAlt: 'nse',       isLive: true },
+  { id: 'inv-6', url: 'https://tradingeconomics.com/united-states/stock-market',imgSrc: img('assets-rh/nasdaq_rin9vo'),        imgAlt: 'nasdaq',    isLive: true },
 ];
 
 const JOB_CARDS: CardData[] = [
-  { id: 'job-1', url: 'https://rrbrecruitmentstaging.net/#/auth/landing',   imgSrc: '/assets-rh/rrb.jpg',         imgAlt: 'RRB',                       jobType: 'central' },
-  { id: 'job-2', url: 'https://drdo.gov.in/drdo/',                          imgSrc: '/assets-rh/drdo-logo.png',   imgAlt: 'DRDO',                      jobType: 'central' },
-  { id: 'job-3', url: 'https://wbpsc.gov.in',                               imgSrc: '/assets-rh/wbpsc.png',       imgAlt: 'WBPSC',                     jobType: 'state' },
-  { id: 'job-4', url: 'https://www.grse.in/career/',                        imgSrc: '/assets-rh/grse-logo.png',   imgAlt: 'GRSE',                      jobType: 'psu' },
-  { id: 'job-5', url: 'https://careers.bhel.in/index.jsp',                  imgSrc: '/assets-rh/bhel.avif',       imgAlt: 'BHEL',                      jobType: 'psu' },
-  { id: 'job-6', url: 'https://iocl.com/latest-job-opening',                imgSrc: '/assets-rh/iocllogo.png',    imgAlt: 'IOCL',                      jobType: 'psu' },
-  { id: 'job-7', url: 'https://madrasfert.co.in/resources/recruitment/',    imgSrc: '/assets-rh/madras-fert.avif',imgAlt: 'Madras-Fertilizers-Limited', jobType: 'psu' },
+  { id: 'job-1', url: 'https://rrbrecruitmentstaging.net/#/auth/landing',   imgSrc: img('assets-rh/rrb_nv0pt4'),         imgAlt: 'RRB',                       jobType: 'central' },
+  { id: 'job-2', url: 'https://drdo.gov.in/drdo/',                          imgSrc: img('assets-rh/DRDO_tny47z'),   imgAlt: 'DRDO',                      jobType: 'central' },
+  { id: 'job-3', url: 'https://wbpsc.gov.in',                               imgSrc: img('assets-rh/wbpsc_jx06od.png'),       imgAlt: 'WBPSC',                     jobType: 'state' },
+  { id: 'job-4', url: 'https://www.grse.in/career/',                        imgSrc: img('assets-rh/grse-logo_cw8xcg'),   imgAlt: 'GRSE',                      jobType: 'psu' },
+  { id: 'job-5', url: 'https://careers.bhel.in/index.jsp',                  imgSrc: img('assets-rh/bhel_iv3bdc'),       imgAlt: 'BHEL',                      jobType: 'psu' },
+  { id: 'job-6', url: 'https://iocl.com/latest-job-opening',                imgSrc: img('assets-rh/iocllogo_qpttuz'),    imgAlt: 'IOCL',                      jobType: 'psu' },
+  { id: 'job-7', url: 'https://madrasfert.co.in/resources/recruitment/',    imgSrc: img('assets-rh/madras-fert_nnks9s'),imgAlt: 'Madras-Fertilizers-Limited', jobType: 'psu' },
 ];
 
 // ─── Storage helpers ──────────────────────────────────────────

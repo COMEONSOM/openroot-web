@@ -59,6 +59,15 @@ const Icons = {
       <circle cx="16.5" cy="16.5" r="2.5" />
     </svg>
   ),
+  gdrive: (
+    <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true">
+      {/* Cloud */}
+      <path d="M7 18a4 4 0 0 1-.5-7.97A5.5 5.5 0 0 1 17.5 9a3.5 3.5 0 0 1 .5 7H7z" />
+      
+      {/* Gear (automation) */}
+      <path d="M12 11.5a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zm0-3l.6 1.4 1.5.3-1.1 1.1.3 1.5-1.3-.7-1.3.7.3-1.5-1.1-1.1 1.5-.3.6-1.4z" />
+    </svg>
+  ),
 };
 
 const iconMap: Record<string, React.ReactNode> = {
@@ -68,6 +77,7 @@ const iconMap: Record<string, React.ReactNode> = {
   "openroot-classes":       Icons.Classes,
   "coevas-terminal":        Icons.Coevas,
   "makaut-grade-pro":       Icons.makaut,
+  "gdrive-web-extension":  Icons.gdrive,
 };
 
 // ── These are the pages Google should show as sitelinks ──────────────────────
@@ -80,6 +90,7 @@ const SITELINK_PAGES = [
   { name: "Travel Expense Manager",     url: "https://openroot.in/software/travel-expense-manager" },
   { name: "Openroot Classes",           url: "https://openroot.in/software/openroot-classes" },
   { name: "Coevas Terminal",            url: "https://openroot.in/software/coevas-terminal" },
+  { name: "GDrive Automation",          url: "https://openroot.in/software/gdrive-web-extension" },
   { name: "Certificate Verification",   url: "https://openroot.in/certificate-verification" },
   { name: "Software Hub",               url: "https://openroot.in/software" },
 ];

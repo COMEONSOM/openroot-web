@@ -13,6 +13,7 @@ const INTERNAL_ROUTES: Record<string, string> = {
   "makaut-grade-pro": "/makaut-grade-pro",
   "travel-expense-manager": "/travel-expense-manager",
   "openroot-classes": "/openroot-classes",
+  "gdrive-web-extension": "/gdrive-web-extension",
 };
 
 // ── SEO keyword map: add / extend per tool slug ──────────────────────────────
@@ -200,10 +201,11 @@ export default function SoftwarePage() {
     { href: "/software/openroot-classes",       label: "Openroot Classes" },
     { href: "/software/nior-ai",                label: "NIOR AI" },
     { href: "/software/travel-expense-manager", label: "Travel Expense Manager" },
-    { href: "/certificate-verification",         label: "Certificate Verification" },
-    { href: "/software/resource-hub",            label: "Resource Hub & Job Updates" },
-    { href: "/software/makaut-grade-pro", label: "Makaut Grade Calculator" },
-    { href: "/software/coevas-terminal",         label: "Coevas Terminal" },
+    { href: "/certificate-verification",        label: "Certificate Verification" },
+    { href: "/software/resource-hub",           label: "Resource Hub & Job Updates" },
+    { href: "/software/makaut-grade-pro",       label: "Makaut Grade Calculator" },
+    { href: "/software/coevas-terminal",        label: "Coevas Terminal" },
+    { href: "/software/gdrive-web-extension",   label: "GDrive Automation" },
   ];
 
   return (

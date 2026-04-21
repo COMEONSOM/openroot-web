@@ -131,6 +131,29 @@ The system provides a clear financial overview of the entire trip and helps grou
     purpose: `The Travel Expense Manager simplifies group travel budgeting by automating expense tracking and balance calculations between participants.
 
 Instead of manually determining who owes whom, the platform generates clear summaries that help travelers manage shared finances transparently and efficiently.`
-  }
+  },
+
+  "gdrive-web-extension": {
+  overview: `Openroot GDrive Automation is a guided Chrome extension workflow designed to help users quickly install, pin, and launch the Openroot GDrive Automation tool with a simple step-by-step interface. The page is created to make the setup process clear even for first-time users who may not be familiar with Chrome extension installation steps.
+
+Instead of leaving users confused with a plain download link, the software page visually explains the complete process, starting from opening the extension page, adding it to Chrome, opening the extensions panel, pinning the tool, and finally using the built-in tutorial video for proper guidance.
+
+This software page acts as an interactive launch point for the extension, making the installation flow easier to understand, more polished, and more user-friendly for everyday users`,
+
+  features: [
+    "Step-by-step guided Chrome extension installation flow",
+    "Visual instructions for first-time users",
+    "Extension page redirect with clear install path",
+    "Pinning guidance for quick toolbar access",
+    "Built-in tutorial video support for proper usage",
+    "Clean interface designed for smooth user onboarding"
+  ],
+
+  purpose: `The primary purpose of Openroot GDrive Automation is to make the Chrome extension setup process simple, visual, and beginner-friendly.
+
+Many users find browser extension installation confusing when instructions are not shown clearly. This software page solves that problem by presenting the complete process in a structured format so users can confidently install, pin, and use the extension without needing extra help.
+
+The goal is to provide a smooth onboarding experience that feels intuitive, professional, and easy to follow for all users.`
+  },
 
 };
