@@ -1480,3 +1480,31 @@
 
   .carouselProgress { margin-inline: var(--sp-4); }
 }
+
+/* ── Image-driven full-card container (image mode) ───────────── */
+/*    Mobile: edge-to-edge (no padding needed on small screens)   */
+/*    ≥900px: inset with padding so the image breathes inside     */
+/*            the card instead of filling it wall-to-wall         */
+.offerImageFull {
+  /* base: fill the card completely on mobile */
+  padding: 0;
+  background-color: var(--_surface-1);
+  transition: background-color 200ms ease;
+}
+
+@media (min-width: 900px) {
+  .offerImageFull {
+    padding: 20px 20px 20px 16px; /* left stays tight against the accent stripe */
+  }
+
+  .offerImageFull img {
+    border-radius: var(--radius-md);  /* rounds corners when image is inset */
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.10), 0 0 0 1px var(--_border-mid);
+  }
+}
+
+@media (min-width: 1280px) {
+  .offerImageFull {
+    padding: 28px 28px 28px 20px;
+  }
+}

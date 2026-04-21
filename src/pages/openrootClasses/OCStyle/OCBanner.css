@@ -51,7 +51,6 @@
   margin-top: 76px;
   padding: var(--banner-padding-lg);
   background: var(--banner-bg);
-  border-radius: var(--border-radius-md);
   box-shadow: var(--shadow-md);
   box-sizing: border-box;
 }

@@ -557,289 +557,291 @@ export default function AvailableCourses() {
   // ─── JSX ──────────────────────────────────────────────────────────────────
 
   return (
-    <div id="available-courses" className="courses-container">
-      <h2>🚀 Available Courses</h2>
+    <div className="courses-section-wrapper">
+      <div id="available-courses" className="courses-container">
+        <h2>🚀 Available Courses</h2>
 
-      <div className="course-stepper">
-        <div className={viewState === "list" ? "step active" : "step"}>
-          Explore
+        <div className="course-stepper">
+          <div className={viewState === "list" ? "step active" : "step"}>
+            Explore
+          </div>
+          <div className={viewState === "details" ? "step active" : "step"}>
+            Overview
+          </div>
+          <div className={viewState === "success" ? "step active" : "step"}>
+            Payment
+          </div>
         </div>
-        <div className={viewState === "details" ? "step active" : "step"}>
-          Overview
-        </div>
-        <div className={viewState === "success" ? "step active" : "step"}>
-          Payment
-        </div>
-      </div>
 
-      {/* LIST */}
-      {viewState === "list" && (
-        <ul className="course-list">
-          {COURSE_DATA.map((course) => (
-            <motion.li
-              key={course.id}
-              className="course-item premium-card"
-              whileHover={{ y: -6, scale: 1.03 }}
-              whileTap={{ scale: 0.98 }}
-              onClick={() => handleCourseClick(course.id)}
-            >
-              <Lottie
-                animationData={course.animation}
-                loop
-                className="course-thumbnail"
-              />
-              <h4>{course.name}</h4>
-              <p>{course.duration}</p>
-              <span className="price-chip">💰 {course.priceLabel}</span>
-            </motion.li>
-          ))}
-        </ul>
-      )}
-
-      {/* DETAILS */}
-      <AnimatePresence>
-        {viewState === "details" && selectedCourse && (
-          <motion.section
-            className="course-details"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0 }}
-          >
-            <button className="back-button" onClick={handleBack}>
-              ← Back
-            </button>
-
-            <h3>{selectedCourse.name}</h3>
-            <p className="duration">{selectedCourse.duration}</p>
-
-            <div className="highlights-grid">
-              {selectedCourse.description.map((line, i) => (
-                <motion.div
-                  key={i}
-                  className="highlight-card"
-                  initial={{ opacity: 0, y: 8 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: i * 0.05 }}
-                >
-                  ✅ {line}
-                </motion.div>
-              ))}
-            </div>
-
-            <div className="price-and-pay">
-              <button className="price">💰 {selectedCourse.priceLabel}</button>
-
-              <motion.button
-                className="pay-button glowing"
-                onClick={openDetailsModal}
-                disabled={isPaying}
-                whileHover={{ scale: 1.08 }}
+        {/* LIST */}
+        {viewState === "list" && (
+          <ul className="course-list">
+            {COURSE_DATA.map((course) => (
+              <motion.li
+                key={course.id}
+                className="course-item premium-card"
+                whileHover={{ y: -6, scale: 1.03 }}
+                whileTap={{ scale: 0.98 }}
+                onClick={() => handleCourseClick(course.id)}
               >
-                {isPaying ? "Processing..." : "🔒 Secure Checkout"}
-              </motion.button>
-
-              <div className="trust-badges">
-                🔒 Secure Payments • 💳 UPI / Cards • ✅ Refund Policy
-              </div>
-            </div>
-          </motion.section>
+                <Lottie
+                  animationData={course.animation}
+                  loop
+                  className="course-thumbnail"
+                />
+                <h4>{course.name}</h4>
+                <p>{course.duration}</p>
+                <span className="price-chip">💰 {course.priceLabel}</span>
+              </motion.li>
+            ))}
+          </ul>
         )}
-      </AnimatePresence>
 
-      {/* DETAILS MODAL */}
-      <AnimatePresence>
-        {isDetailsOpen && (
-          <motion.div
-            className="modal-backdrop"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-          >
-            <motion.div
-              className="checkout-modal"
-              initial={{ opacity: 0, y: 16, scale: 0.98 }}
-              animate={{ opacity: 1, y: 0, scale: 1 }}
-              exit={{ opacity: 0, y: 8, scale: 0.98 }}
+        {/* DETAILS */}
+        <AnimatePresence>
+          {viewState === "details" && selectedCourse && (
+            <motion.section
+              className="course-details"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0 }}
             >
-              <div className="modal-header">
-                <h4>Student details</h4>
-                <button
-                  type="button"
-                  className="modal-close"
-                  onClick={closeDetailsModal}
-                  disabled={isPaying}
-                >
-                  ✕
-                </button>
+              <button className="back-button" onClick={handleBack}>
+                ← Back
+              </button>
+
+              <h3>{selectedCourse.name}</h3>
+              <p className="duration">{selectedCourse.duration}</p>
+
+              <div className="highlights-grid">
+                {selectedCourse.description.map((line, i) => (
+                  <motion.div
+                    key={i}
+                    className="highlight-card"
+                    initial={{ opacity: 0, y: 8 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: i * 0.05 }}
+                  >
+                    ✅ {line}
+                  </motion.div>
+                ))}
               </div>
 
-              <p className="modal-subtitle">
-                We'll prefill your Razorpay checkout with these details and use
-                them for course communication.
-              </p>
+              <div className="price-and-pay">
+                <button className="price">💰 {selectedCourse.priceLabel}</button>
 
-              <div className="modal-body">
-                <div className="field">
-                  <label>Full name</label>
-                  <input
-                    type="text"
-                    value={studentName}
-                    onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                      setStudentName(e.target.value)
-                    }
-                    placeholder="Enter your full name"
-                  />
-                  {formErrors.name && (
-                    <span className="field-error">{formErrors.name}</span>
-                  )}
-                </div>
+                <motion.button
+                  className="pay-button glowing"
+                  onClick={openDetailsModal}
+                  disabled={isPaying}
+                  whileHover={{ scale: 1.08 }}
+                >
+                  {isPaying ? "Processing..." : "🔒 Secure Checkout"}
+                </motion.button>
 
-                <div className="field">
-                  <label>Email address</label>
-                  <input
-                    type="email"
-                    value={studentEmail}
-                    onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                      setStudentEmail(e.target.value)
-                    }
-                    placeholder="you@example.com"
-                  />
-                  {formErrors.email && (
-                    <span className="field-error">{formErrors.email}</span>
-                  )}
-                </div>
-
-                <div className="field">
-                  <label>Phone number</label>
-                  <input
-                    type="tel"
-                    value={studentPhone}
-                    onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                      setStudentPhone(e.target.value)
-                    }
-                    placeholder="10-digit mobile number"
-                  />
-                  {formErrors.phone && (
-                    <span className="field-error">{formErrors.phone}</span>
-                  )}
+                <div className="trust-badges">
+                  🔒 Secure Payments • 💳 UPI / Cards • ✅ Refund Policy
                 </div>
               </div>
+            </motion.section>
+          )}
+        </AnimatePresence>
 
-              <div className="modal-footer">
-                <button
-                  type="button"
-                  className="modal-secondary"
-                  onClick={closeDetailsModal}
-                  disabled={isPaying}
-                >
-                  Cancel
-                </button>
-                <button
-                  type="button"
-                  className="modal-primary"
-                  onClick={handleConfirmDetailsAndPay}
-                  disabled={isPaying}
-                >
-                  {isPaying ? "Processing..." : "Continue to payment"}
-                </button>
-              </div>
+        {/* DETAILS MODAL */}
+        <AnimatePresence>
+          {isDetailsOpen && (
+            <motion.div
+              className="modal-backdrop"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+            >
+              <motion.div
+                className="checkout-modal"
+                initial={{ opacity: 0, y: 16, scale: 0.98 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                exit={{ opacity: 0, y: 8, scale: 0.98 }}
+              >
+                <div className="modal-header">
+                  <h4>Student details</h4>
+                  <button
+                    type="button"
+                    className="modal-close"
+                    onClick={closeDetailsModal}
+                    disabled={isPaying}
+                  >
+                    ✕
+                  </button>
+                </div>
+
+                <p className="modal-subtitle">
+                  We'll prefill your Razorpay checkout with these details and use
+                  them for course communication.
+                </p>
+
+                <div className="modal-body">
+                  <div className="field">
+                    <label>Full name</label>
+                    <input
+                      type="text"
+                      value={studentName}
+                      onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                        setStudentName(e.target.value)
+                      }
+                      placeholder="Enter your full name"
+                    />
+                    {formErrors.name && (
+                      <span className="field-error">{formErrors.name}</span>
+                    )}
+                  </div>
+
+                  <div className="field">
+                    <label>Email address</label>
+                    <input
+                      type="email"
+                      value={studentEmail}
+                      onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                        setStudentEmail(e.target.value)
+                      }
+                      placeholder="you@example.com"
+                    />
+                    {formErrors.email && (
+                      <span className="field-error">{formErrors.email}</span>
+                    )}
+                  </div>
+
+                  <div className="field">
+                    <label>Phone number</label>
+                    <input
+                      type="tel"
+                      value={studentPhone}
+                      onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                        setStudentPhone(e.target.value)
+                      }
+                      placeholder="10-digit mobile number"
+                    />
+                    {formErrors.phone && (
+                      <span className="field-error">{formErrors.phone}</span>
+                    )}
+                  </div>
+                </div>
+
+                <div className="modal-footer">
+                  <button
+                    type="button"
+                    className="modal-secondary"
+                    onClick={closeDetailsModal}
+                    disabled={isPaying}
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="button"
+                    className="modal-primary"
+                    onClick={handleConfirmDetailsAndPay}
+                    disabled={isPaying}
+                  >
+                    {isPaying ? "Processing..." : "Continue to payment"}
+                  </button>
+                </div>
+              </motion.div>
             </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+          )}
+        </AnimatePresence>
 
-      {/* SUCCESS + RECEIPT */}
-      <AnimatePresence>
-        {viewState === "success" && selectedCourse && (
-          <motion.section
-            className="qr-section"
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0 }}
-          >
-            <h3>Payment Successful!</h3>
-            <p>
-              You successfully enrolled in{" "}
-              <strong>{selectedCourse.name}</strong>
-            </p>
-            <p className="motivator">Welcome to Openroot 🚀</p>
+        {/* SUCCESS + RECEIPT */}
+        <AnimatePresence>
+          {viewState === "success" && selectedCourse && (
+            <motion.section
+              className="qr-section"
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0 }}
+            >
+              <h3>Payment Successful!</h3>
+              <p>
+                You successfully enrolled in{" "}
+                <strong>{selectedCourse.name}</strong>
+              </p>
+              <p className="motivator">Welcome to Openroot 🚀</p>
 
-            <div className="qr-section-inner">
-              <div id="receipt-card" className="receipt-card" ref={receiptRef}>
-                <div className="receipt-header">
-                  <div>
-                    <h4>Payment Receipt</h4>
-                    <span>Openroot Classes</span>
+              <div className="qr-section-inner">
+                <div id="receipt-card" className="receipt-card" ref={receiptRef}>
+                  <div className="receipt-header">
+                    <div>
+                      <h4>Payment Receipt</h4>
+                      <span>Openroot Classes</span>
+                    </div>
+                    <div className="receipt-badge">PAID</div>
                   </div>
-                  <div className="receipt-badge">PAID</div>
+
+                  <div className="receipt-section">
+                    <div className="receipt-section-row">
+                      <span>Student name</span>
+                      <strong>{paymentMeta?.studentName || "Student"}</strong>
+                    </div>
+                    <div className="receipt-section-row">
+                      <span>Student email</span>
+                      <strong>{paymentMeta?.studentEmail || "-"}</strong>
+                    </div>
+                    <div className="receipt-section-row">
+                      <span>Phone</span>
+                      <strong>{paymentMeta?.studentPhone || "-"}</strong>
+                    </div>
+                  </div>
+
+                  <div className="receipt-section">
+                    <div className="receipt-section-row">
+                      <span>Course</span>
+                      <strong>{selectedCourse.name}</strong>
+                    </div>
+                    <div className="receipt-section-row">
+                      <span>Course ID</span>
+                      <strong>#{selectedCourse.id}</strong>
+                    </div>
+                    <div className="receipt-section-row">
+                      <span>Amount paid</span>
+                      <strong>₹{selectedCourse.totalFee}</strong>
+                    </div>
+                  </div>
+
+                  <div className="receipt-section">
+                    <div className="receipt-section-row">
+                      <span>Payment ID</span>
+                      <code>{paymentMeta?.paymentId || "-"}</code>
+                    </div>
+                    <div className="receipt-section-row">
+                      <span>Order ID</span>
+                      <code>{paymentMeta?.orderId || "-"}</code>
+                    </div>
+                    <div className="receipt-section-row">
+                      <span>Date</span>
+                      <strong>
+                        {paymentMeta?.paidAt
+                          ? new Date(paymentMeta.paidAt).toLocaleString()
+                          : new Date().toLocaleString()}
+                      </strong>
+                    </div>
+                  </div>
+
+                  <div className="receipt-footer">
+                    Thank you for learning with us!
+                  </div>
                 </div>
 
-                <div className="receipt-section">
-                  <div className="receipt-section-row">
-                    <span>Student name</span>
-                    <strong>{paymentMeta?.studentName || "Student"}</strong>
-                  </div>
-                  <div className="receipt-section-row">
-                    <span>Student email</span>
-                    <strong>{paymentMeta?.studentEmail || "-"}</strong>
-                  </div>
-                  <div className="receipt-section-row">
-                    <span>Phone</span>
-                    <strong>{paymentMeta?.studentPhone || "-"}</strong>
-                  </div>
-                </div>
-
-                <div className="receipt-section">
-                  <div className="receipt-section-row">
-                    <span>Course</span>
-                    <strong>{selectedCourse.name}</strong>
-                  </div>
-                  <div className="receipt-section-row">
-                    <span>Course ID</span>
-                    <strong>#{selectedCourse.id}</strong>
-                  </div>
-                  <div className="receipt-section-row">
-                    <span>Amount paid</span>
-                    <strong>₹{selectedCourse.totalFee}</strong>
-                  </div>
-                </div>
-
-                <div className="receipt-section">
-                  <div className="receipt-section-row">
-                    <span>Payment ID</span>
-                    <code>{paymentMeta?.paymentId || "-"}</code>
-                  </div>
-                  <div className="receipt-section-row">
-                    <span>Order ID</span>
-                    <code>{paymentMeta?.orderId || "-"}</code>
-                  </div>
-                  <div className="receipt-section-row">
-                    <span>Date</span>
-                    <strong>
-                      {paymentMeta?.paidAt
-                        ? new Date(paymentMeta.paidAt).toLocaleString()
-                        : new Date().toLocaleString()}
-                    </strong>
-                  </div>
-                </div>
-
-                <div className="receipt-footer">
-                  Thank you for learning with us!
+                <div className="receipt-actions">
+                  <button onClick={handleDownloadReceipt}>
+                    ⬇️ Download Receipt (PDF)
+                  </button>
+                  <button onClick={handleShareWhatsapp}>
+                    📲 Share Payment Proof on WhatsApp
+                  </button>
                 </div>
               </div>
-
-              <div className="receipt-actions">
-                <button onClick={handleDownloadReceipt}>
-                  ⬇️ Download Receipt (PDF)
-                </button>
-                <button onClick={handleShareWhatsapp}>
-                  📲 Share Payment Proof on WhatsApp
-                </button>
-              </div>
-            </div>
-          </motion.section>
-        )}
-      </AnimatePresence>
+            </motion.section>
+          )}
+        </AnimatePresence>
+      </div>
     </div>
   );
 }

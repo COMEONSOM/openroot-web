@@ -285,3 +285,9 @@
     transform: translateY(0);
   }
 }
+
+.free-content-wrapper {
+  width: 100%;
+  background: #f8fafc; /* same as your section */
+  padding: 20px 0;
+}

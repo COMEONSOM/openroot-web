@@ -78,52 +78,54 @@ const FreeContent = (): React.JSX.Element => {
   const scrollRef = useRef<HTMLDivElement>(null);
 
   return (
-    <section id="free-content" className="free-content-container">
-      {!expanded ? (
-        <>
-          <h2>💎 Free Contents</h2>
+    <div className="free-content-wrapper">
+      <section id="free-content" className="free-content-container">
+        {!expanded ? (
+          <>
+            <h2>💎 Free Contents</h2>
 
-          <div className="scroll-wrapper">
-            <div className="video-scroll-container" ref={scrollRef}>
-              {VIDEOS.map((video) => (
-                <VideoCard key={video.id} video={video} lazy />
-              ))}
+            <div className="scroll-wrapper">
+              <div className="video-scroll-container" ref={scrollRef}>
+                {VIDEOS.map((video) => (
+                  <VideoCard key={video.id} video={video} lazy />
+                ))}
 
-              {/* View All Button */}
-              <div
-                className="view-all-card"
-                onClick={() => setExpanded(true)}
-                role="button"
-                tabIndex={0}
-                aria-label="View all free content"
-                onKeyDown={(e: React.KeyboardEvent<HTMLDivElement>) => {
-                  if (e.key === "Enter" || e.key === " ") setExpanded(true);
-                }}
-              >
-                ➤
-                <span>View All</span>
+                {/* View All Button */}
+                <div
+                  className="view-all-card"
+                  onClick={() => setExpanded(true)}
+                  role="button"
+                  tabIndex={0}
+                  aria-label="View all free content"
+                  onKeyDown={(e: React.KeyboardEvent<HTMLDivElement>) => {
+                    if (e.key === "Enter" || e.key === " ") setExpanded(true);
+                  }}
+                >
+                  ➤
+                  <span>View All</span>
+                </div>
               </div>
             </div>
-          </div>
-        </>
-      ) : (
-        <div className="expanded-view">
-          <button
-            className="back-btn"
-            onClick={() => setExpanded(false)}
-            aria-label="Back to scroll view"
-          >
-            ← Back
-          </button>
+          </>
+        ) : (
+          <div className="expanded-view">
+            <button
+              className="back-btn"
+              onClick={() => setExpanded(false)}
+              aria-label="Back to scroll view"
+            >
+              ← Back
+            </button>
 
-          <div className="expanded-grid">
-            {VIDEOS.map((video) => (
-              <VideoCard key={video.id} video={video} lazy={false} />
-            ))}
+            <div className="expanded-grid">
+              {VIDEOS.map((video) => (
+                <VideoCard key={video.id} video={video} lazy={false} />
+              ))}
+            </div>
           </div>
-        </div>
-      )}
-    </section>
+        )}
+      </section>
+    </div>
   );
 };
 

@@ -639,3 +639,10 @@
     padding: 18px 16px 16px;
   }
 }
+
+.courses-section-wrapper {
+  width: 100%;
+  background: #f8fafc; /* same as section */
+  padding: 10px 0;
+}
+
