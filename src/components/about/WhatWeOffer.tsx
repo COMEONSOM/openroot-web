@@ -8,17 +8,16 @@
 // MOBILE: floating arrows hidden → replaced by bottom prev/next nav + counter
 // =============================================================================
 //
-// ── IMAGE-DRIVEN MODE ────────────────────────────────────────────────────────
-// Card body text has been commented out (NOT deleted) and replaced with a
-// single full-card image that switches automatically based on the active theme.
+// ── RESPONSIVE MODE ──────────────────────────────────────────────────────────
+//   ≤ 899 px  →  IMAGE-DRIVEN  (full-card themed image, no body text)
+//   ≥ 900 px  →  TEXT-DRIVEN   (original tag / title / highlights / list layout)
+//
+// The breakpoint is controlled by the NARROW_BP constant below.
+// Changing that single value shifts the switch-over point everywhere.
 //
 // Asset map (all in /assets/):
 //   Software Solutions  →  SSLIGHT.png  (light)  /  SSDARK.png  (dark)
 //   Openroot Classes    →  OCLIGHT.png  (light)  /  OCDARK.png  (dark)
-//
-// To restore the original text-driven layout, un-comment the blocks marked
-// with  /* TEXT-CONTENT-START */  …  /* TEXT-CONTENT-END */
-// and remove / comment out the  /* IMAGE-DRIVEN-START */  …  block.
 // =============================================================================
 
 import { memo, useCallback, useEffect, useState } from "react";
@@ -33,10 +32,14 @@ import type { OfferCard, WithVars } from "../../types/types";
 // Swap the position of the two cards so Software Solutions is first
 const OFFER_CARDS = [...ORIGINAL_CARDS].reverse();
 
+// -----------------------------------------------------------------------------
+// Breakpoint constant — edit this one value to shift the image/text threshold
+// -----------------------------------------------------------------------------
+const NARROW_BP = 899; // px  ≤ this → image mode  |  > this → text mode
+
 // =============================================================================
 // THEME-AWARE IMAGE MAP
 // Keys must match the `tag` field on each OfferCard exactly.
-// Update paths here if assets are ever moved or renamed.
 // =============================================================================
 const CARD_IMAGES: Record<string, { light: string; dark: string }> = {
   "Software Solutions": {
@@ -51,25 +54,17 @@ const CARD_IMAGES: Record<string, { light: string; dark: string }> = {
 
 // =============================================================================
 // useIsDarkTheme
-// Detects the active colour scheme by checking (in priority order):
-//   1. data-theme="dark" attribute on <html>
-//   2. "dark" class on <html>
-//   3. prefers-color-scheme media query (system preference)
-// Re-evaluates whenever any of these signals change via MutationObserver +
-// MediaQueryList listener so the correct image is always shown without a
-// manual refresh.
+// Detects the active colour scheme via data-theme attr → class → system pref.
+// Re-evaluates on MutationObserver + MediaQueryList change events.
 // =============================================================================
 function useIsDarkTheme(): boolean {
   const getIsDark = (): boolean => {
     const root = document.documentElement;
-    // 1. Explicit data-theme attribute
     const dataTheme = root.getAttribute("data-theme");
     if (dataTheme === "dark")  return true;
     if (dataTheme === "light") return false;
-    // 2. Tailwind / class-based dark mode
     if (root.classList.contains("dark"))  return true;
     if (root.classList.contains("light")) return false;
-    // 3. System preference fallback
     return window.matchMedia("(prefers-color-scheme: dark)").matches;
   };
 
@@ -78,14 +73,12 @@ function useIsDarkTheme(): boolean {
   useEffect(() => {
     const update = () => setIsDark(getIsDark());
 
-    // Watch attribute + class changes on <html>
     const observer = new MutationObserver(update);
     observer.observe(document.documentElement, {
       attributes:      true,
       attributeFilter: ["class", "data-theme"],
     });
 
-    // Watch system preference changes
     const mq = window.matchMedia("(prefers-color-scheme: dark)");
     mq.addEventListener("change", update);
 
@@ -99,8 +92,38 @@ function useIsDarkTheme(): boolean {
 }
 
 // =============================================================================
-// ICON COMPONENTS — INLINE SVG CHEVRONS FOR CAROUSEL ARROW BUTTONS
-// aria-hidden="true" ON ALL — PARENT BUTTON CARRIES THE aria-label
+// useIsNarrow
+// Returns true while window.innerWidth ≤ NARROW_BP.
+// Uses ResizeObserver on <html> so it reacts to every viewport resize without
+// the overhead of polling.  Falls back to an initial synchronous read so there
+// is never a flash of the wrong layout on first render.
+// =============================================================================
+function useIsNarrow(): boolean {
+  const [narrow, setNarrow] = useState<boolean>(
+    () => typeof window !== "undefined" && window.innerWidth <= NARROW_BP,
+  );
+
+  useEffect(() => {
+    const update = () => setNarrow(window.innerWidth <= NARROW_BP);
+
+    // ResizeObserver fires on every layout-affecting resize (incl. orientation)
+    const ro = new ResizeObserver(update);
+    ro.observe(document.documentElement);
+
+    // Belt-and-suspenders: also listen on window for older environments
+    window.addEventListener("resize", update, { passive: true });
+
+    return () => {
+      ro.disconnect();
+      window.removeEventListener("resize", update);
+    };
+  }, []);
+
+  return narrow;
+}
+
+// =============================================================================
+// ICON COMPONENTS — INLINE SVG CHEVRONS
 // =============================================================================
 function ChevronLeft() {
   return (
@@ -128,49 +151,40 @@ function ChevronRight() {
   );
 }
 
-
 // =============================================================================
 // OFFER CARD ITEM — SINGLE CAROUSEL SLIDE CONTENT
-// isActive:    CONTROLS SCALE / OPACITY / BLUR ON INACTIVE ADJACENT SLIDES
-// reduced:     DISABLES ALL MOTION WHEN prefers-reduced-motion IS ACTIVE
-// "--_accent"  CUSTOM PROPERTY DRIVES THE LEFT STRIPE COLOR VIA CSS MODULE
-// tabIndex=-1  REMOVES INACTIVE CARDS FROM TAB ORDER
-// isDark:      SELECTS THE CORRECT THEMED IMAGE FROM CARD_IMAGES
-// CLICKING AN ACTIVE CARD NAVIGATES TO card.link:
-//   - EXTERNAL (starts with "http") → opens in same tab via window.location.href
-//   - INTERNAL → useNavigate() for SPA navigation (no reload)
+//
+// isNarrow = true  (≤ 899 px) → IMAGE-DRIVEN layout (full-card themed image)
+// isNarrow = false (≥ 900 px) → TEXT-DRIVEN  layout (original body + right panel)
 // =============================================================================
 interface OfferCardItemProps {
   card:     OfferCard;
   isActive: boolean;
   reduced:  boolean;
-  isDark:   boolean; // ← NEW: drives themed image selection
+  isDark:   boolean;
+  isNarrow: boolean; // ← drives layout switch
 }
 
-const OfferCardItem = memo(({ card, isActive, reduced, isDark }: OfferCardItemProps) => {
+const OfferCardItem = memo(({ card, isActive, reduced, isDark, isNarrow }: OfferCardItemProps) => {
   const navigate = useNavigate();
 
-  // Handles both external URLs and internal routes
   const handleCardClick = useCallback(() => {
     if (!isActive) return;
     window.scrollTo({ top: 0, behavior: "instant" });
     if (card.link.startsWith("http")) {
-      window.location.href = card.link; // same tab for external
+      window.location.href = card.link;
     } else {
-      navigate(card.link);              // SPA navigation for internal routes
+      navigate(card.link);
     }
   }, [card.link, isActive, navigate]);
 
-  // ── IMAGE-DRIVEN-START ──────────────────────────────────────────────────────
-  // Resolve the theme-correct image for this card.
-  // Falls back to card.image (original field) if the tag isn't in CARD_IMAGES.
+  // Resolve the theme-correct image for this card (used in narrow/image mode)
   const themedImage: string | undefined =
     CARD_IMAGES[card.tag]
       ? isDark
         ? CARD_IMAGES[card.tag].dark
         : CARD_IMAGES[card.tag].light
       : card.image;
-  // ── IMAGE-DRIVEN-END ────────────────────────────────────────────────────────
 
   return (
     <motion.article
@@ -196,129 +210,102 @@ const OfferCardItem = memo(({ card, isActive, reduced, isDark }: OfferCardItemPr
       aria-label={`Go to ${card.tag}`}
       whileHover={!reduced && isActive ? { y: -4 } : {}}
     >
-      {/* TOP SHIMMER HAIRLINE — PURELY DECORATIVE */}
+      {/* TOP SHIMMER HAIRLINE */}
       <span className="ot-card-shimmer" aria-hidden="true" />
 
-      {/* LEFT ACCENT STRIPE — COLOR DRIVEN BY "--_accent" CSS CUSTOM PROPERTY */}
+      {/* LEFT ACCENT STRIPE */}
       <div className={styles.offerStripe} aria-hidden="true" />
 
-      {/* ── IMAGE-DRIVEN-START ────────────────────────────────────────────────
-          Full-card themed image replaces the text body.
-          The image itself contains all the structured content (tag, title,
-          highlights, features, note) that was previously rendered as HTML.
-          Both the offerBody DIV and offerImagePanel DIV below are commented
-          out — do NOT delete them; they are preserved for future restoration.
-
-          Sizing: the image fills the entire card area (width + height 100%)
-          using object-fit: cover so it behaves identically across breakpoints.
-          The aria-label on the wrapper keeps the card accessible.           */}
-      <div
-        className={styles.offerImageFull}
-        aria-label={card.tag}
-      >
-        {themedImage ? (
-          <img
-            src={themedImage}
-            alt={card.tag}
-            style={{
-              width:     "100%",
-              height:    "100%",
-              objectFit: "cover",
-              display:   "block",
-              userSelect: "none",
-            }}
-            loading="eager"
-            decoding="async"
-            draggable={false}
-          />
-        ) : (
-          /* Fallback placeholder shown if the asset fails to resolve */
-          <div className={styles.offerImagePlaceholder}>
-            <span className={styles.offerImagePlaceholderIcon}>◈</span>
-            <span className={styles.offerImagePlaceholderLabel}>{card.tag}</span>
-          </div>
-        )}
-      </div>
-      {/* ── IMAGE-DRIVEN-END ──────────────────────────────────────────────── */}
-
-
-      {/* ══════════════════════════════════════════════════════════════════════
-          TEXT-CONTENT-START
-          Original text-driven card body — commented out, NOT deleted.
-          Un-comment this block (and the offerImagePanel block below) and
-          remove the IMAGE-DRIVEN block above to restore the full text layout.
-          ══════════════════════════════════════════════════════════════════════
-
-      <div className={styles.offerBody}>
-
-        {/* CATEGORY BADGE *\/}
-        <span className={`${styles.offerTag} badge-pill`}>{card.tag}</span>
-
-        {/* CARD HEADLINE *\/}
-        <h3 className={`${styles.offerTitle} section-title-left text-gradient`}>
-          {card.title}
-        </h3>
-
-        <hr className="divider" />
-
-        {/* HIGHLIGHT CHIPS *\/}
-        <div className={styles.offerHighlights} aria-label="Key features">
-          {card.highlights.map((h) => (
-            <span key={h} className={styles.offerHighlightChip}>{h}</span>
-          ))}
+      {/* ── IMAGE-DRIVEN (≤ 899 px) ────────────────────────────────────────── */}
+      {isNarrow && (
+        <div
+          className={styles.offerImageFull}
+          aria-label={card.tag}
+        >
+          {themedImage ? (
+            <img
+              src={themedImage}
+              alt={card.tag}
+              style={{
+                width:      "100%",
+                height:     "100%",
+                objectFit:  "cover",
+                display:    "block",
+                userSelect: "none",
+              }}
+              loading="eager"
+              decoding="async"
+              draggable={false}
+            />
+          ) : (
+            <div className={styles.offerImagePlaceholder}>
+              <span className={styles.offerImagePlaceholderIcon}>◈</span>
+              <span className={styles.offerImagePlaceholderLabel}>{card.tag}</span>
+            </div>
+          )}
         </div>
+      )}
 
-        {/* INTRO PARAGRAPH *\/}
-        <p className={`${styles.offerIntro} text-muted`}>{card.intro}</p>
+      {/* ── TEXT-DRIVEN (≥ 900 px) ─────────────────────────────────────────── */}
+      {!isNarrow && (
+        <>
+          <div className={styles.offerBody}>
+            {/* CATEGORY BADGE */}
+            <span className={`${styles.offerTag} badge-pill`}>{card.tag}</span>
 
-        {/* SUBHEADING ABOVE BULLET LIST *\/}
-        <p className={styles.offerSubheading}>
-          <strong className="text-accent">{card.subheading}</strong>
-        </p>
+            {/* CARD HEADLINE */}
+            <h3 className={`${styles.offerTitle} section-title-left text-gradient`}>
+              {card.title}
+            </h3>
 
-        {/* FEATURE BULLET LIST *\/}
-        <ul className={`${styles.offerList} ot-feature-list`}>
-          {card.items.map((item, i) => (
-            <li key={i}><span>{item}</span></li>
-          ))}
-        </ul>
+            <hr className="divider" />
 
-        {/* BOTTOM CALLOUT NOTE *\/}
-        <p className={`${styles.offerNote} note-callout`}>{card.note}</p>
+            {/* HIGHLIGHT CHIPS */}
+            <div className={styles.offerHighlights} aria-label="Key features">
+              {card.highlights.map((h) => (
+                <span key={h} className={styles.offerHighlightChip}>{h}</span>
+              ))}
+            </div>
 
-      </div>
+            {/* INTRO PARAGRAPH */}
+            <p className={`${styles.offerIntro} text-muted`}>{card.intro}</p>
 
-          ══════════════════════════════════════════════════════════════════════
-          TEXT-CONTENT-END
-          ══════════════════════════════════════════════════════════════════════ */}
+            {/* SUBHEADING */}
+            <p className={styles.offerSubheading}>
+              <strong className="text-accent">{card.subheading}</strong>
+            </p>
 
+            {/* FEATURE BULLET LIST */}
+            <ul className={`${styles.offerList} ot-feature-list`}>
+              {card.items.map((item, i) => (
+                <li key={i}><span>{item}</span></li>
+              ))}
+            </ul>
 
-      {/* ══════════════════════════════════════════════════════════════════════
-          RIGHT IMAGE PANEL — original, hidden on mobile via CSS.
-          Commented out because the full-card image above supersedes it.
-          Un-comment alongside the TEXT-CONTENT block above if restoring.
-          ══════════════════════════════════════════════════════════════════════
-
-      <div className={styles.offerImagePanel} aria-hidden="true">
-        {card.image ? (
-          <img
-            src={card.image}
-            alt=""
-            className={styles.offerImageEl}
-            loading="lazy"
-            decoding="async"
-            draggable={false}
-          />
-        ) : (
-          <div className={styles.offerImagePlaceholder}>
-            <span className={styles.offerImagePlaceholderIcon}>◈</span>
-            <span className={styles.offerImagePlaceholderLabel}>{card.tag}</span>
+            {/* BOTTOM CALLOUT NOTE */}
+            <p className={`${styles.offerNote} note-callout`}>{card.note}</p>
           </div>
-        )}
-      </div>
 
-          ══════════════════════════════════════════════════════════════════════ */}
-
+          {/* RIGHT IMAGE PANEL (hidden on mobile via CSS) */}
+          <div className={styles.offerImagePanel} aria-hidden="true">
+            {card.image ? (
+              <img
+                src={card.image}
+                alt=""
+                className={styles.offerImageEl}
+                loading="lazy"
+                decoding="async"
+                draggable={false}
+              />
+            ) : (
+              <div className={styles.offerImagePlaceholder}>
+                <span className={styles.offerImagePlaceholderIcon}>◈</span>
+                <span className={styles.offerImagePlaceholderLabel}>{card.tag}</span>
+              </div>
+            )}
+          </div>
+        </>
+      )}
     </motion.article>
   );
 });
@@ -327,22 +314,11 @@ OfferCardItem.displayName = "OfferCardItem";
 
 // =============================================================================
 // WHAT WE OFFER SECTION
-// MOBILE LAYOUT:
-//   - Floating side capsule arrows → hidden via CSS
-//   - carouselBottomNav shows instead: [← Prev]  1/2  [Next →]
-//   - Viewport overflow:visible + section clips peek → next card peeks ~48px
-//   - carouselTrack gets swipe-hint class on first slide to nudge left on load
-// DESKTOP LAYOUT:
-//   - Floating capsule arrows remain on right edge of card
-//   - Bottom nav hidden via CSS
-//   - Dot indicators visible
 // =============================================================================
 function WhatWeOffer() {
-  // ?? false ENSURES reduced IS ALWAYS boolean — useReducedMotion CAN RETURN null
-  const reduced = useReducedMotion() ?? false;
-
-  // Theme detection for image selection (light / dark / system)
-  const isDark = useIsDarkTheme();
+  const reduced  = useReducedMotion() ?? false;
+  const isDark   = useIsDarkTheme();
+  const isNarrow = useIsNarrow();      // ← true when ≤ 899 px
 
   const {
     current, cardWidth, trackX, viewportRef,
@@ -386,10 +362,10 @@ function WhatWeOffer() {
           {`Slide ${current + 1} of ${total}: ${OFFER_CARDS[current].tag}`}
         </span>
 
-        {/* VIEWPORT ROW — desktop arrows float absolutely on right edge */}
+        {/* VIEWPORT ROW */}
         <div className={styles.carouselRow}>
 
-          {/* PREV — desktop capsule only, hidden on mobile via CSS */}
+          {/* PREV — desktop capsule, hidden on mobile via CSS */}
           <motion.button
             className={`${styles.arrowBtn} ${styles.arrowBtnPrev}`}
             onClick={() => go(current - 1)}
@@ -401,13 +377,10 @@ function WhatWeOffer() {
             <ChevronLeft />
           </motion.button>
 
-          {/* VIEWPORT
-              Mobile:  overflow:visible (CSS) so next card peeks right
-              Desktop: overflow:hidden (CSS default)                    */}
+          {/* VIEWPORT */}
           <div className={styles.carouselViewport} ref={viewportRef}>
             <motion.div
               className={`${styles.carouselTrack} ${
-                // Swipe hint fires once on first slide to signal swipability
                 current === 0 && !reduced ? styles.carouselTrackHint : ""
               }`}
               animate={{ x: trackX }}
@@ -430,14 +403,15 @@ function WhatWeOffer() {
                     card={card}
                     isActive={i === current}
                     reduced={reduced}
-                    isDark={isDark}   // ← theme prop passed down
+                    isDark={isDark}
+                    isNarrow={isNarrow}   // ← passed down
                   />
                 </div>
               ))}
             </motion.div>
           </div>
 
-          {/* NEXT — desktop capsule only, hidden on mobile via CSS */}
+          {/* NEXT — desktop capsule, hidden on mobile via CSS */}
           <motion.button
             className={`${styles.arrowBtn} ${styles.arrowBtnNext}`}
             onClick={() => go(current + 1)}
@@ -451,10 +425,7 @@ function WhatWeOffer() {
 
         </div>
 
-        {/* ── MOBILE BOTTOM NAV ─────────────────────────────────────
-            Hidden on desktop via CSS (display:none above 767px).
-            Replaces the floating capsule arrows on small screens.
-            [← Prev]  ·  1 / 2  ·  [Next →]                         */}
+        {/* MOBILE BOTTOM NAV (hidden above 767px via CSS) */}
         <div className={styles.carouselBottomNav}>
           <button
             className={styles.carouselNavBtn}
@@ -479,7 +450,7 @@ function WhatWeOffer() {
           </button>
         </div>
 
-        {/* DOT INDICATORS — hidden on mobile (counter replaces them) */}
+        {/* DOT INDICATORS — hidden on mobile */}
         <div
           className={styles.carouselDots}
           role="tablist"
