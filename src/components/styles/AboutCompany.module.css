@@ -1503,8 +1503,14 @@
   }
 }
 
-@media (min-width: 1280px) {
-  .offerImageFull {
-    padding: 28px 28px 28px 20px;
-  }
+.offerImagePanel {
+  height: auto;
+  align-self: center;
+}
+
+.offerImageEl {
+  width: 100%;
+  height: auto;
+  max-height: 240px;
+  object-fit: contain;
 }
