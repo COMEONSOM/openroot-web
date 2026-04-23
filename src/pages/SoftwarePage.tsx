@@ -377,7 +377,7 @@ export default function SoftwarePage() {
         <hr className="divider" />
 
         <section className="sp-explore" aria-label="Explore more tools by Openroot Systems">
-          <p className="sp-explore-title">Explore More Free Tools</p>
+          <p className="sp-explore-title">Explore More</p>
           <div className="sp-explore-links">
             {exploreLinks.map((link) => (
               <a key={link.href} href={link.href} className="sp-explore-link" rel="noopener">{link.label}</a>

@@ -17,7 +17,7 @@ import styles from "../styles/AboutCompany.module.css";
 import { fadeIn, fadeUp, stagger, cardReveal, VP } from "../../motion/variants";
 import { REASONS } from "../../data/aboutdata";
 import type { Reason } from "../../types/types";
-
+import { Link } from "react-router-dom";
 
 // =============================================================================
 // REASON CARD — MICRO-COMPONENT
@@ -151,14 +151,12 @@ function WhyWeImportant() {
                 <a href="/software" className="btn-pill btn-pill-primary">
                   Explore Our Softwares
                 </a>
-                <a
-                  href="https://openroot-classes-firebase.web.app/"
-                  target="_blank"
-                  rel="noopener noreferrer"
+                <Link
+                  to="/openroot-classes"
                   className="btn-pill btn-pill-ghost"
                 >
                   Learn with Openroot Classes
-                </a>
+                </Link>
               </motion.div>
             </div>
 
