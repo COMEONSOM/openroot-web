@@ -1,4 +1,4 @@
-import { useState, useMemo, useCallback, useRef } from "react";
+import { useState, useMemo, useCallback, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Lottie from "lottie-react";
 import jsPDF from "jspdf";
@@ -15,6 +15,9 @@ const API_URL =
 const RAZORPAY_KEY_ID = import.meta.env.VITE_RAZORPAY_KEY_ID as
   | string
   | undefined;
+
+const RAZORPAY_SCRIPT_URL = "https://checkout.razorpay.com/v1/checkout.js";
+const RAZORPAY_SCRIPT_TIMEOUT_MS = 15000;
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 
@@ -52,7 +55,7 @@ interface RazorpayResponse {
 }
 
 interface RazorpayOptions {
-  key: string | undefined;
+  key: string;
   amount: number;
   currency: string;
   name: string;
@@ -63,17 +66,25 @@ interface RazorpayOptions {
     email: string;
     contact: string;
   };
-  handler: (response: RazorpayResponse) => Promise<void>;
+  handler: (response: RazorpayResponse) => Promise<void> | void;
   modal: {
     ondismiss: () => void;
   };
   theme: { color: string };
 }
 
-// Razorpay is loaded via CDN, so we extend the Window interface
+interface RazorpayInstance {
+  open: () => void;
+  close?: () => void;
+}
+
+interface RazorpayConstructor {
+  new (options: RazorpayOptions): RazorpayInstance;
+}
+
 declare global {
   interface Window {
-    Razorpay: new (options: RazorpayOptions) => { open: () => void };
+    Razorpay?: RazorpayConstructor;
   }
 }
 
@@ -119,12 +130,12 @@ const COURSE_DATA = Object.freeze<Course[]>([
       "Career guidance — freelancing, content creation, tech learning path",
     ],
     duration: "1 Month • 8 Classes • 2 Classes / Week",
-    totalFee: 850,
-    priceLabel: "Total Fee: ₹850 • One-Time Payment",
+    totalFee: 1,
+    priceLabel: "Total Fee: ₹1 • One-Time Payment",
   },
 ]);
 
-// ─── Hook ─────────────────────────────────────────────────────────────────────
+// ─── Hook ────────────────────────────────────────────────────────────────────
 
 const useCourseLookup = () => {
   const map = useMemo(
@@ -141,6 +152,91 @@ const useCourseLookup = () => {
 };
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
+
+let razorpayScriptPromise: Promise<boolean> | null = null;
+
+function loadRazorpayScript(): Promise<boolean> {
+  if (typeof window === "undefined") {
+    return Promise.resolve(false);
+  }
+
+  if (window.Razorpay) {
+    return Promise.resolve(true);
+  }
+
+  if (razorpayScriptPromise) {
+    return razorpayScriptPromise;
+  }
+
+  razorpayScriptPromise = new Promise<boolean>((resolve) => {
+    const existingScript = document.querySelector<HTMLScriptElement>(
+      `script[src="${RAZORPAY_SCRIPT_URL}"]`
+    );
+
+    const finish = (ok: boolean) => {
+      resolve(ok);
+    };
+
+    if (existingScript) {
+      const started = Date.now();
+
+      const timer = window.setInterval(() => {
+        if (window.Razorpay) {
+          window.clearInterval(timer);
+          finish(true);
+          return;
+        }
+
+        if (Date.now() - started > RAZORPAY_SCRIPT_TIMEOUT_MS) {
+          window.clearInterval(timer);
+          finish(false);
+        }
+      }, 100);
+
+      existingScript.addEventListener("load", () => {
+        if (window.Razorpay) {
+          window.clearInterval(timer);
+          finish(true);
+        }
+      });
+
+      existingScript.addEventListener("error", () => {
+        window.clearInterval(timer);
+        finish(false);
+      });
+
+      return;
+    }
+
+    const script = document.createElement("script");
+    script.src = RAZORPAY_SCRIPT_URL;
+    script.async = true;
+
+    const timeoutId = window.setTimeout(() => {
+      finish(false);
+    }, RAZORPAY_SCRIPT_TIMEOUT_MS);
+
+    script.onload = () => {
+      window.clearTimeout(timeoutId);
+      finish(Boolean(window.Razorpay));
+    };
+
+    script.onerror = () => {
+      window.clearTimeout(timeoutId);
+      finish(false);
+    };
+
+    document.body.appendChild(script);
+  }).finally(() => {
+    if (window.Razorpay) {
+      return true;
+    }
+    razorpayScriptPromise = null;
+    return false;
+  });
+
+  return razorpayScriptPromise;
+}
 
 async function assetUrlToDataUrl(url: string): Promise<string> {
   const res = await fetch(url);
@@ -174,7 +270,24 @@ export default function AvailableCourses() {
 
   const { getCourseById } = useCourseLookup();
   const receiptRef = useRef<HTMLDivElement>(null);
+  const paymentLockRef = useRef(false);
+  
 
+  useEffect(() => {
+    void loadRazorpayScript();
+  }, []);
+
+  const handleBackToCourses = useCallback(() => {
+    setIsDetailsOpen(false);
+    setIsPaying(false);
+    setViewState("list");
+    setSelectedCourse(null);
+    setPaymentMeta(null);
+    setFormErrors({});
+    setStudentName("");
+    setStudentEmail("");
+    setStudentPhone("");
+  }, []);
   // ---------- COURSE CLICK ----------
   const handleCourseClick = useCallback(
     (id: number) => {
@@ -194,24 +307,28 @@ export default function AvailableCourses() {
 
   // ---------- BACK ----------
   const handleBack = useCallback(() => {
+    if (isPaying) return;
+
     if (viewState === "details") {
       setSelectedCourse(null);
       setViewState("list");
+      setIsDetailsOpen(false);
+      setFormErrors({});
     }
-  }, [viewState]);
+  }, [viewState, isPaying]);
 
   // ---------- DETAILS MODAL ----------
-  const openDetailsModal = () => {
+  const openDetailsModal = useCallback(() => {
     setFormErrors({});
     setIsDetailsOpen(true);
-  };
+  }, []);
 
-  const closeDetailsModal = () => {
+  const closeDetailsModal = useCallback(() => {
     if (isPaying) return;
     setIsDetailsOpen(false);
-  };
+  }, [isPaying]);
 
-  const validateForm = (): boolean => {
+  const validateForm = useCallback((): boolean => {
     const errors: FormErrors = {};
 
     if (!studentName.trim()) {
@@ -232,7 +349,7 @@ export default function AvailableCourses() {
 
     setFormErrors(errors);
     return Object.keys(errors).length === 0;
-  };
+  }, [studentName, studentEmail, studentPhone]);
 
   // ---------- PAYMENT ----------
   const handleConfirmDetailsAndPay = useCallback(async () => {
@@ -244,17 +361,27 @@ export default function AvailableCourses() {
       return;
     }
 
+    if (paymentLockRef.current) return;
+    paymentLockRef.current = true;
     setIsPaying(true);
 
     try {
+      const sdkLoaded = await loadRazorpayScript();
+
+      if (!sdkLoaded || !window.Razorpay) {
+        throw new Error(
+          "Razorpay SDK failed to load. Check network, ad blocker, or Content Security Policy."
+        );
+      }
+
       const createRes = await fetch(`${API_URL}/create-order`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           amount: selectedCourse.totalFee,
-          studentName,
-          studentEmail,
-          studentPhone,
+          studentName: studentName.trim(),
+          studentEmail: studentEmail.trim(),
+          studentPhone: studentPhone.trim(),
         }),
       });
 
@@ -278,9 +405,9 @@ export default function AvailableCourses() {
         description: selectedCourse.name,
         order_id: orderData.id,
         prefill: {
-          name: studentName,
-          email: studentEmail,
-          contact: studentPhone,
+          name: studentName.trim(),
+          email: studentEmail.trim(),
+          contact: studentPhone.trim(),
         },
         handler: async (razorpayResponse: RazorpayResponse) => {
           try {
@@ -304,9 +431,9 @@ export default function AvailableCourses() {
                 paymentId: razorpayResponse.razorpay_payment_id,
                 orderId: razorpayResponse.razorpay_order_id,
                 paidAt: Date.now(),
-                studentName,
-                studentEmail,
-                studentPhone,
+                studentName: studentName.trim(),
+                studentEmail: studentEmail.trim(),
+                studentPhone: studentPhone.trim(),
               });
 
               setViewState("success");
@@ -323,16 +450,20 @@ export default function AvailableCourses() {
               "Payment verification failed: " + (error.message || "Unknown error")
             );
           } finally {
+            paymentLockRef.current = false;
             setIsPaying(false);
           }
         },
         modal: {
           ondismiss: () => {
+            paymentLockRef.current = false;
             setIsPaying(false);
           },
         },
         theme: { color: "#7c3aed" },
       };
+
+      console.log("Razorpay:", window.Razorpay);
 
       const rzp = new window.Razorpay(options);
       rzp.open();
@@ -342,9 +473,10 @@ export default function AvailableCourses() {
       alert(
         "Payment initialization failed: " + (error.message || "Unknown error")
       );
+      paymentLockRef.current = false;
       setIsPaying(false);
     }
-  }, [selectedCourse, studentName, studentEmail, studentPhone]);
+  }, [selectedCourse, validateForm, studentName, studentEmail, studentPhone]);
 
   // ---------- PDF ----------
   const handleDownloadReceipt = async (): Promise<void> => {
@@ -573,7 +705,6 @@ export default function AvailableCourses() {
           </div>
         </div>
 
-        {/* LIST */}
         {viewState === "list" && (
           <ul className="course-list">
             {COURSE_DATA.map((course) => (
@@ -597,7 +728,6 @@ export default function AvailableCourses() {
           </ul>
         )}
 
-        {/* DETAILS */}
         <AnimatePresence>
           {viewState === "details" && selectedCourse && (
             <motion.section
@@ -647,7 +777,6 @@ export default function AvailableCourses() {
           )}
         </AnimatePresence>
 
-        {/* DETAILS MODAL */}
         <AnimatePresence>
           {isDetailsOpen && (
             <motion.div
@@ -664,14 +793,6 @@ export default function AvailableCourses() {
               >
                 <div className="modal-header">
                   <h4>Student details</h4>
-                  <button
-                    type="button"
-                    className="modal-close"
-                    onClick={closeDetailsModal}
-                    disabled={isPaying}
-                  >
-                    ✕
-                  </button>
                 </div>
 
                 <p className="modal-subtitle">
@@ -689,6 +810,7 @@ export default function AvailableCourses() {
                         setStudentName(e.target.value)
                       }
                       placeholder="Enter your full name"
+                      autoComplete="name"
                     />
                     {formErrors.name && (
                       <span className="field-error">{formErrors.name}</span>
@@ -704,6 +826,7 @@ export default function AvailableCourses() {
                         setStudentEmail(e.target.value)
                       }
                       placeholder="you@example.com"
+                      autoComplete="email"
                     />
                     {formErrors.email && (
                       <span className="field-error">{formErrors.email}</span>
@@ -716,9 +839,11 @@ export default function AvailableCourses() {
                       type="tel"
                       value={studentPhone}
                       onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                        setStudentPhone(e.target.value)
+                        setStudentPhone(e.target.value.replace(/\D/g, "").slice(0, 10))
                       }
                       placeholder="10-digit mobile number"
+                      autoComplete="tel"
+                      inputMode="numeric"
                     />
                     {formErrors.phone && (
                       <span className="field-error">{formErrors.phone}</span>
@@ -749,7 +874,6 @@ export default function AvailableCourses() {
           )}
         </AnimatePresence>
 
-        {/* SUCCESS + RECEIPT */}
         <AnimatePresence>
           {viewState === "success" && selectedCourse && (
             <motion.section
@@ -830,6 +954,9 @@ export default function AvailableCourses() {
                 </div>
 
                 <div className="receipt-actions">
+                  <button onClick={handleBackToCourses}>
+                    ← Back to Courses
+                  </button>
                   <button onClick={handleDownloadReceipt}>
                     ⬇️ Download Receipt (PDF)
                   </button>

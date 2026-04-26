@@ -520,23 +520,8 @@ html[data-theme="light"] .nb-overlay,
 
 
 /* ============================================================
-   OVERLAY GRID — 2 columns on screens ≤ 400px
-   ============================================================ */
-
-@media (max-width: 400px) {
-  .nb-panel-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
-
-/* ============================================================
    SECTION ROW RESPONSIVE
    ============================================================ */
-
-@media (max-width: 900px) {
-  .released-softwares { grid-template-columns: repeat(3, 1fr); }
-}
 
 @media (max-width: 640px) {
   .released-softwares {
@@ -551,6 +536,7 @@ html[data-theme="light"] .nb-overlay,
     margin-inline: calc(-1 * clamp(1rem, 5vw, 2.5rem));
     padding-inline: clamp(1rem, 5vw, 2.5rem);
     padding-bottom: 0.4rem;
+    grid-template-columns: repeat(2, 1fr);
   }
 
   .released-softwares::-webkit-scrollbar { display: none; }
@@ -589,7 +575,7 @@ html[data-theme="light"] .nb-overlay,
 }
 
 @media (min-width: 1440px) {
-  .released-softwares { gap: 1.1rem; }
+  .released-softwares { gap: 1.1rem;grid-template-columns: repeat(4, 1fr); }
 }
 
 @media (min-width: 1920px) {

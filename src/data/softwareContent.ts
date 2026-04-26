@@ -141,19 +141,20 @@ Instead of leaving users confused with a plain download link, the software page 
 This software page acts as an interactive launch point for the extension, making the installation flow easier to understand, more polished, and more user-friendly for everyday users`,
 
   features: [
-    "Step-by-step guided Chrome extension installation flow",
-    "Visual instructions for first-time users",
-    "Extension page redirect with clear install path",
-    "Pinning guidance for quick toolbar access",
-    "Built-in tutorial video support for proper usage",
-    "Clean interface designed for smooth user onboarding"
+    "One-Click Automation with Intelligent File Renaming",
+    "Works Directly Inside Google Drive",
+    "Simple and intuitive design, Handles multiple files at once",
+    "Secure Google Authentication, Does not store or transfer user data",
+    "Optimized for performance, runs smoothly without affecting browser speed",
+    "Free to use, no hidden costs or subscriptions"
   ],
 
-  purpose: `The primary purpose of Openroot GDrive Automation is to make the Chrome extension setup process simple, visual, and beginner-friendly.
+  purpose: `The purpose of the Openroot GDrive Automation System is to eliminate the repetitive and time-consuming process of manually organizing and renaming files in Google Drive.
 
-Many users find browser extension installation confusing when instructions are not shown clearly. This software page solves that problem by presenting the complete process in a structured format so users can confidently install, pin, and use the extension without needing extra help.
+Many users, especially students, developers, and content creators, deal with large volumes of media files that are often poorly named and difficult to manage. This leads to inefficiency, confusion, and wasted time.
 
-The goal is to provide a smooth onboarding experience that feels intuitive, professional, and easy to follow for all users.`
-  },
+Our solution addresses this problem by introducing a simple, one-click automation system that intelligently renames and organizes files into a clean, structured format. By doing so, it improves productivity, enhances file accessibility, and ensures a more organized digital workspace.
+
+The tool is designed with a strong focus on usability and minimal user effort, enabling anyone to manage their files efficiently without technical complexity.`}
 
 };

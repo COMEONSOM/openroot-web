@@ -23,9 +23,6 @@
   /* CRITICAL — scopes all repaints inside this element */
   contain: layout style paint;
 
-  /* Promote to own layer for the mount animation */
-  will-change: transform, opacity;
-
   /* Remove will-change after mount via animation-fill-mode trick */
   /* (framer-motion removes it after animation completes) */
 }
