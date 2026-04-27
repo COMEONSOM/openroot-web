@@ -12,6 +12,7 @@ import e3Thumbnail from "../../assets-oc/e3.avif";
 import e4Thumbnail from "../../assets-oc/e4.avif";
 import e5Thumbnail from "../../assets-oc/e5.avif";
 import e6Thumbnail from "../../assets-oc/e6.avif";
+import e7Thumbnail from "../../assets-oc/e7.avif";
 
 // ============================================================
 // TYPES
@@ -29,12 +30,14 @@ interface Video {
 // ============================================================
 
 const VIDEOS: Video[] = [
-  { id: 1, title: "Image to Cinematic Video",     url: "https://youtu.be/d3JtfTJ-uVY", thumbnail: e1Thumbnail },
-  { id: 2, title: "Google Antigravity IDE",        url: "https://youtu.be/EMM0RmkZzhA", thumbnail: e2Thumbnail },
-  { id: 3, title: "Deep Research using ChatGPT",   url: "https://youtu.be/324K9jUF8tQ", thumbnail: e3Thumbnail },
+  { id: 1, title: "GDrive Auto File Renaming",     url: "https://youtu.be/2tqbwlV0aw0", thumbnail: e1Thumbnail },
+  { id: 2, title: "Suno AI Full Tutorial",         url: "https://youtu.be/vLuRuZFAPmk", thumbnail: e2Thumbnail },
+  { id: 3, title: "Google Antigravity IDE",        url: "https://youtu.be/EMM0RmkZzhA", thumbnail: e3Thumbnail },
   { id: 4, title: "Building an Electron App",      url: "https://youtu.be/S_uSCuhMeok", thumbnail: e4Thumbnail },
-  { id: 5, title: "High-CTR Thumbnails Using FLOW",url: "https://youtu.be/39zIVpJhCSU", thumbnail: e5Thumbnail },
-  { id: 6, title: "Suno AI Full Tutorial",         url: "https://youtu.be/vLuRuZFAPmk", thumbnail: e6Thumbnail },
+  { id: 5, title: "Deep Research using ChatGPT",   url: "https://youtu.be/324K9jUF8tQ", thumbnail: e5Thumbnail },
+  { id: 6, title: "Image to Cinematic Video",      url: "https://youtu.be/d3JtfTJ-uVY", thumbnail: e6Thumbnail },
+  { id: 7, title: "High-CTR Thumbnails Using FLOW",url: "https://youtu.be/39zIVpJhCSU", thumbnail: e7Thumbnail },
+  
 ];
 
 // ============================================================

@@ -130,8 +130,8 @@ const COURSE_DATA = Object.freeze<Course[]>([
       "Career guidance — freelancing, content creation, tech learning path",
     ],
     duration: "1 Month • 8 Classes • 2 Classes / Week",
-    totalFee: 1,
-    priceLabel: "Total Fee: ₹1 • One-Time Payment",
+    totalFee: 850,
+    priceLabel: "Total Fee: ₹850 • One-Time Payment",
   },
 ]);
 
