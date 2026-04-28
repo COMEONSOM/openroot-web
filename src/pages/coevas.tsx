@@ -17,6 +17,23 @@ type TabName = 'releases' | 'about';
 
 // ── Release data ───────────────────────────────────────────────────────────
 const releases: Release[] = [
+  
+  {
+    version: '1.2.0',
+    date: '2026-04-28',
+    downloadLink:
+      'https://github.com/COMEONSOM/openroot-web/releases/download/v1.2.0/CoevasTerminalSetup-1.2.0.exe',
+    features: [
+      'All existing features remain the same as the previous version',
+      'No need to download older versions anymore',
+      'This version is more stable and optimized',
+      'Automatic update system has been introduced',
+      'Users will receive all future updates directly within the app',
+      'Future updates will include security improvements and new features',
+      'Ensures a smoother and more reliable experience going forward',
+    ],
+  },
+  
   {
     version: '1.1.0',
     date: '2026-01-15',
