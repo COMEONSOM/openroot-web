@@ -20,7 +20,7 @@ const releases: Release[] = [
 
   {
     version: '1.3.0',
-    date: '2026-04-24',
+    date: '2026-04-11',
     downloadLink:
       'https://github.com/COMEONSOM/openroot-web/releases/download/v1.3.0/CoevasTerminalSetup-1.3.0.exe',
     features: [
