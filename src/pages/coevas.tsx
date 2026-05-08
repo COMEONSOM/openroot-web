@@ -17,10 +17,25 @@ type TabName = 'releases' | 'about';
 
 // ── Release data ───────────────────────────────────────────────────────────
 const releases: Release[] = [
+
+  {
+    version: '1.3.0',
+    date: '2026-04-24',
+    downloadLink:
+      'https://github.com/COMEONSOM/openroot-web/releases/download/v1.3.0/CoevasTerminalSetup-1.3.0.exe',
+    features: [
+      'Enhanced YouTube downloading with 4K and 8K video support',
+      'Improved Facebook post, reel, image, and video downloading support',
+      'Enhanced Instagram reel, video post, and audio-supported downloading',
+      'Improved Threads media downloading support',
+      'Media collections exceeding normal handling limits can now be downloaded as ZIP files',
+      'Automatic update system continues to deliver future updates directly inside the app',
+    ],
+  },
   
   {
     version: '1.2.0',
-    date: '2026-04-28',
+    date: '2026-02-24',
     downloadLink:
       'https://github.com/COMEONSOM/openroot-web/releases/download/v1.2.0/CoevasTerminalSetup-1.2.0.exe',
     features: [
