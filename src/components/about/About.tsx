@@ -2,7 +2,7 @@ import { memo } from "react";
 import { motion } from "framer-motion";
 import Lottie from "lottie-react";
 
-import styles from "./WhoWeAre.module.css";
+import styles from "./About.module.css";
 
 import {
   VP,

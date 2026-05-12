@@ -9,7 +9,7 @@ import BackToTop from "./context/BackToTop";
 // ── ALWAYS loaded (visible on homepage, must be instant) ─────────────────────
 import Header        from "./components/Header";
 import Navbar        from "./components/Navbar";
-import AboutCompany  from "./components/AboutCompany";
+import AboutCompany  from "./components/about/AboutCompany";
 import Footer        from "./components/Footer";
 
 import "./App.css";

@@ -2,117 +2,165 @@ import { memo, useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import Lottie from "lottie-react";
 import { Link } from "react-router-dom";
+
 import missionAnim from "../../animations/mission.json";
+
 import s from "./Mission.module.css";
 
+/* ============================================================================
+   ANIMATION CONFIG
+============================================================================ */
 
 const EASE = [0.22, 1, 0.36, 1] as const;
-const VP = { once: true, amount: 0.18 };
+
+const VP = {
+  once: true,
+  amount: 0.18,
+};
 
 const fadeUp = {
-  hidden: { opacity: 0, y: 28, filter: "blur(8px)" },
+  hidden: {
+    opacity: 0,
+    y: 28,
+    filter: "blur(8px)",
+  },
+
   visible: {
     opacity: 1,
     y: 0,
     filter: "blur(0px)",
-    transition: { duration: 0.7, ease: EASE },
+
+    transition: {
+      duration: 0.7,
+      ease: EASE,
+    },
   },
 };
 
 const titleReveal = {
-  hidden: { opacity: 0, y: 42, filter: "blur(12px)" },
+  hidden: {
+    opacity: 0,
+    y: 42,
+    filter: "blur(12px)",
+  },
+
   visible: {
     opacity: 1,
     y: 0,
     filter: "blur(0px)",
-    transition: { duration: 0.85, ease: EASE },
+
+    transition: {
+      duration: 0.85,
+      ease: EASE,
+    },
   },
 };
 
+/* ============================================================================
+   RESPONSIVE VISUAL CONTROL
+============================================================================ */
 
-function Eyebrow({ label }: { label: string }) {
-  return (
-    <div className={s.eyebrowRow}>
-      <span className={s.eyebrowLine} />
-      <span className={s.eyebrowText}>{label}</span>
-    </div>
-  );
-}
-
-
-/**
- * useFitsVisual
- * Returns true when the viewport is wide enough to show the Lottie panel
- * alongside the copy (≥ 900px, synced with CSS breakpoint).
- */
 const VISUAL_MIN_PX = 900;
 
 function useFitsVisual() {
   const [fits, setFits] = useState<boolean>(() => {
-    if (typeof window === "undefined") return true;
+    if (typeof window === "undefined") {
+      return true;
+    }
+
     return window.innerWidth >= VISUAL_MIN_PX;
   });
 
   useEffect(() => {
-    const mq = window.matchMedia(`(min-width: ${VISUAL_MIN_PX}px)`);
-    const handler = (e: MediaQueryListEvent) => setFits(e.matches);
+    const mq = window.matchMedia(
+      `(min-width: ${VISUAL_MIN_PX}px)`
+    );
+
+    const handler = (
+      e: MediaQueryListEvent
+    ) => {
+      setFits(e.matches);
+    };
+
     mq.addEventListener("change", handler);
+
     setFits(mq.matches);
-    return () => mq.removeEventListener("change", handler);
+
+    return () => {
+      mq.removeEventListener("change", handler);
+    };
   }, []);
 
   return fits;
 }
 
+/* ============================================================================
+   MISSION SECTION
+============================================================================ */
 
 function WhyWeImportant() {
   const showVisual = useFitsVisual();
 
   return (
-    <section className={s.root} aria-labelledby="mission-heading">
-      {/* Ambient orbs */}
+    <section
+      className={s.root}
+      aria-labelledby="mission-heading"
+    >
+      {/* =========================================================
+          AMBIENT ORBS
+      ========================================================= */}
+
       <motion.div
         className={s.orbA}
         aria-hidden="true"
-        animate={{ x: [0, 22, 0], y: [0, 14, 0] }}
-        transition={{ duration: 18, repeat: Infinity, ease: "easeInOut" }}
+        animate={{
+          x: [0, 22, 0],
+          y: [0, 14, 0],
+        }}
+        transition={{
+          duration: 18,
+          repeat: Infinity,
+          ease: "easeInOut",
+        }}
       />
+
       <motion.div
         className={s.orbB}
         aria-hidden="true"
-        animate={{ x: [0, -14, 0], y: [0, -18, 0] }}
-        transition={{ duration: 22, repeat: Infinity, ease: "easeInOut" }}
+        animate={{
+          x: [0, -14, 0],
+          y: [0, -18, 0],
+        }}
+        transition={{
+          duration: 22,
+          repeat: Infinity,
+          ease: "easeInOut",
+        }}
       />
+
+      {/* =========================================================
+          INNER WRAPPER
+      ========================================================= */}
 
       <div className={s.inner}>
 
-        {/* ── Title block ── */}
-        <motion.div
-          className={s.sectionTitleBlock}
-          variants={fadeUp}
-          initial="hidden"
-          whileInView="visible"
-          viewport={VP}
-        >
-          <Eyebrow label="Our Mission" />
+        {/* =========================================================
+            MAIN GRID
+        ========================================================= */}
 
-          <motion.h2
-            id="mission-heading"
-            className={s.sectionTitle}
-            variants={titleReveal}
-          >
-            Built for people,
-            <br />
-            <span className={s.sectionTitleAccent}>powered by purpose.</span>
-          </motion.h2>
-        </motion.div>
-
-        {/* ── Mission stage ── */}
         <div
           className={s.missionStage}
-          data-visual={showVisual ? "visible" : "hidden"}
+          data-visual={
+            showVisual
+              ? "visible"
+              : "hidden"
+          }
         >
-          {/* Lottie panel — only mounted when screen fits */}
+
+          {/* =====================================================
+              RIGHT VISUAL
+          ===================================================== */}
+
           {showVisual && (
             <motion.div
               className={s.missionVisual}
@@ -135,7 +183,10 @@ function WhyWeImportant() {
             </motion.div>
           )}
 
-          {/* Copy */}
+          {/* =====================================================
+              LEFT CONTENT
+          ===================================================== */}
+
           <motion.div
             className={s.missionCopy}
             variants={fadeUp}
@@ -143,58 +194,132 @@ function WhyWeImportant() {
             whileInView="visible"
             viewport={VP}
           >
-            {/*
-              FIX 4 — enriched body copy.
-              Para 1: mission statement — bold key phrases, value proposition.
-              Para 2: social proof nudge + urgency + link CTA.
-              Para 3 (new): short punchy line reinforcing credibility + reach.
-            */}
-            <motion.p className={s.missionCopyP} variants={fadeUp}>
+
+            {/* =================================================
+                TITLE BLOCK
+            ================================================= */}
+
+            <motion.div
+              className={s.sectionTitleBlock}
+              variants={fadeUp}
+            >
+              <motion.h2
+                id="mission-heading"
+                className={s.sectionTitle}
+                variants={titleReveal}
+              >
+                Mission
+              </motion.h2>
+            </motion.div>
+
+            {/* =================================================
+                BODY COPY
+            ================================================= */}
+
+            <motion.p
+              className={s.missionCopyP}
+              variants={fadeUp}
+            >
+              Built for people,
+              powered by purpose.
+
               Our mission is to{" "}
+
               <strong className={s.missionStrong}>
-                open new roots of innovation, opportunity, and digital
-                independence
-              </strong>{" "}
-              for people and small businesses. Everyone deserves access to{" "}
+                open new roots of innovation,
+                opportunity,
+                and digital independence
+              </strong>
+
+              {" "}for people and small businesses.
+
+              Everyone deserves access to{" "}
+
               <strong className={s.missionStrong}>
-                smart technology, financial knowledge, and future-ready skills
-              </strong>{" "}
-              — regardless of income, background, or location.
+                smart technology,
+                financial knowledge,
+                and future-ready skills
+              </strong>
+
+              {" "}— regardless of income,
+              background,
+              or location.
             </motion.p>
 
-            {/* Short credibility nudge — concise, not salesy */}
-            <motion.p className={s.missionCopyP} variants={fadeUp}>
+            <motion.p
+              className={s.missionCopyP}
+              variants={fadeUp}
+            >
               Every solution is meant to be{" "}
+
               <strong className={s.missionStrong}>
-                understandable, maintainable, and truly helpful
-              </strong>{" "}
-              — not just impressive on paper.
+                understandable,
+                maintainable,
+                and truly helpful
+              </strong>
+
+              {" "}— not just impressive on paper.
             </motion.p>
 
-            <motion.p className={s.missionCopyP} variants={fadeUp}>
-              Whether through a simple finance tool, a powerful AI workflow, or
-              an in-depth class,{" "}
+            <motion.p
+              className={s.missionCopyP}
+              variants={fadeUp}
+            >
+              Whether through a simple finance tool,
+              a powerful AI workflow,
+              or an in-depth class,
+
+              {" "}
+
               <strong className={s.missionStrong}>
-                Openroot exists to remove barriers
-              </strong>{" "}
-              and make growth more achievable. Thousands of individuals and
-              businesses already rely on Openroot to stay ahead — and we&apos;re
-              just getting started. Let&apos;s grow together —{" "}
-              <strong className={s.missionStrongAccent}>
-                let&apos;s choose Openroot Systems.
+                Openroot exists
+                to remove barriers
+              </strong>
+
+              {" "}and make growth more achievable.
+
+              Thousands of individuals
+              and businesses already rely on Openroot
+              to stay ahead —
+              and we&apos;re just getting started.
+
+              Let&apos;s grow together —
+
+              {" "}
+
+              <strong
+                className={
+                  s.missionStrongAccent
+                }
+              >
+                let&apos;s choose
+                Openroot Systems.
               </strong>
             </motion.p>
 
+            {/* =================================================
+                CTA BUTTONS
+            ================================================= */}
 
-            {/* CTAs — always side by side (flex-row, nowrap) */}
-            <motion.div className={s.ctaRow} variants={fadeUp}>
+            <motion.div
+              className={s.ctaRow}
+              variants={fadeUp}
+            >
+
+              {/* PRIMARY CTA */}
+
               <motion.a
                 href="/software"
                 className={s.btnPrimary}
-                whileHover={{ scale: 1.04 }}
-                whileTap={{ scale: 0.97 }}
+                whileHover={{
+                  scale: 1.04,
+                }}
+                whileTap={{
+                  scale: 0.97,
+                }}
               >
                 Explore Our Services
+
                 <svg
                   width="14"
                   height="14"
@@ -210,22 +335,29 @@ function WhyWeImportant() {
                 </svg>
               </motion.a>
 
+              {/* SECONDARY CTA */}
+
               <motion.div
-                whileHover={{ scale: 1.04 }}
-                whileTap={{ scale: 0.97 }}
+                whileHover={{
+                  scale: 1.04,
+                }}
+                whileTap={{
+                  scale: 0.97,
+                }}
               >
-                <Link to="/openroot-classes" className={s.btnGhost}>
+                <Link
+                  to="/openroot-classes"
+                  className={s.btnGhost}
+                >
                   Learn with Openroot Classes
                 </Link>
               </motion.div>
             </motion.div>
           </motion.div>
         </div>
-
       </div>
     </section>
   );
 }
-
 
 export default memo(WhyWeImportant);

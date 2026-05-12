@@ -7,17 +7,15 @@
 //   <AboutCompany />
 // =============================================================================
 
-import styles from "./styles/AboutCompany.module.css";
-
-import WhoWeAre       from "./about/WhoWeAre";
-import OurServices from "./about/OurServices";
-import Mission from "./about/Mission";
+import OurServices from "./OurServices";
+import Mission from "./Mission";
+import About from "./About";
 
 export default function AboutCompany() {
   return (
-    <div className={styles.pageRoot}>
+    <div>
       <OurServices />
-      <WhoWeAre />
+      <About />
       <Mission />
     </div>
   );
