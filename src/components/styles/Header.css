@@ -48,7 +48,7 @@
   background: rgba(255, 255, 255, 0.07);
 }
 
-/* Photon trace along bottom edge */
+/* Photon trace — now uses #3F37C9 → #4361EE instead of green */
 .header::after {
   content: "";
   position: absolute;
@@ -60,21 +60,23 @@
   --hdr-sweep: -12%;
   background: linear-gradient(
     90deg,
-    transparent                         0%,
-    transparent                         calc(var(--hdr-sweep) - 1%),
-    rgba(163, 232, 123, 0.22)           calc(var(--hdr-sweep) + 1%),
-    #a3e87b                             calc(var(--hdr-sweep) + 3%),
-    rgba(163, 232, 123, 0.22)           calc(var(--hdr-sweep) + 5%),
-    transparent                         calc(var(--hdr-sweep) + 7%),
-    transparent                         100%
+    transparent                             0%,
+    transparent                             calc(var(--hdr-sweep) - 1%),
+    rgba(63, 55, 201, 0.30)                 calc(var(--hdr-sweep) + 1%),
+    #4361EE                                 calc(var(--hdr-sweep) + 3%),
+    rgba(67, 97, 238, 0.30)                 calc(var(--hdr-sweep) + 5%),
+    transparent                             calc(var(--hdr-sweep) + 7%),
+    transparent                             100%
   );
   animation: hdr-photon 5s cubic-bezier(0.4, 0, 0.55, 1) infinite;
 }
+
 
 @keyframes hdr-photon {
   0%   { --hdr-sweep: -8%;  }
   100% { --hdr-sweep: 108%; }
 }
+
 
 @media (max-width: 899px) {
   .header {
@@ -83,6 +85,7 @@
     margin-inline: calc(50% - 50vw);
   }
 }
+
 
 /* ── LOGO ─────────────────────────────────────────────────── */
 
@@ -100,7 +103,7 @@
   border-radius: 50%;
   background: radial-gradient(
     ellipse at center,
-    rgba(163, 232, 123, 0.14) 0%,
+    rgba(63, 55, 201, 0.14) 0%,
     transparent 70%
   );
   opacity: 0;
@@ -176,6 +179,11 @@
 .login-animation:active {
   transform: translateX(2px);
   transition-duration: 0.08s;
+}
+
+.login-animation:focus-visible {
+  outline: 2px solid #4361EE;
+  outline-offset: 3px;
 }
 
 .login-lottie {
@@ -288,17 +296,18 @@
 }
 
 .profile-button:focus-visible {
-  outline: 2px solid #a3e87b;
+  outline: 2px solid #4361EE;
   outline-offset: 4px;
 }
 
 .avatar-fallback {
   display: grid;
   place-items: center;
-  background: linear-gradient(135deg, #1a3a14, #0e1a09);
-  color: #a3e87b;
+  background: linear-gradient(135deg, #1a1a3a, #0e0e24);
+  color: #6480f5;
   font-weight: 700;
 }
+
 
 /* ── RESPONSIVE AVATAR SIZES ─────────────────────────────── */
 

@@ -10,15 +10,15 @@
 import styles from "./styles/AboutCompany.module.css";
 
 import WhoWeAre       from "./about/WhoWeAre";
-import WhatWeOffer    from "./about/WhatWeOffer";
-import WhyWeImportant from "./about/WhyWeImportant";
+import OurServices from "./about/OurServices";
+import Mission from "./about/Mission";
 
 export default function AboutCompany() {
   return (
     <div className={styles.pageRoot}>
+      <OurServices />
       <WhoWeAre />
-      <WhatWeOffer />
-      <WhyWeImportant />
+      <Mission />
     </div>
   );
 }

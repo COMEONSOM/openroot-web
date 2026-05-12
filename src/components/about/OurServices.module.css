@@ -1,0 +1,306 @@
+.servicesSection {
+  position: relative;
+  overflow: hidden;
+
+  padding-block: clamp(4rem, 8vw, 6.5rem);
+  padding-inline: clamp(1.25rem, 4vw, 3rem);
+
+  background:
+  radial-gradient(
+    circle at top left,
+    rgba(88, 101, 242, 0.08) 0%,
+    transparent 34%
+  ),
+  radial-gradient(
+    circle at bottom right,
+    rgba(88, 101, 242, 0.05) 0%,
+    transparent 32%
+  ),
+  var(--ww-section-bg);
+}
+
+.servicesInner {
+  position: relative;
+  z-index: 1;
+
+  width: min(100%, 1120px);
+
+  margin-inline: auto;
+}
+
+.servicesHeader {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  text-align: left;
+  gap: 0.65rem;
+  max-width: 100%;
+  margin-inline: 0 0;
+  margin-bottom: clamp(1.8rem, 4vw, 2.6rem);
+}
+
+.servicesEyebrowRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+
+.servicesEyebrowText {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  margin: 0;
+  font-size: clamp(1rem, 2.2vw, 1.45rem);
+  font-weight: 800;
+  letter-spacing: -0.035em;
+  line-height: 1.15;
+  color: var(--ot-text);
+  background: none;
+  -webkit-text-fill-color: currentColor;
+}
+
+.servicesTitle {
+  margin: 0;
+  max-width: 18ch;
+  line-height: 1.05;
+  letter-spacing: -0.05em;
+  text-align: left;
+  color: var(--ot-brand-2);
+  font-size: clamp(1.9rem, 3.8vw, 3rem);
+}
+
+.servicesSubtitle {
+  margin: 0;
+  max-width: 62ch;
+  line-height: 1.75;
+  color: var(--color-text-muted);
+  font-size: 0.98rem;
+}
+
+.servicesStack {
+  display: flex;
+  flex-direction: column;
+  gap: 2.1rem;
+}
+
+/* Flat, clean section — no heavy container box */
+.serviceCard {
+  position: relative;
+  padding: 0;
+  background: transparent;
+}
+
+.serviceCard + .serviceCard {
+  padding-top: 2.1rem;
+  border-top: 1px solid var(--color-border);
+}
+
+.serviceInner {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: minmax(0, 1.12fr) minmax(340px, 0.88fr);
+  gap: clamp(1.5rem, 3vw, 3rem);
+  align-items: center;
+}
+
+.serviceContent {
+  display: flex;
+  flex-direction: column;
+  gap: 0.95rem;
+  min-width: 0;
+}
+
+.serviceTag {
+  align-self: flex-start;
+  display: inline-flex;
+  align-items: center;
+  padding: 0.35rem 0.78rem;
+  border-radius: 999px;
+  font-size: 0.68rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-weight: 800;
+  color: var(--ot-brand-2);
+  background: rgba(100, 128, 245, 0.08);
+  border: 1px solid rgba(100, 128, 245, 0.15);
+}
+
+.serviceTitle {
+  margin: 0;
+  font-size: clamp(1.6rem, 3vw, 2.45rem);
+  line-height: 1.02;
+  letter-spacing: -0.045em;
+  max-width: 16ch;
+  color: var(--color-text);
+}
+
+.serviceIntro {
+  margin: 0;
+  max-width: 64ch;
+  line-height: 1.8;
+  text-align: justify;
+  text-justify: inter-word;
+  hyphens: auto;
+  color: var(--color-text-muted);
+}
+
+.serviceSubheading {
+  margin: 0;
+  color: var(--color-text);
+  font-size: 1rem;
+}
+
+.serviceList {
+  margin: 0.1rem 0 0 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+}
+
+.serviceList li {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  color: var(--color-text-muted);
+  line-height: 1.7;
+}
+
+.serviceList li::before {
+  content: "•";
+  color: var(--ot-brand-2);
+  font-weight: 900;
+  line-height: 1;
+  margin-top: 0.05rem;
+}
+
+.serviceNote {
+  margin-top: 0.25rem;
+  line-height: 1.8;
+  text-align: justify;
+  text-justify: inter-word;
+  hyphens: auto;
+  color: var(--color-text-muted);
+}
+
+.serviceHighlights {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.2rem;
+}
+
+.serviceChip {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.38rem 0.65rem;
+  border-radius: 999px;
+  font-size: 0.66rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ot-brand-2);
+  background: rgba(100, 128, 245, 0.06);
+  border: 1px solid rgba(100, 128, 245, 0.12);
+}
+
+.serviceVisual {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 0;
+}
+
+/* Actual JSON animation only — no crafted text on the right */
+.serviceVisualFrame {
+  /* Tweak these three values to crop both visuals equally */
+  --svc-crop-x: 0%;
+  --svc-crop-y: -5%;
+  --svc-crop-scale: 1.14;
+
+  position: relative;
+  width: min(390px, 100%);
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+  display: grid;
+  place-items: center;
+  border-radius: 30px;
+  background:
+    radial-gradient(circle at 50% 35%, rgba(100, 128, 245, 0.15) 0%, transparent 42%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.03));
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.10),
+    0 18px 42px rgba(0, 0, 0, 0.10);
+  border: 1px solid var(--color-border-strong);
+}
+
+/*
+  Crop explanation:
+  - The animation is centered, then nudged slightly upward.
+  - `--svc-crop-scale` zooms in evenly from the middle.
+  - `--svc-crop-y` controls how much bottom content gets hidden.
+  - Because both cards use the same class, the crop ratio stays identical.
+*/
+.serviceAnimation {
+  width: 118% !important;
+  height: 118% !important;
+  transform:
+    translate(var(--svc-crop-x), var(--svc-crop-y))
+    scale(var(--svc-crop-scale));
+  transform-origin: center center;
+  display: block;
+}
+
+@media (max-width: 767px) {
+  .servicesSection {
+    padding-block: clamp(3.5rem, 8vw, 5rem);
+    padding-inline: 1.25rem;
+  }
+
+  .servicesHeader {
+    align-items: flex-start;
+    text-align: left;
+  }
+
+  .servicesTitle {
+    max-width: 100%;
+  }
+
+  .serviceInner {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+
+  .serviceVisual {
+    display: none;
+  }
+
+  .serviceContent {
+    gap: 0.85rem;
+  }
+
+  .serviceTitle {
+    font-size: clamp(1.35rem, 6vw, 1.9rem);
+  }
+
+  .serviceIntro,
+  .serviceNote {
+    line-height: 1.72;
+    text-align: left;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1023px) {
+  .serviceVisualFrame {
+    width: min(300px, 100%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .serviceAnimation {
+    transform: scale(1.02);
+  }
+}

@@ -1,0 +1,665 @@
+/* =============================================================================
+   src/components/styles/WhyWeImportant.module.css
+   v3 — Adjustments:
+   1. Eyebrow "OUR MISSION" → brand blue (matches brand identity)
+   2. "Built for people," → softer charcoal (#2d2d3a) not deep black
+   3. CTA row always flex-row — buttons never stack vertically
+   4. Body copy keeps same structure (content updated in TSX)
+============================================================================= */
+
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   LIGHT MODE TOKENS
+───────────────────────────────────────────────────────────────────────────── */
+.root {
+  --ww-bg:               var(--ot-bg, #ffffff);
+  --ww-orb-a:            rgba(63,  55, 201, 0.05);
+  --ww-orb-b:            rgba(67,  97, 238, 0.04);
+
+  --ww-surface:          rgba(255, 255, 255, 0.62);
+  --ww-surface-soft:     rgba(255, 255, 255, 0.32);
+  --ww-border:           var(--ot-border,      rgba(0, 0, 0, 0.12));
+  --ww-border-strong:    var(--ot-border-hard, rgba(0, 0, 0, 0.22));
+
+  /* FIX 2 — softer charcoal instead of #111111 deep black */
+  --ww-title-color:        #2d2d3a;
+  /* "powered by purpose." stays solid brand blue */
+  --ww-title-accent-color: #3F37C9;
+  --ww-title-grad:         #2d2d3a;
+  --ww-title-accent:       #3F37C9;
+
+  --ww-body-color:       var(--ot-text-muted, rgba(30, 30, 50, 0.68));
+  --ww-strong-color:     var(--ot-text,       rgba(20, 20, 40, 0.88));
+  --ww-muted-color:      var(--ot-text-faint, rgba(30, 30, 50, 0.48));
+
+  /* FIX 1 — eyebrow uses brand blue, NOT gold */
+  --ww-eyebrow-line-color: #3F37C9;
+  --ww-eyebrow-text-color: #3F37C9;
+  --ww-eyebrow-grad:       #3F37C9;
+  --ww-eyebrow-text:       #3F37C9;
+
+  --ww-mission-bg:       #111111;
+  --ww-mission-border:   rgba(255, 255, 255, 0.06);
+  --ww-mission-radial:   none;
+  --ww-shimmer-top:      none;
+
+  --ww-lottie-label-color:   rgba(255, 255, 255, 0.28);
+  --ww-lottie-tagline-color: rgba(255, 255, 255, 0.18);
+  --ww-lottie-glow:          rgba(67, 97, 238, 0.08);
+  --ww-lottie-tagline:       rgba(10, 10, 40, 0.28);
+  --ww-lottie-crop:          14px;
+
+  --ww-btn-primary-bg:   #3F37C9;
+  --ww-btn-primary-hover:#3530b0;
+  --ww-btn-primary-text: #ffffff;
+  --ww-btn-primary-a:    #3F37C9;
+  --ww-btn-primary-b:    #3F37C9;
+
+  --ww-btn-ghost-bg:     #ffffff;
+  --ww-btn-ghost-color:  rgba(10, 10, 25, 0.82);
+  --ww-btn-ghost-border: rgba(0, 0, 0, 0.18);
+  --ww-btn-ghost-hover:  rgba(0, 0, 0, 0.04);
+
+  --ww-accent-link:      #3F37C9;
+  --ww-divider-line:     linear-gradient(to bottom, rgba(67,97,238,0.4), transparent);
+}
+
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   DARK MODE  — manual toggle
+───────────────────────────────────────────────────────────────────────────── */
+:global([data-theme="dark"]) .root {
+  --ww-bg:               var(--ot-bg, #0a0a0a);
+  --ww-orb-a:            rgba(63,  55, 201, 0.12);
+  --ww-orb-b:            rgba(67,  97, 238, 0.09);
+
+  --ww-surface:          rgba(255, 255, 255, 0.05);
+  --ww-surface-soft:     rgba(255, 255, 255, 0.03);
+  --ww-border:           var(--ot-border,      rgba(255, 255, 255, 0.10));
+  --ww-border-strong:    var(--ot-border-hard, rgba(255, 255, 255, 0.18));
+
+  --ww-title-color:        #eeeef5;
+  --ww-title-accent-color: #a0aaff;
+  --ww-title-grad:         #eeeef5;
+  --ww-title-accent:       #a0aaff;
+
+  --ww-body-color:       var(--ot-text-muted, rgba(255, 255, 255, 0.64));
+  --ww-strong-color:     var(--ot-text,       rgba(255, 255, 255, 0.92));
+  --ww-muted-color:      var(--ot-text-faint, rgba(255, 255, 255, 0.46));
+
+  /* Dark mode eyebrow — slightly lighter blue so it reads on dark bg */
+  --ww-eyebrow-line-color: #6a74f0;
+  --ww-eyebrow-text-color: #6a74f0;
+  --ww-eyebrow-grad:       #6a74f0;
+  --ww-eyebrow-text:       #6a74f0;
+
+  --ww-mission-bg:       #1a1a1a;
+  --ww-mission-border:   rgba(255, 255, 255, 0.08);
+  --ww-mission-radial:   none;
+  --ww-shimmer-top:      none;
+
+  --ww-lottie-label-color:   rgba(255, 255, 255, 0.32);
+  --ww-lottie-tagline-color: rgba(255, 255, 255, 0.18);
+  --ww-lottie-glow:          rgba(67, 97, 238, 0.15);
+  --ww-lottie-tagline:       rgba(255, 255, 255, 0.22);
+  --ww-lottie-crop:          14px;
+
+  --ww-btn-primary-bg:   #ffffff;
+  --ww-btn-primary-hover:#e8e8e8;
+  --ww-btn-primary-text: #0f1734;
+  --ww-btn-primary-a:    #ffffff;
+  --ww-btn-primary-b:    #dfe6ff;
+
+  --ww-btn-ghost-bg:     rgba(255, 255, 255, 0.06);
+  --ww-btn-ghost-color:  rgba(255, 255, 255, 0.78);
+  --ww-btn-ghost-border: rgba(255, 255, 255, 0.16);
+  --ww-btn-ghost-hover:  rgba(255, 255, 255, 0.10);
+
+  --ww-accent-link:      #a0aaff;
+  --ww-divider-line:     linear-gradient(to bottom, rgba(67,97,238,0.55), transparent);
+}
+
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   DARK MODE — system preference fallback
+───────────────────────────────────────────────────────────────────────────── */
+@media (prefers-color-scheme: dark) {
+  :global(:root:not([data-theme])) .root {
+    --ww-bg:               var(--ot-bg, #0a0a0a);
+    --ww-orb-a:            rgba(63,  55, 201, 0.12);
+    --ww-orb-b:            rgba(67,  97, 238, 0.09);
+
+    --ww-surface:          rgba(255, 255, 255, 0.05);
+    --ww-surface-soft:     rgba(255, 255, 255, 0.03);
+    --ww-border:           var(--ot-border,      rgba(255, 255, 255, 0.10));
+    --ww-border-strong:    var(--ot-border-hard, rgba(255, 255, 255, 0.18));
+
+    --ww-title-color:        #eeeef5;
+    --ww-title-accent-color: #a0aaff;
+    --ww-title-grad:         #eeeef5;
+    --ww-title-accent:       #a0aaff;
+
+    --ww-body-color:       var(--ot-text-muted, rgba(255, 255, 255, 0.64));
+    --ww-strong-color:     var(--ot-text,       rgba(255, 255, 255, 0.92));
+    --ww-muted-color:      var(--ot-text-faint, rgba(255, 255, 255, 0.46));
+
+    --ww-eyebrow-line-color: #6a74f0;
+    --ww-eyebrow-text-color: #6a74f0;
+    --ww-eyebrow-grad:       #6a74f0;
+    --ww-eyebrow-text:       #6a74f0;
+
+    --ww-mission-bg:       #1a1a1a;
+    --ww-mission-border:   rgba(255, 255, 255, 0.08);
+    --ww-mission-radial:   none;
+    --ww-shimmer-top:      none;
+
+    --ww-lottie-label-color:   rgba(255, 255, 255, 0.32);
+    --ww-lottie-tagline-color: rgba(255, 255, 255, 0.18);
+    --ww-lottie-glow:          rgba(67, 97, 238, 0.15);
+    --ww-lottie-tagline:       rgba(255, 255, 255, 0.22);
+    --ww-lottie-crop:          14px;
+
+    --ww-btn-primary-bg:   #ffffff;
+    --ww-btn-primary-hover:#e8e8e8;
+    --ww-btn-primary-text: #0f1734;
+    --ww-btn-primary-a:    #ffffff;
+    --ww-btn-primary-b:    #dfe6ff;
+
+    --ww-btn-ghost-bg:     rgba(255, 255, 255, 0.06);
+    --ww-btn-ghost-color:  rgba(255, 255, 255, 0.78);
+    --ww-btn-ghost-border: rgba(255, 255, 255, 0.16);
+    --ww-btn-ghost-hover:  rgba(255, 255, 255, 0.10);
+
+    --ww-accent-link:      #a0aaff;
+    --ww-divider-line:     linear-gradient(to bottom, rgba(67,97,238,0.55), transparent);
+  }
+}
+
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   SECTION SHELL
+───────────────────────────────────────────────────────────────────────────── */
+.root {
+  position: relative;
+  width: 100%;
+  padding: clamp(4rem, 8vw, 6.5rem) clamp(1rem, 5vw, 2.5rem);
+  overflow: hidden;
+  isolation: isolate;
+  background: var(--ww-bg);
+  color: var(--ww-strong-color);
+  transition:
+    background var(--ot-transition, 0.35s ease),
+    color      var(--ot-transition, 0.35s ease);
+}
+
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   AMBIENT ORBS
+───────────────────────────────────────────────────────────────────────────── */
+.orbA,
+.orbB {
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 0;
+  filter: blur(80px);
+}
+
+.orbA {
+  top: -20%;
+  left: -12%;
+  width: 50%;
+  height: 50%;
+  background: radial-gradient(circle, var(--ww-orb-a) 0%, transparent 70%);
+}
+
+.orbB {
+  bottom: -5%;
+  right: -10%;
+  width: 42%;
+  height: 46%;
+  background: radial-gradient(circle, var(--ww-orb-b) 0%, transparent 70%);
+  filter: blur(90px);
+}
+
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   CONTENT WRAPPER
+───────────────────────────────────────────────────────────────────────────── */
+.inner {
+  position: relative;
+  z-index: 1;
+  max-width: var(--ot-max-w, 1100px);
+  margin-inline: auto;
+  display: flex;
+  flex-direction: column;
+  gap: clamp(2rem, 4vw, 3.5rem);
+}
+
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   SECTION TITLE BLOCK
+───────────────────────────────────────────────────────────────────────────── */
+.sectionTitleBlock {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  max-width: 680px;
+}
+
+/* ── Eyebrow ── */
+.eyebrowRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.eyebrowLine {
+  /* FIX 1 — brand blue line */
+  width: 22px;
+  height: 2px;
+  border-radius: 999px;
+  flex-shrink: 0;
+  display: inline-block;
+  background: var(--ww-eyebrow-line-color);
+}
+
+.eyebrowText {
+  /* FIX 1 — brand blue text, flat color */
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--ww-eyebrow-text-color);
+  -webkit-text-fill-color: var(--ww-eyebrow-text-color);
+}
+
+/* ── Section Heading ── */
+.sectionTitle {
+  font-size: clamp(2.2rem, 4.8vw, 3.8rem);
+  font-weight: 900;
+  letter-spacing: -0.035em;
+  line-height: 1.06;
+  margin: 0;
+  /* FIX 2 — softer charcoal, not deep black */
+  color: var(--ww-title-color);
+  -webkit-text-fill-color: var(--ww-title-color);
+  text-wrap: balance;
+}
+
+/* "powered by purpose." — solid brand blue, own line */
+.sectionTitleAccent {
+  display: block;
+  color: var(--ww-title-accent-color);
+  -webkit-text-fill-color: var(--ww-title-accent-color);
+  background: none;
+  -webkit-background-clip: unset;
+  background-clip: unset;
+}
+
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   MISSION STAGE  — 2-col grid desktop
+───────────────────────────────────────────────────────────────────────────── */
+.missionStage {
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(260px, 0.85fr);
+  gap: clamp(1.8rem, 3.5vw, 3rem);
+  align-items: center;
+}
+
+.missionCopy {
+  order: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  min-width: 0;
+}
+
+.missionVisual {
+  order: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 0;
+}
+
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   LOTTIE PANEL
+───────────────────────────────────────────────────────────────────────────── */
+.lottieWrap {
+  --crop-x: 0%;
+  --crop-y: -5%;
+  --crop-scale: 1.14;
+
+  position: relative;
+  width: min(390px, 100%);
+  aspect-ratio: 1 / 1;
+
+  overflow: hidden;
+  border-radius: 30px;
+
+  display: grid;
+  place-items: center;
+
+  background:
+    radial-gradient(circle at 50% 35%, rgba(100, 128, 245, 0.15) 0%, transparent 42%),
+    linear-gradient(
+      180deg,
+      rgba(255,255,255,0.08),
+      rgba(255,255,255,0.03)
+    );
+
+  border: 1px solid var(--color-border-strong);
+
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.10),
+    0 18px 42px rgba(0,0,0,0.10);
+}
+
+.lottieAnimation {
+  width: 100% !important;
+  height: 100% !important;
+
+  transform: scale(1.12);
+
+  transform-origin: center center;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.lottieAnimation :global(svg),
+.lottieAnimation canvas {
+  width: 100% !important;
+  height: 100% !important;
+
+  transform: translateY(-2%);
+} 
+
+.lottieGlow {
+  position: absolute;
+  inset: -24px;
+  border-radius: 50%;
+  background: radial-gradient(circle, var(--ww-lottie-glow) 0%, transparent 68%);
+  pointer-events: none;
+  z-index: -1;
+}
+
+.missionSideText {
+  display: flex;
+  position: absolute;
+  inset: 0;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.82rem;
+  font-weight: 400;
+  letter-spacing: 0.04em;
+  color: var(--ww-lottie-label-color, rgba(255, 255, 255, 0.28));
+  pointer-events: none;
+  z-index: 2;
+}
+
+.lottieCaption {
+  position: absolute;
+  bottom: 10px;
+  right: 14px;
+  font-size: 0.6rem;
+  font-weight: 400;
+  letter-spacing: 0.02em;
+  color: var(--ww-lottie-tagline-color, rgba(255, 255, 255, 0.18));
+  pointer-events: none;
+  z-index: 2;
+  white-space: nowrap;
+}
+
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   BODY COPY
+───────────────────────────────────────────────────────────────────────────── */
+.missionCopyP {
+  margin: 0;
+  max-width: 56ch;
+  font-size: 1rem;
+  line-height: 1.82;
+  color: var(--ww-body-color);
+  -webkit-text-fill-color: var(--ww-body-color);
+}
+
+.missionStrong {
+  font-weight: 800;
+  color: var(--ww-strong-color);
+  -webkit-text-fill-color: var(--ww-strong-color);
+}
+
+.missionStrongAccent {
+  font-weight: 700;
+  color: var(--ww-accent-link);
+  -webkit-text-fill-color: var(--ww-accent-link);
+  text-decoration: none;
+  background: none;
+  -webkit-background-clip: unset;
+  background-clip: unset;
+  cursor: pointer;
+  transition: opacity 0.18s ease;
+}
+
+.missionStrongAccent:hover {
+  opacity: 0.78;
+  text-decoration: underline;
+  text-decoration-thickness: 1.5px;
+  text-underline-offset: 3px;
+}
+
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   CTA BUTTONS
+   FIX 3 — always flex-row, never column-stacked on any screen size.
+   On very narrow screens buttons shrink via min-width + padding adjustment
+   rather than stacking.
+───────────────────────────────────────────────────────────────────────────── */
+.ctaRow {
+  display: flex;
+  flex-direction: row;       /* ALWAYS row — never column */
+  flex-wrap: nowrap;         /* prevent wrapping to second line */
+  gap: 10px;
+  margin-top: 6px;
+  align-items: center;
+}
+
+.btnPrimary,
+.btnGhost {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 46px;
+  /* Use flex-shrink so both buttons share space gracefully on narrow screens */
+  flex-shrink: 1;
+  padding: 0 18px;
+  border-radius: 999px;
+  font-weight: 700;
+  font-size: 0.9rem;
+  text-decoration: none;
+  cursor: pointer;
+  white-space: nowrap;
+  transition:
+    transform      var(--ot-transition-fast, 0.18s ease),
+    box-shadow     var(--ot-transition-fast, 0.18s ease),
+    background     var(--ot-transition-fast, 0.18s ease),
+    opacity        var(--ot-transition-fast, 0.18s ease),
+    border-color   var(--ot-transition-fast, 0.18s ease);
+}
+
+/* Primary — flat solid brand blue */
+.btnPrimary {
+  color: var(--ww-btn-primary-text);
+  -webkit-text-fill-color: var(--ww-btn-primary-text);
+  background: var(--ww-btn-primary-bg);
+  border: none;
+  gap: 7px;
+  box-shadow: 0 4px 14px rgba(63, 55, 201, 0.28);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .btnPrimary:hover {
+    background: var(--ww-btn-primary-hover);
+    transform: translateY(-1px);
+    box-shadow: 0 6px 20px rgba(63, 55, 201, 0.36);
+  }
+  .btnPrimary:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 8px rgba(63, 55, 201, 0.22);
+  }
+}
+
+/* Ghost — white pill, thin border */
+.btnGhost {
+  color: var(--ww-btn-ghost-color);
+  -webkit-text-fill-color: var(--ww-btn-ghost-color);
+  background: var(--ww-btn-ghost-bg);
+  border: 1.5px solid var(--ww-btn-ghost-border);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .btnGhost:hover {
+    transform: translateY(-1px);
+    background: var(--ww-btn-ghost-hover);
+    border-color: var(--ww-border-strong);
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.07);
+  }
+  .btnGhost:active {
+    transform: translateY(0);
+    box-shadow: none;
+  }
+}
+
+/* Arrow icon */
+.btnArrow {
+  display: inline-flex;
+  align-items: center;
+  font-style: normal;
+  font-size: 1rem;
+  transition: transform 0.18s ease;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .btnPrimary:hover .btnArrow {
+    transform: translateX(3px);
+  }
+}
+
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   RESPONSIVE — ≤ 899px
+───────────────────────────────────────────────────────────────────────────── */
+@media (max-width: 899px) {
+  .missionStage {
+    grid-template-columns: 1fr;
+    gap: clamp(1.6rem, 4vw, 2.4rem);
+  }
+
+  .missionVisual {
+    order: 1;
+    justify-content: flex-start;
+  }
+
+  .missionCopy {
+    order: 2;
+  }
+
+  .lottieWrap {
+    width: min(320px, 100%);
+    margin-inline: auto;
+  }
+}
+
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   RESPONSIVE — ≤ 640px  (phone)
+   FIX 3 — even on the smallest screens the row stays horizontal.
+   Reduce font-size + padding so both pills fit side by side.
+───────────────────────────────────────────────────────────────────────────── */
+@media (max-width: 640px) {
+  .root {
+    padding: 72px 20px 80px;
+  }
+
+  .sectionTitle {
+    font-size: clamp(2rem, 9vw, 2.8rem);
+    letter-spacing: -0.03em;
+  }
+
+  .missionCopyP {
+    font-size: 0.97rem;
+    line-height: 1.76;
+  }
+
+  /* Buttons stay side-by-side — shrink font + padding to fit */
+  .ctaRow {
+    gap: 8px;
+  }
+
+  .btnPrimary,
+  .btnGhost {
+    font-size: 0.82rem;
+    padding: 0 14px;
+    min-height: 44px;
+  }
+
+  .lottieWrap {
+    --ww-lottie-crop: 16px;
+    width: min(280px, 100%);
+  }
+}
+
+.lottieWrap :global(svg),
+.lottieWrap canvas {
+  width: 112% !important;
+  height: 112% !important;
+
+  transform:
+    translateY(2%)
+    scale(1.12);
+
+  transform-origin: center center;
+}
+
+/* Extra-small safety: if viewport is truly tiny (< 360px), allow
+   text to truncate with ellipsis rather than overflow */
+@media (max-width: 359px) {
+  .btnPrimary,
+  .btnGhost {
+    font-size: 0.76rem;
+    padding: 0 10px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}
+
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   VISUAL HIDDEN STATE (when Lottie is unmounted on small screens)
+───────────────────────────────────────────────────────────────────────────── */
+.missionStage[data-visual="hidden"] {
+  grid-template-columns: 1fr;
+}
+
+.missionStage[data-visual="hidden"] .missionCopy {
+  order: 1;
+  max-width: 680px;
+}
+
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   REDUCED MOTION
+───────────────────────────────────────────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  .btnPrimary,
+  .btnGhost,
+  .btnArrow,
+  .missionStrongAccent {
+    transition: none;
+  }
+}

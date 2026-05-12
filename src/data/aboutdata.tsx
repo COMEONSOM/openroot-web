@@ -52,7 +52,6 @@ export const OFFER_CARDS: OfferCard[] = [
     accentVar:  "var(--ot-accent-warm, #f59e0b)",
     image:     "/assets/openroot-classes.avif",
     link: "/software/openroot-classes",
-    highlights: ["Preminum Content","Affordable Pricing","100% Online Live Classes"],
     intro: (
       <>
         <strong className="text-accent">Openroot Classes</strong> is our
@@ -106,7 +105,6 @@ export const OFFER_CARDS: OfferCard[] = [
     accentVar:  "var(--ot-accent-cool, #6366f1)",
     image:     "/assets/software-solutions.avif",
     link: "/software-solutions",
-    highlights: ["Custom Built", "MSME-Focused", "Scalable", "Maintainable"],
     intro: (
       <>
         Under <strong className="text-accent">Software Solutions</strong>, we
@@ -151,32 +149,5 @@ export const OFFER_CARDS: OfferCard[] = [
         — not just impressive on paper.
       </>
     ),
-  },
-];
-
-// ── WHY WE'RE IMPORTANT — REASON CARDS ───────────────────────────
-// RENDERED AS A 2×2 GRID (DESKTOP) / 1-COL STACK (MOBILE)
-// icon: UNICODE GLYPH INSIDE icon-pill CIRCULAR CONTAINER
-// TO ADD A REASON: PUSH A NEW { icon, title, body } OBJECT HERE
-export const REASONS: Reason[] = [
-  {
-    icon:  "✦",
-    title: "User-First Always",
-    body:  "No ads. No gimmicks. No dark patterns. We focus on building trust by respecting user time, data, and attention.",
-  },
-  {
-    icon:  "◈",
-    title: "Transparent & Accessible Pricing",
-    body:  "High-value solutions for students and small businesses at prices that make sense for them — not just big companies.",
-  },
-  {
-    icon:  "⬡",
-    title: "Small Team, Big Impact",
-    body:  "A lean, focused team that loves building tools solving concrete problems instead of chasing trends.",
-  },
-  {
-    icon:  "◎",
-    title: "Education & Empowerment",
-    body:  "We don't just give tools — we teach people how to use technology, AI, and investing methods to create real change.",
   },
 ];

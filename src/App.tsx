@@ -151,7 +151,6 @@ export default function App() {
                   </Helmet>
 
                   <Header />
-                  <Advertisement />
                   <Navbar />
                   <AboutCompany />
                   <Footer />

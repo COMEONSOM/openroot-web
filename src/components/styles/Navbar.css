@@ -1,41 +1,81 @@
 /* ==========================================================================
-   OPENROOT — NAVBAR | Navbar.css
-   Cleaned to reuse App.css/global utilities
+   OPENROOT — NAVBAR | CLEANED PRODUCTION CSS
+   Overlay / View More System Removed
    ========================================================================== */
 
+.navbar {
+  /* Core palette */
+  --nb-primary: #3f37c9;
+  --nb-secondary: #4361ee;
+  --nb-gradient: linear-gradient(135deg, #3f37c9 0%, #4361ee 100%);
 
-/* ============================================================
+  /* Glow */
+  --nb-glow: rgba(67, 97, 238, 0.14);
+  --nb-glow-strong: rgba(63, 55, 201, 0.24);
+  --nb-glow-bloom: rgba(67, 97, 238, 0.08);
+
+  /* Surface */
+  --nb-card-bg: var(--ot-bg);
+  --nb-card-border: rgba(0, 0, 0, 0.09);
+  --nb-card-border-hover: rgba(67, 97, 238, 0.45);
+
+  /* Text */
+  --nb-text: var(--ot-text);
+  --nb-text-muted: var(--ot-text-muted);
+
+  /* Timing */
+  --nb-ease: cubic-bezier(0.16, 1, 0.3, 1);
+  --nb-ease-snap: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ==========================================================================
+   DARK MODE
+   ========================================================================== */
+
+[data-theme="dark"] .navbar {
+  --nb-card-bg: #111111;
+  --nb-card-border: rgba(255, 255, 255, 0.08);
+  --nb-card-border-hover: rgba(67, 97, 238, 0.55);
+  --nb-glow: rgba(67, 97, 238, 0.2);
+  --nb-glow-strong: rgba(67, 97, 238, 0.32);
+  --nb-glow-bloom: rgba(67, 97, 238, 0.12);
+}
+
+/* ==========================================================================
    SECTION ROOT
-   ============================================================ */
+   ========================================================================== */
 
 .navbar {
   position: relative;
   width: 100%;
-  padding: clamp(2rem, 5vw, 4rem) clamp(1rem, 5vw, 2.5rem);
+  padding:
+    clamp(1.5rem, 3.5vw, 4rem)
+    clamp(1rem, 5vw, 2.5rem);
   isolation: isolate;
   overflow: hidden;
 }
 
-/* Top hairline */
+/* top separator */
 .navbar::before {
   content: "";
   position: absolute;
-  top: 0; left: 0; right: 0;
+  top: 0;
+  left: 0;
+  right: 0;
   height: 1px;
   pointer-events: none;
   background: linear-gradient(
     90deg,
-    transparent      0%,
+    transparent 0%,
     var(--ot-border) 20%,
     var(--ot-border) 80%,
-    transparent      100%
+    transparent 100%
   );
 }
 
-
-/* ============================================================
+/* ==========================================================================
    INNER WRAPPER
-   ============================================================ */
+   ========================================================================== */
 
 .navbar-content {
   position: relative;
@@ -45,13 +85,12 @@
   margin-inline: auto;
   display: flex;
   flex-direction: column;
-  gap: clamp(1.1rem, 2.5vw, 1.8rem);
+  gap: clamp(1rem, 2.5vw, 1.6rem);
 }
 
-
-/* ============================================================
-   HEADER ROW
-   ============================================================ */
+/* ==========================================================================
+   HEADER
+   ========================================================================== */
 
 .software-header {
   display: flex;
@@ -61,599 +100,509 @@
 }
 
 .navbar-title {
-  font-size: clamp(1rem, 2.2vw, 1.45rem);
-  font-weight: 800;
-  letter-spacing: -0.03em;
-  line-height: 1.15;
-  color: var(--ot-text);
-}
-
-.view-all-link {
+  position: relative;
   display: inline-flex;
   align-items: center;
-  gap: 0.35rem;
-  padding: 0.42rem 1rem;
-  font-family: var(--ot-font);
-  font-size: 0.78rem;
-  font-weight: 700;
-  letter-spacing: 0.02em;
-  color: var(--ot-text-muted);
-  background: var(--ot-surface-alt);
-  border: 1px solid var(--ot-border);
-  border-radius: 999px;
-  cursor: pointer;
-  flex-shrink: 0;
-  transition:
-    color        0.22s ease,
-    background   0.22s ease,
-    border-color 0.22s ease,
-    transform    0.22s var(--ease-spring);
+  gap: 0.55rem;
+  margin: 0;
+  font-size: clamp(1rem, 2.2vw, 1.45rem);
+  font-weight: 800;
+  letter-spacing: -0.035em;
+  line-height: 1.15;
+  color: var(--ot-text);
+  background: none;
+  -webkit-text-fill-color: currentColor;
 }
 
-@media (hover: hover) and (pointer: fine) {
-  .view-all-link:hover {
-    color: var(--ot-text);
-    background: var(--ot-brand-dim);
-    border-color: var(--ot-brand-border);
-    transform: translateX(3px);
-  }
-}
-
-
-/* ============================================================
-   SOFTWARE ROW — 5-column desktop grid
-   ============================================================ */
+/* ==========================================================================
+   SOFTWARE GRID
+   ========================================================================== */
 
 .released-softwares {
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  gap: clamp(0.6rem, 1.4vw, 1rem);
+  grid-template-columns: repeat(
+    var(--software-columns, 5),
+    minmax(0, 1fr)
+  );
+  gap: clamp(0.65rem, 1.3vw, 0.9rem);
   align-items: stretch;
 }
 
+.released-softwares--compact {
+  grid-template-columns: repeat(
+    var(--compact-columns, 3),
+    minmax(0, 1fr)
+  );
+  gap: clamp(0.55rem, 1.1vw, 0.75rem);
+}
 
-/* ============================================================
-   SOFTWARE BUTTON CARD (shared: section row + overlay grid)
-   ============================================================ */
+/* ==========================================================
+   RESPONSIVE GRID COLUMN CONTROL
+   ========================================================== */
+
+.released-softwares {
+  --software-columns: 6;
+}
+
+.released-softwares--compact {
+  --compact-columns: 6;
+}
+
+/* Large laptop */
+@media (max-width: 1400px) {
+  .released-softwares {
+    --software-columns: 5;
+  }
+
+  .released-softwares--compact {
+    --compact-columns: 5;
+  }
+}
+
+/* Tablet landscape */
+@media (max-width: 899px) {
+  .released-softwares {
+    --software-columns: 4;
+  }
+
+  .released-softwares--compact {
+    --compact-columns: 4;
+  }
+}
+
+/* Tablet */
+@media (max-width: 760px) {
+  .released-softwares {
+    --software-columns: 3;
+  }
+
+  .released-softwares--compact {
+    --compact-columns: 3;
+  }
+}
+
+/* Mobile */
+@media (max-width: 360px) {
+  .released-softwares {
+    --software-columns: 2;
+  }
+
+  .released-softwares--compact {
+    --compact-columns: 2;
+  }
+}
+
+/* ==========================================================================
+   SOFTWARE CARD
+   ========================================================================== */
 
 .software-btn {
   appearance: none;
-  font-family: var(--ot-font);
+  -webkit-appearance: none;
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
-  gap: clamp(0.55rem, 1vw, 0.8rem);
-  padding: clamp(0.8rem, 1.6vw, 1.1rem);
-  min-height: clamp(84px, 11vw, 110px);
-  text-align: left;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(0.5rem, 1vw, 0.75rem);
+  padding:
+    clamp(0.85rem, 1.6vw, 1.1rem)
+    clamp(0.6rem, 1.2vw, 0.9rem);
+
+  min-height: clamp(90px, 11vw, 118px);
+  text-align: center;
   cursor: pointer;
-  box-shadow: var(--ot-shadow-sm);
-  color: var(--ot-text);
-  backdrop-filter: blur(8px) saturate(1.3);
-  -webkit-backdrop-filter: blur(8px) saturate(1.3);
+  border-radius: var(--ot-radius-xl);
+  border: 1px solid var(--nb-card-border);
+  background: var(--nb-card-bg);
+  color: var(--nb-text);
+  font-family: var(--ot-font);
+  box-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.04),
+    0 2px 8px rgba(0, 0, 0, 0.03);
   transition:
-    transform     0.26s var(--ease-spring),
-    box-shadow    0.26s var(--ease-spring),
-    border-color  0.26s ease,
-    background    0.26s ease;
+    transform 0.28s var(--nb-ease),
+    box-shadow 0.28s var(--nb-ease),
+    border-color 0.22s var(--nb-ease-snap),
+    background 0.22s ease;
 }
+
+/* spotlight glow */
+.software-btn::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0;
+  background: radial-gradient(
+    circle 100px at var(--x, 50%) var(--y, 50%),
+    var(--nb-glow) 0%,
+    var(--nb-glow-bloom) 55%,
+    transparent 80%
+  );
+
+  transition: opacity 0.3s ease;
+}
+
+/* top hairline */
+.software-btn::after {
+  content: "";
+
+  position: absolute;
+
+  top: 0;
+  left: 10%;
+  right: 10%;
+
+  height: 1px;
+
+  z-index: 1;
+
+  pointer-events: none;
+
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.55) 50%,
+    transparent 100%
+  );
+
+  opacity: 0.5;
+}
+
+/* ==========================================================================
+   HOVER
+   ========================================================================== */
 
 @media (hover: hover) and (pointer: fine) {
   .software-btn:hover {
-    border-color: var(--ot-brand-border);
-    background: var(--ot-surface);
+    transform: translateY(-3px);
+
+    border-color: var(--nb-card-border-hover);
+
+    background: var(--nb-card-bg);
+
     box-shadow:
-      0 0 0 1px var(--ot-brand-dim),
-      var(--ot-shadow-md);
+      0 0 0 1px var(--nb-glow),
+      0 4px 20px var(--nb-glow-strong),
+      0 1px 4px rgba(0, 0, 0, 0.06);
   }
 
-  .software-btn:hover::after {
-    background: linear-gradient(
-      90deg,
-      transparent          0%,
-      var(--ot-brand-mid) 25%,
-      var(--ot-brand)     50%,
-      var(--ot-brand-mid) 75%,
-      transparent         100%
-    );
+  .software-btn:hover::before {
+    opacity: 1;
   }
 
   .software-btn:hover .software-icon {
-    transform: scale(1.1);
-    border-color: var(--ot-brand-border);
+    transform: scale(1.05);
+
     box-shadow:
-      0 0 0 3px var(--ot-brand-dim),
-      0 0 18px  var(--ot-brand-glow);
+      0 0 0 3px var(--nb-glow),
+      0 0 20px var(--nb-glow-strong);
   }
 
   .software-btn:hover .software-name {
-    color: var(--ot-text);
+    color: var(--nb-secondary);
   }
 }
+
+/* ==========================================================================
+   ACTIVE
+   ========================================================================== */
 
 .software-btn:active {
-  box-shadow: var(--ot-shadow-sm);
-}
+  transform: scale(0.97);
 
-@media (hover: none) {
-  .software-btn:active {
-    background: var(--ot-brand-dim);
-    border-color: var(--ot-brand-border);
-  }
-}
+  border-color: var(--nb-primary);
 
-
-/* ============================================================
-   ICON WRAPPER — always-dark pill
-   ============================================================ */
-
-.software-icon {
-  position: relative;
-  z-index: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: clamp(34px, 4vw, 42px);
-  height: clamp(34px, 4vw, 42px);
-  border-radius: var(--ot-radius-md);
-  flex-shrink: 0;
-  pointer-events: none;
-  background: var(--ot-brand-icon-bg);
-  color: var(--ot-brand);
-  border: 1px solid var(--ot-brand-dim);
-  transition:
-    transform    0.26s var(--ease-spring),
-    box-shadow   0.26s ease,
-    border-color 0.26s ease;
-}
-
-.software-icon svg {
-  pointer-events: none;
-  flex-shrink: 0;
-  display: block;
-}
-
-
-/* ============================================================
-   APP NAME LABEL
-   ============================================================ */
-
-.software-name {
-  position: relative;
-  z-index: 1;
-  font-size: clamp(0.7rem, 1.05vw, 0.82rem);
-  font-weight: 600;
-  line-height: 1.3;
-  letter-spacing: -0.01em;
-  color: var(--ot-text-muted);
-  pointer-events: none;
-  transition: color 0.26s ease;
-  display: -webkit-box;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 2;
-  line-clamp: 2;
-  overflow: hidden;
-}
-
-
-/* ============================================================
-   OVERLAY BACKDROP — Portal-rendered into document.body
-   ============================================================ */
-
-.nb-overlay {
-  position: fixed;
-  inset: 0;
-  z-index: 9999;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: clamp(1rem, 3vw, 2rem);
-  cursor: default;
-  background: rgba(0, 0, 0, 0.78);
-  backdrop-filter: blur(40px) saturate(0.5) brightness(0.5);
-  -webkit-backdrop-filter: blur(40px) saturate(0.5) brightness(0.5);
-  animation: nb-overlay-in 0.24s var(--ease-spring) both;
-}
-
-@keyframes nb-overlay-in {
-  from { opacity: 0; }
-  to   { opacity: 1; }
-}
-
-@media (max-width: 640px) {
-  .nb-overlay {
-    align-items: flex-end;
-    padding: 0;
-  }
-}
-
-html[data-theme="light"] .nb-overlay,
-:root:not([data-theme="dark"]) .nb-overlay {
-  background: rgba(0, 0, 0, 0.68);
-}
-
-@media (prefers-color-scheme: light) {
-  :root:not([data-theme]) .nb-overlay {
-    background: rgba(0, 0, 0, 0.68);
-  }
-}
-
-
-/* ============================================================
-   OVERLAY PANEL
-   ============================================================ */
-
-.nb-panel {
-  position: relative;
-  width: 100%;
-  max-width: min(680px, 96vw);
-  max-height: 80dvh;
-  display: flex;
-  flex-direction: column;
-  cursor: default;
-  border-radius: var(--ot-radius-xl);
-  overflow: hidden;
-  background: var(--ot-glass-bg);
-  border: 1px solid var(--ot-border-hard);
-  backdrop-filter: blur(32px) saturate(2);
-  -webkit-backdrop-filter: blur(32px) saturate(2);
   box-shadow:
-    var(--ot-shadow-xl),
-    0 0 0 1px var(--ot-brand-dim);
-  animation: nb-panel-in 0.32s 0.05s var(--ease-spring) both;
-}
+    0 0 0 1px var(--nb-glow-strong),
+    0 1px 4px rgba(0, 0, 0, 0.08);
 
-@keyframes nb-panel-in {
-  from { opacity: 0; transform: scale(0.94) translateY(20px); }
-  to   { opacity: 1; transform: scale(1)    translateY(0);    }
-}
-
-@media (max-width: 640px) {
-  .nb-panel {
-    max-width: 100%;
-    max-height: 88dvh;
-    border-radius: var(--ot-radius-xl) var(--ot-radius-xl) 0 0;
-    border-bottom: none;
-    animation-name: nb-panel-up;
-  }
-}
-
-@keyframes nb-panel-up {
-  from { opacity: 0; transform: translateY(48px); }
-  to   { opacity: 1; transform: translateY(0);    }
-}
-
-.nb-panel::before {
-  content: "";
-  position: absolute;
-  top: 10px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 36px;
-  height: 3px;
-  border-radius: 999px;
-  background: var(--ot-border-hard);
-  z-index: 10;
-  pointer-events: none;
-}
-
-@media (min-width: 641px) {
-  .nb-panel::before { display: none; }
-}
-
-.nb-panel::after {
-  content: "";
-  position: absolute;
-  top: 0; left: 0; right: 0;
-  height: 2px;
-  z-index: 10;
-  pointer-events: none;
-  background: linear-gradient(
-    90deg,
-    transparent            0%,
-    var(--ot-brand-glow)  20%,
-    var(--ot-brand)       50%,
-    var(--ot-brand-glow)  80%,
-    transparent           100%
-  );
-}
-
-
-/* ============================================================
-   PANEL HEADER
-   ============================================================ */
-
-.nb-panel-header {
-  position: sticky;
-  top: 0;
-  z-index: 5;
-  flex-shrink: 0;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1rem;
-  padding:
-    clamp(1.25rem, 3vw, 1.6rem)
-    clamp(1.2rem, 3vw, 1.6rem)
-    clamp(0.85rem, 1.8vw, 1rem);
-  background: var(--ot-glass-bg);
-  backdrop-filter: blur(32px);
-  -webkit-backdrop-filter: blur(32px);
-  border-bottom: 1px solid var(--ot-border);
-}
-
-@media (max-width: 640px) {
-  .nb-panel-header { padding-top: clamp(1.6rem, 4vw, 1.9rem); }
-}
-
-.nb-panel-title {
-  display: flex;
-  align-items: center;
-  gap: 0.6rem;
-  font-size: clamp(0.9rem, 1.8vw, 1.1rem);
-  font-weight: 800;
-  letter-spacing: -0.03em;
-  color: var(--ot-text);
-  line-height: 1;
-  user-select: none;
-}
-
-.nb-panel-title::before {
-  content: "";
-  flex-shrink: 0;
-  width: 7px;
-  height: 7px;
-  border-radius: 999px;
-  background: var(--ot-brand);
-  box-shadow: 0 0 8px var(--ot-brand-glow);
-  animation: ot-dot-pulse 2.8s ease-in-out infinite;
-}
-
-
-/* ============================================================
-   CLOSE BUTTON
-   ============================================================ */
-
-.nb-close-btn {
-  position: static;
-  display: inline-flex;
-  align-items: center;
-  gap: 0.4rem;
-  flex-shrink: 0;
-  padding: 0.4rem 0.9rem;
-  font-family: var(--ot-font);
-  font-size: 0.7rem;
-  font-weight: 700;
-  letter-spacing: 0.07em;
-  text-transform: uppercase;
-  white-space: nowrap;
-  border-radius: 999px;
-  background: var(--ot-surface-alt);
-  border: 1px solid var(--ot-border-hard);
-  color: var(--ot-text-muted);
-  cursor: pointer;
-  transition:
-    color        0.2s ease,
-    background   0.2s ease,
-    border-color 0.2s ease,
-    box-shadow   0.2s ease,
-    transform    0.2s var(--ease-spring);
-}
-
-.nb-esc {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: 1px 5px;
-  border-radius: 4px;
-  background: var(--ot-bg-dim);
-  color: var(--ot-text-faint);
-  font-size: 0.56rem;
-  font-weight: 800;
-  letter-spacing: 0.08em;
-  line-height: 1.5;
-  border: 1px solid var(--ot-border-hard);
-}
-
-@media (max-width: 380px) { .nb-esc { display: none; } }
-
-@media (hover: hover) and (pointer: fine) {
-  .nb-close-btn:hover {
-    color: var(--ot-brand);
-    background: var(--ot-brand-dim);
-    border-color: var(--ot-brand-border);
-    box-shadow: 0 0 12px var(--ot-brand-dim);
-  }
-}
-
-.nb-close-btn:active {
-  transform: scale(0.93);
   transition-duration: 0.08s;
 }
 
-.nb-close-btn:focus-visible {
-  outline: 2px solid var(--ot-brand);
+/* ==========================================================================
+   FOCUS
+   ========================================================================== */
+
+.software-btn:focus-visible {
+  outline: 2px solid var(--nb-secondary);
+
   outline-offset: 3px;
 }
 
+/* ==========================================================================
+   TOUCH DEVICES
+   ========================================================================== */
 
-/* ============================================================
-   PANEL SCROLL WRAPPER
-   ============================================================ */
+@media (hover: none) {
+  .software-btn:active {
+    background: var(--nb-glow-bloom);
 
-.nb-panel-scroll {
-  overflow-y: auto;
-  overflow-x: hidden;
-  overscroll-behavior: contain;
-  flex: 1;
-  padding: clamp(1rem, 2.5vw, 1.3rem);
+    border-color: var(--nb-card-border-hover);
+  }
 }
 
+/* ==========================================================================
+   ICON
+   ========================================================================== */
 
-/* ============================================================
-   OVERLAY GRID
-   ============================================================ */
+.software-icon {
+  position: relative;
 
-.nb-panel-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: clamp(0.6rem, 1.2vw, 0.875rem);
+  z-index: 1;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  flex-shrink: 0;
+
+  pointer-events: none;
+
+  width: clamp(36px, 4vw, 46px);
+
+  height: clamp(36px, 4vw, 46px);
+
+  border-radius: var(--ot-radius-md);
+
+  background: var(--nb-gradient);
+
+  color: #ffffff;
+
+  border: 1px solid transparent;
+
+  box-shadow:
+    0 0 0 1px rgba(67, 97, 238, 0.25),
+    0 2px 8px rgba(63, 55, 201, 0.2);
+
+  transition:
+    transform 0.28s var(--nb-ease),
+    box-shadow 0.22s var(--nb-ease);
 }
 
-.nb-panel-grid .software-btn {
-  min-height: clamp(80px, 10vw, 100px);
-  animation: ot-card-pop 0.36s var(--ease-spring) both;
+.software-icon svg {
+  display: block;
+
+  flex-shrink: 0;
+
+  pointer-events: none;
 }
 
-.nb-panel-grid .software-btn:nth-child(1)  { animation-delay: 0.06s; }
-.nb-panel-grid .software-btn:nth-child(2)  { animation-delay: 0.10s; }
-.nb-panel-grid .software-btn:nth-child(3)  { animation-delay: 0.14s; }
-.nb-panel-grid .software-btn:nth-child(4)  { animation-delay: 0.18s; }
-.nb-panel-grid .software-btn:nth-child(5)  { animation-delay: 0.22s; }
-.nb-panel-grid .software-btn:nth-child(6)  { animation-delay: 0.26s; }
-.nb-panel-grid .software-btn:nth-child(7)  { animation-delay: 0.30s; }
-.nb-panel-grid .software-btn:nth-child(8)  { animation-delay: 0.34s; }
-.nb-panel-grid .software-btn:nth-child(9)  { animation-delay: 0.38s; }
-.nb-panel-grid .software-btn:nth-child(10) { animation-delay: 0.42s; }
-.nb-panel-grid .software-btn:nth-child(11) { animation-delay: 0.46s; }
-.nb-panel-grid .software-btn:nth-child(12) { animation-delay: 0.50s; }
+/* ==========================================================================
+   APP NAME
+   ========================================================================== */
 
+.software-name {
+  position: relative;
 
-/* ============================================================
-   SECTION ROW RESPONSIVE
-   ============================================================ */
+  z-index: 1;
 
-@media (max-width: 640px) {
+  width: 100%;
+
+  font-size: clamp(0.72rem, 1.05vw, 0.86rem);
+
+  font-weight: 600;
+
+  line-height: 1.25;
+
+  letter-spacing: -0.01em;
+
+  color: var(--nb-text-muted);
+
+  pointer-events: none;
+
+  display: -webkit-box;
+
+  -webkit-box-orient: vertical;
+
+  -webkit-line-clamp: 2;
+
+  line-clamp: 2;
+
+  overflow: hidden;
+
+  word-break: break-word;
+
+  hyphens: auto;
+
+  transition: color 0.22s ease;
+}
+
+/* ==========================================================================
+   RESPONSIVE
+   ========================================================================== */
+
+@media (max-width: 1200px) {
   .released-softwares {
-    display: flex;
-    overflow-x: auto;
-    overflow-y: hidden;
-    scroll-snap-type: x mandatory;
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: none;
-    -ms-overflow-style: none;
-    gap: 0.65rem;
-    margin-inline: calc(-1 * clamp(1rem, 5vw, 2.5rem));
-    padding-inline: clamp(1rem, 5vw, 2.5rem);
-    padding-bottom: 0.4rem;
-    grid-template-columns: repeat(2, 1fr);
+    gap: clamp(0.5rem, 1.2vw, 0.8rem);
+  }
+}
+
+@media (max-width: 900px) {
+  .navbar {
+    padding:
+      clamp(1.1rem, 3vw, 2rem)
+      clamp(0.9rem, 4vw, 1.5rem);
   }
 
-  .released-softwares::-webkit-scrollbar { display: none; }
+  .software-btn {
+    min-height: clamp(84px, 14vw, 110px);
+  }
+}
+
+@media (max-width: 640px) {
+  .navbar-title {
+    font-size: 0.98rem;
+  }
+
+  .navbar-content {
+    gap: 0.9rem;
+  }
+
+  .released-softwares--compact {
+    gap: 0.5rem;
+  }
 
   .software-btn {
-    flex-direction: row;
-    align-items: center;
-    flex-shrink: 0;
-    width: clamp(140px, 38vw, 172px);
-    min-height: clamp(66px, 14vw, 82px);
-    gap: 0.7rem;
-    scroll-snap-align: start;
-    padding: clamp(0.7rem, 3vw, 0.95rem);
+    min-height: clamp(84px, 18vw, 100px);
+
+    padding: 0.8rem 0.7rem;
+
+    border-radius: var(--ot-radius-lg);
   }
 
   .software-icon {
     width: 34px;
+
     height: 34px;
-    flex-shrink: 0;
+
     border-radius: var(--ot-radius-sm);
   }
 
   .software-name {
-    font-size: clamp(0.7rem, 3.2vw, 0.78rem);
+    font-size: clamp(0.68rem, 2.9vw, 0.78rem);
   }
 }
 
 @media (max-width: 480px) {
-  .navbar-title  { font-size: 0.95rem; }
-  .view-all-link { font-size: 0.72rem; padding: 0.35rem 0.85rem; }
+  .navbar {
+    padding: 1rem 0.85rem 1.25rem;
+  }
+
+  .navbar-title {
+    font-size: 0.93rem;
+  }
+
+  .software-btn {
+    min-height: 86px;
+
+    padding: 0.75rem 0.6rem;
+  }
+
+  .software-name {
+    font-size: 0.68rem;
+  }
 }
 
 @media (max-width: 380px) {
-  .software-btn  { width: clamp(128px, 44vw, 150px); }
-  .software-name { font-size: 0.68rem; }
+  .software-btn {
+    min-height: 82px;
+
+    padding: 0.68rem 0.55rem;
+  }
+
+  .software-name {
+    font-size: 0.66rem;
+  }
 }
 
+/* ==========================================================================
+   LARGE SCREENS
+   ========================================================================== */
+
 @media (min-width: 1440px) {
-  .released-softwares { gap: 1.1rem;grid-template-columns: repeat(4, 1fr); }
+  .released-softwares {
+    gap: 1rem;
+  }
+
+  .software-btn {
+    min-height: 124px;
+  }
 }
 
 @media (min-width: 1920px) {
-  .navbar         { padding: clamp(3rem, 4vw, 5rem) clamp(2rem, 5vw, 4rem); }
-  .navbar-content { max-width: 1400px; }
-  .navbar-title   { font-size: clamp(1.5rem, 1.6vw, 2rem); }
-  .software-btn   {
-    min-height: 130px;
-    padding: 1.4rem;
-    gap: 0.9rem;
-    border-radius: var(--ot-radius-xl);
+  .navbar {
+    padding:
+      clamp(3rem, 4vw, 5rem)
+      clamp(2rem, 5vw, 4rem);
   }
-  .software-icon  { width: 50px; height: 50px; }
-  .software-name  { font-size: 0.95rem; }
+
+  .navbar-content {
+    max-width: 1400px;
+  }
+
+  .navbar-title {
+    font-size: clamp(1.5rem, 1.6vw, 2rem);
+  }
+
+  .software-btn {
+    min-height: 130px;
+
+    padding: 1.4rem;
+
+    gap: 0.9rem;
+  }
+
+  .software-icon {
+    width: 50px;
+
+    height: 50px;
+  }
+
+  .software-name {
+    font-size: 0.95rem;
+  }
 }
 
-
-/* ============================================================
-   FORCED COLORS
-   ============================================================ */
+/* ==========================================================================
+   ACCESSIBILITY
+   ========================================================================== */
 
 @media (forced-colors: active) {
-  .software-btn  { border: 2px solid ButtonText; forced-color-adjust: auto; }
-  .software-icon { background: ButtonText; color: ButtonFace; border-color: ButtonText; }
-  .nb-panel      { border: 2px solid ButtonText; }
-  .nb-overlay    { background: Canvas; }
-  .nb-close-btn  { border: 2px solid ButtonText; forced-color-adjust: auto; }
-}
+  .software-btn {
+    border: 2px solid ButtonText;
 
-
-/* ============================================================
-   REDUCED MOTION
-   ============================================================ */
-
-@media (prefers-reduced-motion: reduce) {
-  .nb-overlay,
-  .nb-panel,
-  .nb-panel-title::before,
-  .nb-panel-grid .software-btn {
-    animation: none !important;
+    forced-color-adjust: auto;
   }
 
+  .software-icon {
+    background: ButtonText;
+
+    color: ButtonFace;
+
+    border-color: ButtonText;
+  }
+}
+
+/* ==========================================================================
+   REDUCED MOTION
+   ========================================================================== */
+
+@media (prefers-reduced-motion: reduce) {
   .software-btn,
   .software-btn::before,
   .software-btn::after,
   .software-icon,
-  .software-name,
-  .view-all-link,
-  .nb-close-btn {
+  .software-name {
     animation: none !important;
+
     transition: none !important;
-  }
-}
-
-
-/* ============================================================
-   OVERLAY GRID — 401px–640px horizontal scroll FIX
-   ============================================================ */
-
-@media (max-width: 640px) and (min-width: 401px) {
-  .nb-panel-scroll {
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-    scroll-snap-type: x proximity;
-  }
-
-  .nb-panel-grid {
-    grid-template-columns: repeat(3, 145px);
-    width: max-content;
-    min-width: 100%;
-    mask-image: none;
-    -webkit-mask-image: none;
-    padding-right: 16px;
-  }
-
-  .nb-panel-grid .software-btn {
-    scroll-snap-align: start;
-    width: 145px;
-    flex-shrink: 0;
   }
 }
