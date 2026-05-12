@@ -52,6 +52,7 @@ export const OFFER_CARDS: OfferCard[] = [
     accentVar:  "var(--ot-accent-warm, #f59e0b)",
     image:     "/assets/openroot-classes.avif",
     link: "/software/openroot-classes",
+
     intro: (
       <>
         <strong className="text-accent">Openroot Classes</strong> is our
@@ -101,7 +102,7 @@ export const OFFER_CARDS: OfferCard[] = [
   },
   {
     tag:        "Software Solutions",
-    title:      "Software Built for Real-World Businesses",
+    title:      "Software for Govt. and Businesses",
     accentVar:  "var(--ot-accent-cool, #6366f1)",
     image:     "/assets/software-solutions.avif",
     link: "/software-solutions",

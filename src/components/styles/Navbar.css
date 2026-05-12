@@ -51,6 +51,8 @@
   padding:
     clamp(1.5rem, 3.5vw, 4rem)
     clamp(1rem, 5vw, 2.5rem);
+
+  padding-bottom: clamp(0.25rem, 1vw, 0.25rem);
   isolation: isolate;
   overflow: hidden;
 }

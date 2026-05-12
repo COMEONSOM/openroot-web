@@ -8,7 +8,6 @@ import BackToTop from "./context/BackToTop";
 
 // ── ALWAYS loaded (visible on homepage, must be instant) ─────────────────────
 import Header        from "./components/Header";
-import Advertisement from "./components/Advertisement";
 import Navbar        from "./components/Navbar";
 import AboutCompany  from "./components/AboutCompany";
 import Footer        from "./components/Footer";
