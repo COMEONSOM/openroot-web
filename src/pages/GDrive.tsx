@@ -1,162 +1,429 @@
 import React, { useState } from "react";
+
 import "../components/styles/GDrive.css";
 
-import logo from "/assets/company-icon.png";
 import step1Img from "/assets-gdrive/step-01.png";
 import step2Img from "/assets-gdrive/step-02.png";
 import step3Img from "/assets-gdrive/step-03.png";
 import tutorialThumb from "/assets-gdrive/tutorial-thumb.png";
 
+/* =============================================================================
+   LINKS
+============================================================================= */
+
 const EXTENSION_URL =
   "https://chromewebstore.google.com/detail/openroot-gdrive-automatio/pndbnlfhpjinfneglecnpgijhcaffdng";
 
-const HOW_TO_USE_URL = "https://www.youtube.com/watch?v=2tqbwlV0aw0";
+const HOW_TO_USE_URL =
+  "https://www.youtube.com/watch?v=2tqbwlV0aw0";
 
-type StepKey = 0 | 1 | 2 | 3;
+/* =============================================================================
+   TYPES
+============================================================================= */
+
+type StepKey = 0 | 1 | 2;
 
 type StepItem = {
   number: string;
   title: string;
-  button: string;
+  short: string;
+  note: string;
+  button?: string;
   previewImage?: string;
 };
+
+type TutorialItem = {
+  title: string;
+  short: string;
+  note: string;
+  previewImage: string;
+};
+
+/* =============================================================================
+   STEPS
+============================================================================= */
 
 const STEPS: StepItem[] = [
   {
     number: "01",
-    title: "Go to the Extension Page",
-    button: "Go to Extension Page",
-    previewImage: step1Img,
+
+    title:
+      "Go to the Extension Page",
+
+    short:
+      "Open the official Chrome Web Store page.",
+
+    note:
+      "After opening the page, click Add to Chrome to begin installation.",
+
+    button:
+      "Go to Extension Page",
+
+    previewImage:
+      step1Img,
   },
+
   {
-    number: "02",
-    title: "Open Extensions Panel and Pin It",
-    button: "Next",
-    previewImage: step2Img,
+    number:
+      "02",
+
+    title:
+      "Open Extensions Panel and Pin It",
+
+    short:
+      "Open the Extensions panel from the Chrome toolbar and pin the extension for quick access.",
+
+    note:
+      "Pinned extensions stay visible in the browser toolbar so you can use them anytime.",
+
+    previewImage:
+      step2Img,
   },
+
   {
-    number: "03",
-    title: "Extension Ready to Use",
-    button: "Next",
-    previewImage: step3Img,
-  },
-  {
-    number: "04",
-    title: "How to Use",
-    button: "How to Use",
-    previewImage: tutorialThumb,
+    number:
+      "03",
+
+    title:
+      "Extension Ready to Use",
+
+    short:
+      "After pinning, the extension becomes available directly from your browser toolbar.",
+
+    note:
+      "You can now start using the extension right away.",
+
+    previewImage:
+      step3Img,
   },
 ];
 
+/* =============================================================================
+   TUTORIAL
+============================================================================= */
+
+const TUTORIAL: TutorialItem = {
+  title:
+    "How to Use",
+
+  short:
+    "Click the preview image to open the tutorial video in a new tab.",
+
+  note:
+    "The image itself works as the tutorial link.",
+
+  previewImage:
+    tutorialThumb,
+};
+
+/* =============================================================================
+   COMPONENT
+============================================================================= */
+
 export default function WebExtensionSection(): React.JSX.Element {
-  const [activeStep, setActiveStep] = useState<StepKey>(0);
+  const [activeStep, setActiveStep] =
+    useState<StepKey>(0);
 
-  const current = STEPS[activeStep];
-  const isFirst = activeStep === 0;
-  const isLast = activeStep === STEPS.length - 1;
+  const [isTutorialMode, setIsTutorialMode] =
+    useState(false);
 
-  const goNext = () => {
-    if (!isLast) setActiveStep((prev) => (prev + 1) as StepKey);
+  const currentStep =
+    STEPS[activeStep];
+
+  /* =============================================================================
+     ACTIONS
+  ============================================================================= */
+
+  const openExtensionPage = () => {
+    window.open(
+      EXTENSION_URL,
+      "_blank",
+      "noopener,noreferrer"
+    );
+
+    setActiveStep(1);
+
+    setIsTutorialMode(false);
   };
 
-  const goPrev = () => {
-    if (!isFirst) setActiveStep((prev) => (prev - 1) as StepKey);
+  const openTutorial = () => {
+    setIsTutorialMode(true);
   };
 
-  const handlePrimary = () => {
-    if (activeStep === 0) {
-      window.open(EXTENSION_URL, "_blank", "noopener,noreferrer");
-      setActiveStep(1);
-      return;
-    }
+  const handleStepClick = (
+    index: number
+  ) => {
+    setActiveStep(index as StepKey);
 
-    if (activeStep === 3) {
-      window.open(HOW_TO_USE_URL, "_blank", "noopener,noreferrer");
-      return;
-    }
-
-    goNext();
+    setIsTutorialMode(false);
   };
 
-  const getNote = () => {
-    switch (activeStep) {
-      case 0:
-        return "Open the extension page and click Add to Chrome.";
-      case 1:
-        return "Click the puzzle icon, then find the extension and pin it.";
-      case 2:
-        return "After pinning, the extension will appear in the Chrome toolbar.";
-      case 3:
-        return "Open the YouTube guide to learn how to use the extension properly.";
-      default:
-        return "";
-    }
-  };
+  /* =============================================================================
+     DYNAMIC CONTENT
+  ============================================================================= */
+
+  const currentTitle =
+    isTutorialMode
+      ? TUTORIAL.title
+      : currentStep.title;
+
+  const currentShort =
+    isTutorialMode
+      ? TUTORIAL.short
+      : currentStep.short;
+
+  const currentNote =
+    isTutorialMode
+      ? TUTORIAL.note
+      : currentStep.note;
+
+  const currentPreview =
+    isTutorialMode
+      ? TUTORIAL.previewImage
+      : currentStep.previewImage;
+
+  const currentBadge =
+    isTutorialMode
+      ? "How to Use"
+      : `Step ${currentStep.number}`;
+
+  const currentCounter =
+    isTutorialMode
+      ? "Tutorial Preview"
+      : `${activeStep + 1} / ${STEPS.length}`;
 
   return (
-    <section id="web-extension-section" className="we-section">
+    <section
+      id="web-extension-section"
+      className="we-section"
+    >
       <div className="we-container">
+        {/* =====================================================
+            HEADER
+        ===================================================== */}
+
         <div className="we-header">
-          <div className="we-brand">
-            <div>
-              <h2 className="we-title">Install Our Chrome Web Extension</h2>
-            </div>
-          </div>
+          <h2 className="we-title">
+            Install & Start Using the
+            Extension
+          </h2>
 
           <p className="we-subtitle">
-            Follow these simple steps to install and use the extension.
+            Follow the guided setup
+            process to install and use
+            the extension properly.
           </p>
         </div>
 
-        <div className="we-grid">
-          <aside className="we-step-rail">
-            {STEPS.map((step, index) => (
-              <button
-                key={step.number}
-                className={`we-step-card ${
-                  index === activeStep ? "is-active" : ""
-                }`}
-                onClick={() => setActiveStep(index as StepKey)}
-              >
-                <div className="we-step-number">{step.number}</div>
-                <div className="we-step-content">
-                  <h4>{step.title}</h4>
-                </div>
-              </button>
-            ))}
-          </aside>
+        {/* =====================================================
+            MAIN GRID
+        ===================================================== */}
 
-          <div className="we-action-card">
-            <div className="we-action-top">
-              <div className="we-action-badge">Step {current.number}</div>
-              <div className="we-step-counter">
-                {activeStep + 1} / 04
+        <div className="we-grid">
+          {/* =================================================
+              LEFT PANEL
+          ================================================= */}
+
+          <aside className="we-step-rail">
+            {/* =============================================
+                PROGRESS
+            ============================================== */}
+
+            <div className="we-progress-wrap">
+              <div className="we-progress-top">
+                <span>
+                  Setup Progress
+                </span>
+
+                <span>
+                  {activeStep + 1} /{" "}
+                  {STEPS.length}
+                </span>
+              </div>
+
+              <div className="we-progress-bar">
+                <div
+                  className="we-progress-fill"
+                  style={{
+                    width: `${
+                      ((activeStep + 1) /
+                        STEPS.length) *
+                      100
+                    }%`,
+                  }}
+                />
               </div>
             </div>
 
+            {/* =============================================
+                STEP LIST
+            ============================================== */}
+
+            <div className="we-step-list">
+              {STEPS.map(
+                (
+                  step,
+                  index
+                ) => (
+                  <button
+                    key={
+                      step.number
+                    }
+                    className={`we-step-card ${
+                      index ===
+                        activeStep &&
+                      !isTutorialMode
+                        ? "is-active"
+                        : ""
+                    }`}
+                    onClick={() =>
+                      handleStepClick(
+                        index
+                      )
+                    }
+                  >
+                    <div className="we-step-number">
+                      {
+                        step.number
+                      }
+                    </div>
+
+                    <div className="we-step-content">
+                      <h4>
+                        {
+                          step.title
+                        }
+                      </h4>
+                    </div>
+                  </button>
+                )
+              )}
+            </div>
+
+            {/* =============================================
+                HOW TO USE
+            ============================================== */}
+
+            <button
+              type="button"
+              className={`we-tutorial-card ${
+                isTutorialMode
+                  ? "is-active"
+                  : ""
+              }`}
+              onClick={
+                openTutorial
+              }
+            >
+              <div className="we-tutorial-copy">
+                <h4>
+                  How to Use
+                </h4>
+
+                <p>
+                  Open the tutorial
+                  guide separately.
+                </p>
+              </div>
+            </button>
+
+            {/* =============================================
+                INSTRUCTION NOTE
+            ============================================== */}
+
+            <div className="we-rail-note">
+              {currentNote}
+            </div>
+          </aside>
+
+          {/* =================================================
+              RIGHT PANEL
+          ================================================= */}
+
+          <div className="we-action-card">
+            {/* =============================================
+                TOP BAR
+            ============================================== */}
+
+            <div className="we-action-top">
+              <div className="we-action-badge">
+                {currentBadge}
+              </div>
+
+              <div className="we-step-counter">
+                {currentCounter}
+              </div>
+            </div>
+
+            {/* =============================================
+                PREVIEW
+            ============================================== */}
+
             <div className="we-preview">
-              {current.previewImage && (
+              {isTutorialMode ? (
+                <a
+                  href={
+                    HOW_TO_USE_URL
+                  }
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="we-preview-link"
+                  aria-label="Open tutorial video"
+                >
+                  <img
+                    src={
+                      currentPreview
+                    }
+                    alt={
+                      currentTitle
+                    }
+                    className="we-preview-image"
+                  />
+                </a>
+              ) : (
                 <img
-                  src={current.previewImage}
-                  alt={current.title}
+                  src={
+                    currentPreview
+                  }
+                  alt={
+                    currentTitle
+                  }
                   className="we-preview-image"
                 />
               )}
             </div>
 
-            <div className="we-toolbar">
-              {!isFirst && (
-                <button className="we-secondary-button" onClick={goPrev}>
-                  ← Previous
-                </button>
-              )}
+            {/* =============================================
+                SINGLE MAIN TEXT
+            ============================================== */}
 
-              <button className="we-button" onClick={handlePrimary}>
-                {current.button}
-              </button>
+            <div className="we-content-block">
+              <p className="we-main-description">
+                {currentShort}
+              </p>
             </div>
 
-            <div className="we-mini-box">{getNote()}</div>
+            {/* =============================================
+                ACTION BUTTON
+            ============================================== */}
+
+            <div className="we-toolbar">
+              {!isTutorialMode &&
+                activeStep ===
+                  0 &&
+                currentStep.button && (
+                  <button
+                    className="we-button"
+                    onClick={
+                      openExtensionPage
+                    }
+                  >
+                    {
+                      currentStep.button
+                    }
+                  </button>
+                )}
+            </div>
           </div>
         </div>
       </div>
