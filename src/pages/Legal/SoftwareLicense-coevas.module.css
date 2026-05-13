@@ -1,0 +1,129 @@
+.page {
+  background-color: #020617; /* slate-950 */
+  color: #e2e8f0; /* slate-200 */
+  min-height: 100vh;
+}
+
+.container {
+  max-width: 56rem; /* max-w-4xl */
+  margin-inline: auto;
+  padding: 3rem 1.5rem; /* py-12 px-6 */
+}
+
+/* =====================================================
+   HEADER
+====================================================== */
+
+.header {
+  margin-bottom: 2.5rem;
+}
+
+.headerTitle {
+  font-size: 1.875rem;
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  color: #ffffff;
+  line-height: 1.2;
+}
+
+.headerSub {
+  margin-top: 0.5rem;
+  color: #94a3b8; /* slate-400 */
+  font-size: 1rem;
+}
+
+.headerBrand {
+  color: #e2e8f0; /* slate-200 */
+  font-weight: 500;
+}
+
+.headerDivider {
+  margin-top: 1rem;
+  height: 1px;
+  background-color: #1e293b; /* slate-800 */
+}
+
+/* =====================================================
+   SECTIONS
+====================================================== */
+
+.section {
+  margin-bottom: 2rem;
+}
+
+.sectionLast {
+  margin-bottom: 3rem;
+}
+
+.sectionTitle {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #ffffff;
+  margin-bottom: 0.75rem;
+  line-height: 1.3;
+}
+
+/* =====================================================
+   TYPOGRAPHY
+====================================================== */
+
+.para {
+  color: #cbd5e1; /* slate-300 */
+  line-height: 1.75;
+  font-size: 1rem;
+  margin-top: 0;
+}
+
+.para + .para {
+  margin-top: 1rem;
+}
+
+/* =====================================================
+   LIST
+====================================================== */
+
+.list {
+  list-style: disc;
+  padding-left: 1.5rem;
+  color: #cbd5e1; /* slate-300 */
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.listItem {
+  line-height: 1.75;
+  font-size: 1rem;
+}
+
+/* =====================================================
+   CONTACT
+====================================================== */
+
+.contactBlock {
+  margin-top: 0.5rem;
+  color: #e2e8f0; /* slate-200 */
+  font-weight: 500;
+  line-height: 1.75;
+}
+
+.contactLink {
+  color: #60a5fa; /* blue-400 */
+  text-decoration: none;
+}
+
+.contactLink:hover {
+  text-decoration: underline;
+}
+
+/* =====================================================
+   FOOTER
+====================================================== */
+
+.footer {
+  border-top: 1px solid #1e293b; /* slate-800 */
+  padding-top: 1.5rem;
+  text-align: center;
+  color: #64748b; /* slate-500 */
+  font-size: 0.875rem;
+}

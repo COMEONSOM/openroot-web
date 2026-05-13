@@ -7,27 +7,27 @@ const CLOUD = "https://res.cloudinary.com/dydh05l1u/video/upload";  // aryan clo
 export const softwareList: Software[] = [
 
   {
-    name: "Travel Expense Manager",
-    shortName: "Travel Manager",
-    slug: "travel-expense-manager",
-    url: "/travel-expense-manager",
-    video: `${CLOUD}/travel-expense-manager-demo_yg1yif.mp4`,
-    description: "Track group travel expenses and automatically calculate who owes whom during trips.",
-    seoTitle: "Travel Expense Manager | Split Trip Expenses Easily",
-    seoDescription: "Manage and split group travel expenses easily. Track spending, calculate balances and simplify trip budgeting with Openroot Travel Expense Manager.",
-    category: "Finance Utility"
-  },
-
-  {
-    name: "Resource Hub & Job Updates",
+    name: "Govt. Websites & Job Updates",
     shortName: "Resource Hub",
     slug: "resource-hub",
     url: "/resource-hub",
     video: `${CLOUD}/resource-hub-demo_rlkmkr.mp4`,
     description: "A curated collection of important websites, tools and job updates for students and learners.",
-    seoTitle: "Resource Hub & Job Updates for Students | Openroot",
+    seoTitle: "Govt. Websites & Job Updates for Students and Job Seekers | Openroot Systems",
     seoDescription: "Find latest job updates, student resources, useful websites and productivity tools in one organized platform by Openroot.",
     category: "Resource Platform"
+  },
+
+  {
+    name: "Openroot Classes",
+    shortName: "Classes",
+    slug: "openroot-classes",
+    url: "/openroot-classes",
+    video: `${CLOUD}/openroot-classes-demo_pbjffx.mp4`,
+    description: "Online learning platform providing training in prompt engineering, financial literacy and productivity skills.",
+    seoTitle: "Openroot Classes – Learn AI, Finance & Productivity Skills",
+    seoDescription: "Join Openroot Classes to learn prompt engineering, financial literacy and real-world productivity skills with practical training.",
+    category: "Education Platform"
   },
 
   {
@@ -43,15 +43,15 @@ export const softwareList: Software[] = [
   },
 
   {
-    name: "Openroot Classes",
-    shortName: "Classes",
-    slug: "openroot-classes",
-    url: "/openroot-classes",
-    video: `${CLOUD}/openroot-classes-demo_pbjffx.mp4`,
-    description: "Online learning platform providing training in prompt engineering, financial literacy and productivity skills.",
-    seoTitle: "Openroot Classes – Learn AI, Finance & Productivity Skills",
-    seoDescription: "Join Openroot Classes to learn prompt engineering, financial literacy and real-world productivity skills with practical training.",
-    category: "Education Platform"
+    name: "Travel Expense Manager",
+    shortName: "Travel Manager",
+    slug: "travel-expense-manager",
+    url: "/travel-expense-manager",
+    video: `${CLOUD}/travel-expense-manager-demo_yg1yif.mp4`,
+    description: "Track group travel expenses and automatically calculate who owes whom during trips.",
+    seoTitle: "Travel Expense Manager | Split Trip Expenses Easily",
+    seoDescription: "Manage and split group travel expenses easily. Track spending, calculate balances and simplify trip budgeting with Openroot Travel Expense Manager.",
+    category: "Finance Utility"
   },
 
   {

@@ -41,18 +41,7 @@
   padding-bottom: var(--ot-section-bottom);
 
   /* Match the global section atmosphere */
-  background:
-    radial-gradient(
-      circle at top left,
-      rgba(88, 101, 242, 0.07) 0%,
-      transparent 34%
-    ),
-    radial-gradient(
-      circle at bottom right,
-      rgba(88, 101, 242, 0.05) 0%,
-      transparent 30%
-    ),
-    var(--ot-section-bg);
+  background: var(--ot-section-bg);
 }
 
 /* ==========================================================================

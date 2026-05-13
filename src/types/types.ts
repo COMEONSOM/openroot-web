@@ -14,7 +14,6 @@ export type WithVars = CSSProperties & Record<`--${string}`, string | number>;
 export interface OfferCard {
   tag:        string;       // BADGE LABEL e.g. "Openroot Classes"
   title:      string;       // CARD HEADLINE
-  highlights: string[];     // QUICK-SCAN CHIPS ROW RENDERED BELOW TITLE
   intro:      ReactNode;    // INTRO PARAGRAPH — JSX SUPPORTED
   subheading: string;       // SUBHEADING TEXT ABOVE BULLET LIST
   items:      ReactNode[];  // BULLET LIST ITEMS — JSX SUPPORTED

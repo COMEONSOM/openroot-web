@@ -4,7 +4,7 @@
 
 import React, { useState } from 'react';
 import styles from '../components/styles/coevas.module.css';
-
+import { Link } from "react-router-dom";
 // ── Types ──────────────────────────────────────────────────────────────────
 interface Release {
   version: string;
@@ -388,9 +388,9 @@ const CoeasTerminal: React.FC = () => {
           <p className={styles.footerText}>
             © 2026 <strong>Openroot Systems</strong>. All rights reserved.
             &nbsp;·&nbsp;
-            <a href="license-coevas-software.html" className={styles.footerLink}>License</a>
+            <Link to="/License" className={styles.footerLink}> License </Link>
             &nbsp;·&nbsp;
-            <a href="coevas-security-terms.html" className={styles.footerLink}>Terms of Use</a>
+            <Link to="/CoevasTerms" className={styles.footerLink}> Terms of Use </Link>
           </p>
           <p className={styles.footerSub}>
             This software and this website are the intellectual property of Openroot Systems.

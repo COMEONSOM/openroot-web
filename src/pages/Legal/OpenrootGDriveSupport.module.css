@@ -1,0 +1,719 @@
+/* =========================================================
+   OPENROOT GDRIVE SUPPORT
+   Optimized CSS Module
+   Reuses global App.css tokens/utilities as much as possible
+========================================================= */
+
+/* =========================================================
+   PAGE LAYOUT
+========================================================= */
+
+.page {
+  position: relative;
+
+  min-height: 100vh;
+
+  overflow: hidden;
+
+  background:
+    radial-gradient(
+      circle at top left,
+      var(--ot-brand-soft),
+      transparent 30%
+    ),
+    var(--ot-bg);
+
+  color: var(--ot-text);
+}
+
+.shell {
+  position: relative;
+  z-index: 2;
+
+  width: 100%;
+  max-width: 1120px;
+
+  margin-inline: auto;
+
+  padding-inline: var(--ot-page-inline);
+  padding-top: clamp(2.5rem, 5vw, 4rem);
+  padding-bottom: clamp(3rem, 6vw, 5rem);
+
+  display: grid;
+  gap: 1.25rem;
+}
+
+/* =========================================================
+   BACKGROUND GLOW
+========================================================= */
+
+.backgroundGlowA,
+.backgroundGlowB {
+  position: absolute;
+
+  border-radius: 999px;
+
+  pointer-events: none;
+
+  filter: blur(60px);
+
+  opacity: 0.55;
+}
+
+.backgroundGlowA {
+  top: -120px;
+  left: -120px;
+
+  width: 340px;
+  height: 340px;
+
+  background: var(--ot-brand-soft);
+}
+
+.backgroundGlowB {
+  right: -140px;
+  bottom: -140px;
+
+  width: 420px;
+  height: 420px;
+
+  background: rgba(16, 185, 129, 0.08);
+}
+
+/* =========================================================
+   SHARED CARD SYSTEM
+========================================================= */
+
+.hero,
+.card,
+.contactCard {
+  position: relative;
+
+  overflow: hidden;
+
+  border-radius: var(--ot-radius-xl);
+
+  border: 1px solid var(--ot-border);
+
+  background: var(--ot-glass-bg);
+
+  backdrop-filter: blur(var(--ot-blur));
+  -webkit-backdrop-filter: blur(var(--ot-blur));
+
+  box-shadow:
+    inset 0 1px 0 var(--ot-border-hard),
+    var(--ot-shadow-lg);
+}
+
+/* subtle top glow border */
+.hero::before,
+.card::before,
+.contactCard::before {
+  content: "";
+
+  position: absolute;
+
+  top: 0;
+  left: 0;
+  right: 0;
+
+  height: 1px;
+
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--ot-brand-border),
+    transparent
+  );
+}
+
+/* =========================================================
+   HERO SECTION
+========================================================= */
+
+.hero {
+  padding: clamp(1.5rem, 3vw, 2rem);
+}
+
+.brandRow {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+
+  margin-bottom: 1rem;
+}
+
+.logoWrapper {
+  width: 52px;
+  height: 52px;
+
+  border-radius: var(--ot-radius-md);
+
+  overflow: hidden;
+
+  background: rgba(255, 255, 255, 0.03);
+
+  border: 1px solid var(--ot-border);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.logoImg {
+  width: 100%;
+  height: 100%;
+
+  object-fit: contain;
+}
+
+.brandName {
+  font-size: 1rem;
+  font-weight: 700;
+
+  color: var(--ot-text);
+}
+
+.brandSub {
+  margin-top: 0.2rem;
+
+  font-size: 0.82rem;
+  line-height: 1.5;
+
+  color: var(--ot-text-faint);
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+
+  width: fit-content;
+
+  margin-bottom: 1rem;
+
+  padding: 0.45rem 0.85rem;
+
+  border-radius: 999px;
+
+  background: var(--ot-brand-soft);
+
+  border: 1px solid var(--ot-brand-border);
+
+  color: var(--ot-brand);
+
+  font-size: 0.74rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+}
+
+.title {
+  margin: 0;
+
+  max-width: 760px;
+
+  font-size: clamp(2rem, 5vw, 4rem);
+  line-height: 1.02;
+  letter-spacing: -0.05em;
+  font-weight: 900;
+
+  color: var(--ot-text);
+}
+
+.subtitle {
+  margin-top: 1rem;
+
+  max-width: 860px;
+
+  color: var(--ot-text-muted);
+
+  font-size: 0.98rem;
+  line-height: 1.9;
+}
+
+.heroActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.85rem;
+
+  margin-top: 1.5rem;
+}
+
+/* =========================================================
+   BUTTONS
+========================================================= */
+
+.primaryBtn,
+.secondaryBtn,
+.contactBtn,
+.contactBtnSecondary {
+  min-height: 48px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 0.85rem 1.15rem;
+
+  border-radius: var(--ot-radius-md);
+
+  text-decoration: none;
+
+  font-size: 0.88rem;
+  font-weight: 700;
+
+  transition:
+    transform var(--ot-transition-fast),
+    border-color var(--ot-transition-fast),
+    opacity var(--ot-transition-fast),
+    background var(--ot-transition-fast);
+}
+
+.primaryBtn,
+.contactBtn {
+  background: linear-gradient(
+    135deg,
+    var(--ot-brand),
+    var(--ot-brand-2)
+  );
+
+  color: #ffffff;
+
+  box-shadow:
+    0 10px 24px rgba(67, 97, 238, 0.22);
+}
+
+.secondaryBtn,
+.contactBtnSecondary {
+  background: var(--ot-surface-alt);
+
+  border: 1px solid var(--ot-border);
+
+  color: var(--ot-text);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .primaryBtn:hover,
+  .secondaryBtn:hover,
+  .contactBtn:hover,
+  .contactBtnSecondary:hover {
+    transform: translateY(-2px);
+  }
+}
+
+/* =========================================================
+   GRID SECTION
+========================================================= */
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1.25rem;
+}
+
+.card {
+  padding: 1.4rem;
+}
+
+.cardTitle {
+  margin: 0;
+
+  font-size: 1.2rem;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+
+  color: var(--ot-text);
+}
+
+/* =========================================================
+   QUICK STEPS
+========================================================= */
+
+.stepList {
+  list-style: none;
+
+  margin: 1.2rem 0 0;
+  padding: 0;
+
+  display: grid;
+  gap: 0.85rem;
+}
+
+.stepItem {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.85rem;
+
+  padding: 0.9rem;
+
+  border-radius: var(--ot-radius-lg);
+
+  background: var(--ot-surface-alt);
+
+  border: 1px solid var(--ot-border);
+}
+
+.stepIndex {
+  flex-shrink: 0;
+
+  width: 40px;
+  height: 40px;
+
+  border-radius: var(--ot-radius-md);
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  background: var(--ot-brand-soft);
+
+  border: 1px solid var(--ot-brand-border);
+
+  color: var(--ot-brand);
+
+  font-size: 0.75rem;
+  font-weight: 800;
+}
+
+.stepText {
+  color: var(--ot-text-muted);
+
+  line-height: 1.7;
+}
+
+/* =========================================================
+   TIPS
+========================================================= */
+
+.tipsWrap {
+  display: grid;
+  gap: 0.75rem;
+
+  margin-top: 1.2rem;
+}
+
+.tipRow {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+
+  padding: 0.9rem;
+
+  border-radius: var(--ot-radius-lg);
+
+  background: var(--ot-surface-alt);
+
+  border: 1px solid var(--ot-border);
+}
+
+.tipBullet {
+  width: 10px;
+  height: 10px;
+
+  margin-top: 0.45rem;
+
+  border-radius: 999px;
+
+  background: var(--ot-brand);
+
+  flex-shrink: 0;
+}
+
+.tipText {
+  color: var(--ot-text-muted);
+
+  line-height: 1.7;
+  font-size: 0.92rem;
+}
+
+/* =========================================================
+   SECTION HEADER
+========================================================= */
+
+.sectionHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+
+  margin-bottom: 1rem;
+}
+
+.sectionTag {
+  padding: 0.45rem 0.75rem;
+
+  border-radius: 999px;
+
+  background: var(--ot-brand-soft);
+
+  border: 1px solid var(--ot-brand-border);
+
+  color: var(--ot-brand);
+
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+
+/* =========================================================
+   FAQ
+========================================================= */
+
+.faqList {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.faqItem {
+  overflow: hidden;
+
+  border-radius: var(--ot-radius-lg);
+
+  border: 1px solid var(--ot-border);
+
+  background: var(--ot-surface-alt);
+
+  transition:
+    border-color var(--ot-transition-fast),
+    box-shadow var(--ot-transition-fast);
+}
+
+.faqItemOpen {
+  border-color: var(--ot-brand-border);
+
+  box-shadow:
+    0 0 0 1px rgba(67, 97, 238, 0.08);
+}
+
+.faqButton {
+  width: 100%;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+
+  padding: 1rem;
+
+  background: transparent;
+  border: none;
+
+  cursor: pointer;
+
+  text-align: left;
+}
+
+.faqQuestion {
+  color: var(--ot-text);
+
+  font-size: 0.95rem;
+  font-weight: 600;
+  line-height: 1.6;
+}
+
+.faqIcon {
+  flex-shrink: 0;
+
+  width: 30px;
+  height: 30px;
+
+  border-radius: var(--ot-radius-md);
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  background: var(--ot-brand-soft);
+
+  border: 1px solid var(--ot-brand-border);
+
+  color: var(--ot-brand);
+
+  font-size: 1.2rem;
+  font-weight: 700;
+}
+
+.faqAnswerWrap {
+  overflow: hidden;
+}
+
+.faqAnswer {
+  padding:
+    0
+    1rem
+    1rem;
+
+  color: var(--ot-text-muted);
+
+  font-size: 0.92rem;
+  line-height: 1.8;
+}
+
+/* =========================================================
+   HELP GRID
+========================================================= */
+
+.helpGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.9rem;
+
+  margin-top: 1rem;
+}
+
+.helpCard {
+  display: block;
+
+  padding: 1rem;
+
+  border-radius: var(--ot-radius-lg);
+
+  background: var(--ot-surface-alt);
+
+  border: 1px solid var(--ot-border);
+
+  text-decoration: none;
+
+  transition:
+    transform var(--ot-transition-fast),
+    border-color var(--ot-transition-fast);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .helpCard:hover {
+    transform: translateY(-2px);
+
+    border-color: var(--ot-brand-border);
+  }
+}
+
+.helpTitle {
+  color: var(--ot-text);
+
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.helpDesc {
+  margin-top: 0.55rem;
+
+  color: var(--ot-text-muted);
+
+  font-size: 0.9rem;
+  line-height: 1.7;
+}
+
+.helpLink {
+  margin-top: 1rem;
+
+  color: var(--ot-brand);
+
+  font-size: 0.88rem;
+  font-weight: 700;
+}
+
+/* =========================================================
+   CONTACT
+========================================================= */
+
+.contactCard {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+
+  padding: 1.5rem;
+
+  background:
+    linear-gradient(
+      135deg,
+      rgba(67, 97, 238, 0.08),
+      rgba(15, 23, 42, 0.95)
+    );
+}
+
+.contactLabel {
+  margin-bottom: 0.55rem;
+
+  color: var(--ot-brand);
+
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.contactTitle {
+  margin: 0;
+
+  font-size: clamp(1.4rem, 3vw, 2rem);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+
+  color: var(--ot-text);
+}
+
+.contactText {
+  margin-top: 0.8rem;
+
+  max-width: 720px;
+
+  color: var(--ot-text-muted);
+
+  font-size: 0.94rem;
+  line-height: 1.8;
+}
+
+.contactActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media (max-width: 900px) {
+  .grid,
+  .helpGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .hero,
+  .card,
+  .contactCard {
+    border-radius: var(--ot-radius-lg);
+  }
+
+  .card,
+  .contactCard,
+  .hero {
+    padding: 1.15rem;
+  }
+
+  .title {
+    line-height: 1.08;
+  }
+
+  .faqButton {
+    align-items: flex-start;
+  }
+}
+
+/* =========================================================
+   REDUCED MOTION
+========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+  .primaryBtn,
+  .secondaryBtn,
+  .contactBtn,
+  .contactBtnSecondary,
+  .helpCard,
+  .faqItem {
+    transition: none !important;
+  }
+}
