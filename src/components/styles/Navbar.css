@@ -1,31 +1,58 @@
 /* ==========================================================================
-   OPENROOT — NAVBAR | CLEANED PRODUCTION CSS
-   Overlay / View More System Removed
+   OPENROOT — NAVBAR
+   Updated to use shared global layout tokens from app.css
    ========================================================================== */
 
 .navbar {
-  /* Core palette */
+  /* Brand palette */
   --nb-primary: #3f37c9;
   --nb-secondary: #4361ee;
   --nb-gradient: linear-gradient(135deg, #3f37c9 0%, #4361ee 100%);
 
-  /* Glow */
+  /* Hover glow system */
   --nb-glow: rgba(67, 97, 238, 0.14);
   --nb-glow-strong: rgba(63, 55, 201, 0.24);
   --nb-glow-bloom: rgba(67, 97, 238, 0.08);
 
-  /* Surface */
+  /* Surface / border — tied to the global token system */
   --nb-card-bg: var(--ot-bg);
-  --nb-card-border: rgba(0, 0, 0, 0.09);
+  --nb-card-border: var(--color-border);
   --nb-card-border-hover: rgba(67, 97, 238, 0.45);
 
   /* Text */
-  --nb-text: var(--ot-text);
-  --nb-text-muted: var(--ot-text-muted);
+  --nb-text: var(--color-text);
+  --nb-text-muted: var(--color-text-muted);
 
-  /* Timing */
+  /* Motion */
   --nb-ease: cubic-bezier(0.16, 1, 0.3, 1);
   --nb-ease-snap: cubic-bezier(0.4, 0, 0.2, 1);
+
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  isolation: isolate;
+
+  /* Shared page rhythm:
+     - no top padding
+     - consistent horizontal padding
+     - shared bottom spacing token */
+  padding-top: 20px;
+  padding-inline: var(--ot-page-inline);
+  padding-bottom: var(--ot-section-bottom);
+
+  /* Match the global section atmosphere */
+  background:
+    radial-gradient(
+      circle at top left,
+      rgba(88, 101, 242, 0.07) 0%,
+      transparent 34%
+    ),
+    radial-gradient(
+      circle at bottom right,
+      rgba(88, 101, 242, 0.05) 0%,
+      transparent 30%
+    ),
+    var(--ot-section-bg);
 }
 
 /* ==========================================================================
@@ -41,29 +68,25 @@
   --nb-glow-bloom: rgba(67, 97, 238, 0.12);
 }
 
-/* ==========================================================================
-   SECTION ROOT
-   ========================================================================== */
-
-.navbar {
-  position: relative;
-  width: 100%;
-  padding:
-    clamp(1.5rem, 3.5vw, 4rem)
-    clamp(1rem, 5vw, 2.5rem);
-
-  padding-bottom: clamp(0.25rem, 1vw, 0.25rem);
-  isolation: isolate;
-  overflow: hidden;
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme]) .navbar {
+    --nb-card-bg: #111111;
+    --nb-card-border: rgba(255, 255, 255, 0.08);
+    --nb-card-border-hover: rgba(67, 97, 238, 0.55);
+    --nb-glow: rgba(67, 97, 238, 0.2);
+    --nb-glow-strong: rgba(67, 97, 238, 0.32);
+    --nb-glow-bloom: rgba(67, 97, 238, 0.12);
+  }
 }
 
-/* top separator */
+/* ==========================================================================
+   TOP SEPARATOR
+   ========================================================================== */
+
 .navbar::before {
   content: "";
   position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
+  inset: 0 0 auto 0;
   height: 1px;
   pointer-events: none;
   background: linear-gradient(
@@ -82,12 +105,14 @@
 .navbar-content {
   position: relative;
   z-index: 1;
+
   width: 100%;
-  max-width: var(--ot-max-w);
+  max-width: var(--ot-content-max);
   margin-inline: auto;
+
   display: flex;
   flex-direction: column;
-  gap: clamp(1rem, 2.5vw, 1.6rem);
+  gap: var(--sp-xl);
 }
 
 /* ==========================================================================
@@ -98,7 +123,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 1rem;
+  gap: var(--sp-lg);
 }
 
 .navbar-title {
@@ -107,10 +132,12 @@
   align-items: center;
   gap: 0.55rem;
   margin: 0;
+
   font-size: clamp(1rem, 2.2vw, 1.45rem);
   font-weight: 800;
   letter-spacing: -0.035em;
   line-height: 1.15;
+
   color: var(--ot-text);
   background: none;
   -webkit-text-fill-color: currentColor;
@@ -120,37 +147,31 @@
    SOFTWARE GRID
    ========================================================================== */
 
-.released-softwares {
+.released-softwares,
+.released-softwares--compact {
   display: grid;
-  grid-template-columns: repeat(
-    var(--software-columns, 5),
-    minmax(0, 1fr)
-  );
-  gap: clamp(0.65rem, 1.3vw, 0.9rem);
   align-items: stretch;
 }
 
-.released-softwares--compact {
+.released-softwares {
+  --software-columns: 6;
   grid-template-columns: repeat(
-    var(--compact-columns, 3),
+    var(--software-columns),
+    minmax(0, 1fr)
+  );
+  gap: clamp(0.65rem, 1.3vw, 0.9rem);
+}
+
+.released-softwares--compact {
+  --compact-columns: 6;
+  grid-template-columns: repeat(
+    var(--compact-columns),
     minmax(0, 1fr)
   );
   gap: clamp(0.55rem, 1.1vw, 0.75rem);
 }
 
-/* ==========================================================
-   RESPONSIVE GRID COLUMN CONTROL
-   ========================================================== */
-
-.released-softwares {
-  --software-columns: 6;
-}
-
-.released-softwares--compact {
-  --compact-columns: 6;
-}
-
-/* Large laptop */
+/* Responsive column control */
 @media (max-width: 1400px) {
   .released-softwares {
     --software-columns: 5;
@@ -161,7 +182,6 @@
   }
 }
 
-/* Tablet landscape */
 @media (max-width: 899px) {
   .released-softwares {
     --software-columns: 4;
@@ -172,7 +192,6 @@
   }
 }
 
-/* Tablet */
 @media (max-width: 760px) {
   .released-softwares {
     --software-columns: 3;
@@ -183,7 +202,6 @@
   }
 }
 
-/* Mobile */
 @media (max-width: 360px) {
   .released-softwares {
     --software-columns: 2;
@@ -201,29 +219,36 @@
 .software-btn {
   appearance: none;
   -webkit-appearance: none;
+
   position: relative;
   overflow: hidden;
   isolation: isolate;
+
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   gap: clamp(0.5rem, 1vw, 0.75rem);
+
   padding:
     clamp(0.85rem, 1.6vw, 1.1rem)
     clamp(0.6rem, 1.2vw, 0.9rem);
 
   min-height: clamp(90px, 11vw, 118px);
+
   text-align: center;
   cursor: pointer;
+
   border-radius: var(--ot-radius-xl);
   border: 1px solid var(--nb-card-border);
   background: var(--nb-card-bg);
   color: var(--nb-text);
   font-family: var(--ot-font);
+
   box-shadow:
     0 1px 2px rgba(0, 0, 0, 0.04),
     0 2px 8px rgba(0, 0, 0, 0.03);
+
   transition:
     transform 0.28s var(--nb-ease),
     box-shadow 0.28s var(--nb-ease),
@@ -240,6 +265,7 @@
   pointer-events: none;
   z-index: 0;
   opacity: 0;
+
   background: radial-gradient(
     circle 100px at var(--x, 50%) var(--y, 50%),
     var(--nb-glow) 0%,
@@ -253,23 +279,16 @@
 /* top hairline */
 .software-btn::after {
   content: "";
-
   position: absolute;
-
-  top: 0;
-  left: 10%;
-  right: 10%;
-
+  inset: 0 10% auto 10%;
   height: 1px;
-
   z-index: 1;
-
   pointer-events: none;
 
   background: linear-gradient(
     90deg,
     transparent 0%,
-    rgba(255, 255, 255, 0.55) 50%,
+    var(--ot-border-hard) 50%,
     transparent 100%
   );
 
@@ -283,11 +302,7 @@
 @media (hover: hover) and (pointer: fine) {
   .software-btn:hover {
     transform: translateY(-3px);
-
     border-color: var(--nb-card-border-hover);
-
-    background: var(--nb-card-bg);
-
     box-shadow:
       0 0 0 1px var(--nb-glow),
       0 4px 20px var(--nb-glow-strong),
@@ -300,7 +315,6 @@
 
   .software-btn:hover .software-icon {
     transform: scale(1.05);
-
     box-shadow:
       0 0 0 3px var(--nb-glow),
       0 0 20px var(--nb-glow-strong);
@@ -317,13 +331,10 @@
 
 .software-btn:active {
   transform: scale(0.97);
-
   border-color: var(--nb-primary);
-
   box-shadow:
     0 0 0 1px var(--nb-glow-strong),
     0 1px 4px rgba(0, 0, 0, 0.08);
-
   transition-duration: 0.08s;
 }
 
@@ -333,7 +344,6 @@
 
 .software-btn:focus-visible {
   outline: 2px solid var(--nb-secondary);
-
   outline-offset: 3px;
 }
 
@@ -344,7 +354,6 @@
 @media (hover: none) {
   .software-btn:active {
     background: var(--nb-glow-bloom);
-
     border-color: var(--nb-card-border-hover);
   }
 }
@@ -355,29 +364,21 @@
 
 .software-icon {
   position: relative;
-
   z-index: 1;
 
   display: flex;
-
   align-items: center;
-
   justify-content: center;
 
   flex-shrink: 0;
-
   pointer-events: none;
 
   width: clamp(36px, 4vw, 46px);
-
   height: clamp(36px, 4vw, 46px);
 
   border-radius: var(--ot-radius-md);
-
   background: var(--nb-gradient);
-
   color: #ffffff;
-
   border: 1px solid transparent;
 
   box-shadow:
@@ -391,9 +392,7 @@
 
 .software-icon svg {
   display: block;
-
   flex-shrink: 0;
-
   pointer-events: none;
 }
 
@@ -403,35 +402,25 @@
 
 .software-name {
   position: relative;
-
   z-index: 1;
 
   width: 100%;
 
   font-size: clamp(0.72rem, 1.05vw, 0.86rem);
-
   font-weight: 600;
-
   line-height: 1.25;
-
   letter-spacing: -0.01em;
 
   color: var(--nb-text-muted);
-
   pointer-events: none;
 
   display: -webkit-box;
-
   -webkit-box-orient: vertical;
-
   -webkit-line-clamp: 2;
-
   line-clamp: 2;
-
   overflow: hidden;
 
   word-break: break-word;
-
   hyphens: auto;
 
   transition: color 0.22s ease;
@@ -448,12 +437,6 @@
 }
 
 @media (max-width: 900px) {
-  .navbar {
-    padding:
-      clamp(1.1rem, 3vw, 2rem)
-      clamp(0.9rem, 4vw, 1.5rem);
-  }
-
   .software-btn {
     min-height: clamp(84px, 14vw, 110px);
   }
@@ -474,17 +457,13 @@
 
   .software-btn {
     min-height: clamp(84px, 18vw, 100px);
-
     padding: 0.8rem 0.7rem;
-
     border-radius: var(--ot-radius-lg);
   }
 
   .software-icon {
     width: 34px;
-
     height: 34px;
-
     border-radius: var(--ot-radius-sm);
   }
 
@@ -495,7 +474,8 @@
 
 @media (max-width: 480px) {
   .navbar {
-    padding: 1rem 0.85rem 1.25rem;
+    padding-inline: 0.85rem;
+    padding-bottom: var(--ot-section-bottom);
   }
 
   .navbar-title {
@@ -504,7 +484,6 @@
 
   .software-btn {
     min-height: 86px;
-
     padding: 0.75rem 0.6rem;
   }
 
@@ -516,7 +495,6 @@
 @media (max-width: 380px) {
   .software-btn {
     min-height: 82px;
-
     padding: 0.68rem 0.55rem;
   }
 
@@ -524,10 +502,6 @@
     font-size: 0.66rem;
   }
 }
-
-/* ==========================================================================
-   LARGE SCREENS
-   ========================================================================== */
 
 @media (min-width: 1440px) {
   .released-softwares {
@@ -541,9 +515,7 @@
 
 @media (min-width: 1920px) {
   .navbar {
-    padding:
-      clamp(3rem, 4vw, 5rem)
-      clamp(2rem, 5vw, 4rem);
+    padding-inline: clamp(2rem, 5vw, 4rem);
   }
 
   .navbar-content {
@@ -556,15 +528,12 @@
 
   .software-btn {
     min-height: 130px;
-
     padding: 1.4rem;
-
     gap: 0.9rem;
   }
 
   .software-icon {
     width: 50px;
-
     height: 50px;
   }
 
@@ -580,15 +549,12 @@
 @media (forced-colors: active) {
   .software-btn {
     border: 2px solid ButtonText;
-
     forced-color-adjust: auto;
   }
 
   .software-icon {
     background: ButtonText;
-
     color: ButtonFace;
-
     border-color: ButtonText;
   }
 }
@@ -604,7 +570,6 @@
   .software-icon,
   .software-name {
     animation: none !important;
-
     transition: none !important;
   }
 }

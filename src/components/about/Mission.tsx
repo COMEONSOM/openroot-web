@@ -98,7 +98,7 @@ function useFitsVisual() {
    MISSION SECTION
 ============================================================================ */
 
-function WhyWeImportant() {
+function Mission() {
   const showVisual = useFitsVisual();
 
   return (
@@ -208,7 +208,7 @@ function WhyWeImportant() {
                 className={s.sectionTitle}
                 variants={titleReveal}
               >
-                Mission
+                Purpose
               </motion.h2>
             </motion.div>
 
@@ -311,12 +311,6 @@ function WhyWeImportant() {
               <motion.a
                 href="/software"
                 className={s.btnPrimary}
-                whileHover={{
-                  scale: 1.04,
-                }}
-                whileTap={{
-                  scale: 0.97,
-                }}
               >
                 Explore Our Services
 
@@ -337,21 +331,14 @@ function WhyWeImportant() {
 
               {/* SECONDARY CTA */}
 
-              <motion.div
-                whileHover={{
-                  scale: 1.04,
-                }}
-                whileTap={{
-                  scale: 0.97,
-                }}
-              >
+              <div>
                 <Link
                   to="/openroot-classes"
                   className={s.btnGhost}
                 >
                   Learn with Openroot Classes
                 </Link>
-              </motion.div>
+              </div>
             </motion.div>
           </motion.div>
         </div>
@@ -360,4 +347,4 @@ function WhyWeImportant() {
   );
 }
 
-export default memo(WhyWeImportant);
+export default memo(Mission);

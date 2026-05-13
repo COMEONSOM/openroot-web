@@ -3,57 +3,58 @@
    B&W + Brand Token Architecture — Production Edition
    VERSION: 2026.8
    Color Theory: Black/White foundation · #3F37C9 (indigo) + #4361EE (electric blue)
-   ─────────────────────────────────────────────────────────────────────────*/
+   ========================================================================== */
 
 
 /* ============================================================
    DESIGN TOKENS — LIGHT MODE DEFAULT
    ============================================================ */
 :root {
+  color-scheme: light;
 
-  /* — Surfaces — */
+  /* ── Surfaces ───────────────────────────────────────────── */
   --ot-bg:              #ffffff;
   --ot-bg-soft:         #f5f5f5;
   --ot-bg-dim:          #ececec;
   --ot-surface:         rgba(255, 255, 255, 0.72);
   --ot-surface-alt:     rgba(0, 0, 0, 0.04);
 
-  /* — Text — */
+  /* ── Text ───────────────────────────────────────────────── */
   --ot-text:            #0a0a0a;
   --ot-text-muted:      #4a4a4a;
   --ot-text-faint:      #888888;
 
-  /* — Borders — */
+  /* ── Borders ────────────────────────────────────────────── */
   --ot-border:          rgba(0, 0, 0, 0.12);
   --ot-border-hard:     rgba(0, 0, 0, 0.22);
   --ot-border-glow:     rgba(0, 0, 0, 0.06);
 
-  /* — Gradient stops — */
+  /* ── Gradient stops ─────────────────────────────────────── */
   --ot-grad-from:       #0a0a0a;
   --ot-grad-mid:        #3a3a3a;
   --ot-grad-to:         #8a8a8a;
 
-  /* — CTA / buttons — */
+  /* ── CTA / buttons ──────────────────────────────────────── */
   --ot-cta-bg:          #0a0a0a;
   --ot-cta-text:        #ffffff;
   --ot-cta-border:      rgba(0, 0, 0, 0.3);
   --ot-cta-hover-bg:    #1e1e1e;
 
-  /* — Offer card accent stripes — */
+  /* ── Offer card accent stripes ──────────────────────────── */
   --ot-accent-warm:     rgba(0, 0, 0, 0.55);
   --ot-accent-cool:     rgba(0, 0, 0, 0.28);
 
-  /* — Aurora — now uses subtle blue tints in light mode — */
+  /* ── Aurora ─ subtle blue tints in light mode ───────────── */
   --ot-aurora-1:        rgba(67, 97, 238, 0.08);
   --ot-aurora-2:        rgba(63, 55, 201, 0.06);
   --ot-aurora-3:        rgba(100, 130, 255, 0.05);
 
-  /* — Glass — */
+  /* ── Glass ──────────────────────────────────────────────── */
   --ot-glass-bg:        rgba(255, 255, 255, 0.55);
   --ot-glass-border:    rgba(0, 0, 0, 0.10);
   --ot-blur:            18px;
 
-  /* — Footer tokens — */
+  /* ── Footer tokens ──────────────────────────────────────── */
   --ot-footer-bg-a:     #0a0a0a;
   --ot-footer-bg-b:     #111111;
   --ot-footer-text:     #f0f0f0;
@@ -63,42 +64,41 @@
   --ot-footer-glass:    rgba(255, 255, 255, 0.06);
   --ot-footer-border:   rgba(255, 255, 255, 0.10);
 
-  /* — Icon invert — */
+  /* ── Icon invert ────────────────────────────────────────── */
   --ot-icon-invert:     1;
 
-  /* — Radius — */
+  /* ── Radius ─────────────────────────────────────────────── */
   --ot-radius-xl:       22px;
   --ot-radius-lg:       16px;
   --ot-radius-md:       12px;
   --ot-radius-sm:       8px;
 
-  /* — Shadows — */
+  /* ── Shadows ────────────────────────────────────────────── */
   --ot-shadow-sm:       0 1px 4px rgba(0, 0, 0, 0.05);
   --ot-shadow-md:       0 4px 18px rgba(0, 0, 0, 0.07);
   --ot-shadow-lg:       0 12px 40px rgba(0, 0, 0, 0.09);
   --ot-shadow-xl:       0 24px 64px rgba(0, 0, 0, 0.05);
 
-  /* — Motion — */
+  /* ── Motion ─────────────────────────────────────────────── */
   --ot-transition:      0.35s cubic-bezier(.21, 1.02, .73, 1);
   --ot-transition-fast: 0.18s ease;
   --ease-spring:        cubic-bezier(0.16, 1, 0.3, 1);
   --ease-spring-soft:   cubic-bezier(0.22, 1, 0.36, 1);
 
-  /* — Layout — */
-  --ot-max-w:           1100px;
+  /* ── Layout ─────────────────────────────────────────────── */
+  --ot-max-w:           1140px;
   --ot-font:            "Inter", "IBM Plex Sans", system-ui, sans-serif;
 
+  /* Shared page rhythm */
+  --ot-page-inline:     clamp(1rem, 5vw, 2.5rem);
+  --ot-section-bottom:  clamp(3rem, 7vw, 5.5rem);
+  --ot-section-bg:      #ffffff;
+  --ot-content-max:     min(100%, var(--ot-max-w));
 
   /* ┌──────────────────────────────────────────────────────────────────┐
      │  BRAND ACCENT TOKENS — BLUE / INDIGO                            │
-     │                                                                  │
-     │  Replaces the old green palette (#16a34a / #a3e87b).             │
-     │  Primary: #3F37C9 (deep indigo)                                  │
-     │  Secondary: #4361EE (electric blue)                              │
-     │                                                                  │
-     │  Light mode : #3F37C9 — WCAG AA on white (4.6:1)                │
-     │  Dark  mode : #6480f5 — lighter electric blue, AA on dark        │
-     │               → overridden in [data-theme="dark"] below         │
+     │  Primary: #3F37C9 (deep indigo)                                 │
+     │  Secondary: #4361EE (electric blue)                             │
      └──────────────────────────────────────────────────────────────────┘ */
   --ot-brand:           #3F37C9;
   --ot-brand-2:         #4361EE;
@@ -116,11 +116,9 @@
   --nb-green-dim:       var(--ot-brand-dim);
   --nb-green-border:    var(--ot-brand-border);
 
-
   /* ┌──────────────────────────────────────────────────────────────────┐
      │  CSS MODULE BRIDGE                                               │
      │  Maps --color-* (used in *.module.css) onto --ot-* tokens.       │
-     │  Theme overrides propagate automatically — no duplication.       │
      └──────────────────────────────────────────────────────────────────┘ */
 
   /* Accent */
@@ -174,8 +172,7 @@
   --shadow-card-hover:         var(--ot-shadow-lg);
   --shadow-glow:               var(--ot-shadow-sm);
 
-
-  /* ─── Fluid Spacing — 4px grid ─────────────────────────────────────*/
+  /* ─── Fluid Spacing — 4px grid ───────────────────────────────────── */
   --sp-2xs: clamp(0.2rem,  0.38vw, 0.3rem);
   --sp-xs:  clamp(0.3rem,  0.55vw, 0.5rem);
   --sp-sm:  clamp(0.5rem,  0.85vw, 0.7rem);
@@ -186,8 +183,7 @@
   --sp-4:   1rem;
   --sp-8:   2rem;
 
-
-  /* ─── Fluid Typography — 0.72× compact scale ───────────────────── */
+  /* ─── Fluid Typography ───────────────────────────────────────────── */
   --fz-2xs: clamp(0.4375rem, 0.58vw, 0.5rem);
   --fz-xs:  clamp(0.5rem,    0.68vw, 0.5625rem);
   --fz-sm:  clamp(0.5625rem, 0.82vw, 0.625rem);
@@ -197,34 +193,39 @@
   --fz-xl:  clamp(1rem,      1.8vw,  1.5rem);
   --fz-2xl: clamp(1.1rem,    2.3vw,  1.9rem);
 
-
-  /* — Radius aliases — */
+  /* ── Radius aliases ──────────────────────────────────────────────── */
   --radius-xs:   4px;
   --radius-sm:   var(--ot-radius-sm);
   --radius-md:   var(--ot-radius-md);
   --radius-lg:   var(--ot-radius-lg);
   --radius-pill: 9999px;
 
-
-  /* — Transition aliases — */
+  /* ── Transition aliases ─────────────────────────────────────────── */
   --t-snap:        var(--ot-transition-fast);
   --t-base:        var(--ot-transition);
   --t-spring:      0.32s var(--ease-spring-soft);
   --t-spring-fast: 0.26s var(--ease-spring);
 
-
-  /* — Layout — */
+  /* ── Layout aliases ─────────────────────────────────────────────── */
   --content-max: min(100%, var(--ot-max-w));
   --card-pad:    clamp(0.75rem, 1.45vw, 1.25rem);
   --section-gap: clamp(1.4rem,  2.9vw,  2.5rem);
 }
 
-
+/* Mobile rhythm token adjustments keep all sections aligned */
+@media (max-width: 767px) {
+  :root {
+    --ot-page-inline:    0.85rem;
+    --ot-section-bottom: clamp(3rem, 8vw, 4.5rem);
+  }
+}
 
 /* ============================================================
    DARK MODE — MANUAL OVERRIDE
    ============================================================ */
 [data-theme="dark"] {
+  color-scheme: dark;
+
   --ot-bg:              #0a0a0a;
   --ot-bg-soft:         #111111;
   --ot-bg-dim:          #1a1a1a;
@@ -284,15 +285,17 @@
   --ot-brand-border:    rgba(100, 128, 245, 0.30);
   --ot-brand-soft:      rgba(100, 128, 245, 0.10);
   --ot-brand-icon-bg:   #0e0e24;
+
+  --ot-section-bg:      #111111;
 }
-
-
 
 /* ============================================================
    DARK MODE — SYSTEM AUTO
    ============================================================ */
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme]) {
+    color-scheme: dark;
+
     --ot-bg:              #0a0a0a;
     --ot-bg-soft:         #111111;
     --ot-bg-dim:          #1a1a1a;
@@ -350,10 +353,10 @@
     --ot-brand-border:    rgba(100, 128, 245, 0.30);
     --ot-brand-soft:      rgba(100, 128, 245, 0.10);
     --ot-brand-icon-bg:   #0e0e24;
+
+    --ot-section-bg:      #111111;
   }
 }
-
-
 
 /* ============================================================
    GLOBAL RESET
@@ -435,8 +438,6 @@ a {
   border-radius: var(--ot-radius-sm);
 }
 
-
-
 /* ============================================================
    APP SHELL
    ============================================================ */
@@ -451,25 +452,19 @@ a {
   width: 100%;
 }
 
-
-
 /* ============================================================
    TYPOGRAPHY UTILITIES
    ============================================================ */
 
-/*
- * Primary gradient — display headings across all pages.
- * .text-gradient-strong and .text-gradient-primary are kept as
- * aliases for backward-compat but share the same rule block.
- */
+/* Primary gradient — display headings across all pages. */
 .text-gradient,
 .text-gradient-strong,
 .text-gradient-primary {
   background: linear-gradient(
     120deg,
-    var(--ot-grad-from)  0%,
-    var(--ot-grad-mid)  55%,
-    var(--ot-grad-to)  100%
+    var(--ot-grad-from) 0%,
+    var(--ot-grad-mid) 55%,
+    var(--ot-grad-to) 100%
   );
   background-clip: text;
   -webkit-background-clip: text;
@@ -480,7 +475,7 @@ a {
 .text-gradient-brand {
   background: linear-gradient(
     120deg,
-    var(--ot-brand)   0%,
+    var(--ot-brand) 0%,
     var(--ot-brand-2) 100%
   );
   background-clip: text;
@@ -492,7 +487,7 @@ a {
 .text-gradient-soft {
   background: linear-gradient(
     100deg,
-    var(--ot-text)       0%,
+    var(--ot-text) 0%,
     var(--ot-text-muted) 100%
   );
   background-clip: text;
@@ -567,8 +562,6 @@ a {
   font-size: 0.8125rem;
   margin-top: 0.875rem;
 }
-
-
 
 /* ============================================================
    CARD / PANEL UTILITIES
@@ -690,8 +683,7 @@ a {
   .card-body { padding: 1rem; }
 }
 
-
-/* ── Section card: lighter shadow in light mode only ─────── */
+/* Section card: lighter shadow in light mode only */
 html[data-theme="light"] .ot-section-card,
 :root:not([data-theme="dark"]) .ot-section-card {
   box-shadow:
@@ -709,8 +701,7 @@ html[data-theme="light"] .ot-section-card,
   }
 }
 
-
-/* ── Glass shine — reusable ::before layer ────────────────── */
+/* Glass shine — reusable ::before layer */
 .ot-glass-shine {
   position: relative;
   overflow: hidden;
@@ -749,8 +740,7 @@ html[data-theme="dark"] .ot-glass-shine::before { mix-blend-mode: screen; opacit
   :root:not([data-theme]) .ot-glass-shine::before { mix-blend-mode: overlay; opacity: 0.16; }
 }
 
-
-/* ── Card shimmer hairline ─────────────────────────────────── */
+/* Card shimmer hairline */
 .ot-card-shimmer {
   position: absolute;
   top: 0; left: 0; right: 0;
@@ -775,8 +765,7 @@ html[data-theme="dark"] .ot-card-shimmer { opacity: 0.85; }
   :root:not([data-theme]) .ot-card-shimmer { opacity: 0.85; }
 }
 
-
-/* ── Section aurora wrapper ────────────────────────────────── */
+/* Section aurora wrapper */
 .ot-section-aurora::after {
   content: "";
   position: absolute;
@@ -791,8 +780,6 @@ html[data-theme="dark"] .ot-card-shimmer { opacity: 0.85; }
   opacity: 0.55;
   animation: aurora-drift 28s infinite alternate ease-in-out;
 }
-
-
 
 /* ============================================================
    BADGE / PILL UTILITIES
@@ -842,8 +829,6 @@ html[data-theme="dark"] .ot-card-shimmer { opacity: 0.85; }
   color: var(--ot-text);
   flex-shrink: 0;
 }
-
-
 
 /* ============================================================
    BUTTON UTILITIES
@@ -933,8 +918,6 @@ html[data-theme="dark"] .ot-card-shimmer { opacity: 0.85; }
   .btn-stack-mobile .btn-pill { width: 100%; justify-content: center; }
 }
 
-
-
 /* ============================================================
    LIST / LAYOUT HELPERS
    ============================================================ */
@@ -959,11 +942,16 @@ html[data-theme="dark"] .ot-card-shimmer { opacity: 0.85; }
   flex-wrap: wrap;
 }
 
-.max-width-container {
+.max-width-container,
+.ot-page-inner,
+.ot-section-inner {
   width: 100%;
   max-width: var(--ot-max-w);
   margin-inline: auto;
-  padding-inline: clamp(1rem, 4vw, 2rem);
+}
+
+.max-width-container {
+  padding-inline: var(--ot-page-inline);
 }
 
 .visually-hidden,
@@ -976,8 +964,6 @@ html[data-theme="dark"] .ot-card-shimmer { opacity: 0.85; }
   clip-path: inset(50%);
   white-space: nowrap;
 }
-
-
 
 /* ============================================================
    NOTE / CALLOUT BOXES
@@ -1022,17 +1008,47 @@ html[data-theme="dark"] .ot-card-shimmer { opacity: 0.85; }
   margin-block: 1.25rem;
 }
 
-
-
 /* ============================================================
    SHARED SECTION PATTERNS
    ============================================================ */
+
+/* Primary section shell for all page sections */
+.ot-page-section,
 .ot-section {
   position: relative;
   width: 100%;
-  padding: clamp(2.5rem, 6vw, 5rem) clamp(1rem, 5vw, 2.5rem);
-  isolation: isolate;
   overflow: hidden;
+  isolation: isolate;
+  padding-top: 0;
+  padding-inline: var(--ot-page-inline);
+  padding-bottom: var(--ot-section-bottom);
+}
+
+/* Optional shared background layer */
+.ot-page-section--bg,
+.ot-section--bg {
+  background:
+    radial-gradient(
+      circle at top left,
+      rgba(88, 101, 242, 0.07) 0%,
+      transparent 34%
+    ),
+    radial-gradient(
+      circle at bottom right,
+      rgba(88, 101, 242, 0.05) 0%,
+      transparent 30%
+    ),
+    var(--ot-section-bg);
+}
+
+/* Shared inner content wrapper */
+.ot-page-inner,
+.ot-section-inner {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: var(--ot-max-w);
+  margin-inline: auto;
 }
 
 .ot-section-card {
@@ -1104,11 +1120,10 @@ html[data-theme="dark"] .ot-card-shimmer { opacity: 0.85; }
 }
 
 @media (min-width: 1024px) {
-  .ot-section--tight-top { padding-top: clamp(1rem, 2vw, 1.5rem); }
+  .ot-section--tight-top { padding-top: 0; }
 }
 
-
-/* ── Numbered feature list ──────────────────────────────────── */
+/* ── Numbered feature list ─────────────────────────────────── */
 .ot-feature-list {
   list-style: none;
   padding: 0;
@@ -1150,8 +1165,7 @@ html[data-theme="dark"] .ot-card-shimmer { opacity: 0.85; }
   color: var(--ot-text-faint);
 }
 
-
-/* ── Stat row ────────────────────────────────────────────────── */
+/* ── Stat row ───────────────────────────────────────────────── */
 .ot-stat-row {
   display: flex;
   flex-wrap: wrap;
@@ -1188,7 +1202,7 @@ html[data-theme="dark"] .ot-card-shimmer { opacity: 0.85; }
   background: linear-gradient(
     100deg,
     var(--ot-grad-from) 0%,
-    var(--ot-grad-mid)  100%
+    var(--ot-grad-mid) 100%
   );
   background-clip: text;
   -webkit-background-clip: text;
@@ -1211,8 +1225,7 @@ html[data-theme="dark"] .ot-card-shimmer { opacity: 0.85; }
   }
 }
 
-
-/* ── Quote block ─────────────────────────────────────────────── */
+/* ── Quote block ───────────────────────────────────────────── */
 .ot-quote {
   position: relative;
   padding-left: 1.1rem;
@@ -1233,8 +1246,7 @@ html[data-theme="dark"] .ot-card-shimmer { opacity: 0.85; }
   background: linear-gradient(180deg, var(--ot-brand) 0%, var(--ot-brand-2) 100%);
 }
 
-
-/* ── Corner accent watermark ─────────────────────────────────── */
+/* ── Corner accent watermark ───────────────────────────────── */
 .ot-corner-accent {
   position: absolute;
   bottom: -1.5rem;
@@ -1252,14 +1264,11 @@ html[data-theme="dark"] .ot-card-shimmer { opacity: 0.85; }
 
 @media (max-width: 560px) { .ot-corner-accent { display: none; } }
 
-
-
 /* ============================================================
-   ★ SHARED UTILITIES
+   SHARED UTILITIES
    ============================================================ */
 
-
-/* ── P1 · Top Gradient Hairline ──────────────────────────── */
+/* Top Gradient Hairline */
 .ot-stripe-top {
   position: relative;
   overflow: hidden;
@@ -1282,7 +1291,6 @@ html[data-theme="dark"] .ot-card-shimmer { opacity: 0.85; }
   );
 }
 
-/* Brand variant — blue gradient hairline */
 .ot-stripe-top--brand::before {
   background: linear-gradient(
     90deg,
@@ -1294,8 +1302,7 @@ html[data-theme="dark"] .ot-card-shimmer { opacity: 0.85; }
   );
 }
 
-
-/* ── P5 · Card Lift Hover ─────────────────────────────────── */
+/* Card lift hover */
 @media (hover: hover) and (pointer: fine) {
   .ot-card-lift:hover {
     transform: translateY(-3px);
@@ -1312,8 +1319,7 @@ html[data-theme="dark"] .ot-card-shimmer { opacity: 0.85; }
   }
 }
 
-
-/* ── P6 · scaleX Bottom Stripe Reveal ────────────────────── */
+/* scaleX Bottom Stripe Reveal */
 .ot-stripe-reveal {
   position: relative;
   overflow: hidden;
@@ -1343,8 +1349,7 @@ html[data-theme="dark"] .ot-card-shimmer { opacity: 0.85; }
 
 .ot-stripe-reveal--active::after { transform: scaleX(1); }
 
-
-/* ── P7 · Kicker / Eyebrow Label ─────────────────────────── */
+/* Kicker / Eyebrow Label */
 .ot-kicker {
   display: inline-flex;
   align-items: center;
@@ -1371,8 +1376,7 @@ html[data-theme="dark"] .ot-card-shimmer { opacity: 0.85; }
   color: var(--ot-brand);
 }
 
-
-/* ── P8 · Body Copy ───────────────────────────────────────── */
+/* Body Copy */
 .ot-body-copy {
   font-size: var(--fz-md);
   line-height: 1.65;
@@ -1380,8 +1384,7 @@ html[data-theme="dark"] .ot-card-shimmer { opacity: 0.85; }
   color: var(--ot-text-muted);
 }
 
-
-/* ── P9 · Centered Section Header Block ──────────────────── */
+/* Centered Section Header Block */
 .ot-section-header {
   display: flex;
   flex-direction: column;
@@ -1393,8 +1396,7 @@ html[data-theme="dark"] .ot-card-shimmer { opacity: 0.85; }
   margin-bottom: var(--sp-lg);
 }
 
-
-/* ── P10 · Brand Pill Base ────────────────────────────────── */
+/* Brand Pill Base */
 .ot-brand-pill {
   display: inline-flex;
   align-items: center;
@@ -1410,23 +1412,20 @@ html[data-theme="dark"] .ot-card-shimmer { opacity: 0.85; }
     color            200ms ease;
 }
 
-
-/* ── P12 · Brand Focus-Visible Ring ──────────────────────── */
+/* Focus ring */
 .ot-focus-brand:focus-visible {
   outline: 2px solid var(--ot-brand);
   outline-offset: 3px;
   border-radius: var(--ot-radius-sm);
 }
 
-
-/* ── P14 · :active Scale-Down ────────────────────────────── */
+/* Active scale-down */
 .ot-active-scale:active {
   transform: scale(0.96) !important;
   transition-duration: 0.08s !important;
 }
 
-
-/* ── P16 · Standalone Backdrop Glass ─────────────────────── */
+/* Standalone Backdrop Glass */
 .ot-glass {
   backdrop-filter: blur(12px) saturate(1.6);
   -webkit-backdrop-filter: blur(12px) saturate(1.6);
@@ -1447,8 +1446,7 @@ html[data-theme="light"] .ot-glass--dark,
   :root:not([data-theme]) .ot-glass--dark { background: rgba(0, 0, 0, 0.68); }
 }
 
-
-/* ── P18 · Thin Scrollbar ─────────────────────────────────── */
+/* Thin Scrollbar */
 .scrollbar-thin {
   scrollbar-width: thin;
   scrollbar-color: var(--ot-border-hard) transparent;
@@ -1476,8 +1474,7 @@ html[data-theme="light"] .ot-glass--dark,
 }
 .scrollbar-brand::-webkit-scrollbar-thumb:hover { background: var(--ot-brand); }
 
-
-/* ── P22 · Vertical Left Accent Bar ──────────────────────── */
+/* Vertical Left Accent Bar */
 .ot-accent-bar-left { position: relative; }
 
 .ot-accent-bar-left::before {
@@ -1508,8 +1505,7 @@ html[data-theme="light"] .ot-glass--dark,
   transform: scaleY(1);
 }
 
-
-/* ── P23 · CSS Grid Accordion ────────────────────────────── */
+/* CSS Grid Accordion */
 .ot-accordion-body {
   display: grid;
   grid-template-rows: 0fr;
@@ -1524,8 +1520,7 @@ html[data-theme="light"] .ot-glass--dark,
   overflow: hidden;
 }
 
-
-/* ── P17 · Pulsing Dot ────────────────────────────────────── */
+/* Pulsing Dot */
 .ot-dot-pulse {
   animation: ot-dot-pulse 2.6s ease-in-out infinite;
 }
@@ -1557,7 +1552,20 @@ html[data-theme="light"] .ot-glass--dark,
   }
 }
 
+/* Primary reusable section shell (legacy alias kept as .ot-section) */
+.ot-section {
+  position: relative;
+  width: 100%;
+  padding: 0 var(--ot-page-inline) var(--ot-section-bottom);
+  isolation: isolate;
+  overflow: hidden;
+}
 
+/* Backdrop-only section variant */
+.ot-section-aurora {
+  position: relative;
+  overflow: hidden;
+}
 
 /* ============================================================
    BACKGROUND ANIMATION LAYER
@@ -1587,8 +1595,6 @@ html[data-theme="light"] .ot-glass--dark,
   animation: aurora-drift 22s infinite alternate ease-in-out;
 }
 
-
-
 /* ============================================================
    LOADER OVERLAY
    ============================================================ */
@@ -1614,8 +1620,6 @@ html[data-theme="light"] .ot-glass--dark,
   place-items: center;
 }
 
-
-
 /* ============================================================
    GLOBAL SCROLLBAR
    ============================================================ */
@@ -1626,8 +1630,6 @@ html[data-theme="light"] .ot-glass--dark,
   border-radius: 999px;
 }
 ::-webkit-scrollbar-thumb:hover { background: var(--ot-text-faint); }
-
-
 
 /* ============================================================
    REDUCED MOTION
@@ -1643,36 +1645,34 @@ html[data-theme="light"] .ot-glass--dark,
   }
 }
 
-
-
 /* ============================================================
    GLOBAL KEYFRAMES
    ============================================================ */
 
-/* Pulsing status dot — now blue glow */
+/* Pulsing status dot — blue glow */
 @keyframes ot-dot-pulse {
-  0%,  100% { box-shadow: 0 0 4px  var(--ot-brand-dim);  opacity: 1;    }
-  50%       { box-shadow: 0 0 16px var(--ot-brand-glow); opacity: 0.75; }
+  0%, 100% { box-shadow: 0 0 4px var(--ot-brand-dim);  opacity: 1; }
+  50%      { box-shadow: 0 0 16px var(--ot-brand-glow); opacity: 0.75; }
 }
 
 /* Staggered card entrance */
 @keyframes ot-card-pop {
   from { opacity: 0; transform: translateY(14px) scale(0.96); }
-  to   { opacity: 1; transform: translateY(0)    scale(1);    }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
 }
 
 /* Swipe hint nudge */
 @keyframes ot-swipe-hint {
-  0%   { transform: translateX(0);     }
+  0%   { transform: translateX(0); }
   20%  { transform: translateX(-10px); }
-  40%  { transform: translateX(4px);   }
-  60%  { transform: translateX(-6px);  }
-  80%  { transform: translateX(2px);   }
-  100% { transform: translateX(0);     }
+  40%  { transform: translateX(4px); }
+  60%  { transform: translateX(-6px); }
+  80%  { transform: translateX(2px); }
+  100% { transform: translateX(0); }
 }
 
 /* Ambient aurora drift */
 @keyframes aurora-drift {
   from { transform: translate(-8%, -8%) scale(1.08); }
-  to   { transform: translate(8%, 6%)  scale(1);     }
+  to   { transform: translate(8%, 6%) scale(1); }
 }

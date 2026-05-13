@@ -1,324 +1,204 @@
 /* =============================================================================
-   src/components/styles/WhyWeImportant.module.css
-   Fully Updated — Background Matches OurServices Section (Light + Dark)
+   src/components/styles/Mission.module.css
+   CLEAN • GLOBAL-ALIGNED • PRODUCTION READY
 ============================================================================= */
 
-/* ─────────────────────────────────────────────────────────────────────────────
-   ROOT
-───────────────────────────────────────────────────────────────────────────── */
+/* =============================================================================
+   ROOT / SECTION SHELL
+============================================================================= */
 
 .root {
-  --ww-title-color:
-    var(--color-text, #111111);
-
-  --ww-title-accent-color:
-    #3f37c9;
-
-  --ww-body-color:
-    var(
-      --color-text-muted,
-      rgba(30, 30, 50, 0.72)
-    );
-
-  --ww-strong-color:
-    var(--color-text, #111111);
-
-  --ww-muted-color:
-    rgba(30, 30, 50, 0.48);
-
-  --ww-eyebrow-line-color:
-    #3f37c9;
-
-  --ww-eyebrow-text-color:
-    #3f37c9;
-
-  --ww-btn-primary-bg:
-    #3f37c9;
-
-  --ww-btn-primary-hover:
-    #3530b0;
-
-  --ww-btn-primary-text:
-    #ffffff;
-
-  --ww-btn-ghost-bg:
-    #ffffff;
-
-  --ww-btn-ghost-color:
-    rgba(10, 10, 25, 0.82);
-
-  --ww-btn-ghost-border:
-    rgba(0, 0, 0, 0.18);
-
-  --ww-btn-ghost-hover:
-    rgba(0, 0, 0, 0.04);
-
-  --ww-accent-link:
-    #3f37c9;
-
   position: relative;
-
   overflow: hidden;
-
   isolation: isolate;
-
   width: 100%;
 
-  padding:
-    0
-    clamp(1.25rem, 4vw, 3rem)
-    clamp(4rem, 8vw, 6rem);
+  /* Shared global section rhythm */
+  padding-top: 0;
+  padding-inline: var(--ot-page-inline);
+  padding-bottom: var(--ot-section-bottom);
 
-  background:
-    radial-gradient(
-      circle at top left,
-      rgba(88, 101, 242, 0.07) 0%,
-      transparent 34%
-    ),
-    radial-gradient(
-      circle at bottom right,
-      rgba(88, 101, 242, 0.05) 0%,
-      transparent 30%
-    ),
-    var(--ot-bg);
-
-  color:
-    var(--ww-strong-color);
+  /* Flat global background — same as navbar/services/about */
+  background: var(--ot-section-bg);
 
   transition:
     background 0.35s ease,
     color 0.35s ease;
 }
 
-/* ─────────────────────────────────────────────────────────────────────────────
-   DARK MODE
-───────────────────────────────────────────────────────────────────────────── */
+/* =============================================================================
+   AMBIENT ORBS
+   Used by the TSX for soft motion accents
+============================================================================= */
 
-:global([data-theme="dark"]) .root {
-  --ww-title-color:
-    #eeeef5;
-
-  --ww-title-accent-color:
-    #a0aaff;
-
-  --ww-body-color:
-    rgba(255, 255, 255, 0.68);
-
-  --ww-strong-color:
-    rgba(255, 255, 255, 0.92);
-
-  --ww-muted-color:
-    rgba(255, 255, 255, 0.46);
-
-  --ww-eyebrow-line-color:
-    #6a74f0;
-
-  --ww-eyebrow-text-color:
-    #6a74f0;
-
-  --ww-btn-primary-bg:
-    #ffffff;
-
-  --ww-btn-primary-hover:
-    #e8e8e8;
-
-  --ww-btn-primary-text:
-    #111111;
-
-  --ww-btn-ghost-bg:
-    rgba(255, 255, 255, 0.06);
-
-  --ww-btn-ghost-color:
-    rgba(255, 255, 255, 0.82);
-
-  --ww-btn-ghost-border:
-    rgba(255, 255, 255, 0.14);
-
-  --ww-btn-ghost-hover:
-    rgba(255, 255, 255, 0.10);
-
-  --ww-accent-link:
-    #a0aaff;
+.orbA,
+.orbB {
+  position: absolute;
+  pointer-events: none;
+  z-index: 0;
+  border-radius: 999px;
+  filter: blur(28px);
+  opacity: 0.55;
 }
 
-/* ─────────────────────────────────────────────────────────────────────────────
-   INNER
-───────────────────────────────────────────────────────────────────────────── */
+.orbA {
+  top: -8%;
+  left: -6%;
+  width: 280px;
+  height: 280px;
+  background: radial-gradient(
+    circle at center,
+    rgba(67, 97, 238, 0.14) 0%,
+    transparent 70%
+  );
+}
+
+.orbB {
+  right: -10%;
+  bottom: -12%;
+  width: 320px;
+  height: 320px;
+  background: radial-gradient(
+    circle at center,
+    rgba(63, 55, 201, 0.12) 0%,
+    transparent 72%
+  );
+}
+
+/* =============================================================================
+   INNER WRAPPER
+============================================================================= */
 
 .inner {
   position: relative;
-
   z-index: 1;
 
-  max-width:
-    var(--ot-max-w, 1100px);
-
+  width: 100%;
+  max-width: var(--ot-content-max);
   margin-inline: auto;
 
   display: flex;
-
   flex-direction: column;
-
   gap: 1.25rem;
 }
 
-/* ─────────────────────────────────────────────────────────────────────────────
+/* =============================================================================
    MAIN GRID
-───────────────────────────────────────────────────────────────────────────── */
+============================================================================= */
 
 .missionStage {
   display: grid;
-
   grid-template-columns:
     minmax(0, 1.15fr)
     minmax(260px, 0.85fr);
-
-  gap:
-    clamp(1.8rem, 3.5vw, 3rem);
-
+  gap: clamp(1.8rem, 3.5vw, 3rem);
   align-items: start;
 }
 
-/* ─────────────────────────────────────────────────────────────────────────────
+/* =============================================================================
    LEFT CONTENT
-───────────────────────────────────────────────────────────────────────────── */
+============================================================================= */
 
 .missionCopy {
   order: 1;
 
   display: flex;
-
   flex-direction: column;
-
   gap: 1rem;
 
   min-width: 0;
 }
 
-/* ─────────────────────────────────────────────────────────────────────────────
+/* =============================================================================
    TITLE
-───────────────────────────────────────────────────────────────────────────── */
+============================================================================= */
 
 .sectionTitleBlock {
   display: flex;
-
   flex-direction: column;
-
   gap: 0.35rem;
 
   max-width: 680px;
-
   margin-bottom: 0.2rem;
 }
 
 .sectionTitle {
   margin: 0;
 
-  font-size:
-    clamp(2.3rem, 5vw, 4.4rem);
-
+  font-size: clamp(2.3rem, 5vw, 4.4rem);
   line-height: 0.96;
-
   letter-spacing: -0.065em;
 
-  color:
-    var(--ww-title-color);
+  color: var(--color-text, #111111);
 
   text-wrap: balance;
 }
 
-.sectionTitleAccent {
-  display: block;
-
-  color:
-    var(--ww-title-accent-color);
-}
-
-/* ─────────────────────────────────────────────────────────────────────────────
+/* =============================================================================
    BODY COPY
-───────────────────────────────────────────────────────────────────────────── */
+============================================================================= */
 
 .missionCopyP {
   margin: 0;
 
   font-size: 1rem;
-
   line-height: 1.9;
-
   text-align: justify;
 
-  color:
-    var(--ww-body-color);
+  color: var(--color-text-muted, rgba(30, 30, 50, 0.72));
 
-  -webkit-text-fill-color:
-    var(--ww-body-color);
+  -webkit-text-fill-color: currentColor;
 }
 
 .missionStrong {
   font-weight: 800;
-
-  color:
-    var(--ww-strong-color);
+  color: var(--color-text, #111111);
 }
 
 .missionStrongAccent {
   font-weight: 700;
-
-  color:
-    var(--ww-accent-link);
+  color: var(--ot-brand-2, #4361ee);
 
   text-decoration: none;
-
-  transition:
-    opacity 0.18s ease;
+  transition: opacity 0.18s ease;
 }
 
 .missionStrongAccent:hover {
   opacity: 0.78;
-
   text-decoration: underline;
-
   text-decoration-thickness: 1.5px;
-
   text-underline-offset: 3px;
 }
 
-/* ─────────────────────────────────────────────────────────────────────────────
+/* =============================================================================
    RIGHT VISUAL
-───────────────────────────────────────────────────────────────────────────── */
+============================================================================= */
 
 .missionVisual {
   order: 2;
 
   display: flex;
-
   align-items: flex-start;
-
   justify-content: center;
-
   align-self: start;
 
   min-width: 0;
 }
 
-/* ─────────────────────────────────────────────────────────────────────────────
+/* =============================================================================
    LOTTIE WRAP
-───────────────────────────────────────────────────────────────────────────── */
+============================================================================= */
 
 .lottieWrap {
   position: relative;
 
-  width:
-    min(390px, 100%);
-
+  width: min(390px, 100%);
   aspect-ratio: 1 / 1;
 
   overflow: hidden;
-
   border-radius: 30px;
 
   display: grid;
-
   place-items: center;
 
   background:
@@ -328,43 +208,50 @@
       rgba(10, 10, 10, 1)
     );
 
-  border:
-    1px solid
-    rgba(255, 255, 255, 0.08);
-
-  box-shadow:
-    inset 0 1px 0
-    rgba(255, 255, 255, 0.05),
-    0 18px 42px
-    rgba(0, 0, 0, 0.24);
+  border: 1px solid rgba(255, 255, 255, 0.08);
 }
 
-/* ─────────────────────────────────────────────────────────────────────────────
-   LOTTIE
-───────────────────────────────────────────────────────────────────────────── */
+/* soft glow layer used in TSX */
+.lottieGlow {
+  position: absolute;
+  inset: 12%;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 0;
+
+  background: radial-gradient(
+    circle at center,
+    rgba(67, 97, 238, 0.18) 0%,
+    transparent 70%
+  );
+
+  filter: blur(18px);
+  opacity: 0.9;
+}
 
 .lottieAnimation {
   width: 100% !important;
-
   height: 100% !important;
 
-  transform:
-    scale(1.12);
+  position: relative;
+  z-index: 1;
 
+  transform: scale(1.12);
   transform-origin: center center;
 
   display: flex;
-
   align-items: center;
-
   justify-content: center;
+
+  overflow: hidden;
+  line-height: 0;
 }
 
 .lottieAnimation :global(svg),
 .lottieAnimation :global(canvas) {
   width: 112% !important;
-
   height: 112% !important;
+  display: block;
 
   transform:
     translateY(2%)
@@ -373,42 +260,31 @@
   transform-origin: center center;
 }
 
-/* ─────────────────────────────────────────────────────────────────────────────
+/* =============================================================================
    CTA
-───────────────────────────────────────────────────────────────────────────── */
+============================================================================= */
 
 .ctaRow {
   display: flex;
-
   flex-wrap: nowrap;
-
   gap: 10px;
-
   align-items: center;
-
   margin-top: 6px;
 }
 
 .btnPrimary,
 .btnGhost {
   display: inline-flex;
-
   align-items: center;
-
   justify-content: center;
 
   min-height: 46px;
-
   padding: 0 18px;
-
   border-radius: 999px;
 
   font-size: 0.9rem;
-
   font-weight: 700;
-
   text-decoration: none;
-
   white-space: nowrap;
 
   transition:
@@ -420,56 +296,35 @@
 
 .btnPrimary {
   border: none;
-
-  color:
-    var(--ww-btn-primary-text);
-
-  background:
-    var(--ww-btn-primary-bg);
-
-  box-shadow:
-    0 4px 14px
-    rgba(63, 55, 201, 0.28);
+  color: var(--ot-cta-text, #ffffff);
+  background: var(--ot-cta-bg, #3f37c9);
 }
 
 .btnPrimary:hover {
-  background:
-    var(--ww-btn-primary-hover);
-
-  transform:
-    translateY(-1px);
+  background: var(--ot-cta-hover-bg, #3530b0);
 }
 
 .btnGhost {
-  background:
-    var(--ww-btn-ghost-bg);
-
-  color:
-    var(--ww-btn-ghost-color);
-
-  border:
-    1.5px solid
-    var(--ww-btn-ghost-border);
+  background: var(--ot-surface, #ffffff);
+  color: var(--color-text, #111111);
+  border: 1.5px solid var(--color-border-strong, rgba(0, 0, 0, 0.18));
 }
 
 .btnGhost:hover {
-  background:
-    var(--ww-btn-ghost-hover);
-
-  transform:
-    translateY(-1px);
+  background: var(
+    --ot-surface-alt,
+    rgba(0, 0, 0, 0.04)
+  );
 }
 
-/* ─────────────────────────────────────────────────────────────────────────────
+/* =============================================================================
    RESPONSIVE
-───────────────────────────────────────────────────────────────────────────── */
+============================================================================= */
 
 @media (max-width: 899px) {
   .missionStage {
     grid-template-columns: 1fr;
-
-    gap:
-      clamp(1.6rem, 4vw, 2.4rem);
+    gap: clamp(1.6rem, 4vw, 2.4rem);
   }
 
   .missionVisual {
@@ -477,55 +332,61 @@
   }
 
   .lottieWrap {
-    width:
-      min(320px, 100%);
+    width: min(320px, 100%);
   }
 }
 
 @media (max-width: 640px) {
   .root {
-    padding:
-      0
-      1.2rem
-      clamp(3rem, 8vw, 4.5rem);
+    padding-top: 0;
+    padding-inline: 0.85rem;
+    padding-bottom: var(--ot-section-bottom);
   }
 
   .sectionTitle {
-    font-size:
-      clamp(2rem, 9vw, 2.8rem);
-
+    font-size: clamp(2rem, 9vw, 2.8rem);
     letter-spacing: -0.03em;
   }
 
   .missionCopyP {
     font-size: 0.97rem;
-
     line-height: 1.76;
   }
 
   .btnPrimary,
   .btnGhost {
     min-height: 44px;
-
     font-size: 0.82rem;
-
     padding: 0 14px;
   }
 
   .lottieWrap {
-    width:
-      min(280px, 100%);
+    width: min(280px, 100%);
   }
 }
 
-/* ─────────────────────────────────────────────────────────────────────────────
+/* =============================================================================
    REDUCED MOTION
-───────────────────────────────────────────────────────────────────────────── */
+============================================================================= */
 
 @media (prefers-reduced-motion: reduce) {
+  .orbA,
+  .orbB,
   .btnPrimary,
   .btnGhost,
   .missionStrongAccent {
     transition: none;
+    animation: none;
+  }
+
+  .lottieAnimation {
+    transform: scale(1.02);
+  }
+
+  .lottieAnimation :global(svg),
+  .lottieAnimation :global(canvas) {
+    transform:
+      translateY(0%)
+      scale(1.02);
   }
 }

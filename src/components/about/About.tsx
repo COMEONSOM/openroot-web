@@ -14,22 +14,22 @@ import {
 import xAnimation from "../../animations/about.json";
 
 /* =========================================================
-   WHO WE ARE
+   ABOUT
 ========================================================= */
 
-function WhoWeAre() {
+function About() {
   return (
     <motion.section
-      className={styles.whoSection}
+      className={styles.aboutSection}
       variants={fadeIn}
       initial="hidden"
       whileInView="visible"
       viewport={VP}
-      aria-labelledby="who-we-are-heading"
+      aria-labelledby="about-heading"
     >
-      <div className={styles.whoContainer}>
+      <div className={styles.aboutContainer}>
         <motion.div
-          className={styles.whoGrid}
+          className={styles.aboutGrid}
           variants={stagger()}
           initial="hidden"
           whileInView="visible"
@@ -40,17 +40,17 @@ function WhoWeAre() {
           ================================================= */}
 
           <motion.div
-            className={styles.whoContent}
+            className={styles.aboutContent}
             variants={fadeUp}
           >
             <h2
-              id="who-we-are-heading"
-              className={styles.whoTitle}
+              id="about-heading"
+              className={styles.aboutTitle}
             >
               About
             </h2>
 
-            <p className={styles.whoLead}>
+            <p className={styles.aboutLead}>
               Openroot Systems is a registered
               MSME under the Government of India
               with UDYAM Registration Number
@@ -60,7 +60,7 @@ function WhoWeAre() {
               (NCS) portal.
             </p>
 
-            <div className={styles.whoBody}>
+            <div className={styles.aboutBody}>
               <p>
                 We build
                 <strong>
@@ -118,7 +118,6 @@ function WhoWeAre() {
                   loading="lazy"
                 />
               </div>
-              
             </div>
           </motion.div>
 
@@ -127,7 +126,7 @@ function WhoWeAre() {
           ================================================= */}
 
           <motion.div
-            className={styles.whoVisual}
+            className={styles.aboutVisual}
             variants={fadeUp}
           >
             <div className={styles.visualFrame}>
@@ -145,4 +144,4 @@ function WhoWeAre() {
   );
 }
 
-export default memo(WhoWeAre);
+export default memo(About);

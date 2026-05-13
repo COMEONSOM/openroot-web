@@ -1,54 +1,57 @@
-.whoSection {
+/* =========================================================
+   ABOUT
+   GLOBAL-ALIGNED • CLEAN • PRODUCTION READY
+========================================================= */
+
+.aboutSection {
   position: relative;
   overflow: hidden;
-
-  padding:
-    0
-    clamp(1.25rem, 4vw, 3rem)
-    clamp(4rem, 8vw, 6rem);
-
   isolation: isolate;
 
-  background:
-  radial-gradient(
-    circle at top left,
-    rgba(88, 101, 242, 0.07) 0%,
-    transparent 34%
-  ),
-  radial-gradient(
-    circle at bottom right,
-    rgba(88, 101, 242, 0.05) 0%,
-    transparent 30%
-  ),
-  var(--ww-section-bg);
+  /* Shared global page rhythm */
+  padding-top: 0;
+  padding-inline: var(--ot-page-inline);
+  padding-bottom: var(--ot-section-bottom);
+
+  /* Match navbar / services exactly */
+  background: var(--ot-section-bg);
 
   transition:
     background 0.35s ease,
     color 0.35s ease;
 }
 
-.whoContainer {
-  width: min(100%, 1140px);
+/* =========================================================
+   INNER WRAPPER
+========================================================= */
+
+.aboutContainer {
+  width: 100%;
+  max-width: var(--ot-content-max);
   margin-inline: auto;
 }
 
-.whoGrid {
-  display: grid;
+/* =========================================================
+   MAIN GRID
+========================================================= */
 
+.aboutGrid {
+  display: grid;
   grid-template-columns:
     minmax(0, 1.08fr)
     minmax(300px, 0.92fr);
-
   gap: clamp(2rem, 4.5vw, 4.5rem);
-
   align-items: start;
 }
 
-.whoContent {
+/* =========================================================
+   LEFT CONTENT
+========================================================= */
+
+.aboutContent {
   display: flex;
   flex-direction: column;
   gap: 1.25rem;
-
   min-width: 0;
 }
 
@@ -56,19 +59,15 @@
    TITLE
 ========================================================= */
 
-.whoTitle {
+.aboutTitle {
   margin: 0;
-
   max-width: 12ch;
 
   font-size: clamp(2.3rem, 5vw, 4.4rem);
-
   line-height: 0.96;
-
   letter-spacing: -0.065em;
 
   color: var(--color-text, #111111);
-
   text-wrap: balance;
 }
 
@@ -76,13 +75,11 @@
    BODY
 ========================================================= */
 
-.whoLead {
+.aboutLead {
   margin: 0;
-
   max-width: 58ch;
 
   font-size: 1.03rem;
-
   line-height: 1.85;
 
   color: var(
@@ -91,22 +88,18 @@
   );
 }
 
-.whoBody {
+.aboutBody {
   display: flex;
   flex-direction: column;
-
   gap: 0.95rem;
-
   max-width: 64ch;
 }
 
-.whoBody p {
+.aboutBody p {
   margin: 0;
 
   font-size: 1rem;
-
   line-height: 1.9;
-
   text-align: justify;
 
   color: var(
@@ -115,7 +108,7 @@
   );
 }
 
-.whoBody strong {
+.aboutBody strong {
   color: var(--color-text, #111111);
 }
 
@@ -125,45 +118,32 @@
 
 .certificateGrid {
   display: flex;
-
   gap: 1rem;
-
   margin-top: 0.45rem;
-
   min-width: 0;
 }
 
 .certificateCard {
   position: relative;
-
   flex: 1;
-
   min-width: 0;
   aspect-ratio: 16 / 9;
 
   overflow: hidden;
-
   border-radius: 24px;
 
-  background:
-    rgba(255,255,255,0.04);
+  background: rgba(255, 255, 255, 0.04);
 
-  border:
-    1px solid rgba(120,120,140,0.12);
+  border: 1px solid rgba(120, 120, 140, 0.12);
 
-  box-shadow:
-    0 10px 28px rgba(0,0,0,0.08);
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.08);
 }
 
 .certificateImage {
   width: 100%;
-
   height: auto;
-
   display: block;
-
   object-fit: cover;
-
   aspect-ratio: 16 / 9;
 }
 
@@ -171,25 +151,20 @@
    RIGHT VISUAL
 ========================================================= */
 
-.whoVisual {
+.aboutVisual {
   display: flex;
-
   justify-content: center;
-
   padding-top: 0.4rem;
 }
 
 .visualFrame {
   width: min(100%, 390px);
-
   aspect-ratio: 1 / 1;
 
   overflow: hidden;
-
   border-radius: 30px;
 
   display: grid;
-
   place-items: center;
 
   position: relative;
@@ -197,26 +172,24 @@
   background:
     radial-gradient(
       circle at 50% 35%,
-      rgba(67,97,238,0.16) 0%,
+      rgba(67, 97, 238, 0.16) 0%,
       transparent 42%
     ),
     linear-gradient(
       180deg,
-      rgba(36,36,36,0.96),
-      rgba(10,10,10,1)
+      rgba(36, 36, 36, 0.96),
+      rgba(10, 10, 10, 1)
     );
 
-  border:
-    1px solid rgba(255,255,255,0.08);
+  border: 1px solid rgba(255, 255, 255, 0.08);
 
   box-shadow:
-    inset 0 1px 0 rgba(255,255,255,0.05),
-    0 18px 42px rgba(0,0,0,0.24);
+    inset 0 1px 0 rgba(255, 255, 255, 0.05),
+    0 18px 42px rgba(0, 0, 0, 0.24);
 }
 
 .visualAnimation {
   width: 118% !important;
-
   height: 118% !important;
 
   transform:
@@ -224,7 +197,6 @@
     scale(1.08);
 
   transform-origin: center center;
-
   display: block;
 }
 
@@ -233,15 +205,15 @@
 ========================================================= */
 
 @media (max-width: 991px) {
-  .whoGrid {
+  .aboutGrid {
     grid-template-columns: 1fr;
   }
 
-  .whoVisual {
+  .aboutVisual {
     justify-content: flex-start;
   }
 
-  .whoTitle {
+  .aboutTitle {
     max-width: 100%;
   }
 
@@ -255,14 +227,13 @@
 ========================================================= */
 
 @media (max-width: 767px) {
-  .whoSection {
-    padding:
-      0
-      1.2rem
-      clamp(3rem, 8vw, 4rem);
+  .aboutSection {
+    padding-top: 0;
+    padding-inline: 0.85rem;
+    padding-bottom: var(--ot-section-bottom);
   }
 
-  .whoBody p {
+  .aboutBody p {
     text-align: left;
   }
 
@@ -270,15 +241,10 @@
     width: 100%;
   }
 
-  /* horizontal image scrolling */
-
   .certificateGrid {
     overflow-x: auto;
-
     padding-bottom: 0.35rem;
-
     scrollbar-width: none;
-
     -ms-overflow-style: none;
   }
 
@@ -288,7 +254,6 @@
 
   .certificateCard {
     flex: 0 0 88%;
-
     aspect-ratio: 16 / 9;
   }
 }
@@ -300,7 +265,6 @@
 @media (prefers-reduced-motion: reduce) {
   .visualAnimation {
     transition: none !important;
-
     transform:
       translateY(0%)
       scale(1.02);
