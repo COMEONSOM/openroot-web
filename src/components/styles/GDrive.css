@@ -1,6 +1,6 @@
 /* =============================================================================
    WEB EXTENSION SECTION
-   Minimal • Architectural • Global Styling Driven
+   Minimal • Architectural • Responsive Navigation
 ============================================================================= */
 
 #web-extension-section {
@@ -50,35 +50,6 @@
     clamp(2rem, 4vw, 3rem);
 }
 
-#web-extension-section .we-eyebrow {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-
-  margin-bottom: 1rem;
-
-  padding:
-    0.46rem
-    0.9rem;
-
-  border-radius: 999px;
-
-  background:
-    rgba(88, 101, 242, 0.06);
-
-  border:
-    1px solid rgba(88, 101, 242, 0.12);
-
-  color:
-    var(--ot-brand);
-
-  font-size: 0.72rem;
-  font-weight: 800;
-
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-}
-
 #web-extension-section .we-title {
   margin-top: 20px;
 
@@ -113,7 +84,7 @@
 }
 
 /* =============================================================================
-   GRID
+   MAIN GRID
 ============================================================================= */
 
 #web-extension-section .we-grid {
@@ -146,7 +117,7 @@
 }
 
 /* =============================================================================
-   STEP RAIL
+   LEFT PANEL
 ============================================================================= */
 
 #web-extension-section .we-step-rail {
@@ -169,7 +140,7 @@
 
   gap: 0.7rem;
 
-  padding-bottom: 0.4rem;
+  padding-bottom: 0.5rem;
 }
 
 #web-extension-section .we-progress-top {
@@ -243,8 +214,7 @@
 
   gap: 0.95rem;
 
-  padding:
-    1rem;
+  padding: 1rem;
 
   border-radius:
     calc(var(--ot-radius-md) + 2px);
@@ -326,24 +296,23 @@
   margin: 0;
 
   font-size:
-    clamp(0.94rem, 1.3vw, 1rem);
+    clamp(0.95rem, 1.3vw, 1rem);
 
   font-weight: 800;
 
-  line-height: 1.42;
+  line-height: 1.5;
 
   color:
     var(--color-text);
 }
 
-#web-extension-section .we-step-content p,
 #web-extension-section .we-tutorial-copy p {
   margin:
-    0.42rem 0 0;
+    0.45rem 0 0;
 
   font-size: 0.86rem;
 
-  line-height: 1.68;
+  line-height: 1.7;
 
   color:
     var(--color-text-muted);
@@ -361,16 +330,16 @@
   border-top:
     1px solid rgba(120,120,140,0.1);
 
-  font-size: 0.84rem;
+  font-size: 0.9rem;
 
-  line-height: 1.7;
+  line-height: 1.8;
 
   color:
     var(--color-text-muted);
 }
 
 /* =============================================================================
-   ACTION CARD
+   RIGHT PANEL
 ============================================================================= */
 
 #web-extension-section .we-action-card {
@@ -392,7 +361,7 @@
   align-items: center;
   justify-content: space-between;
 
-  gap: 0.8rem;
+  gap: 1rem;
 
   margin-bottom: 1rem;
 }
@@ -403,8 +372,8 @@
   justify-content: center;
 
   padding:
-    0.45rem
-    0.82rem;
+    0.48rem
+    0.9rem;
 
   border-radius: 999px;
 
@@ -417,7 +386,7 @@
   color:
     var(--ot-brand);
 
-  font-size: 0.68rem;
+  font-size: 0.72rem;
   font-weight: 800;
 
   letter-spacing: 0.08em;
@@ -425,7 +394,7 @@
 }
 
 #web-extension-section .we-step-counter {
-  font-size: 0.72rem;
+  font-size: 0.76rem;
   font-weight: 700;
 
   letter-spacing: 0.08em;
@@ -494,68 +463,28 @@
 #web-extension-section .we-content-block {
   display: flex;
   flex-direction: column;
+
+  align-items: center;
+
+  text-align: center;
+
+  padding-top: 1.2rem;
 }
 
-#web-extension-section .we-action-title {
-  margin:
-    1.5rem 0 0;
+#web-extension-section .we-main-description {
+  margin: 0;
+
+  max-width: 58ch;
 
   font-size:
-    clamp(1.8rem, 3vw, 3rem);
+    clamp(1rem, 1.4vw, 1.12rem);
 
-  font-weight: 900;
+  font-weight: 500;
 
-  line-height: 1;
-
-  letter-spacing: -0.05em;
+  line-height: 1.8;
 
   color:
     var(--color-text);
-
-  text-wrap: balance;
-}
-
-#web-extension-section .we-action-text {
-  margin:
-    1rem 0 0;
-
-  max-width: 62ch;
-
-  font-size:
-    clamp(0.95rem, 1.4vw, 1rem);
-
-  line-height: 1.9;
-
-  color:
-    var(--color-text-muted);
-}
-
-/* =============================================================================
-   INFO BOX
-============================================================================= */
-
-#web-extension-section .we-mini-box {
-  margin-top: 1rem;
-
-  padding:
-    1rem
-    1.1rem;
-
-  border-radius:
-    calc(var(--ot-radius-md) + 2px);
-
-  background:
-    rgba(88, 101, 242, 0.03);
-
-  border:
-    1px solid rgba(88, 101, 242, 0.08);
-
-  color:
-    var(--color-text-muted);
-
-  font-size: 0.92rem;
-
-  line-height: 1.75;
 }
 
 /* =============================================================================
@@ -565,6 +494,7 @@
 #web-extension-section .we-toolbar {
   display: flex;
   align-items: center;
+  justify-content: center;
 
   gap: 0.85rem;
 
@@ -574,10 +504,19 @@
 }
 
 /* =============================================================================
+   MOBILE NAVIGATION
+============================================================================= */
+
+#web-extension-section .we-mobile-nav {
+  display: none;
+}
+
+/* =============================================================================
    BUTTONS
 ============================================================================= */
 
-#web-extension-section .we-button {
+#web-extension-section .we-button,
+#web-extension-section .we-secondary-button {
   min-height: 48px;
 
   display: inline-flex;
@@ -588,10 +527,24 @@
     0.9rem
     1.25rem;
 
-  border: none;
-
   border-radius:
     calc(var(--ot-radius-md) + 2px);
+
+  font-size: 0.9rem;
+  font-weight: 700;
+
+  cursor: pointer;
+
+  transition:
+    background 0.18s ease,
+    border-color 0.18s ease,
+    opacity 0.18s ease;
+}
+
+/* PRIMARY */
+
+#web-extension-section .we-button {
+  border: none;
 
   background:
     linear-gradient(
@@ -601,31 +554,66 @@
     );
 
   color: #ffffff;
-
-  font-size: 0.9rem;
-  font-weight: 700;
-
-  cursor: pointer;
-
-  transition:
-    opacity 0.18s ease;
 }
 
 #web-extension-section .we-button:hover {
   opacity: 0.96;
 }
 
+/* SECONDARY */
+
+#web-extension-section .we-secondary-button {
+  border:
+    1px solid #111111;
+
+  background:
+    var(--ot-card-bg);
+
+  color:
+    var(--color-text);
+}
+
+#web-extension-section .we-secondary-button:hover {
+  background:
+    rgba(88, 101, 242, 0.03);
+}
+
 /* =============================================================================
-   TABLET
+   TABLET / SMALLER SCREENS
 ============================================================================= */
 
 @media (max-width: 980px) {
+
   #web-extension-section .we-grid {
     grid-template-columns: 1fr;
   }
 
+  /* Hide left navigation rail */
+
   #web-extension-section .we-step-rail {
     display: none;
+  }
+
+  /* Show mobile navigation */
+
+  #web-extension-section .we-mobile-nav {
+    display: flex;
+
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 1rem;
+
+    margin-top: 1.5rem;
+
+    padding-top: 1.25rem;
+
+    border-top:
+      1px solid rgba(120,120,140,0.1);
+  }
+
+  #web-extension-section .we-mobile-nav:has(button:only-child) {
+    justify-content: flex-end;
   }
 }
 
@@ -634,6 +622,7 @@
 ============================================================================= */
 
 @media (max-width: 640px) {
+
   #web-extension-section .we-action-card {
     padding: 1rem;
   }
@@ -642,22 +631,18 @@
     min-height: 220px;
   }
 
-  #web-extension-section .we-action-title {
-    font-size:
-      clamp(1.6rem, 7vw, 2.2rem);
+  #web-extension-section .we-main-description {
+    font-size: 1rem;
+
+    line-height: 1.85;
   }
 
-  #web-extension-section .we-action-text {
-    line-height: 1.8;
+  #web-extension-section .we-mobile-nav {
+    flex-wrap: wrap;
   }
 
-  #web-extension-section .we-toolbar {
-    flex-direction: column;
-
-    align-items: stretch;
-  }
-
-  #web-extension-section .we-button {
-    width: 100%;
+  #web-extension-section .we-button,
+  #web-extension-section .we-secondary-button {
+    flex: 1;
   }
 }

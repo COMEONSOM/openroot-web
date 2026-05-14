@@ -135,11 +135,9 @@ function safeParseFloat(value: string): number {
  * Prevents script injection and limits string length.
  */
 function sanitizeNumericInput(raw: string): string {
-  // Allow digits + at most one leading minus for potential negative display,
-  // then strip to digits + dot only (GPA is always non-negative).
   return raw
     .replace(/[^0-9.]/g, "")
-    .replace(/(\..*)\./g, "$1") // keep only the first decimal point
+    .replace(/(\..*)\./g, "$1")
     .slice(0, MAX_INPUT_LENGTH);
 }
 
@@ -194,7 +192,6 @@ function calcDGPA(
 ): ResultState {
   const { showYg1, showYg2, showYg3, showYg4 } = getDGPAVisibility(courseType);
 
-  // Validate only the fields that are visible/required for this course type
   const requiredFields: Array<{ label: string; value: string; show: boolean }> = [
     { label: "YGPA 1", value: yg1, show: showYg1 },
     { label: "YGPA 2", value: yg2, show: showYg2 },
@@ -213,7 +210,6 @@ function calcDGPA(
     }
   }
 
-  // Safe to parse now — visible fields are guaranteed valid
   const y = [yg1, yg2, yg3, yg4].map((v) => {
     const n = safeParseFloat(v);
     return Number.isNaN(n) ? 0 : n;
@@ -276,7 +272,6 @@ function calcTillSem(
   const startSem = studentType === "lateral" ? LATERAL_START_SEM : REGULAR_START_SEM;
   const selected = Number(selectedSemStr);
 
-  // Guard against non-integer or out-of-range semester values.
   if (!Number.isInteger(selected) || selected < startSem || selected > MAX_SEM) {
     return { data: null, error: "Invalid semester selected." };
   }
@@ -334,7 +329,6 @@ function getDGPAVisibility(courseType: CourseType): DGPAFieldVisibility {
 }
 
 // ─── Custom Hook: useTillSemester ─────────────────────────────────────────────
-// Extracted so the parent component doesn't carry this complexity inline.
 
 interface TillSemesterHook {
   studentType: StudentType;
@@ -363,7 +357,6 @@ function useTillSemester(): TillSemesterHook {
     return Array.from({ length: MAX_SEM - start + 1 }, (_, i) => String(start + i));
   }, [studentType]);
 
-  // Full reset when student type changes.
   const setStudentType = useCallback((v: StudentType) => {
     setStudentTypeRaw(v);
     setSelectedSem("");
@@ -372,8 +365,6 @@ function useTillSemester(): TillSemesterHook {
     setTillSemError("");
   }, []);
 
-  // Rebuild semesterValues when the target semester changes.
-  // Preserves already-entered values so the user doesn't lose work.
   useEffect(() => {
     if (!selectedSemester) {
       setSemesterValues({});
@@ -394,7 +385,6 @@ function useTillSemester(): TillSemesterHook {
     });
     setTillSemData(null);
     setTillSemError("");
-    // `semesterValues` intentionally omitted — only re-run on selection/type change.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedSemester, studentType]);
 
@@ -436,7 +426,6 @@ function useTillSemester(): TillSemesterHook {
 }
 
 // ─── Shared Style Tokens ──────────────────────────────────────────────────────
-// Centralised so a single change propagates everywhere.
 
 const FIELD_STYLE: React.CSSProperties = { width: "100%", height: 48, borderRadius: 14 };
 const CARD_STYLE: React.CSSProperties = { borderRadius: 22 };
@@ -452,7 +441,6 @@ const TWO_COL_GRID: React.CSSProperties = {
 };
 
 // ─── Reusable Sub-components ──────────────────────────────────────────────────
-// memo() prevents re-renders when parent state unrelated to props changes.
 
 const ResultDisplay = memo(({ result }: { result: ResultState }) => {
   if (!result.text) return null;
@@ -571,7 +559,6 @@ const Makaut: React.FC = () => {
     } else if (courseType === "3l") {
       setYg1("");
     }
-    // "4" → all fields visible; nothing to clear.
   }, [courseType]);
 
   // ─── Mobile-menu dismiss ────────────────────────────────────────────────────
@@ -645,7 +632,7 @@ const Makaut: React.FC = () => {
     setCgpaResult(calcCGPA(cgpaCP, cgpaC));
   }, [cgpaCP, cgpaC]);
 
-  // ─── Tool selector cards (stable — defined outside render loop) ─────────────
+  // ─── Tool selector cards ────────────────────────────────────────────────────
   const TOOL_CARDS: { id: ToolId; img: string; alt: string }[] = useMemo(
     () => [
       { id: "sgpaTool", img: "./assets-makaut/sgpa.avif", alt: "SGPA calculator icon" },
@@ -663,17 +650,10 @@ const Makaut: React.FC = () => {
     ? Number(tillSem.selectedSemester) - tillSemStartSem + 1
     : 0;
 
-  // ──────────────────────────────────────────────────────────────────────────────
-  // RENDER
-  // ──────────────────────────────────────────────────────────────────────────────
   return (
-    <div className="app-wrapper" style={{ minHeight: "100vh" }}>
-      <script type="application/ld+json">
-        {JSON.stringify(SEO_JSON_LD)}
-      </script>
-      <script type="application/ld+json">
-        {JSON.stringify(FAQ_JSON_LD)}
-      </script>
+    <div className="makaut" style={{ minHeight: "100vh" }}>
+      <script type="application/ld+json">{JSON.stringify(SEO_JSON_LD)}</script>
+      <script type="application/ld+json">{JSON.stringify(FAQ_JSON_LD)}</script>
 
       {/* ════════════════════ HEADER ════════════════════ */}
       <header className="site-header" role="banner">
@@ -693,7 +673,7 @@ const Makaut: React.FC = () => {
           />
         </div>
 
-        <div  className="logo-text" >
+        <div className="logo-text">
           <h1>
             SGPA, YGPA, DGPA, CGPA, percentage conversion, and semester-wise grade calculation
             for MAKAUT students.
@@ -716,11 +696,12 @@ const Makaut: React.FC = () => {
         </button>
 
         <div ref={mobileMenuRef} className={`mobile-menu${mobileMenuOpen ? " show" : ""}`}>
-          <button className="btn btn-primary w-100" type="button" onClick={showCalculations}>
+          <button className="btn calc-btn w-100" type="button" onClick={showCalculations}>
             Show Calculations
           </button>
         </div>
       </header>
+
       <HiddenSeoContent />
 
       {/* ════════════════════ FORMULA MODAL ════════════════════ */}
@@ -767,36 +748,37 @@ const Makaut: React.FC = () => {
                 Credit Index = Sum of Credit Points.
               </p>
 
-              {/* Student type */}
-              <div className="form-group">
-                <label htmlFor="studentType">Student Type</label>
-                <select
-                  id="studentType"
-                  value={tillSem.studentType}
-                  style={FIELD_STYLE}
-                  onChange={(e) => tillSem.setStudentType(e.target.value as StudentType)}
-                >
-                  <option value="regular">Regular Student</option>
-                  <option value="lateral">Lateral Entry Student</option>
-                </select>
-              </div>
+              {/* Two dropdowns side by side on larger screens */}
+              <div className="semester-grid">
+                <div className="form-group">
+                  <label htmlFor="studentType">Student Type</label>
+                  <select
+                    id="studentType"
+                    value={tillSem.studentType}
+                    style={FIELD_STYLE}
+                    onChange={(e) => tillSem.setStudentType(e.target.value as StudentType)}
+                  >
+                    <option value="regular">Regular Student</option>
+                    <option value="lateral">Lateral Entry Student</option>
+                  </select>
+                </div>
 
-              {/* Semester selector */}
-              <div className="form-group">
-                <label htmlFor="selectedSemester">Select Semester</label>
-                <select
-                  id="selectedSemester"
-                  value={tillSem.selectedSemester}
-                  style={FIELD_STYLE}
-                  onChange={(e) => tillSem.handleSelectSem(e.target.value)}
-                >
-                  <option value="">-- Select --</option>
-                  {tillSem.semesterOptions.map((sem) => (
-                    <option key={sem} value={sem}>
-                      {sem} Semester
-                    </option>
-                  ))}
-                </select>
+                <div className="form-group">
+                  <label htmlFor="selectedSemester">Select Semester</label>
+                  <select
+                    id="selectedSemester"
+                    value={tillSem.selectedSemester}
+                    style={FIELD_STYLE}
+                    onChange={(e) => tillSem.handleSelectSem(e.target.value)}
+                  >
+                    <option value="">-- Select --</option>
+                    {tillSem.semesterOptions.map((sem) => (
+                      <option key={sem} value={sem}>
+                        {sem} Semester
+                      </option>
+                    ))}
+                  </select>
+                </div>
               </div>
 
               {/* Per-semester credit inputs */}
@@ -961,7 +943,6 @@ const Makaut: React.FC = () => {
                 subtitle="Select course type and yearly GPA."
               />
               <div className="tool-body" style={TWO_COL_GRID}>
-                {/* Course type — full-width row */}
                 <div className="form-group" style={{ gridColumn: "1 / -1" }}>
                   <label htmlFor="courseType">Course Type</label>
                   <select
