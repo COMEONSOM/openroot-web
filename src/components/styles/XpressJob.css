@@ -1,66 +1,70 @@
 /* ============================================================
-   RESOURCEHUB.CSS — scoped to .resource-hub
-   Matches ResourceHub.tsx v2.0.0
+   XPRESSJOB.CSS — scoped to .xpressjob
+   Matches XpressJob.tsx v2.0.0
    Single breakpoint: 900px (≤899 mobile, ≥900 desktop)
    ============================================================ */
 
 
+
 /* ── DESIGN TOKENS ─────────────────────────────────────────── */
-.resource-hub {
-  --rh-bg-grad:    linear-gradient(135deg, #200202 0%, #0b0040 40%, #010003 100%);
-  --rh-bg-radial:  radial-gradient(circle at 30% 30%, #e7dd17 0%, #65f349 25%, #366fea 55%, #0c0c04 100%);
+.xpressjob {
+  --xj-bg-grad:    linear-gradient(135deg, #200202 0%, #0b0040 40%, #010003 100%);
+  --xj-bg-radial:  radial-gradient(circle at 30% 30%, #e7dd17 0%, #65f349 25%, #366fea 55%, #0c0c04 100%);
 
-  --rh-text:       #f0f0f0;
-  --rh-text-muted: #a0a0a0;
-  --rh-white:      #ffffff;
+  --xj-text:       #f0f0f0;
+  --xj-text-muted: #a0a0a0;
+  --xj-white:      #ffffff;
 
-  --rh-cyan:       #00f5ff;
-  --rh-purple:     #bf00ff;
-  --rh-pink:       #ff006e;
-  --rh-green:      #00ff88;
-  --rh-blue:       #3b82f6;
-  --rh-accent:     #60a5fa;
+  --xj-cyan:       #00f5ff;
+  --xj-purple:     #bf00ff;
+  --xj-pink:       #ff006e;
+  --xj-green:      #00ff88;
+  --xj-blue:       #3b82f6;
+  --xj-accent:     #60a5fa;
 
-  --rh-glass-bg:        rgba(255,255,255,0.03);
-  --rh-glass-border:    rgba(255,255,255,0.08);
-  --rh-glass-highlight: rgba(255,255,255,0.15);
+  --xj-glass-bg:        rgba(255,255,255,0.03);
+  --xj-glass-border:    rgba(255,255,255,0.08);
+  --xj-glass-highlight: rgba(255,255,255,0.15);
 
-  --rh-card-bg:     rgba(32,32,36,0.14);
-  --rh-card-border: rgba(255,255,255,0.12);
-  --rh-card-radius: 12px;
-  --rh-card-pad:    0.4rem;
+  --xj-card-bg:     rgba(32,32,36,0.14);
+  --xj-card-border: rgba(255,255,255,0.12);
+  --xj-card-radius: 12px;
+  --xj-card-pad:    0.4rem;
 
-  --rh-depth-1: 0 4px 20px rgba(0,0,0,0.3);
-  --rh-depth-2: 0 8px 40px rgba(0,0,0,0.4);
-  --rh-depth-3: 0 20px 60px rgba(0,0,0,0.5);
+  --xj-depth-1: 0 4px 20px rgba(0,0,0,0.3);
+  --xj-depth-2: 0 8px 40px rgba(0,0,0,0.4);
+  --xj-depth-3: 0 20px 60px rgba(0,0,0,0.5);
 
-  --rh-glow-cyan:   0 0 30px rgba(0,245,255,0.5);
-  --rh-glow-purple: 0 0 30px rgba(191,0,255,0.5);
-  --rh-glow-pink:   0 0 30px rgba(255,0,110,0.5);
+  --xj-glow-cyan:   0 0 30px rgba(0,245,255,0.5);
+  --xj-glow-purple: 0 0 30px rgba(191,0,255,0.5);
+  --xj-glow-pink:   0 0 30px rgba(255,0,110,0.5);
 
-  --rh-t-fast:   200ms;
-  --rh-t-smooth: 400ms;
-  --rh-t-slow:   800ms;
+  --xj-t-fast:   200ms;
+  --xj-t-smooth: 400ms;
+  --xj-t-slow:   800ms;
 
-  --rh-section-gap: 3.5rem;
-  --rh-font: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --xj-section-gap: 3.5rem;
+  --xj-font: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
 }
+
 
 
 /* ── ROOT WRAPPER ──────────────────────────────────────────── */
-.resource-hub {
+.xpressjob {
   position: relative;
   min-height: 100vh;
-  font-family: var(--rh-font);
-  color: var(--rh-white);
-  background: var(--rh-bg-radial), var(--rh-bg-grad);
+  font-family: var(--xj-font);
+  color: var(--xj-white);
+  background: var(--xj-bg-radial), var(--xj-bg-grad);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  overflow-x: hidden;
+  /* overflow-x:hidden removed — kills position:sticky/fixed on header.
+     Add overflow-x:hidden to html,body in your global CSS instead. */
 }
 
+
 /* Grid overlay */
-.resource-hub::before {
+.xpressjob::before {
   content: "";
   position: absolute;
   inset: 0;
@@ -74,13 +78,15 @@
   z-index: 0;
 }
 
+
 @media (max-width: 899px) {
-  .resource-hub::before { opacity: 0.05; }
+  .xpressjob::before { opacity: 0.05; }
 }
 
 
+
 /* ── AMBIENT ORBS ──────────────────────────────────────────── */
-.resource-hub .tech-orb {
+.xpressjob .xj-tech-orb {
   position: absolute;
   width: 150px;
   height: 150px;
@@ -92,34 +98,42 @@
   will-change: transform, opacity;
 }
 
-.resource-hub .tech-orb:nth-of-type(1) {
+
+.xpressjob .xj-tech-orb:nth-of-type(1) {
   top: 12%; left: 6%;
   background: radial-gradient(circle, rgba(102,0,255,0.22), transparent 70%);
 }
-.resource-hub .tech-orb:nth-of-type(2) {
+.xpressjob .xj-tech-orb:nth-of-type(2) {
   bottom: 8%; right: 18%;
   background: radial-gradient(circle, rgba(0,102,255,0.16), transparent 70%);
 }
-.resource-hub .tech-orb:nth-of-type(3) {
+.xpressjob .xj-tech-orb:nth-of-type(3) {
   top: 48%; right: 34%;
   background: radial-gradient(circle, rgba(180,0,255,0.12), transparent 70%);
 }
 
+
 @media (max-width: 899px) {
-  .resource-hub .tech-orb { display: none; }
+  .xpressjob .xj-tech-orb { display: none; }
 }
+
 
 
 /* ── SITE HEADER ───────────────────────────────────────────── */
 /*
-  isolation:auto — intentional.
-  isolation:isolate + backdrop-filter + position:sticky creates a triple
-  stacking context that traps position:fixed children in WebKit/Blink.
-  Keeping isolation:auto lets the dropdown's z-index work globally.
+  position:fixed — immune to ancestor overflow:hidden / backdrop-filter
+  stacking contexts. Avoids the WebKit/Blink trap where sticky +
+  backdrop-filter on the same element pins position:fixed children.
+
+  isolation:auto — intentional. isolation:isolate + backdrop-filter
+  creates a paint layer that traps absolute/fixed children in
+  WebKit/Blink. Keeping isolation:auto lets the dropdown z-index work.
 */
-.resource-hub .site-header {
-  position: sticky;
+.xpressjob .xj-site-header {
+  position: fixed;
   top: 0;
+  left: 0;
+  right: 0;
   z-index: 1000;
   isolation: auto;
   display: flex;
@@ -135,34 +149,38 @@
   border-bottom: none;
 }
 
+
 /* Animated gradient underline */
-.resource-hub .site-header::after {
+.xpressjob .xj-site-header::after {
   content: "";
   position: absolute;
   bottom: 0; left: 0; right: 0;
   height: 1px;
   background: linear-gradient(
-    90deg, transparent, var(--rh-cyan), var(--rh-purple), var(--rh-pink), transparent
+    90deg, transparent, var(--xj-cyan), var(--xj-purple), var(--xj-pink), transparent
   );
   background-size: 200% 100%;
-  animation: rh-header-glow 4s linear infinite;
+  animation: xj-header-glow 4s linear infinite;
 }
 
-@keyframes rh-header-glow {
+
+@keyframes xj-header-glow {
   0%   { background-position: 200% 0; }
   100% { background-position: -200% 0; }
 }
 
+
 @media (max-width: 899px) {
-  .resource-hub .site-header {
-    height: auto;
-    padding: 0.75rem 1rem;
+  .xpressjob .xj-site-header {
+    height: 62px;
+    padding: 0 1rem;
   }
 }
 
 
+
 /* ── LOGO ──────────────────────────────────────────────────── */
-.resource-hub .logo-wrapper {
+.xpressjob .xj-logo-wrapper {
   flex: 0 0 auto;
   display: flex;
   align-items: center;
@@ -171,33 +189,38 @@
   z-index: 1;
 }
 
-.resource-hub .site-logo {
+
+.xpressjob .xj-site-logo {
   width: 120px;
   height: auto;
 }
 
-.resource-hub .logo-text {
+
+.xpressjob .xj-logo-text {
   font-size: 1rem;
   font-weight: 700;
   letter-spacing: 2px;
   white-space: nowrap;
-  background: linear-gradient(135deg, var(--rh-cyan), var(--rh-purple), var(--rh-pink));
+  background: linear-gradient(135deg, var(--xj-cyan), var(--xj-purple), var(--xj-pink));
   background-size: 200% 200%;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
-  animation: rh-text-gradient 5s ease infinite;
+  animation: xj-text-gradient 5s ease infinite;
 }
 
-@keyframes rh-text-gradient {
+
+@keyframes xj-text-gradient {
   0%, 100% { background-position: 0% 50%; }
   50%       { background-position: 100% 50%; }
 }
 
+
 @media (max-width: 480px) {
-  .resource-hub .logo-text { display: none; }
-  .resource-hub .site-logo { width: 100px; }
+  .xpressjob .xj-logo-text { display: none; }
+  .xpressjob .xj-site-logo { width: 100px; }
 }
+
 
 
 /* ── NAVBAR ────────────────────────────────────────────────── */
@@ -206,7 +229,7 @@
   justify-content:flex-end — pins all children to the right edge.
   position:relative — anchors the dropdown (absolute/fixed aware).
 */
-.resource-hub .navbar {
+.xpressjob .xj-navbar {
   flex: 1 1 auto;
   display: flex;
   align-items: center;
@@ -216,40 +239,46 @@
 }
 
 
+
 /* ── DESKTOP NAV LINKS ─────────────────────────────────────── */
 /* Hidden by default — shown at ≥900px */
-.resource-hub .nav-links {
+.xpressjob .xj-nav-links {
   display: none;
   align-items: center;
   gap: 1.4rem;
 }
 
-.resource-hub .nav-links a {
+
+.xpressjob .xj-nav-links a {
   font-size: 0.95rem;
   font-weight: 500;
-  color: var(--rh-white);
+  color: var(--xj-white);
   text-decoration: none;
   position: relative;
-  transition: color var(--rh-t-fast) ease;
+  transition: color var(--xj-t-fast) ease;
 }
 
-.resource-hub .nav-links a::after {
+
+.xpressjob .xj-nav-links a::after {
   content: "";
   position: absolute;
   left: 0; bottom: -4px;
   width: 0; height: 2px;
-  background: var(--rh-cyan);
-  transition: width var(--rh-t-fast) ease;
+  background: var(--xj-cyan);
+  transition: width var(--xj-t-fast) ease;
 }
 
-.resource-hub .nav-links a:hover        { color: var(--rh-cyan); }
-.resource-hub .nav-links a:hover::after  { width: 100%; }
 
-.resource-hub .nav-links a:focus-visible {
-  outline: 2px solid var(--rh-cyan);
+.xpressjob .xj-nav-links a:hover        { color: var(--xj-cyan); }
+.xpressjob .xj-nav-links a:hover::after  { width: 100%; }
+
+
+.xpressjob .xj-nav-links a:focus-visible {
+  outline: 2px solid var(--xj-cyan);
   outline-offset: 3px;
   border-radius: 2px;
 }
+
 
 
 /* ── HAMBURGER BUTTON ──────────────────────────────────────── */
@@ -258,7 +287,7 @@
   button's border-radius so it never bleeds into the header.
   Hidden by default — shown at ≤899px.
 */
-.resource-hub .menu-toggle {
+.xpressjob .xj-menu-toggle {
   display: none;
   flex-direction: column;
   justify-content: center;
@@ -267,52 +296,57 @@
   width: 42px;
   height: 42px;
   padding: 0;
-  background: var(--rh-glass-bg);
-  border: 1px solid var(--rh-glass-border);
+  background: var(--xj-glass-bg);
+  border: 1px solid var(--xj-glass-border);
   border-radius: 12px;
   cursor: pointer;
   overflow: hidden;
   position: relative;
   transition:
-    box-shadow    var(--rh-t-fast) ease,
-    border-color  var(--rh-t-fast) ease;
+    box-shadow    var(--xj-t-fast) ease,
+    border-color  var(--xj-t-fast) ease;
 }
 
+
 /* Conic glow — only animates on hover/open to save GPU */
-.resource-hub .menu-toggle::before {
+.xpressjob .xj-menu-toggle::before {
   content: "";
   position: absolute;
   inset: -50%;
-  background: conic-gradient(from 0deg, transparent, var(--rh-cyan), transparent 30%);
+  background: conic-gradient(from 0deg, transparent, var(--xj-cyan), transparent 30%);
   opacity: 0;
   pointer-events: none;
   z-index: 0;
   animation: none;
-  transition: opacity var(--rh-t-fast);
+  transition: opacity var(--xj-t-fast);
 }
 
-.resource-hub .menu-toggle:hover::before,
-.resource-hub .menu-toggle.open::before {
+
+.xpressjob .xj-menu-toggle:hover::before,
+.xpressjob .xj-menu-toggle.xj-open::before {
   opacity: 1;
-  animation: rh-rotate-border 2s linear infinite;
+  animation: xj-rotate-border 2s linear infinite;
 }
 
-.resource-hub .menu-toggle:hover {
-  box-shadow: var(--rh-glow-cyan);
-  border-color: var(--rh-cyan);
+
+.xpressjob .xj-menu-toggle:hover {
+  box-shadow: var(--xj-glow-cyan);
+  border-color: var(--xj-cyan);
 }
 
-@keyframes rh-rotate-border {
+
+@keyframes xj-rotate-border {
   to { transform: rotate(360deg); }
 }
 
 
+
 /* ── HAMBURGER LINES — CSS X animation ────────────────────── */
-.resource-hub .menu-line {
+.xpressjob .xj-menu-line {
   display: block;
   width: 20px;
   height: 2px;
-  background: var(--rh-white);
+  background: var(--xj-white);
   border-radius: 2px;
   transform-origin: center;
   pointer-events: none;
@@ -323,9 +357,11 @@
     opacity    0.18s ease;
 }
 
-.resource-hub .menu-toggle.open .menu-line:nth-child(1) { transform: translateY(7px)  rotate(45deg);  }
-.resource-hub .menu-toggle.open .menu-line:nth-child(2) { opacity: 0; transform: scaleX(0);            }
-.resource-hub .menu-toggle.open .menu-line:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+.xpressjob .xj-menu-toggle.xj-open .xj-menu-line:nth-child(1) { transform: translateY(7px)  rotate(45deg);  }
+.xpressjob .xj-menu-toggle.xj-open .xj-menu-line:nth-child(2) { opacity: 0; transform: scaleX(0);            }
+.xpressjob .xj-menu-toggle.xj-open .xj-menu-line:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
 
 
 /* ── MOBILE DROPDOWN ───────────────────────────────────────── */
@@ -339,7 +375,7 @@
   NEVER use display:none — it kills CSS transitions.
   visibility + opacity + pointer-events handle show/hide instead.
 */
-.resource-hub .menu-dropdown {
+.xpressjob .xj-menu-dropdown {
   position: fixed;
   top: 72px;
   right: 1rem;
@@ -374,25 +410,28 @@
     visibility  0.22s ease;
 }
 
-/* Open state — React adds .open class */
-.resource-hub .menu-dropdown.open {
+
+/* Open state — React adds .xj-open class */
+.xpressjob .xj-menu-dropdown.xj-open {
   opacity: 1;
   visibility: visible;
   pointer-events: auto;
   transform: translateY(0) scale(1);
 }
 
-.resource-hub .menu-dropdown li {
+
+.xpressjob .xj-menu-dropdown li {
   margin: 0;
 }
 
-.resource-hub .menu-dropdown a {
+
+.xpressjob .xj-menu-dropdown a {
   display: flex;
   align-items: center;
   justify-content: center;
   min-height: 44px;
   padding: 0.5rem 0.75rem;
-  color: var(--rh-white);
+  color: var(--xj-white);
   text-decoration: none;
   font-weight: 500;
   font-size: 0.92rem;
@@ -407,81 +446,98 @@
     transform    0.18s ease;
 }
 
-.resource-hub .menu-dropdown a:hover {
-  color: var(--rh-cyan);
+
+.xpressjob .xj-menu-dropdown a:hover {
+  color: var(--xj-cyan);
   background: rgba(0,245,255,0.08);
   border-color: rgba(0,245,255,0.25);
   transform: translateX(3px);
 }
 
-.resource-hub .menu-dropdown a:focus-visible {
-  outline: 2px solid var(--rh-cyan);
+
+.xpressjob .xj-menu-dropdown a:focus-visible {
+  outline: 2px solid var(--xj-cyan);
   outline-offset: 2px;
   border-radius: 10px;
 }
+
 
 
 /* ── RESPONSIVE BREAKPOINTS (single source: 900px) ────────── */
 
 /* Mobile — ≤899px */
 @media (max-width: 899px) {
-  .resource-hub .nav-links   { display: none; }
-  .resource-hub .menu-toggle { display: flex; }
-  .resource-hub .menu-dropdown {
+  .xpressjob .xj-nav-links   { display: none; }
+  .xpressjob .xj-menu-toggle { display: flex; }
+  .xpressjob .xj-menu-dropdown {
     top: 62px;
     right: 0.75rem;
     width: 190px;
   }
-  .resource-hub .site-header{
-    max-height: 76px;
-  }
 }
+
 
 /* Desktop — ≥900px */
 @media (min-width: 900px) {
-  .resource-hub .nav-links   { display: flex; }
-  .resource-hub .menu-toggle { display: none; }
+  .xpressjob .xj-nav-links   { display: flex; }
+  .xpressjob .xj-menu-toggle { display: none; }
   /*
-    menu-dropdown intentionally NOT hidden with display:none here.
+    xj-menu-dropdown intentionally NOT hidden with display:none here.
     It's already invisible via visibility:hidden.
     display:none would break the transition on resize edge cases.
   */
 }
 
 
+
 /* ── MAIN CONTAINER ────────────────────────────────────────── */
-.resource-hub .container {
+/*
+  padding-top offsets fixed header height so first section
+  isn't hidden beneath the header bar.
+*/
+.xpressjob .xj-container {
   position: relative;
   z-index: 1;
   max-width: 1500px;
-  margin: 1.75rem auto;
-  padding: 0 1rem;
+  margin: 0 auto;
+  padding: calc(72px + 1.75rem) 1rem 0;
 }
+
+
+@media (max-width: 899px) {
+  .xpressjob .xj-container {
+    padding-top: calc(62px + 1.25rem);
+  }
+}
+
 
 
 /* ── SECTION ───────────────────────────────────────────────── */
-.resource-hub .section-container {
-  margin-bottom: var(--rh-section-gap);
+.xpressjob .xj-section-container {
+  margin-bottom: var(--xj-section-gap);
   scroll-margin-top: 6rem;
-  animation: rh-fade-in 220ms ease-in-out;
+  animation: xj-fade-in 220ms ease-in-out;
 }
 
-@keyframes rh-fade-in {
+
+@keyframes xj-fade-in {
   from { opacity: 0; transform: translateY(8px); }
   to   { opacity: 1; transform: translateY(0); }
 }
 
-.resource-hub .section-title {
+
+.xpressjob .xj-section-title {
   font-size: clamp(1.15rem, 2vw, 1.8rem);
-  color: var(--rh-white);
+  color: var(--xj-white);
   font-weight: 700;
   margin-bottom: 1rem;
   text-align: left;
 }
 
 
+
 /* ── CARD GRID ─────────────────────────────────────────────── */
-.resource-hub .card-grid {
+.xpressjob .xj-card-grid {
   display: grid;
   gap: 0.75rem;
   grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
@@ -489,31 +545,33 @@
   justify-items: center;
 }
 
+
 @media (min-width: 1200px) {
-  .resource-hub .card-grid { grid-template-columns: repeat(7, 1fr); gap: 1.25rem; }
+  .xpressjob .xj-card-grid { grid-template-columns: repeat(7, 1fr); gap: 1.25rem; }
 }
 @media (min-width: 1024px) and (max-width: 1199px) {
-  .resource-hub .card-grid { grid-template-columns: repeat(5, 1fr); }
+  .xpressjob .xj-card-grid { grid-template-columns: repeat(5, 1fr); }
 }
 @media (min-width: 768px) and (max-width: 1023px) {
-  .resource-hub .card-grid { grid-template-columns: repeat(4, 1fr); }
+  .xpressjob .xj-card-grid { grid-template-columns: repeat(4, 1fr); }
 }
 @media (max-width: 767px) {
-  .resource-hub .card-grid { grid-template-columns: repeat(3, 1fr); }
+  .xpressjob .xj-card-grid { grid-template-columns: repeat(3, 1fr); }
 }
 @media (max-width: 420px) {
-  .resource-hub .card-grid { grid-template-columns: repeat(2, 1fr); }
+  .xpressjob .xj-card-grid { grid-template-columns: repeat(2, 1fr); }
 }
+
 
 
 /* ── CARD ──────────────────────────────────────────────────── */
-.resource-hub .card {
+.xpressjob .xj-card {
   width: 100%;
   max-height: 120px;
   background: #34362c81;
-  border: 1px solid var(--rh-card-border);
-  border-radius: var(--rh-card-radius);
-  padding: var(--rh-card-pad);
+  border: 1px solid var(--xj-card-border);
+  border-radius: var(--xj-card-radius);
+  padding: var(--xj-card-pad);
   display: flex;
   flex-direction: column;
   align-items: stretch;
@@ -523,12 +581,13 @@
   transition: transform 220ms ease, box-shadow 220ms ease;
 }
 
-.resource-hub .job-card {
+
+.xpressjob .xj-job-card {
   width: 100%;
   max-height: 120px;
   background: #ffffff;
-  border: 1px solid var(--rh-card-border);
-  border-radius: var(--rh-card-radius);
+  border: 1px solid var(--xj-card-border);
+  border-radius: var(--xj-card-radius);
   padding: 5px;
   display: flex;
   flex-direction: column;
@@ -539,28 +598,32 @@
   transition: transform 220ms ease, box-shadow 220ms ease;
 }
 
+
 @media (hover: hover) and (pointer: fine) {
-  .resource-hub .card:hover,
-  .resource-hub .job-card:hover {
+  .xpressjob .xj-card:hover,
+  .xpressjob .xj-job-card:hover {
     transform: translateY(-6px);
     box-shadow: 0 12px 30px rgba(0,0,0,0.42);
-    border-color: var(--rh-accent);
+    border-color: var(--xj-accent);
   }
 }
 
-.resource-hub .card:focus-visible,
-.resource-hub .job-card:focus-visible {
-  outline: 2px solid var(--rh-cyan);
+
+.xpressjob .xj-card:focus-visible,
+.xpressjob .xj-job-card:focus-visible {
+  outline: 2px solid var(--xj-cyan);
   outline-offset: 2px;
 }
 
-.resource-hub .hidden {
+
+.xpressjob .xj-hidden {
   display: none !important;
 }
 
 
+
 /* ── IMAGE WRAPPER ─────────────────────────────────────────── */
-.resource-hub .img-wrapper {
+.xpressjob .xj-img-wrapper {
   margin-top: 0.4rem;
   height: 140px;
   display: flex;
@@ -572,7 +635,8 @@
   position: relative;
 }
 
-.resource-hub .img-wrapper img {
+
+.xpressjob .xj-img-wrapper img {
   width: 100%;
   height: 100%;
   object-fit: contain;
@@ -581,8 +645,9 @@
 }
 
 
+
 /* ── LIVE BADGE ────────────────────────────────────────────── */
-.resource-hub .live {
+.xpressjob .xj-live {
   position: absolute;
   top: 4px; left: 9px;
   padding: 4px 10px;
@@ -591,14 +656,15 @@
   font-size: 0.65rem;
   font-weight: 800;
   letter-spacing: 1px;
-  color: var(--rh-white);
+  color: var(--xj-white);
   z-index: 10;
   margin: 0;
-  animation: rh-live-pulse 2s ease-in-out infinite;
+  animation: xj-live-pulse 2s ease-in-out infinite;
   box-shadow: 0 0 20px rgba(255,0,64,0.5);
 }
 
-.resource-hub .live::before {
+
+.xpressjob .xj-live::before {
   content: "";
   position: absolute;
   left: -4px; top: 50%;
@@ -606,22 +672,25 @@
   width: 8px; height: 8px;
   background: #fff;
   border-radius: 50%;
-  animation: rh-live-dot 1s ease-in-out infinite;
+  animation: xj-live-dot 1s ease-in-out infinite;
 }
 
-@keyframes rh-live-pulse {
+
+@keyframes xj-live-pulse {
   0%, 100% { transform: scale(1); }
   50%       { transform: scale(1.05); }
 }
 
-@keyframes rh-live-dot {
+
+@keyframes xj-live-dot {
   0%, 100% { opacity: 1; box-shadow: 0 0 5px #fff; }
   50%       { opacity: 0.5; box-shadow: 0 0 15px #fff; }
 }
 
 
+
 /* ── STAR BUTTON ───────────────────────────────────────────── */
-.resource-hub .star-btn {
+.xpressjob .xj-star-btn {
   position: absolute;
   top: -1px; right: 9px;
   width: 24px; height: 24px;
@@ -639,14 +708,15 @@
   padding: 0;
   line-height: 1;
   transition:
-    transform     var(--rh-t-fast) ease,
-    background    var(--rh-t-fast) ease,
-    border-color  var(--rh-t-fast) ease,
-    color         var(--rh-t-fast) ease,
-    box-shadow    var(--rh-t-fast) ease;
+    transform     var(--xj-t-fast) ease,
+    background    var(--xj-t-fast) ease,
+    border-color  var(--xj-t-fast) ease,
+    color         var(--xj-t-fast) ease,
+    box-shadow    var(--xj-t-fast) ease;
 }
 
-.resource-hub .star-btn:hover {
+
+.xpressjob .xj-star-btn:hover {
   transform: scale(1.2) rotate(15deg);
   background: rgba(255,200,0,0.2);
   border-color: gold;
@@ -654,21 +724,24 @@
   box-shadow: 0 0 20px rgba(255,200,0,0.4);
 }
 
-.resource-hub .star-btn.starred {
+
+.xpressjob .xj-star-btn.xj-starred {
   background: rgba(255,200,0,0.3);
   color: gold;
   border-color: gold;
-  animation: rh-star-pulse 1.5s ease infinite;
+  animation: xj-star-pulse 1.5s ease infinite;
 }
 
-@keyframes rh-star-pulse {
+
+@keyframes xj-star-pulse {
   0%, 100% { box-shadow: 0 0 10px rgba(255,200,0,0.4); }
   50%       { box-shadow: 0 0 25px rgba(255,200,0,0.8); }
 }
 
 
+
 /* ── JOB FILTERS ───────────────────────────────────────────── */
-.resource-hub .job-filters {
+.xpressjob .xj-job-filters {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
@@ -676,10 +749,11 @@
   margin: 1.25rem auto;
 }
 
-.resource-hub .filter-btn {
+
+.xpressjob .xj-filter-btn {
   background: rgba(255,255,255,0.04);
-  border: 1px solid var(--rh-card-border);
-  color: var(--rh-white);
+  border: 1px solid var(--xj-card-border);
+  color: var(--xj-white);
   padding: 8px 16px;
   border-radius: 20px;
   font-weight: 600;
@@ -691,21 +765,24 @@
     border-color 220ms ease;
 }
 
-.resource-hub .filter-btn:hover,
-.resource-hub .filter-btn.active {
+
+.xpressjob .xj-filter-btn:hover,
+.xpressjob .xj-filter-btn.xj-active {
   background: linear-gradient(90deg, rgba(11,15,239,0.95), rgba(72,9,220,0.85));
   border-color: transparent;
   transform: translateY(-2px);
 }
 
-.resource-hub .filter-btn:focus-visible {
-  outline: 2px solid var(--rh-cyan);
+
+.xpressjob .xj-filter-btn:focus-visible {
+  outline: 2px solid var(--xj-cyan);
   outline-offset: 2px;
 }
 
 
+
 /* ── TOAST ─────────────────────────────────────────────────── */
-.resource-hub .rh-toast {
+.xpressjob .xj-toast {
   position: fixed;
   bottom: 24px;
   left: 50%;
@@ -715,7 +792,7 @@
   padding: 12px 18px;
   border-radius: 12px;
   background: rgba(6,10,30,0.94);
-  color: var(--rh-white);
+  color: var(--xj-white);
   font-size: 0.9rem;
   font-weight: 500;
   border: 1px solid rgba(0,245,255,0.2);
@@ -724,17 +801,19 @@
     0 0 20px rgba(0,245,255,0.1);
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
-  animation: rh-toast-in 0.25s ease;
+  animation: xj-toast-in 0.25s ease;
 }
 
-@keyframes rh-toast-in {
+
+@keyframes xj-toast-in {
   from { opacity: 0; transform: translateX(-50%) translateY(10px); }
   to   { opacity: 1; transform: translateX(-50%) translateY(0); }
 }
 
 
+
 /* ── FOOTER ────────────────────────────────────────────────── */
-.resource-hub .site-footer {
+.xpressjob .xj-site-footer {
   position: relative;
   z-index: 1;
   display: flex;
@@ -742,84 +821,54 @@
   align-items: center;
   padding: 2.5rem 1.25rem;
   text-align: center;
-  color: var(--rh-white);
+  color: var(--xj-white);
   font-weight: bold;
 }
 
-.resource-hub .site-footer::before {
+
+.xpressjob .xj-site-footer::before {
   content: "";
   position: absolute;
   top: 0; left: 50%;
   transform: translateX(-50%);
   width: 60%; height: 2px;
-  background: linear-gradient(90deg, transparent, var(--rh-accent), #a855f7, transparent);
+  background: linear-gradient(90deg, transparent, var(--xj-accent), #a855f7, transparent);
   background-size: 200%;
-  animation: rh-glow-line 6s linear infinite;
+  animation: xj-glow-line 6s linear infinite;
 }
 
-@keyframes rh-glow-line {
+
+@keyframes xj-glow-line {
   0%   { background-position: 0% 0; }
   100% { background-position: 200% 0; }
 }
 
-.resource-hub .footer-bottom {
+
+.xpressjob .xj-footer-bottom {
   display: flex;
   flex-direction: column;
   align-items: center;
   width: 100%;
 }
 
-.resource-hub .footer-bottom p {
+
+.xpressjob .xj-footer-bottom p {
   margin: 0.2rem 0;
   font-size: 0.88rem;
   opacity: 0.9;
 }
 
-.resource-hub .footer-links {
-  display: flex;
-  justify-content: center;
-  flex-wrap: wrap;
-  gap: 0.4rem;
-  margin-top: 1rem;
-}
 
-.resource-hub .footer-links a {
-  color: var(--rh-white);
-  font-weight: 600;
-  text-decoration: none;
-  font-size: 0.9rem;
-  position: relative;
-  -webkit-tap-highlight-color: transparent;
-  transition: color 260ms ease, transform 260ms ease;
-}
-
-.resource-hub .footer-links a::after {
-  content: "";
-  position: absolute;
-  bottom: -2px; left: 50%;
-  width: 0; height: 2px;
-  background: var(--rh-accent);
-  transition: width 260ms ease, left 260ms ease;
-}
-
-.resource-hub .footer-links a:hover { transform: scale(1.04); }
-.resource-hub .footer-links a:hover::after { width: 100%; left: 0; }
-
-.resource-hub .footer-links a:focus-visible {
-  outline: 2px solid var(--rh-accent);
-  outline-offset: 3px;
-  border-radius: 2px;
-}
-
-.resource-hub .version-label {
+.xpressjob .xj-version-label {
   margin-top: 0.75rem;
   font-size: 0.75rem;
   color: rgba(255,255,255,0.45);
   pointer-events: none;
 }
 
+
 @media (min-width: 601px) {
-  .resource-hub .version-label {
+  .xpressjob .xj-version-label {
     position: absolute;
     bottom: 10px; right: 14px;
     margin-top: 0;
@@ -827,93 +876,23 @@
 }
 
 
+
 /* ── GLOBAL FOCUS RING ─────────────────────────────────────── */
-.resource-hub :focus-visible {
-  outline: 2px solid var(--rh-accent);
+.xpressjob :focus-visible {
+  outline: 2px solid var(--xj-accent);
   outline-offset: 3px;
 }
 
 
+
 /* ── REDUCED MOTION ────────────────────────────────────────── */
 @media (prefers-reduced-motion: reduce) {
-  .resource-hub *,
-  .resource-hub *::before,
-  .resource-hub *::after {
+  .xpressjob *,
+  .xpressjob *::before,
+  .xpressjob *::after {
     animation-duration:        0.001ms !important;
     animation-iteration-count: 1       !important;
     transition-duration:       0.001ms !important;
     scroll-behavior:           auto    !important;
   }
 }
-
-
-/* In ResourceHub.css — find the ROOT WRAPPER block and update these two rules */
-
-.resource-hub {
-  /* REMOVE this — it kills position:sticky on the header */
- 
-
-  /* Everything else stays the same */
-  position: relative;
-  min-height: 100vh;
-  font-family: var(--rh-font);
-  color: var(--rh-white);
-  background: var(--rh-bg-radial), var(--rh-bg-grad);
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-/* Move overflow-x:hidden to the html/body level instead.
-   Add this to your global App.css or index.css: */
-html, body {
-  overflow-x: hidden;
-}
-
-/* ── SITE HEADER — replace the existing .site-header block ── */
-.resource-hub .site-header {
-  position: fixed;          /* ← was sticky — fixed is immune to ancestor overflow */
-  top: 0;
-  left: 0;
-  right: 0;
-  z-index: 1000;
-  isolation: auto;
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-  width: 100%;
-  box-sizing: border-box;
-  height: 72px;
-  padding: 0 2rem;
-  background: rgba(0,0,0,0.83);
-  backdrop-filter: blur(20px) saturate(180%);
-  -webkit-backdrop-filter: blur(20px) saturate(180%);
-  border-bottom: none;
-}
-
-@media (max-width: 899px) {
-  .resource-hub .site-header {
-    height: 62px;
-    padding: 0 1rem;
-  }
-}
-
-/* ── CONTAINER — push content below the fixed header ───────── */
-.resource-hub .container {
-  position: relative;
-  z-index: 1;
-  max-width: 1500px;
-  margin: 0 auto;
-  padding: 1.75rem 1rem 0;
-  /* offset = header height so first section isn't hidden under it */
-  padding-top: calc(72px + 1.75rem);
-}
-
-@media (max-width: 899px) {
-  .resource-hub .container {
-    padding-top: calc(62px + 1.25rem);
-  }
-}
-
-/* ── AMBIENT ORBS — push below fixed header ─────────────────── */
-/* Orbs use position:absolute relative to .resource-hub,
-   so no change needed — they already render behind the header's z-index */

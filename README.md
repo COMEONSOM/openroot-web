@@ -30,7 +30,7 @@ Openroot Systems is a product-focused software company that builds **clean, scal
 | Product | Category | Description |
 |---|---|---|
 | [Travel Expense Manager](https://openroot.in/openroot-travel-expense-manager/) | Finance Utility | Track group travel expenses and auto-calculate who owes whom |
-| [Resource Hub & Job Updates](https://openroot.in/openroot-helping-hand/) | Resource Platform | Curated tools, websites and job updates for students |
+| [Resources & Job Updates](https://openroot.in/XpressJob/) | Resource Platform | Curated tools, websites and job updates for students |
 | [NIOR AI](https://openroot-time-ai-module.web.app/) | AI Tool | AI-powered assistant for financial insights and decision support |
 | [Openroot Classes](https://openroot-classes-firebase.web.app/) | Education Platform | Training in prompt engineering, financial literacy and productivity |
 | [Coevas Media Downloader](https://openroot.in/Coevas-Systems-Openroot/) | Media Utility | Download video/audio from YouTube, Instagram, Facebook, Threads |

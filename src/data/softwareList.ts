@@ -7,10 +7,10 @@ const CLOUD = "https://res.cloudinary.com/dydh05l1u/video/upload";  // aryan clo
 export const softwareList: Software[] = [
 
   {
-    name: "Govt. Websites & Job Updates",
-    shortName: "Resource Hub",
-    slug: "resource-hub",
-    url: "/resource-hub",
+    name: "Resources & Govt. Job Updates",
+    shortName: "XpressJob",
+    slug: "xpress-job",
+    url: "/xpress-job",
     video: `${CLOUD}/resource-hub-demo_rlkmkr.mp4`,
     description: "A curated collection of important websites, tools and job updates for students and learners.",
     seoTitle: "Govt. Websites & Job Updates for Students and Job Seekers | Openroot Systems",
@@ -55,7 +55,7 @@ export const softwareList: Software[] = [
   },
 
   {
-    name: "Coevas Media Downloader",
+    name: "YT Video Downloader",
     shortName: "Coevas",
     slug: "coevas-terminal",
     url: "/coevas-terminal",

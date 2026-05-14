@@ -7,7 +7,7 @@ import "../components/styles/software-hub.css";
 const PAGE_URL = "https://openroot.in/software";
 
 export default function SoftwareHub() {
-  const importantTools = ["resource-hub", "nior-ai", "travel-expense-manager"];
+  const importantTools = ["XpressJob", "nior-ai", "travel-expense-manager"];
   const featuredTools  = softwareList.filter(t => importantTools.includes(t.slug));
 
   // ── JSON-LD: ItemList of all tools (enables sitelinks / rich list in SERP) ──
@@ -56,7 +56,7 @@ export default function SoftwareHub() {
         <title>Openroot Software Hub – Free AI Tools, Job Updates & Productivity Apps</title>
         <meta
           name="description"
-          content="Explore free tools by Openroot Systems: NIOR AI, MAKAUT Grade Calculator, Travel Expense Manager, Resource Hub, Coevas Terminal and more. No download required."
+          content="Explore free tools by Openroot Systems: NIOR AI, MAKAUT Grade Calculator, Travel Expense Manager, XpressJob, Coevas Terminal and more. No download required."
         />
         <meta
           name="keywords"
@@ -110,7 +110,7 @@ export default function SoftwareHub() {
 
       <header className="sh-header">
         {/* h1 includes primary keyword phrase for the hub page */}
-        <h1 className="sh-title">Openroot Software Hub</h1>
+        <h1 className="sh-title">Openroot Systems Software Hub</h1>
         <p className="sh-subtitle">
           Free AI tools, productivity software, and powerful utilities built by Openroot Systems —
           no download required.

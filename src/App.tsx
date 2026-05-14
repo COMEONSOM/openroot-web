@@ -15,6 +15,7 @@ import Footer from "./components/Footer";
 
 import "./App.css";
 
+
 // ── LAZY loaded (separate JS chunks, only downloaded when user visits that page)
 const SoftwareHub         = lazy(() => import("./pages/SoftwareHub"));
 const SoftwarePage        = lazy(() => import("./pages/SoftwarePage"));
@@ -24,7 +25,7 @@ const PrivacyPolicy       = lazy(() => import("./pages/Legal/privacy-policy"));
 const Terms               = lazy(() => import("./pages/Legal/terms"));
 const License             = lazy(() => import("./pages/Legal/SoftwareLicense-coevas"));
 const OpenrootGDriveSupport = lazy(() => import("./pages/Legal/openroot-GDrive-support"));
-const ResourceHub         = lazy(() => import("./pages/resourcehub"));
+const XpressJob           = lazy(() => import("./pages/xpressjob"));
 const CoeasTerminal       = lazy(() => import("./pages/coevas"));
 const CoevasTerms         = lazy(() => import("./pages/Legal/coevas-legal-terms"));
 const Makaut              = lazy(() => import("./pages/makaut"));
@@ -234,7 +235,7 @@ export default function App() {
             {/* ═══════════════════════════════════════════════
                 TOOLS
             ═══════════════════════════════════════════════ */}
-            <Route path="/resource-hub"           element={<ResourceHub />} />
+            <Route path="/xpress-job"           element={<XpressJob />} />
             <Route path="/coevas-terminal"        element={<CoeasTerminal />} />
             <Route path="/makaut-grade-pro"        element={<Makaut />} />
             <Route path="/travel-expense-manager" element={<TravelExpenseManager />} />

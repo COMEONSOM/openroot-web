@@ -24,7 +24,7 @@ import React from "react";
 const ALLOWED_SLUGS = new Set([
   "travel-expense-manager",
   "nior-ai",
-  "resource-hub",
+  "xpress-job",
   "openroot-classes",
   "coevas-terminal",
   "makaut-grade-pro",
@@ -47,7 +47,7 @@ function safeJsonLd(obj: unknown): string {
 // ─────────────────────────────────────────────────────────────
 
 const Icons = {
-  timeAI: (
+  NiorAI: (
     <svg
       width="22"
       height="22"
@@ -132,7 +132,7 @@ const Icons = {
     </svg>
   ),
 
-  resourcehub: (
+  XpressJob: (
     <svg
       viewBox="0 0 24 24"
       width="20"
@@ -182,8 +182,8 @@ const Icons = {
 
 const iconMap: Record<string, React.ReactNode> = {
   "travel-expense-manager": Icons.travelExpense,
-  "nior-ai": Icons.timeAI,
-  "resource-hub": Icons.resourcehub,
+  "nior-ai": Icons.NiorAI,
+  "xpress-job": Icons.XpressJob,
   "openroot-classes": Icons.Classes,
   "coevas-terminal": Icons.Coevas,
   "makaut-grade-pro": Icons.makaut,
@@ -196,7 +196,7 @@ const iconMap: Record<string, React.ReactNode> = {
 
 const SITELINK_PAGES = [
   { name: "NIOR AI", url: "https://openroot.in/software/nior-ai" },
-  { name: "Resource Hub & Job Updates", url: "https://openroot.in/software/resource-hub" },
+  { name: "XpressJob", url: "https://openroot.in/software/xpress-job" },
   { name: "MAKAUT Grade Calculator", url: "https://openroot.in/software/makaut-grade-pro" },
   { name: "Travel Expense Manager", url: "https://openroot.in/software/travel-expense-manager" },
   { name: "Openroot Classes", url: "https://openroot.in/software/openroot-classes" },

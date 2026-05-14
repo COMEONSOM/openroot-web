@@ -4,12 +4,12 @@ import "../components/styles/softwarePage.css";
 
 export const softwareContent: Record<string, SoftwareContent> = {
 
-  "resource-hub": {
-    overview: `Openroot Resource Hub — Resource Hub & Job Updates is a centralized digital platform designed to simplify access to essential online resources for students, professionals, and job seekers. Many learners struggle to find reliable educational portals, government services, and productivity tools scattered across the internet. This platform solves that problem by organizing important websites into structured categories so users can access them quickly from one place.
+  "xpress-job": {
+    overview: `Openroot XpressJob is a centralized digital platform designed to simplify access to essential online resources for students, professionals, and job seekers. Many learners struggle to find reliable educational portals, government services, and productivity tools scattered across the internet. This platform solves that problem by organizing important websites into structured categories so users can access them quickly from one place.
 
 The platform is especially useful for students pursuing ITI, Diploma, and undergraduate or postgraduate education. Instead of navigating dozens of unrelated websites, learners can directly access academic portals, scholarship platforms, examination systems, and skill-development resources through a clean and organized interface.
 
-Openroot Resource Hub also includes curated productivity tools, AI platforms, investing resources, and government job portals. By bringing these resources together into a structured interface, the platform reduces information overload and helps users discover valuable digital tools more efficiently.`,
+Openroot XpressJob also includes curated productivity tools, AI platforms, investing resources, and government job portals. By bringing these resources together into a structured interface, the platform reduces information overload and helps users discover valuable digital tools more efficiently.`,
 
     features: [
       "Centralized resource hub for students, professionals, and job seekers",
@@ -20,7 +20,7 @@ Openroot Resource Hub also includes curated productivity tools, AI platforms, in
       "Organized categories that reduce time spent searching online"
     ],
 
-    purpose: `The primary goal of Openroot Helping Hand is to make essential educational, productivity, financial, and career resources easily accessible through a single platform.
+    purpose: `The primary goal of Openroot XpressJob is to make essential educational, productivity, financial, and career resources easily accessible through a single platform.
 
 By organizing trusted websites into structured categories, the platform helps users quickly discover useful portals without spending time searching across multiple sources. The initiative reflects Openroot Systems’ mission of supporting digital learning, skill development, and career exploration through practical online tools.`
   },

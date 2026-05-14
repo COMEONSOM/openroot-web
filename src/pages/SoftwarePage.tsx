@@ -8,7 +8,7 @@ import "../components/styles/softwarePage.css";
 
 // Maps slug → internal React Router path used AFTER login check
 const INTERNAL_ROUTES: Record<string, string> = {
-  "resource-hub": "/resource-hub",
+  "xpress-job": "/xpress-job",
   "coevas-terminal": "/coevas-terminal",
   "makaut-grade-pro": "/makaut-grade-pro",
   "travel-expense-manager": "/travel-expense-manager",
@@ -18,8 +18,8 @@ const INTERNAL_ROUTES: Record<string, string> = {
 
 // ── SEO keyword map: add / extend per tool slug ──────────────────────────────
 const TOOL_KEYWORDS: Record<string, string> = {
-  "resource-hub":
-    "resource hub, free study materials, job updates, student resources, Openroot resource hub, MAKAUT resources",
+  "xpress-job":
+    "XpressJob, job updates, career resources, student resources, MAKAUT resources",
   "coevas-terminal":
     "Coevas terminal, online terminal, web terminal, browser terminal, Openroot Coevas",
   "makaut-grade-pro":
@@ -202,7 +202,7 @@ export default function SoftwarePage() {
     { href: "/software/nior-ai",                label: "NIOR AI" },
     { href: "/software/travel-expense-manager", label: "Travel Expense Manager" },
     { href: "/certificate-verification",        label: "Certificate Verification" },
-    { href: "/software/resource-hub",           label: "Resource Hub & Job Updates" },
+    { href: "/software/xpress-job",             label: "Resources & Job Updates" },
     { href: "/software/makaut-grade-pro",       label: "Makaut Grade Calculator" },
     { href: "/software/coevas-terminal",        label: "Coevas Terminal" },
     { href: "/software/gdrive-web-extension",   label: "GDrive Automation" },
