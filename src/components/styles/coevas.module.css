@@ -1,70 +1,78 @@
 /* =======================================================================
-   coevas.module.css — Scoped CSS Module
-   All styles are component-local. Uses --cv-* tokens defined on .root
-   to avoid any collision with app.css globals (--ot-*, --color-*, etc.)
+   coevas.module.css — GitHub light-mode inspired styling
+   Clean, soft, modern, and fully scoped to this component
    ======================================================================= */
 
-/* ── Component-level design tokens ────────────────────────────────────── */
 .root {
-  --cv-bg:              #000000;
-  --cv-nav-bg:          #161b22;
-  --cv-nav-border:      #30363d;
-  --cv-surface:         #161b22;
-  --cv-border:          #30363d;
-  --cv-text:            #e6edf3;
-  --cv-text-muted:      #7d8590;
-  --cv-text-link:       #58a6ff;
-  --cv-success:         #3fb950;
-  --cv-success-bg:      rgba(46, 160, 67, 0.15);
-  --cv-success-border:  rgba(46, 160, 67, 0.4);
-  --cv-btn-primary-bg:  #238636;
-  --cv-btn-primary-bdr: #2ea043;
-  --cv-btn-primary-hov: #2ea043;
+  --cv-bg: #f6f8fa;
+  --cv-surface: #ffffff;
+  --cv-surface-subtle: #f6f8fa;
+  --cv-surface-muted: #f3f4f6;
+  --cv-border: #d0d7de;
+  --cv-border-soft: #d8dee4;
 
-  background-color: var(--cv-bg);
+  --cv-text: #1f2328;
+  --cv-text-muted: #59636e;
+  --cv-text-subtle: #6e7781;
+  --cv-text-link: #0969da;
+  --cv-text-link-hover: #0550ae;
+
+  --cv-success: #1a7f37;
+  --cv-success-bg: #dafbe1;
+  --cv-success-border: #abdfb2;
+
+  --cv-btn-primary-bg: #1f883d;
+  --cv-btn-primary-border: #1f883d;
+  --cv-btn-primary-hover: #1a7f37;
+  --cv-btn-primary-active: #116329;
+
+  --cv-shadow: 0 1px 0 rgba(31, 35, 40, 0.04);
+  --cv-shadow-elevated: 0 8px 24px rgba(140, 149, 159, 0.18);
+
+  background:
+    radial-gradient(circle at top, rgba(9, 105, 218, 0.06), transparent 30%),
+    var(--cv-bg);
   color: var(--cv-text);
   min-height: 100vh;
   font-size: 14px;
   line-height: 1.5;
-  /* Explicit font — do not inherit from body (--ot-font) */
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans",
     Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
   -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
 }
 
-/* ── Global override: svg { height: auto } → explicit px ──────────────── */
-/* app.css sets svg { height: auto; display: block } which breaks icon sizes */
 .icon {
-  display: inline-block;   /* override block */
+  display: inline-block;
   flex-shrink: 0;
   width: 14px;
-  height: 14px;             /* override height: auto */
+  height: 14px;
   vertical-align: middle;
 }
 
-/* Larger repo icon in header */
 .repoIcon {
   display: block;
   flex-shrink: 0;
-  color: var(--cv-text-muted);
   width: 20px;
-  height: 20px;             /* override height: auto */
+  height: 20px;
+  color: var(--cv-text-muted);
 }
 
-/* ── Sticky navbar ─────────────────────────────────────────────────────── */
+/* ── Sticky top bar ───────────────────────────────────────────────────── */
 .ghNav {
-  background-color: var(--cv-nav-bg);
-  border-bottom: 1px solid var(--cv-nav-border);
   position: sticky;
   top: 0;
   z-index: 100;
+  background: rgba(255, 255, 255, 0.86);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(208, 215, 222, 0.8);
 }
 
 .ghNavInner {
-  max-width: 1280px;
+  max-width: 1180px;
   margin: 0 auto;
-  padding: 0 16px;
-  height: 48px;
+  padding: 0 20px;
+  min-height: 56px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -74,166 +82,151 @@
 .ghNavLeft {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
   min-width: 0;
 }
 
-/* app.css: a { color: inherit } — explicit color needed on all links */
 .ghNavLogo {
-  display: flex;
+  display: inline-flex;
   align-items: center;
   flex-shrink: 0;
   text-decoration: none;
-  transition: opacity 0.15s ease;
+  border-radius: 999px;
+  transition: transform 0.15s ease, opacity 0.15s ease;
 }
 
 .ghNavLogo:hover {
-  opacity: 0.8;
+  opacity: 0.9;
+  transform: translateY(-1px);
   text-decoration: none;
 }
 
 .ghNavLogoImg {
   width: 32px;
-  height: 32px;             /* override img { height: auto } */
-  border-radius: 6px;
+  height: 32px;
   display: block;
-  object-fit: contain;
+  object-fit: cover;
   object-position: center;
-  flex-shrink: 0;
-  opacity: 0.9;
-  transition: opacity 0.15s ease, transform 0.15s ease;
-}
-
-.ghNavLogo:hover .ghNavLogoImg {
-  opacity: 1;
-  transform: scale(1.05);
+  border-radius: 999px;
+  border: 1px solid rgba(208, 215, 222, 0.9);
+  box-shadow: var(--cv-shadow);
 }
 
 .ghNavBrand {
   font-size: 0.875rem;
-  font-weight: 400;
+  font-weight: 600;
   color: var(--cv-text-muted);
   white-space: nowrap;
 }
 
 .ghNavSep {
   color: var(--cv-border);
-  font-size: 1.1rem;
-  font-weight: 300;
+  font-size: 1rem;
   user-select: none;
 }
 
 .ghNavRepo {
   font-size: 0.875rem;
-  font-weight: 600;
+  font-weight: 700;
   color: var(--cv-text);
   white-space: nowrap;
 }
 
-.ghNavBadge {
-  font-size: 0.7rem;
-  font-weight: 500;
-  color: var(--cv-text-muted);
-  border: 1px solid var(--cv-border);
-  border-radius: 2em;
-  padding: 1px 7px;
-  line-height: 1.6;
-  white-space: nowrap;
-}
 
+
+/* remove emoji/star style look */
 .rating {
-  color: #fbbf24;
-  font-weight: 600;
+  color: #eab308; /* golden yellow */
 }
 
 .ratingValue {
-  color: #e5e7eb;
-  margin-left: 6px;
+  color: var(--cv-text);
+  font-weight: 700;
 }
 
 .ghNavRight {
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: 12px;
   flex-shrink: 0;
 }
 
 .ghNavLink {
-  font-size: 0.8125rem;
-  color: var(--cv-text-muted);   /* explicit — overrides a { color: inherit } */
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.875rem;
+  font-weight: 400;
+  color: #24292f; /* pure github black */
   text-decoration: none;
-  transition: color 0.1s;
+  padding: 8px 12px;
+  border-radius: 10px;
+  transition:
+    background-color 0.15s ease,
+    border-color 0.15s ease,
+    color 0.15s ease;
+  font-variant-emoji: text;
+  border: 1px solid transparent;
 }
 
 .ghNavLink:hover {
-  color: var(--cv-text);
+  color: #111827;
+  font-weight: 600;
   text-decoration: none;
 }
 
-/* ── Page container ────────────────────────────────────────────────────── */
+/* ── Layout ───────────────────────────────────────────────────────────── */
 .container {
-  max-width: 980px;
+  max-width: 1180px;
   margin: 0 auto;
-  padding: 24px 16px 64px;
+  padding: 28px 20px 64px;
 }
 
-/* ── Repo header ───────────────────────────────────────────────────────── */
 .repoHeader {
-  margin-bottom: 0;
-  padding-bottom: 16px;
-  border-bottom: 1px solid var(--cv-border);
+  padding: 6px 0 18px;
 }
 
 .repoTitleRow {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
   flex-wrap: wrap;
-  margin-bottom: 6px;
+  margin-bottom: 8px;
 }
 
-/* app.css: h1 { line-height: 1.18 } — override with class selector */
 .repoTitle {
-  font-size: 1.25rem;
-  font-weight: 600;
-  color: var(--cv-text-link);
-  letter-spacing: -0.01em;
-  cursor: pointer;
-  line-height: 1.3;
-  max-width: unset;          /* override h1 from any inherited max-width */
-}
-
-.repoTitle:hover {
-  text-decoration: underline;
-}
-
-.repoVisibilityBadge {
-  font-size: 0.7rem;
-  font-weight: 500;
-  color: var(--cv-text-muted);
-  border: 1px solid var(--cv-border);
-  border-radius: 2em;
-  padding: 2px 8px;
-  line-height: 1.6;
-  flex-shrink: 0;
-  margin-left: 2px;
-}
-
-/* app.css: p { max-width: 72ch } — max-width: unset on every <p> in this component */
-.tagline {
-  color: var(--cv-text-muted);
-  font-size: 0.8125rem;
-  margin-left: 28px;
-  margin-bottom: 12px;
+  font-size: clamp(1.35rem, 1rem + 1vw, 1.8rem);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--cv-text);
+  line-height: 1.15;
   max-width: unset;
 }
 
-/* ── Tab bar ───────────────────────────────────────────────────────────── */
+.repoVisibilityBadge {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--cv-text-muted);
+  border: 1px solid var(--cv-border);
+  border-radius: 999px;
+  padding: 3px 10px;
+  line-height: 1.4;
+  background: rgba(255, 255, 255, 0.72);
+}
+
+.tagline {
+  color: var(--cv-text-muted);
+  font-size: 0.95rem;
+  max-width: 72ch;
+  margin-bottom: 0;
+}
+
 .repoTabs {
   display: flex;
   align-items: center;
+  gap: 6px;
   border-bottom: 1px solid var(--cv-border);
-  margin-bottom: 24px;
+  margin-bottom: 18px;
   overflow-x: auto;
   scrollbar-width: none;
 }
@@ -242,89 +235,94 @@
   display: none;
 }
 
-/* Handles both <button> and <a> tabs */
 .repoTab {
-  /* Reset <button> browser defaults */
   appearance: none;
   -webkit-appearance: none;
-  background: none;
-  border: none;
+  background: transparent;
+  border: 1px solid transparent;
   border-bottom: 2px solid transparent;
+  border-radius: 10px 10px 0 0;
   font-family: inherit;
-  font-size: 0.875rem;
+  font-size: 0.925rem;
+  font-weight: 600;
   cursor: pointer;
   outline: none;
 
-  /* Shared layout */
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  padding: 10px 14px;
-  font-weight: 400;
-  color: var(--cv-text-muted);  /* explicit — overrides a { color: inherit } */
+  gap: 8px;
+  padding: 12px 16px;
+  color: var(--cv-text-muted);
   text-decoration: none;
   white-space: nowrap;
-  transition: color 0.1s, border-color 0.1s, background-color 0.1s;
+  transition: background-color 0.15s ease, color 0.15s ease,
+    border-color 0.15s ease, transform 0.15s ease;
 }
 
 .repoTab:hover {
   color: var(--cv-text);
-  border-bottom-color: #6e7681;
+  background: rgba(209, 213, 218, 0.18);
+  border-bottom-color: rgba(9, 105, 218, 0.3);
   text-decoration: none;
-  background-color: rgba(177, 186, 196, 0.06);
-  border-radius: 6px 6px 0 0;
 }
 
 .repoTab:focus-visible {
-  outline: 2px solid var(--cv-text-link);
-  outline-offset: -2px;
-  border-radius: 6px 6px 0 0;
+  outline: 2px solid rgba(9, 105, 218, 0.35);
+  outline-offset: 2px;
 }
 
 .active {
-  font-weight: 600;
   color: var(--cv-text) !important;
-  border-bottom-color: #f78166 !important;
+  background: var(--cv-surface);
+  border-color: var(--cv-border);
+  border-bottom-color: var(--cv-surface) !important;
+  box-shadow: 0 -1px 0 rgba(255, 255, 255, 0.95), var(--cv-shadow);
 }
 
-/* ── Repo body ─────────────────────────────────────────────────────────── */
 .repoBody {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 18px;
 }
 
-/* ── Section wrappers ──────────────────────────────────────────────────── */
+/* ── Panels ───────────────────────────────────────────────────────────── */
 .appInfo,
 .downloadSection {
   background: var(--cv-surface);
   border: 1px solid var(--cv-border);
-  border-radius: 6px;
-  padding: 16px;
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: var(--cv-shadow);
 }
 
-/* app.css: h2 { line-height: 1.18 } → override */
 .sectionHeading {
-  font-size: 0.875rem;
-  font-weight: 600;
+  font-size: 1rem;
+  font-weight: 700;
   margin-bottom: 12px;
   color: var(--cv-text);
-  padding-bottom: 8px;
-  border-bottom: 1px solid var(--cv-border);
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--cv-border-soft);
   display: flex;
   align-items: center;
-  gap: 6px;
-  line-height: 1.4;
+  gap: 8px;
+  line-height: 1.3;
   max-width: unset;
 }
 
-/* ── About paragraphs ──────────────────────────────────────────────────── */
-.infoPara {
-  font-size: 0.875rem;
+.sectionSubtext {
+  margin-top: -4px;
+  margin-bottom: 16px;
   color: var(--cv-text-muted);
-  line-height: 1.6;
-  max-width: unset;          /* override global p { max-width: 72ch } */
-  margin-bottom: 0.5rem;
+  font-size: 0.925rem;
+  max-width: 72ch;
+}
+
+.infoPara {
+  font-size: 0.96rem;
+  color: var(--cv-text-muted);
+  line-height: 1.75;
+  max-width: unset;
+  margin-bottom: 0.9rem;
 }
 
 .infoPara:last-child {
@@ -333,90 +331,75 @@
 
 .infoPara strong {
   color: var(--cv-text);
+  font-weight: 700;
 }
 
-/* explicit color — overrides a { color: inherit } */
 .inlineLink {
   color: var(--cv-text-link);
   text-decoration: none;
+  font-weight: 600;
 }
 
 .inlineLink:hover {
+  color: var(--cv-text-link-hover);
   text-decoration: underline;
 }
 
-/* ── Latest version card ───────────────────────────────────────────────── */
+/* ── Latest release card ──────────────────────────────────────────────── */
 .latestBox {
-  background: var(--cv-surface);
-  border: 1px solid var(--cv-success-border);
-  border-radius: 6px;
-  padding: 16px 16px 16px 20px;
-  margin-bottom: 16px;
   position: relative;
   overflow: hidden;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(250, 252, 255, 0.98)),
+    var(--cv-surface);
+  border: 1px solid var(--cv-success-border);
+  border-radius: 16px;
+  padding: 18px 18px 18px 22px;
+  margin-bottom: 18px;
+  box-shadow: 0 1px 0 rgba(31, 35, 40, 0.04), 0 10px 30px rgba(26, 31, 36, 0.08);
 }
 
-/* Green left stripe */
-.latestBox::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  bottom: 0;
-  width: 4px;
-  background: var(--cv-success);
-  border-radius: 6px 0 0 6px;
-}
-
-/* "Latest" pill badge */
 .latestBox::after {
   content: 'Latest';
   position: absolute;
-  top: 12px;
-  right: 12px;
-  font-size: 0.6875rem;
-  font-weight: 500;
+  top: 14px;
+  right: 14px;
+  font-size: 0.72rem;
+  font-weight: 700;
   color: var(--cv-success);
   background: var(--cv-success-bg);
   border: 1px solid var(--cv-success-border);
-  padding: 2px 8px;
-  border-radius: 2em;
+  padding: 4px 10px;
+  border-radius: 999px;
 }
 
-/* app.css: h3 { line-height: 1.18 } → override */
 .latestTitle {
-  font-size: 1rem;
-  font-weight: 600;
-  color: var(--cv-text-link);
-  margin-bottom: 4px;
-  cursor: pointer;
-  line-height: 1.3;
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: var(--cv-text);
+  margin-bottom: 6px;
+  line-height: 1.25;
   max-width: unset;
-}
-
-.latestTitle:hover {
-  text-decoration: underline;
 }
 
 .latestDate {
   color: var(--cv-text-muted);
-  font-size: 0.8125rem;
+  font-size: 0.9rem;
   line-height: 1.6;
-  max-width: unset;          /* override global p { max-width: 72ch } */
+  max-width: unset;
 }
 
-/* ── Version feature list ──────────────────────────────────────────────── */
+/* ── Feature list ─────────────────────────────────────────────────────── */
 .versionFeatures {
-  margin-top: 10px;
+  margin-top: 12px;
   padding-left: 0;
   list-style: none;
 }
 
-/* app.css: li { max-width: 72ch } → override */
 .versionFeatures li {
-  font-size: 0.8125rem;
+  font-size: 0.92rem;
   color: var(--cv-text);
-  padding: 3px 0 3px 22px;
+  padding: 6px 0 6px 22px;
   position: relative;
   max-width: unset;
 }
@@ -425,170 +408,234 @@
   content: '•';
   position: absolute;
   left: 8px;
+  top: 3px;
   color: var(--cv-success);
-  font-size: 1rem;
+  font-size: 1.1rem;
   line-height: 1.5;
 }
 
-/* ── Download button ───────────────────────────────────────────────────── */
+/* ── Buttons ──────────────────────────────────────────────────────────── */
 .downloadBtn {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
+  gap: 8px;
   margin-top: 14px;
-  padding: 5px 16px;
-  background-color: var(--cv-btn-primary-bg);
-  color: #ffffff;            /* explicit — overrides a { color: inherit } */
+  padding: 9px 16px;
+  background: var(--cv-btn-primary-bg);
+  color: #ffffff;
   text-decoration: none;
-  border-radius: 6px;
-  font-weight: 500;
-  font-size: 0.875rem;
-  border: 1px solid var(--cv-btn-primary-bdr);
-  box-shadow: 0 1px 0 rgba(31, 35, 40, 0.1);
-  transition: background-color 0.1s ease, border-color 0.1s ease;
+  border-radius: 10px;
+  font-weight: 700;
+  font-size: 0.9rem;
+  border: 1px solid var(--cv-btn-primary-border);
+  box-shadow: 0 1px 0 rgba(31, 35, 40, 0.04);
+  transition: transform 0.15s ease, background-color 0.15s ease,
+    border-color 0.15s ease, box-shadow 0.15s ease;
   cursor: pointer;
   white-space: nowrap;
   user-select: none;
 }
 
 .downloadBtn:hover {
-  background-color: var(--cv-btn-primary-hov);
-  border-color: #3fb950;
-  text-decoration: none;
+  background: var(--cv-btn-primary-hover);
+  border-color: var(--cv-btn-primary-hover);
   color: #ffffff;
+  text-decoration: none;
 }
 
 .downloadBtn:active {
-  background-color: #196c2e;
+  background: var(--cv-btn-primary-active);
+  transform: translateY(0);
 }
 
-/* ── Older versions header ─────────────────────────────────────────────── */
+.downloadBtn:focus-visible {
+  outline: 2px solid rgba(31, 136, 61, 0.35);
+  outline-offset: 2px;
+}
+
+.secondaryBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 16px;
+  background: var(--cv-surface);
+  color: var(--cv-text);
+  text-decoration: none;
+  border-radius: 10px;
+  font-weight: 700;
+  font-size: 0.9rem;
+  border: 1px solid var(--cv-border);
+  transition: background-color 0.15s ease, border-color 0.15s ease;
+}
+
+.secondaryBtn:hover {
+  background: var(--cv-surface-subtle);
+  border-color: var(--cv-border-soft);
+  text-decoration: none;
+}
+
+/* ── Previous releases ───────────────────────────────────────────────── */
 .olderVersionsHeader {
   display: flex;
   align-items: center;
-  gap: 6px;
-  margin-bottom: 8px;
+  gap: 8px;
+  margin: 4px 0 12px;
 }
 
 .olderVersionsTitle {
-  font-size: 0.875rem;
-  font-weight: 600;
+  font-size: 0.96rem;
+  font-weight: 700;
   color: var(--cv-text);
   line-height: 1.3;
   max-width: unset;
 }
 
-/* ── Older versions list ───────────────────────────────────────────────── */
+.olderList {
+  display: grid;
+  gap: 10px;
+}
+
 .versionItem {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  gap: 12px;
-  background: transparent;
+  gap: 16px;
+  background: var(--cv-surface);
   border: 1px solid var(--cv-border);
-  border-radius: 0;
-  padding: 12px 16px;
-  margin-bottom: 0;
-  transition: background-color 0.1s ease, border-color 0.1s ease;
+  border-radius: 14px;
+  padding: 16px;
+  box-shadow: var(--cv-shadow);
+  transition: transform 0.15s ease, box-shadow 0.15s ease,
+    border-color 0.15s ease, background-color 0.15s ease;
 }
 
-.versionItem:first-child  { border-radius: 6px 6px 0 0; }
-.versionItem:last-child   { border-radius: 0 0 6px 6px; }
-.versionItem:only-child   { border-radius: 6px; }
-
-.versionItem + .versionItem {
-  margin-top: -1px;
-  border-top-color: var(--cv-border);
+.versionItem:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--cv-shadow-elevated);
+  border-color: #b9c4d0;
 }
 
 .versionInfo {
-  max-width: 70%;
+  max-width: 72%;
+  min-width: 0;
 }
 
 .versionLabel {
-  font-weight: 600;
-  color: var(--cv-text-link);
-  display: block;
-  margin-bottom: 2px;
-  font-size: 0.875rem;
-  cursor: pointer;
-}
-
-.versionLabel:hover {
-  text-decoration: underline;
+  font-weight: 800;
+  color: var(--cv-text);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 4px;
+  font-size: 0.95rem;
 }
 
 .versionDate {
   color: var(--cv-text-muted);
-  font-size: 0.75rem;
+  font-size: 0.82rem;
   display: block;
   line-height: 1.5;
 }
 
 .noOlderText {
   color: var(--cv-text-muted);
-  font-size: 0.8125rem;
+  font-size: 0.92rem;
   padding: 8px 0;
   max-width: unset;
 }
 
 .invalidLink {
-  color: #f87171;
-  font-size: 0.8125rem;
+  color: #cf222e;
+  font-size: 0.92rem;
   max-width: unset;
+  margin-top: 12px;
 }
 
 .invalidLinkSmall {
-  color: #f87171;
-  font-size: 0.75rem;
+  color: #cf222e;
+  font-size: 0.8rem;
+  align-self: center;
 }
 
-/* ── Footer ────────────────────────────────────────────────────────────── */
+/* ── Footer ──────────────────────────────────────────────────────────── */
 .footer {
-  margin-top: 40px;
+  margin-top: 28px;
   text-align: center;
   color: var(--cv-text-muted);
-  font-size: 0.75rem;
-  padding-top: 16px;
+  font-size: 0.82rem;
+  padding-top: 18px;
   border-top: 1px solid var(--cv-border);
   line-height: 1.8;
 }
 
 .footerText {
-  max-width: unset;          /* override global p { max-width: 72ch } */
+  max-width: unset;
 }
 
 .footerLink {
-  color: var(--cv-text-link);  /* explicit — overrides a { color: inherit } */
+  color: var(--cv-text-link);
   text-decoration: none;
+  font-weight: 700;
 }
 
 .footerLink:hover {
+  color: var(--cv-text-link-hover);
   text-decoration: underline;
 }
 
 .footerSub {
   margin-top: 4px;
-  color: #484f58;
-  font-size: 0.7rem;
+  color: var(--cv-text-subtle);
+  font-size: 0.76rem;
   max-width: unset;
 }
 
-/* ── Responsive ────────────────────────────────────────────────────────── */
-@media (max-width: 600px) {
-  .ghNavBrand,
-  .ghNavSep { display: none; }
-
-  .tagline { margin-left: 0; }
-
-  .container { padding: 16px 12px 48px; }
-
-  .repoTitle { font-size: 1.1rem; }
-
+/* ── Responsive ───────────────────────────────────────────────────────── */
+@media (max-width: 900px) {
   .versionItem {
     flex-direction: column;
-    align-items: flex-start;
   }
 
-  .versionInfo { max-width: 100%; }
+  .versionInfo {
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 640px) {
+  .ghNavInner {
+    padding: 0 14px;
+    min-height: 52px;
+  }
+
+  .ghNavBrand,
+  .ghNavSep {
+    display: none;
+  }
+
+  .container {
+    padding: 18px 14px 52px;
+  }
+
+  .repoTabs {
+    gap: 4px;
+  }
+
+  .repoTab {
+    padding: 11px 14px;
+  }
+
+  .appInfo,
+  .downloadSection {
+    padding: 16px;
+    border-radius: 14px;
+  }
+
+  .latestBox {
+    padding-right: 72px;
+  }
+
+  .latestBox::after {
+    top: 12px;
+    right: 12px;
+  }
 }
