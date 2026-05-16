@@ -60,7 +60,7 @@ const titleReveal = {
    RESPONSIVE VISUAL CONTROL
 ============================================================================ */
 
-const VISUAL_MIN_PX = 900;
+const VISUAL_MIN_PX = 361;
 
 function useFitsVisual() {
   const [fits, setFits] = useState<boolean>(() => {
@@ -158,32 +158,6 @@ function Mission() {
         >
 
           {/* =====================================================
-              RIGHT VISUAL
-          ===================================================== */}
-
-          {showVisual && (
-            <motion.div
-              className={s.missionVisual}
-              variants={fadeUp}
-              initial="hidden"
-              whileInView="visible"
-              viewport={VP}
-              aria-hidden="true"
-            >
-              <div className={s.lottieWrap}>
-                <span className={s.lottieGlow} />
-
-                <Lottie
-                  animationData={missionAnim}
-                  loop
-                  autoplay
-                  className={s.lottieAnimation}
-                />
-              </div>
-            </motion.div>
-          )}
-
-          {/* =====================================================
               LEFT CONTENT
           ===================================================== */}
 
@@ -223,6 +197,8 @@ function Mission() {
               Built for people,
               powered by purpose.
 
+              {" "}
+
               Our mission is to{" "}
 
               <strong className={s.missionStrong}>
@@ -232,6 +208,8 @@ function Mission() {
               </strong>
 
               {" "}for people and small businesses.
+
+              {" "}
 
               Everyone deserves access to{" "}
 
@@ -278,10 +256,14 @@ function Mission() {
 
               {" "}and make growth more achievable.
 
+              {" "}
+
               Thousands of individuals
               and businesses already rely on Openroot
               to stay ahead —
               and we&apos;re just getting started.
+
+              {" "}
 
               Let&apos;s grow together —
 
@@ -296,52 +278,84 @@ function Mission() {
                 Openroot Systems.
               </strong>
             </motion.p>
+          </motion.div>
 
-            {/* =================================================
-                CTA BUTTONS
-            ================================================= */}
+          {/* =====================================================
+              RIGHT VISUAL
+          ===================================================== */}
 
+          {showVisual && (
             <motion.div
-              className={s.ctaRow}
+              className={s.missionVisual}
               variants={fadeUp}
+              initial="hidden"
+              whileInView="visible"
+              viewport={VP}
+              aria-hidden="true"
             >
+              <div className={s.lottieWrap}>
+                <span className={s.lottieGlow} />
 
-              {/* PRIMARY CTA */}
-
-              <motion.a
-                href="/software"
-                className={s.btnPrimary}
-              >
-                Explore Our Services
-
-                <svg
-                  width="14"
-                  height="14"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2.5"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  aria-hidden="true"
-                >
-                  <path d="M5 12h14M12 5l7 7-7 7" />
-                </svg>
-              </motion.a>
-
-              {/* SECONDARY CTA */}
-
-              <div>
-                <Link
-                  to="/openroot-classes"
-                  className={s.btnGhost}
-                >
-                  Learn with Openroot Classes
-                </Link>
+                <Lottie
+                  animationData={missionAnim}
+                  loop
+                  autoplay
+                  className={s.lottieAnimation}
+                />
               </div>
             </motion.div>
-          </motion.div>
+          )}
         </div>
+
+        {/* =========================================================
+            CTA SECTION
+            BELOW CONTENT + VISUAL
+        ========================================================= */}
+
+        <motion.div
+          className={s.ctaWrap}
+          variants={fadeUp}
+          initial="hidden"
+          whileInView="visible"
+          viewport={VP}
+        >
+          <div className={s.ctaRow}>
+
+            {/* PRIMARY CTA */}
+
+            <motion.a
+              href="/software"
+              className={s.btnPrimary}
+            >
+              <span>
+                Explore Our Services
+              </span>
+
+              <svg
+                width="14"
+                height="14"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                aria-hidden="true"
+              >
+                <path d="M5 12h14M12 5l7 7-7 7" />
+              </svg>
+            </motion.a>
+
+            {/* SECONDARY CTA */}
+
+            <Link
+              to="/openroot-classes"
+              className={s.btnGhost}
+            >
+              Learn with Openroot Classes
+            </Link>
+          </div>
+        </motion.div>
       </div>
     </section>
   );

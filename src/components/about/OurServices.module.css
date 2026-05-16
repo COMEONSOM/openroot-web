@@ -8,14 +8,10 @@
   overflow: hidden;
   isolation: isolate;
 
-  /* Shared spacing system */
   padding-top: 0;
-
   padding-inline: var(--ot-page-inline);
-
   padding-bottom: var(--ot-section-bottom);
 
-  /* EXACT SAME CLEAN BACKGROUND */
   background: var(--ot-section-bg);
 
   transition:
@@ -93,7 +89,7 @@
 }
 
 /* ==========================================================
-   CARD INNER
+   CARD INNER — base (≥900px desktop)
 ========================================================== */
 
 .serviceInner {
@@ -115,18 +111,37 @@
 }
 
 .serviceTag {
+  display: inline-flex;
+
+  align-items: center;
+  justify-content: center;
+
   align-self: flex-start;
-  padding: 0.5rem 1rem;
+
+  width: fit-content;
+  max-width: max-content;
+
+  padding:
+    0.48rem
+    0.9rem;
+
   border-radius: 999px;
 
   font-size: 0.74rem;
   font-weight: 800;
+
   letter-spacing: 0.08em;
   text-transform: uppercase;
 
+  white-space: nowrap;
+
   color: var(--ot-brand-2);
-  background: rgba(100, 128, 245, 0.08);
-  border: 1px solid rgba(100, 128, 245, 0.16);
+
+  background:
+    rgba(100, 128, 245, 0.08);
+
+  border:
+    1px solid rgba(100, 128, 245, 0.16);
 }
 
 .serviceTitle {
@@ -143,13 +158,16 @@
 
 .serviceIntro {
   margin: 0;
-  max-width: 64ch;
 
-  font-size: 1.03rem;
-  line-height: 1.85;
+  max-width: 62ch;
+
+  font-size: clamp(0.92rem, 0.22vw + 0.88rem, 1.03rem);
+  line-height: clamp(1.62, 0.2vw + 1.58, 1.82);
+
   text-align: justify;
-
   color: var(--color-text-muted);
+
+  text-wrap: pretty;
 }
 
 .serviceSubheading {
@@ -173,10 +191,14 @@
 
 .serviceList li {
   display: flex;
-  gap: 12px;
+  gap: 10px;
 
-  line-height: 1.8;
+  font-size: clamp(0.9rem, 0.18vw + 0.86rem, 0.98rem);
+  line-height: clamp(1.58, 0.18vw + 1.56, 1.76);
+
   color: var(--color-text-muted);
+
+  text-wrap: pretty;
 }
 
 .serviceList li::before {
@@ -191,15 +213,17 @@
 .serviceNote {
   position: relative;
 
-  margin-top: 1rem;
-  padding-left: 1rem;
+  margin-top: 0.9rem;
+  padding-left: 0.9rem;
 
-  border-left: 2px solid rgba(100, 128, 245, 0.2);
+  border-left: 2px solid rgba(100, 128, 245, 0.18);
 
-  font-size: 1rem;
-  line-height: 1.85;
+  font-size: clamp(0.9rem, 0.2vw + 0.86rem, 1rem);
+  line-height: clamp(1.62, 0.2vw + 1.58, 1.82);
 
   color: var(--color-text);
+
+  text-wrap: pretty;
 }
 
 /* ==========================================================
@@ -241,12 +265,6 @@
 
   background: #ffffff;
   border: 1px solid var(--color-border-strong);
-
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.08),
-    0 18px 42px rgba(0, 0, 0, 0.08);
-
-  contain: layout paint;
 }
 
 .serviceAnimation {
@@ -285,8 +303,6 @@
   color: white;
   background: linear-gradient(135deg, var(--ot-brand), var(--ot-brand-2));
 
-  box-shadow: 0 10px 30px rgba(88, 101, 242, 0.18);
-
   transition:
     transform 0.22s ease,
     box-shadow 0.22s ease;
@@ -296,49 +312,359 @@
 
 .serviceCTA:hover {
   transform: translateY(-2px);
-  box-shadow: 0 16px 36px rgba(88, 101, 242, 0.24);
 }
 
 .serviceCTA:active {
   transform: scale(0.985);
 }
 
-/* ==========================================================
-   MOBILE CTA
-========================================================== */
-
+/* Mobile CTA — hidden by default; revealed at specific breakpoints */
 .mobileCTA {
   display: none;
 }
 
 /* ==========================================================
-   TABLET
+   XXL SCREENS ≥1800px
+   Largest animation, widest text, generous spacing
 ========================================================== */
 
-@media (max-width: 1023px) {
+@media (min-width: 1800px) {
   .serviceInner {
-    grid-template-columns: 1fr;
-  }
-
-  .serviceVisual {
-    justify-content: flex-start;
-  }
-
-  .serviceVisualSticky {
-    position: relative;
-    top: auto;
+    grid-template-columns: minmax(0, 1.1fr) minmax(420px, 0.9fr);
+    gap: clamp(2.5rem, 3vw, 4.5rem);
   }
 
   .serviceVisualFrame {
-    width: min(320px, 100%);
+    width: min(520px, 100%);
+  }
+
+  .serviceTitle {
+    font-size: clamp(2.4rem, 3.2vw, 4.4rem);
+  }
+
+  .serviceIntro {
+    max-width: 68ch;
   }
 }
 
 /* ==========================================================
-   MOBILE
+   LARGE SCREENS 1400–1799px
 ========================================================== */
 
-@media (max-width: 767px) {
+@media (min-width: 1400px) and (max-width: 1799px) {
+  .serviceInner {
+    grid-template-columns: minmax(0, 1.08fr) minmax(380px, 0.92fr);
+  }
+
+  .serviceVisualFrame {
+    width: min(460px, 100%);
+  }
+}
+
+/* ==========================================================
+   MEDIUM-LARGE 1200–1399px
+========================================================== */
+
+@media (min-width: 1200px) and (max-width: 1399px) {
+  .serviceInner {
+    grid-template-columns: minmax(0, 1.06fr) minmax(340px, 0.94fr);
+  }
+
+  .serviceVisualFrame {
+    width: min(420px, 100%);
+  }
+}
+
+/* ==========================================================
+   TEXT DENSITY — all screens ≤1200px
+========================================================== */
+
+@media (max-width: 1200px) {
+  .serviceIntro {
+    max-width: 58ch;
+  }
+
+  .serviceNote {
+    max-width: 58ch;
+  }
+}
+
+/* ==========================================================
+   STANDARD DESKTOP 900–1199px
+   Two-column preserved; animation slightly smaller
+========================================================== */
+
+@media (min-width: 900px) and (max-width: 1199px) {
+  .serviceInner {
+    grid-template-columns: minmax(0, 1fr) minmax(300px, 320px);
+    gap: 1.5rem;
+  }
+
+  .serviceVisual {
+    justify-content: flex-end;
+  }
+
+  .serviceVisualSticky {
+    top: 96px;
+  }
+
+  .serviceVisualFrame {
+    width: min(390px, 100%);
+  }
+
+  .serviceAnimation {
+    width: 114% !important;
+    height: 114% !important;
+
+    transform:
+      translate(var(--svc-crop-x), var(--svc-crop-y))
+      scale(1.08);
+  }
+
+  .serviceIntro {
+    font-size: 0.94rem;
+    line-height: 1.68;
+    max-width: 54ch;
+  }
+
+  .serviceList li {
+    font-size: 0.92rem;
+    line-height: 1.66;
+  }
+
+  .serviceNote {
+    font-size: 0.93rem;
+    line-height: 1.68;
+    max-width: 54ch;
+  }
+}
+
+/* ==========================================================
+   SMALLER DESKTOP / LARGE TABLET 768–899px
+   Still two-column; animation shrinks further
+========================================================== */
+
+@media (min-width: 768px) and (max-width: 899px) {
+  .serviceInner {
+    grid-template-columns: minmax(0, 1fr) 240px;
+    gap: 1.4rem;
+    align-items: start;
+  }
+
+  .serviceVisual {
+    justify-content: flex-end;
+  }
+
+  .serviceVisualSticky {
+    position: sticky;
+    top: 88px;
+  }
+
+  .serviceVisualFrame {
+    width: min(240px, 100%);
+    border-radius: 24px;
+  }
+
+  .serviceAnimation {
+    width: 112% !important;
+    height: 112% !important;
+
+    transform:
+      translate(var(--svc-crop-x), var(--svc-crop-y))
+      scale(1.06);
+  }
+
+  .serviceTitle {
+    max-width: 100%;
+    font-size: clamp(1.9rem, 4.5vw, 2.8rem);
+  }
+
+  .serviceIntro {
+    font-size: 0.93rem;
+    line-height: 1.7;
+    max-width: 52ch;
+    text-align: left;
+  }
+
+  .serviceList li {
+    font-size: 0.91rem;
+    line-height: 1.66;
+  }
+
+  .serviceNote {
+    font-size: 0.92rem;
+    line-height: 1.7;
+    max-width: 52ch;
+  }
+}
+
+/* ==========================================================
+   WRAP / FLOW LAYOUT 641–767px
+   ─────────────────────────────────────────────────────────
+   Strategy: dissolve .serviceContent into the parent grid
+   via display:contents so every child becomes a direct grid
+   item. This lets us place the animation in column 2 beside
+   ONLY the subheading + bullet list rows, creating a
+   text-wraps-image effect — no HTML changes required.
+
+   Grid columns: [1fr] [155px]
+   ┌────────────────────────┬────────────┐
+   │ tag pill               │            │ ← row 1 (spans both)
+   ├────────────────────────┤            │
+   │ title                  │            │ ← row 2 (spans both)
+   ├────────────────────────┤            │
+   │ intro paragraph        │            │ ← row 3 (spans both)
+   ├────────────────────────┤ animation  │
+   │ subheading             │   frame    │ ← row 4 (col 1 | col 2)
+   ├────────────────────────┤            │
+   │ bullet list            │            │ ← row 5 (col 1 | col 2)
+   ├────────────────────────┴────────────┤
+   │ note                                │ ← row 6 (spans both)
+   ├─────────────────────────────────────┤
+   │ CTA button                          │ ← row 7 (spans both)
+   └─────────────────────────────────────┘
+========================================================== */
+
+@media (min-width: 641px) and (max-width: 767px) {
+  .servicesStack {
+    gap: 2.8rem;
+  }
+
+  .serviceCard + .serviceCard {
+    padding-top: 2.8rem;
+  }
+
+  /* Two-column grid: text | animation */
+  .serviceInner {
+    display: grid;
+    grid-template-columns: 1fr 155px;
+    gap: 0.7rem 1.25rem;
+    align-items: start;
+  }
+
+  /* ── Dissolve serviceContent so its children join the grid ── */
+  .serviceContent {
+    display: contents;
+  }
+
+  /* ── Full-width rows ── */
+  .serviceTag {
+    grid-column: 1 / -1;
+    grid-row: 1;
+    align-self: start;
+  }
+
+  .serviceTitle {
+    grid-column: 1 / -1;
+    grid-row: 2;
+    font-size: clamp(1.75rem, 6vw, 2.5rem);
+    max-width: 100%;
+  }
+
+  .serviceIntro {
+    grid-column: 1 / -1;
+    grid-row: 3;
+    font-size: 0.94rem;
+    line-height: 1.7;
+    text-align: left;
+    max-width: 100%;
+  }
+
+  /* ── Left-column rows (beside animation) ── */
+  .serviceSubheading {
+    grid-column: 1;
+    grid-row: 4;
+    align-self: start;
+    margin-top: 0;
+    font-size: 0.98rem;
+  }
+
+  .serviceList {
+    grid-column: 1;
+    grid-row: 5;
+    align-self: start;
+    gap: 0.65rem;
+  }
+
+  .serviceList li {
+    font-size: 0.9rem;
+    line-height: 1.64;
+  }
+
+  /* ── Back to full-width ── */
+  .serviceNote {
+    grid-column: 1 / -1;
+    grid-row: 6;
+    font-size: 0.92rem;
+    line-height: 1.7;
+    max-width: 100%;
+  }
+
+  /* Mobile CTA — full width at bottom */
+  .mobileCTA {
+    display: flex !important;
+    grid-column: 1 / -1;
+    grid-row: 7;
+    width: 100%;
+    justify-content: center;
+    margin-top: 0.4rem;
+    min-width: 100%;
+  }
+
+  /* ── Animation panel: col 2, spans rows 4-5 ── */
+  .serviceVisual {
+    display: flex !important;
+    grid-column: 2;
+    grid-row: 4 / 6;
+    justify-content: flex-end;
+    align-items: flex-start;
+    align-self: start;
+  }
+
+  .serviceVisualSticky {
+    position: static;
+    width: 100%;
+    gap: 0;
+  }
+
+  .serviceVisualFrame {
+    width: 100%;
+    max-width: 155px;
+    border-radius: 18px;
+    aspect-ratio: 1 / 1;
+  }
+
+  .serviceAnimation {
+    width: 116% !important;
+    height: 116% !important;
+
+    transform:
+      translate(var(--svc-crop-x), var(--svc-crop-y))
+      scale(1.1);
+  }
+
+  /* Hide the desktop CTA that lives inside the visual panel */
+  .serviceVisual .serviceCTA {
+    display: none;
+  }
+}
+
+/* ==========================================================
+   STACKED MOBILE LAYOUT 361–640px
+   ─────────────────────────────────────────────────────────
+   Single-column grid. display:contents on .serviceContent
+   again so we can control order across the full column:
+
+   ┌─────────────────────────────────────┐
+   │ tag → title → intro → sub → list → note   (rows 1-6)
+   ├─────────────────────────────────────┤
+   │ animation (centred)                 │ ← row 7
+   ├─────────────────────────────────────┤
+   │ CTA button                          │ ← row 8
+   └─────────────────────────────────────┘
+========================================================== */
+
+@media (min-width: 361px) and (max-width: 640px) {
   .servicesStack {
     gap: 2.5rem;
   }
@@ -348,34 +674,177 @@
   }
 
   .serviceInner {
+    display: grid;
     grid-template-columns: 1fr;
-    gap: 1.2rem;
+    row-gap: 0.9rem;
+    align-items: start;
   }
 
+  /* Dissolve serviceContent so children join the grid */
+  .serviceContent {
+    display: contents;
+  }
+
+  /* Explicit row order for content children */
+  .serviceTag       { grid-row: 1; }
+  .serviceTitle     { grid-row: 2; }
+  .serviceIntro     { grid-row: 3; }
+  .serviceSubheading { grid-row: 4; }
+  .serviceList      { grid-row: 5; }
+  .serviceNote      { grid-row: 6; }
+
+  /* Typography */
+  .serviceTitle {
+    font-size: clamp(1.75rem, 8vw, 2.6rem);
+    max-width: 100%;
+    line-height: 1;
+  }
+
+  .serviceIntro {
+    font-size: 0.93rem;
+    line-height: 1.68;
+    text-align: left;
+    max-width: 100%;
+  }
+
+  .serviceList li {
+    font-size: 0.91rem;
+    line-height: 1.65;
+  }
+
+  .serviceNote {
+    font-size: 0.92rem;
+    line-height: 1.68;
+    max-width: 100%;
+    margin-top: 0;
+  }
+
+  /* Animation: row 7, centred */
   .serviceVisual {
+    display: flex !important;
+    grid-row: 7;
+    justify-content: center;
+    align-items: center;
+    margin-top: 0.4rem;
+  }
+
+  .serviceVisualSticky {
+    position: static;
+    align-items: center;
+    width: 100%;
+    gap: 0;
+  }
+
+  .serviceVisualFrame {
+    width: min(260px, 78%);
+    margin: 0 auto;
+    border-radius: 22px;
+  }
+
+  .serviceAnimation {
+    width: 116% !important;
+    height: 116% !important;
+
+    transform:
+      translate(var(--svc-crop-x), var(--svc-crop-y))
+      scale(1.1);
+  }
+
+  /* Hide CTA inside visual panel */
+  .serviceVisual .serviceCTA {
     display: none;
   }
 
-  .serviceTitle {
-    max-width: 100%;
-    font-size: clamp(1.8rem, 8vw, 2.7rem);
-  }
-
-  .serviceIntro,
-  .serviceNote {
-    text-align: left;
-  }
-
+  /* Mobile CTA: row 8, full width */
   .mobileCTA {
-    display: flex;
+    display: flex !important;
+    grid-row: 8;
     width: 100%;
     justify-content: center;
-    margin-top: 1.2rem;
+    min-width: 100%;
+    margin-top: 0.4rem;
   }
 
   .serviceCTA {
     width: 100%;
     min-width: 100%;
+  }
+}
+
+/* ==========================================================
+   COMPACT MOBILE ≤360px
+   Hide animation entirely — text + CTA only
+========================================================== */
+
+@media (max-width: 360px) {
+  .servicesSection {
+    padding-inline: 0.95rem;
+  }
+
+  .servicesStack {
+    gap: 2.2rem;
+  }
+
+  .serviceCard + .serviceCard {
+    padding-top: 2.2rem;
+  }
+
+  /* Single-column block layout; re-enable flex on content */
+  .serviceInner {
+    display: block;
+  }
+
+  .serviceContent {
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+  }
+
+  /* Hide animation completely */
+  .serviceVisual {
+    display: none !important;
+  }
+
+  /* Show mobile CTA */
+  .mobileCTA {
+    display: flex !important;
+    width: 100%;
+    justify-content: center;
+    margin-top: 0.6rem;
+  }
+
+  .serviceCTA {
+    width: 100%;
+    min-width: 100%;
+  }
+
+  /* Compact typography */
+  .serviceTitle {
+    font-size: 1.45rem;
+    max-width: 100%;
+    letter-spacing: -0.05em;
+  }
+
+  .serviceIntro {
+    font-size: 0.88rem;
+    line-height: 1.65;
+    text-align: left;
+    max-width: 100%;
+  }
+
+  .serviceSubheading {
+    font-size: 0.94rem;
+  }
+
+  .serviceList li {
+    font-size: 0.87rem;
+    line-height: 1.62;
+  }
+
+  .serviceNote {
+    font-size: 0.88rem;
+    line-height: 1.65;
+    max-width: 100%;
   }
 }
 

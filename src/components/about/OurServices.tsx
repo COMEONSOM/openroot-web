@@ -3,6 +3,11 @@
  * OUR SERVICES — OPENROOT SYSTEMS
  * CLEANED + PRODUCTION READY
  * ============================================================
+ * Changes from original:
+ *   • ZERO structural changes
+ *   • Animation hidden on ≤767px via CSS only (.serviceVisual)
+ *   • Text sizes use clamp() in the CSS — component untouched
+ * ============================================================
  */
 
 import { memo } from "react";
@@ -60,19 +65,17 @@ function getOfferByTag(tag: string): OfferCard {
 const SERVICE_BLOCKS: ServiceBlock[] = [
   {
     ...getOfferByTag("Software Solutions"),
-
     animationData: softwareAnimation,
   },
 
   {
     ...getOfferByTag("Openroot Classes"),
-
     animationData: classesAnimation,
   },
 ];
 
 /* ============================================================
-   SERVICE CARD
+   SERVICE CARD — original structure, untouched
 ============================================================ */
 
 function ServiceCard({
@@ -81,10 +84,6 @@ function ServiceCard({
   card: ServiceBlock;
 }) {
   const navigate = useNavigate();
-
-  /* ========================================================
-     CTA HANDLER
-  ======================================================== */
 
   const handleCTA = () => {
     if (card.tag === "Software Solutions") {
@@ -108,8 +107,9 @@ function ServiceCard({
       viewport={VP}
     >
       <div className={styles.serviceInner}>
+
         {/* ==================================================
-            LEFT CONTENT
+            LEFT CONTENT — original, untouched
         ================================================== */}
 
         <div className={styles.serviceContent}>
@@ -143,10 +143,7 @@ function ServiceCard({
             {card.note}
           </p>
 
-          {/* ==============================================
-              MOBILE CTA
-          ============================================== */}
-
+          {/* Mobile CTA — visible only ≤767px via CSS */}
           <button
             type="button"
             className={`${styles.serviceCTA} ${styles.mobileCTA}`}
@@ -159,55 +156,40 @@ function ServiceCard({
         </div>
 
         {/* ==================================================
-            RIGHT VISUAL PANEL
+            RIGHT VISUAL PANEL — hidden ≤767px via CSS only
         ================================================== */}
 
         <div className={styles.serviceVisual}>
-          <div
-            className={
-              styles.serviceVisualSticky
-            }
-          >
-            <div
-              className={
-                styles.serviceVisualFrame
-              }
-            >
+          <div className={styles.serviceVisualSticky}>
+            <div className={styles.serviceVisualFrame}>
               <Lottie
-                animationData={
-                  card.animationData
-                }
+                animationData={card.animationData}
                 loop
                 autoplay
-                className={
-                  styles.serviceAnimation
-                }
+                className={styles.serviceAnimation}
               />
             </div>
 
-            {/* ==========================================
-                DESKTOP CTA
-            ========================================== */}
-
+            {/* Desktop CTA — inside visual panel */}
             <button
               type="button"
               className={styles.serviceCTA}
               onClick={handleCTA}
             >
-              {card.tag ===
-              "Software Solutions"
+              {card.tag === "Software Solutions"
                 ? "Explore Solutions"
                 : "Join Classes"}
             </button>
           </div>
         </div>
+
       </div>
     </motion.article>
   );
 }
 
 /* ============================================================
-   MAIN COMPONENT
+   MAIN COMPONENT — original, untouched
 ============================================================ */
 
 function OurServices() {
@@ -220,12 +202,9 @@ function OurServices() {
       viewport={VP}
       aria-labelledby="our-services-heading"
     >
-
       <div className={styles.servicesInner}>
-        {/* ==================================================
-            HEADER
-        ================================================== */}
 
+        {/* Header */}
         <motion.div
           className={styles.servicesHeader}
           variants={stagger()}
@@ -234,31 +213,15 @@ function OurServices() {
           viewport={VP}
         >
           <motion.div
-            className={
-              styles.servicesEyebrowRow
-            }
+            className={styles.servicesEyebrowRow}
             variants={fadeUp}
           >
-            <span
-              className={
-                styles.servicesEyebrowLine
-              }
-            />
-
-            <span
-              className={
-                styles.servicesEyebrowText
-              }
-            >
-              Our Services
-            </span>
+            <span className={styles.servicesEyebrowLine} />
+            <span className={styles.servicesEyebrowText}>Our Services</span>
           </motion.div>
         </motion.div>
 
-        {/* ==================================================
-            SERVICE STACK
-        ================================================== */}
-
+        {/* Service stack */}
         <motion.div
           className={styles.servicesStack}
           variants={stagger()}
@@ -273,6 +236,7 @@ function OurServices() {
             />
           ))}
         </motion.div>
+
       </div>
     </motion.section>
   );

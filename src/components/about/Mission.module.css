@@ -1,24 +1,23 @@
 /* =============================================================================
    src/components/styles/Mission.module.css
-   CLEAN • GLOBAL-ALIGNED • PRODUCTION READY
+   CLEAN • GLOBAL-ALIGNED • RESPONSIVE • LIGHTWEIGHT
 ============================================================================= */
 
 /* =============================================================================
-   ROOT / SECTION SHELL
+   ROOT
 ============================================================================= */
 
 .root {
   position: relative;
   overflow: hidden;
   isolation: isolate;
+
   width: 100%;
 
-  /* Shared global section rhythm */
   padding-top: 0;
   padding-inline: var(--ot-page-inline);
   padding-bottom: var(--ot-section-bottom);
 
-  /* Flat global background — same as navbar/services/about */
   background: var(--ot-section-bg);
 
   transition:
@@ -27,46 +26,53 @@
 }
 
 /* =============================================================================
-   AMBIENT ORBS
-   Used by the TSX for soft motion accents
+   ORBS
 ============================================================================= */
 
 .orbA,
 .orbB {
   position: absolute;
-  pointer-events: none;
   z-index: 0;
+
+  pointer-events: none;
+
   border-radius: 999px;
-  filter: blur(28px);
-  opacity: 0.55;
+
+  opacity: 0.16;
 }
 
 .orbA {
   top: -8%;
   left: -6%;
+
   width: 280px;
   height: 280px;
-  background: radial-gradient(
-    circle at center,
-    rgba(67, 97, 238, 0.14) 0%,
-    transparent 70%
-  );
+
+  background:
+    radial-gradient(
+      circle at center,
+      rgba(67, 97, 238, 0.14) 0%,
+      transparent 72%
+    );
 }
 
 .orbB {
   right: -10%;
   bottom: -12%;
+
   width: 320px;
   height: 320px;
-  background: radial-gradient(
-    circle at center,
-    rgba(63, 55, 201, 0.12) 0%,
-    transparent 72%
-  );
+
+  background:
+    radial-gradient(
+      circle at center,
+      rgba(63, 55, 201, 0.12) 0%,
+      transparent 72%
+    );
 }
 
 /* =============================================================================
-   INNER WRAPPER
+   INNER
 ============================================================================= */
 
 .inner {
@@ -75,11 +81,13 @@
 
   width: 100%;
   max-width: var(--ot-content-max);
+
   margin-inline: auto;
 
   display: flex;
   flex-direction: column;
-  gap: 1.25rem;
+
+  gap: 1.2rem;
 }
 
 /* =============================================================================
@@ -88,10 +96,13 @@
 
 .missionStage {
   display: grid;
+
   grid-template-columns:
-    minmax(0, 1.15fr)
-    minmax(260px, 0.85fr);
-  gap: clamp(1.8rem, 3.5vw, 3rem);
+    minmax(0, 1.08fr)
+    minmax(300px, 0.92fr);
+
+  gap: clamp(1.6rem, 3vw, 3rem);
+
   align-items: start;
 }
 
@@ -100,10 +111,9 @@
 ============================================================================= */
 
 .missionCopy {
-  order: 1;
-
   display: flex;
   flex-direction: column;
+
   gap: 1rem;
 
   min-width: 0;
@@ -116,71 +126,77 @@
 .sectionTitleBlock {
   display: flex;
   flex-direction: column;
+
   gap: 0.35rem;
 
   max-width: 680px;
+
   margin-bottom: 0.2rem;
 }
 
 .sectionTitle {
   margin: 0;
 
-  font-size: clamp(2.3rem, 5vw, 4.4rem);
+  max-width: 11ch;
+
+  font-size: clamp(2.2rem, 4.8vw, 4.2rem);
   line-height: 0.96;
+
   letter-spacing: -0.065em;
 
-  color: var(--color-text, #111111);
+  color: var(--color-text);
 
   text-wrap: balance;
 }
 
 /* =============================================================================
-   BODY COPY
+   COPY
 ============================================================================= */
 
 .missionCopyP {
   margin: 0;
 
-  font-size: 1rem;
-  line-height: 1.9;
-  text-align: justify;
+  max-width: 60ch;
 
-  color: var(--color-text-muted, rgba(30, 30, 50, 0.72));
+  font-size:
+    clamp(0.92rem, 0.18vw + 0.88rem, 1rem);
+
+  line-height:
+    clamp(1.64, 0.18vw + 1.6, 1.84);
+
+  text-align: left;
+
+  color: var(--color-text-muted);
+
+  text-wrap: pretty;
 
   -webkit-text-fill-color: currentColor;
 }
 
 .missionStrong {
   font-weight: 800;
-  color: var(--color-text, #111111);
+  color: var(--color-text);
 }
 
 .missionStrongAccent {
   font-weight: 700;
-  color: var(--ot-brand-2, #4361ee);
+  color: var(--ot-brand-2);
 
-  text-decoration: none;
   transition: opacity 0.18s ease;
 }
 
 .missionStrongAccent:hover {
   opacity: 0.78;
-  text-decoration: underline;
-  text-decoration-thickness: 1.5px;
-  text-underline-offset: 3px;
 }
 
 /* =============================================================================
-   RIGHT VISUAL
+   VISUAL
 ============================================================================= */
 
 .missionVisual {
-  order: 2;
-
   display: flex;
   align-items: flex-start;
   justify-content: center;
-  align-self: start;
 
   min-width: 0;
 }
@@ -192,11 +208,12 @@
 .lottieWrap {
   position: relative;
 
-  width: min(390px, 100%);
+  width: clamp(220px, 32vw, 520px);
   aspect-ratio: 1 / 1;
 
   overflow: hidden;
-  border-radius: 30px;
+
+  border-radius: 28px;
 
   display: grid;
   place-items: center;
@@ -204,73 +221,88 @@
   background:
     linear-gradient(
       180deg,
-      rgba(36, 36, 36, 0.96),
-      rgba(10, 10, 10, 1)
+      rgba(0, 0, 0, 0.96),
+      rgb(0, 0, 0)
     );
 
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border:
+    1px solid rgba(255, 255, 255, 0.08);
 }
 
-/* soft glow layer used in TSX */
 .lottieGlow {
-  position: absolute;
-  inset: 12%;
-  border-radius: 50%;
-  pointer-events: none;
-  z-index: 0;
-
-  background: radial-gradient(
-    circle at center,
-    rgba(67, 97, 238, 0.18) 0%,
-    transparent 70%
-  );
-
-  filter: blur(18px);
-  opacity: 0.9;
+  display: none;
 }
+
+/* =============================================================================
+   LOTTIE
+============================================================================= */
 
 .lottieAnimation {
-  width: 100% !important;
-  height: 100% !important;
+  width: 118% !important;
+  height: 118% !important;
 
   position: relative;
   z-index: 1;
-
-  transform: scale(1.12);
-  transform-origin: center center;
 
   display: flex;
   align-items: center;
   justify-content: center;
 
   overflow: hidden;
+
   line-height: 0;
+
+  transform:
+    translateY(-2%)
+    scale(1.08);
+
+  transform-origin: center center;
 }
 
 .lottieAnimation :global(svg),
 .lottieAnimation :global(canvas) {
-  width: 112% !important;
-  height: 112% !important;
+  width: 118% !important;
+  height: 118% !important;
+
   display: block;
 
   transform:
-    translateY(2%)
-    scale(1.12);
+    translateY(-2%)
+    scale(1.08);
 
   transform-origin: center center;
 }
 
 /* =============================================================================
-   CTA
+   CTA WRAP
+============================================================================= */
+
+.ctaWrap {
+  width: 100%;
+
+  display: flex;
+  justify-content: flex-start;
+
+  margin-top: 4px;
+}
+
+/* =============================================================================
+   CTA ROW
 ============================================================================= */
 
 .ctaRow {
   display: flex;
-  flex-wrap: nowrap;
-  gap: 10px;
+  flex-wrap: wrap;
+
+  justify-content: center;
   align-items: center;
-  margin-top: 6px;
+
+  gap: 0.9rem;
 }
+
+/* =============================================================================
+   BUTTONS
+============================================================================= */
 
 .btnPrimary,
 .btnGhost {
@@ -278,14 +310,24 @@
   align-items: center;
   justify-content: center;
 
+  gap: 0.45rem;
+
+  width: fit-content;
+  max-width: max-content;
+
   min-height: 46px;
-  padding: 0 18px;
+
+  padding:
+    0
+    1.2rem;
+
   border-radius: 999px;
 
   font-size: 0.9rem;
   font-weight: 700;
-  text-decoration: none;
+
   white-space: nowrap;
+  text-decoration: none;
 
   transition:
     transform 0.18s ease,
@@ -296,72 +338,359 @@
 
 .btnPrimary {
   border: none;
-  color: var(--ot-cta-text, #ffffff);
-  background: var(--ot-cta-bg, #3f37c9);
+
+  color: var(--ot-cta-text);
+
+  background:
+    linear-gradient(
+      135deg,
+      var(--ot-brand),
+      var(--ot-brand-2)
+    );
 }
 
 .btnPrimary:hover {
-  background: var(--ot-cta-hover-bg, #3530b0);
+  transform: translateY(-1px);
 }
 
 .btnGhost {
-  background: var(--ot-surface, #ffffff);
-  color: var(--color-text, #111111);
-  border: 1.5px solid var(--color-border-strong, rgba(0, 0, 0, 0.18));
+  background: var(--ot-surface);
+
+  color: var(--color-text);
+
+  border:
+    1.5px solid var(--color-border-strong);
 }
 
 .btnGhost:hover {
-  background: var(
-    --ot-surface-alt,
-    rgba(0, 0, 0, 0.04)
-  );
+  background:
+    rgba(0, 0, 0, 0.03);
 }
 
 /* =============================================================================
-   RESPONSIVE
+   ≥1800px
 ============================================================================= */
 
-@media (max-width: 899px) {
+@media (min-width: 1800px) {
   .missionStage {
-    grid-template-columns: 1fr;
-    gap: clamp(1.6rem, 4vw, 2.4rem);
-  }
-
-  .missionVisual {
-    justify-content: flex-start;
+    grid-template-columns:
+      minmax(0, 1.08fr)
+      minmax(420px, 0.92fr);
   }
 
   .lottieWrap {
-    width: min(320px, 100%);
-  }
-}
-
-@media (max-width: 640px) {
-  .root {
-    padding-top: 0;
-    padding-inline: 0.85rem;
-    padding-bottom: var(--ot-section-bottom);
+    width: min(520px, 100%);
   }
 
   .sectionTitle {
-    font-size: clamp(2rem, 9vw, 2.8rem);
-    letter-spacing: -0.03em;
+    font-size:
+      clamp(2.5rem, 3vw, 4.5rem);
   }
 
   .missionCopyP {
-    font-size: 0.97rem;
-    line-height: 1.76;
+    max-width: 68ch;
+  }
+}
+
+/* =============================================================================
+   1400px–1799px
+============================================================================= */
+
+@media (min-width: 1400px) and (max-width: 1799px) {
+  .lottieWrap {
+    width: min(460px, 100%);
+  }
+}
+
+/* =============================================================================
+   1200px–1399px
+============================================================================= */
+
+@media (min-width: 1200px) and (max-width: 1399px) {
+  .lottieWrap {
+    width: min(420px, 100%);
+  }
+}
+
+/* =============================================================================
+   900px–1199px
+============================================================================= */
+
+@media (min-width: 900px) and (max-width: 1199px) {
+  .missionStage {
+    grid-template-columns:
+      minmax(0, 1fr)
+      minmax(280px, 320px);
+
+    gap: 1.5rem;
+  }
+
+  .missionVisual {
+    justify-content: flex-end;
+  }
+
+  .sectionTitle {
+    max-width: 12ch;
+  }
+
+  .missionCopyP {
+    max-width: 54ch;
+
+    font-size: 0.94rem;
+    line-height: 1.7;
+  }
+
+  .lottieWrap {
+    width: min(360px, 100%);
+  }
+
+  .lottieAnimation,
+  .lottieAnimation :global(svg),
+  .lottieAnimation :global(canvas) {
+    transform:
+      translateY(-1%)
+      scale(1.06);
+  }
+}
+
+/* =============================================================================
+   641px–899px
+   ANIMATION INSIDE CONTENT FLOW
+============================================================================= */
+
+@media (min-width: 641px) and (max-width: 899px) {
+  .missionStage {
+    display: grid;
+
+    grid-template-columns:
+      minmax(0, 1fr)
+      210px;
+
+    gap:
+      0.9rem
+      1.3rem;
+
+    align-items: start;
+  }
+
+  .missionCopy {
+    display: contents;
+  }
+
+  .sectionTitleBlock {
+    grid-column: 1 / -1;
+    grid-row: 1;
+  }
+
+  .missionCopyP:nth-of-type(1) {
+    grid-column: 1 / -1;
+    grid-row: 2;
+  }
+
+  .missionCopyP:nth-of-type(2) {
+    grid-column: 1;
+    grid-row: 3;
+  }
+
+  .missionCopyP:nth-of-type(3) {
+    grid-column: 1;
+    grid-row: 4;
+  }
+
+  .missionVisual {
+    grid-column: 2;
+    grid-row: 3 / 5;
+
+    justify-content: flex-end;
+    align-items: flex-start;
+  }
+
+  .sectionTitle {
+    max-width: 100%;
+
+    font-size:
+      clamp(1.9rem, 4vw, 3rem);
+  }
+
+  .missionCopyP {
+    max-width: 100%;
+
+    font-size: 0.92rem;
+    line-height: 1.66;
+  }
+
+  .lottieWrap {
+    width: min(210px, 100%);
+
+    border-radius: 22px;
+  }
+
+  .lottieAnimation,
+  .lottieAnimation :global(svg),
+  .lottieAnimation :global(canvas) {
+    transform:
+      translateY(-1%)
+      scale(1.04);
+  }
+
+  .ctaWrap {
+    margin-top: 0.2rem;
   }
 
   .btnPrimary,
   .btnGhost {
     min-height: 44px;
-    font-size: 0.82rem;
-    padding: 0 14px;
+
+    font-size: 0.84rem;
+
+    padding:
+      0
+      1rem;
+  }
+}
+
+/* =============================================================================
+   361px–640px
+   CONTENT
+   ↓
+   ANIMATION
+   ↓
+   CTA
+============================================================================= */
+
+@media (min-width: 361px) and (max-width: 640px) {
+  .root {
+    padding-inline: 1rem;
+  }
+
+  .missionStage {
+    grid-template-columns: 1fr;
+
+    gap: 1rem;
+  }
+
+  .missionCopy {
+    gap: 0.82rem;
+  }
+
+  .sectionTitle {
+    max-width: 100%;
+
+    font-size:
+      clamp(1.55rem, 7vw, 2.35rem);
+
+    letter-spacing: -0.04em;
+  }
+
+  .missionCopyP {
+    max-width: 100%;
+
+    font-size: 0.89rem;
+    line-height: 1.64;
+  }
+
+  .missionVisual {
+    justify-content: center;
+    align-items: center;
+
+    width: 100%;
   }
 
   .lottieWrap {
-    width: min(280px, 100%);
+    width: min(250px, 76vw);
+
+    border-radius: 22px;
+
+    margin-inline: auto;
+  }
+
+  .lottieAnimation,
+  .lottieAnimation :global(svg),
+  .lottieAnimation :global(canvas) {
+    transform:
+      translateY(0%)
+      scale(1.03);
+  }
+
+  .ctaWrap {
+    margin-top: 0.15rem;
+    justify-content: center;
+  }
+
+  .ctaRow {
+    gap: 0.7rem;
+    justify-content: center;
+  }
+
+  .btnPrimary,
+  .btnGhost {
+    min-height: 44px;
+
+    font-size: 0.82rem;
+
+    padding:
+      0
+      0.95rem;
+  }
+}
+
+/* =============================================================================
+   ≤360px
+   NO VISUAL
+============================================================================= */
+
+@media (max-width: 360px) {
+  .root {
+    padding-inline: 0.92rem;
+  }
+
+  .orbA,
+  .orbB {
+    display: none;
+  }
+
+  .missionStage {
+    grid-template-columns: 1fr;
+
+    gap: 0.9rem;
+  }
+
+  .missionVisual {
+    display: none !important;
+  }
+
+  .sectionTitle {
+    max-width: 100%;
+
+    font-size: 1.34rem;
+
+    letter-spacing: -0.03em;
+  }
+
+  .missionCopyP {
+    max-width: 100%;
+
+    font-size: 0.85rem;
+    line-height: 1.58;
+  }
+
+  .ctaWrap {
+    margin-top: 0.15rem;
+  }
+
+  .ctaRow {
+    gap: 0.65rem;
+  }
+
+  .btnPrimary,
+  .btnGhost {
+    min-height: 42px;
+
+    font-size: 0.79rem;
+
+    padding:
+      0
+      0.9rem;
   }
 }
 
@@ -379,10 +708,7 @@
     animation: none;
   }
 
-  .lottieAnimation {
-    transform: scale(1.02);
-  }
-
+  .lottieAnimation,
   .lottieAnimation :global(svg),
   .lottieAnimation :global(canvas) {
     transform:
