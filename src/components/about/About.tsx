@@ -95,30 +95,6 @@ function About() {
                 small businesses.
               </p>
             </div>
-
-            {/* =============================================
-                CERTIFICATION IMAGES
-            ============================================== */}
-
-            <div className={styles.certificateGrid}>
-              <div className={styles.certificateCard}>
-                <img
-                  src="/assets/about1.avif"
-                  alt="LinkedIn"
-                  className={styles.certificateImage}
-                  loading="lazy"
-                />
-              </div>
-
-              <div className={styles.certificateCard}>
-                <img
-                  src="/assets/about2.avif"
-                  alt="openroot systems google review"
-                  className={styles.certificateImage}
-                  loading="lazy"
-                />
-              </div>
-            </div>
           </motion.div>
 
           {/* =================================================
@@ -137,6 +113,51 @@ function About() {
                 className={styles.visualAnimation}
               />
             </div>
+          </motion.div>
+
+          {/* =================================================
+              CERTIFICATE IMAGES
+              Direct child of aboutGrid — placed at col 1,
+              row 2 so it sits under text content only.
+          ================================================= */}
+
+          <motion.div
+            className={styles.certificateGrid}
+            variants={fadeUp}
+          >
+            {/* LinkedIn */}
+            <a
+              href="https://www.linkedin.com/in/comeonsom/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className={styles.certificateCard}
+              aria-label="Visit Somnath Banerjee's LinkedIn profile"
+            >
+              <img
+                src="/assets/about1.avif"
+                alt="Somnath Banerjee — Founder of Openroot Systems on LinkedIn"
+                className={styles.certificateImage}
+                loading="lazy"
+                draggable={false}
+              />
+            </a>
+
+            {/* Chrome Web Store */}
+            <a
+              href="https://chromewebstore.google.com/detail/openroot-gdrive-automatio/pndbnlfhpjinfneglecnpgijhcaffdng"
+              target="_blank"
+              rel="noopener noreferrer"
+              className={styles.certificateCard}
+              aria-label="View Openroot GDrive Automation System on Chrome Web Store"
+            >
+              <img
+                src="/assets/about2.avif"
+                alt="Openroot GDrive Automation System on Chrome Web Store"
+                className={styles.certificateImage}
+                loading="lazy"
+                draggable={false}
+              />
+            </a>
           </motion.div>
         </motion.div>
       </div>

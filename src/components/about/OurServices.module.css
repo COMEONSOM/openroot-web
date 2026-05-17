@@ -8,11 +8,18 @@
   overflow: hidden;
   isolation: isolate;
 
+  /* Keep the section aligned to the same rhythm as the navbar */
   padding-top: 0;
   padding-inline: var(--ot-page-inline);
   padding-bottom: var(--ot-section-bottom);
 
   background: var(--ot-section-bg);
+
+  /* The right side is controlled by variables so it stays stable
+     across breakpoints without creating a large content-to-visual gap. */
+  --svc-col-gap: clamp(0.85rem, 1.4vw, 1.25rem);
+  --svc-visual-width: clamp(300px, 32vw, 520px);
+  --svc-frame-radius: 32px;
 
   transition:
     background 0.35s ease,
@@ -94,8 +101,10 @@
 
 .serviceInner {
   display: grid;
-  grid-template-columns: minmax(0, 1.08fr) minmax(320px, 0.92fr);
-  gap: clamp(2rem, 4vw, 4rem);
+  grid-template-columns:
+    minmax(0, 1fr)
+    minmax(0, var(--svc-visual-width));
+  gap: var(--svc-col-gap);
   align-items: start;
 }
 
@@ -108,6 +117,7 @@
   flex-direction: column;
   gap: 1rem;
   min-width: 0;
+  max-width: 100%;
 }
 
 .serviceTag {
@@ -233,7 +243,9 @@
 .serviceVisual {
   display: flex;
   align-items: flex-start;
-  justify-content: center;
+  justify-content: flex-end;
+  width: 100%;
+  min-width: 0;
 }
 
 .serviceVisualSticky {
@@ -245,6 +257,8 @@
   align-items: center;
 
   gap: 1.4rem;
+  width: 100%;
+  min-width: 0;
 }
 
 .serviceVisualFrame {
@@ -254,11 +268,11 @@
 
   position: relative;
 
-  width: min(390px, 100%);
+  width: 100%;
   aspect-ratio: 1 / 1;
 
   overflow: hidden;
-  border-radius: 32px;
+  border-radius: var(--svc-frame-radius);
 
   display: grid;
   place-items: center;
@@ -268,8 +282,8 @@
 }
 
 .serviceAnimation {
-  width: 118% !important;
-  height: 118% !important;
+  width: 116% !important;
+  height: 116% !important;
 
   display: block;
 
@@ -292,6 +306,7 @@
 
   cursor: pointer;
   min-width: 220px;
+  max-width: 100%;
 
   padding: 0.95rem 1.2rem;
   border-radius: 18px;
@@ -329,13 +344,9 @@
 ========================================================== */
 
 @media (min-width: 1800px) {
-  .serviceInner {
-    grid-template-columns: minmax(0, 1.1fr) minmax(420px, 0.9fr);
-    gap: clamp(2.5rem, 3vw, 4.5rem);
-  }
-
-  .serviceVisualFrame {
-    width: min(520px, 100%);
+  .servicesSection {
+    --svc-col-gap: 1.25rem;
+    --svc-visual-width: clamp(420px, 28vw, 560px);
   }
 
   .serviceTitle {
@@ -352,12 +363,9 @@
 ========================================================== */
 
 @media (min-width: 1400px) and (max-width: 1799px) {
-  .serviceInner {
-    grid-template-columns: minmax(0, 1.08fr) minmax(380px, 0.92fr);
-  }
-
-  .serviceVisualFrame {
-    width: min(460px, 100%);
+  .servicesSection {
+    --svc-col-gap: 1.1rem;
+    --svc-visual-width: clamp(380px, 30vw, 460px);
   }
 }
 
@@ -366,12 +374,9 @@
 ========================================================== */
 
 @media (min-width: 1200px) and (max-width: 1399px) {
-  .serviceInner {
-    grid-template-columns: minmax(0, 1.06fr) minmax(340px, 0.94fr);
-  }
-
-  .serviceVisualFrame {
-    width: min(420px, 100%);
+  .servicesSection {
+    --svc-col-gap: 1rem;
+    --svc-visual-width: clamp(340px, 29vw, 420px);
   }
 }
 
@@ -395,21 +400,13 @@
 ========================================================== */
 
 @media (min-width: 900px) and (max-width: 1199px) {
-  .serviceInner {
-    grid-template-columns: minmax(0, 1fr) minmax(300px, 320px);
-    gap: 1.5rem;
-  }
-
-  .serviceVisual {
-    justify-content: flex-end;
+  .servicesSection {
+    --svc-col-gap: 0.95rem;
+    --svc-visual-width: clamp(280px, 28vw, 360px);
   }
 
   .serviceVisualSticky {
     top: 96px;
-  }
-
-  .serviceVisualFrame {
-    width: min(390px, 100%);
   }
 
   .serviceAnimation {
@@ -445,24 +442,14 @@
 ========================================================== */
 
 @media (min-width: 768px) and (max-width: 899px) {
-  .serviceInner {
-    grid-template-columns: minmax(0, 1fr) 240px;
-    gap: 1.4rem;
-    align-items: start;
-  }
-
-  .serviceVisual {
-    justify-content: flex-end;
+  .servicesSection {
+    --svc-col-gap: 0.9rem;
+    --svc-visual-width: clamp(240px, 27vw, 300px);
   }
 
   .serviceVisualSticky {
     position: sticky;
     top: 88px;
-  }
-
-  .serviceVisualFrame {
-    width: min(240px, 100%);
-    border-radius: 24px;
   }
 
   .serviceAnimation {
@@ -526,6 +513,12 @@
 ========================================================== */
 
 @media (min-width: 641px) and (max-width: 767px) {
+  .servicesSection {
+    --svc-col-gap: 0.85rem;
+    --svc-visual-width: 155px;
+    --svc-frame-radius: 18px;
+  }
+
   .servicesStack {
     gap: 2.8rem;
   }
@@ -537,8 +530,8 @@
   /* Two-column grid: text | animation */
   .serviceInner {
     display: grid;
-    grid-template-columns: 1fr 155px;
-    gap: 0.7rem 1.25rem;
+    grid-template-columns: minmax(0, 1fr) minmax(0, var(--svc-visual-width));
+    gap: 0.7rem var(--svc-col-gap);
     align-items: start;
   }
 
@@ -619,6 +612,7 @@
     justify-content: flex-end;
     align-items: flex-start;
     align-self: start;
+    width: 100%;
   }
 
   .serviceVisualSticky {
@@ -629,7 +623,7 @@
 
   .serviceVisualFrame {
     width: 100%;
-    max-width: 155px;
+    max-width: none;
     border-radius: 18px;
     aspect-ratio: 1 / 1;
   }

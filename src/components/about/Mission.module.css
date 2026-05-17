@@ -20,6 +20,9 @@
 
   background: var(--ot-section-bg);
 
+  --mission-grid-gap: min(20px, 1.5vw);
+  --mission-visual-width: clamp(240px, 26vw, 420px);
+
   transition:
     background 0.35s ease,
     color 0.35s ease;
@@ -98,10 +101,11 @@
   display: grid;
 
   grid-template-columns:
-    minmax(0, 1.08fr)
-    minmax(300px, 0.92fr);
+    minmax(0, 1fr)
+    minmax(240px, var(--mission-visual-width));
 
-  gap: clamp(1.6rem, 3vw, 3rem);
+  column-gap: var(--mission-grid-gap);
+  row-gap: 1.2rem;
 
   align-items: start;
 }
@@ -117,6 +121,7 @@
   gap: 1rem;
 
   min-width: 0;
+  width: 100%;
 }
 
 /* =============================================================================
@@ -129,7 +134,7 @@
 
   gap: 0.35rem;
 
-  max-width: 680px;
+  max-width: 100%;
 
   margin-bottom: 0.2rem;
 }
@@ -156,7 +161,7 @@
 .missionCopyP {
   margin: 0;
 
-  max-width: 60ch;
+  max-width: 100%;
 
   font-size:
     clamp(0.92rem, 0.18vw + 0.88rem, 1rem);
@@ -196,8 +201,9 @@
 .missionVisual {
   display: flex;
   align-items: flex-start;
-  justify-content: center;
+  justify-content: flex-start;
 
+  width: 100%;
   min-width: 0;
 }
 
@@ -208,7 +214,8 @@
 .lottieWrap {
   position: relative;
 
-  width: clamp(220px, 32vw, 520px);
+  width: 100%;
+  max-width: var(--mission-visual-width);
   aspect-ratio: 1 / 1;
 
   overflow: hidden;
@@ -238,8 +245,8 @@
 ============================================================================= */
 
 .lottieAnimation {
-  width: 118% !important;
-  height: 118% !important;
+  width: 110% !important;
+  height: 110% !important;
 
   position: relative;
   z-index: 1;
@@ -372,14 +379,14 @@
 ============================================================================= */
 
 @media (min-width: 1800px) {
-  .missionStage {
-    grid-template-columns:
-      minmax(0, 1.08fr)
-      minmax(420px, 0.92fr);
+  .root {
+    --mission-visual-width: clamp(360px, 24vw, 480px);
   }
 
-  .lottieWrap {
-    width: min(520px, 100%);
+  .missionStage {
+    grid-template-columns:
+      minmax(0, 1fr)
+      minmax(360px, var(--mission-visual-width));
   }
 
   .sectionTitle {
@@ -388,7 +395,7 @@
   }
 
   .missionCopyP {
-    max-width: 68ch;
+    max-width: 100%;
   }
 }
 
@@ -397,8 +404,8 @@
 ============================================================================= */
 
 @media (min-width: 1400px) and (max-width: 1799px) {
-  .lottieWrap {
-    width: min(460px, 100%);
+  .root {
+    --mission-visual-width: clamp(320px, 25vw, 440px);
   }
 }
 
@@ -407,8 +414,8 @@
 ============================================================================= */
 
 @media (min-width: 1200px) and (max-width: 1399px) {
-  .lottieWrap {
-    width: min(420px, 100%);
+  .root {
+    --mission-visual-width: clamp(300px, 24vw, 400px);
   }
 }
 
@@ -417,31 +424,36 @@
 ============================================================================= */
 
 @media (min-width: 900px) and (max-width: 1199px) {
+  .root {
+    --mission-visual-width: clamp(260px, 23vw, 320px);
+  }
+
   .missionStage {
     grid-template-columns:
       minmax(0, 1fr)
-      minmax(280px, 320px);
+      minmax(260px, var(--mission-visual-width));
 
-    gap: 1.5rem;
+    column-gap: var(--mission-grid-gap);
+    row-gap: 1.1rem;
   }
 
   .missionVisual {
-    justify-content: flex-end;
+    justify-content: flex-start;
   }
 
   .sectionTitle {
-    max-width: 12ch;
+    max-width: 100%;
   }
 
   .missionCopyP {
-    max-width: 54ch;
+    max-width: 100%;
 
     font-size: 0.94rem;
     line-height: 1.7;
   }
 
   .lottieWrap {
-    width: min(360px, 100%);
+    width: 100%;
   }
 
   .lottieAnimation,
@@ -464,11 +476,10 @@
 
     grid-template-columns:
       minmax(0, 1fr)
-      210px;
+      minmax(190px, 210px);
 
-    gap:
-      0.9rem
-      1.3rem;
+    column-gap: var(--mission-grid-gap);
+    row-gap: 0.9rem;
 
     align-items: start;
   }
@@ -501,7 +512,7 @@
     grid-column: 2;
     grid-row: 3 / 5;
 
-    justify-content: flex-end;
+    justify-content: flex-start;
     align-items: flex-start;
   }
 
@@ -520,7 +531,8 @@
   }
 
   .lottieWrap {
-    width: min(210px, 100%);
+    width: 100%;
+    max-width: 210px;
 
     border-radius: 22px;
   }
@@ -598,6 +610,7 @@
 
   .lottieWrap {
     width: min(250px, 76vw);
+    max-width: 100%;
 
     border-radius: 22px;
 
