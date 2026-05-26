@@ -1676,3 +1676,667 @@ html[data-theme="light"] .ot-glass--dark,
   from { transform: translate(-8%, -8%) scale(1.08); }
   to   { transform: translate(8%, 6%) scale(1); }
 }
+
+
+
+/* ============================================================
+   CERTIFICATE MODAL — GLASS SYSTEM
+   Professional Glass · Aligned with B&W Token Architecture
+   VERSION: 2026.2 — PREMIUM EDITION
+   Scoped globally so .cert-* classes are reusable anywhere.
+   ============================================================ */
+
+/* ── Overlay ─────────────────────────────────────────────────────────── */
+
+.cert-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 999999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: clamp(16px, 4vw, 40px);
+  background:
+    url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.92' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.045'/%3E%3C/svg%3E"),
+    radial-gradient(ellipse 70% 60% at 50% 42%, rgba(255,255,255,0.07) 0%, transparent 100%),
+    radial-gradient(ellipse 100% 100% at 50% 50%, transparent 40%, rgba(0,0,0,0.35) 100%),
+    rgba(0, 0, 0, 0.62);
+  backdrop-filter: blur(10px) saturate(0.75);
+  -webkit-backdrop-filter: blur(10px) saturate(0.75);
+  animation: cm-overlay-in 0.22s ease both;
+}
+
+/* ── Modal Shell ─────────────────────────────────────────────────────── */
+
+.cert-modal {
+  position: relative;
+  width: min(520px, 100%);
+  padding: clamp(24px, 5vw, 42px) clamp(20px, 5vw, 38px) clamp(20px, 4vw, 34px);
+  border-radius: var(--ot-radius-xl);
+  font-family: var(--ot-font);
+  color: var(--ot-text);
+  isolation: isolate;
+  overflow: hidden;
+
+  background: var(--ot-glass-bg);
+  border: 1px solid var(--ot-border-hard);
+  backdrop-filter: blur(var(--ot-blur)) saturate(1.6);
+  -webkit-backdrop-filter: blur(var(--ot-blur)) saturate(1.6);
+
+  box-shadow:
+    0 0 0 1px var(--ot-border-glow),
+    inset 0 1px 0 rgba(255, 255, 255, 0.22),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.08),
+    0 2px 4px rgba(0, 0, 0, 0.05),
+    0 8px 24px rgba(0, 0, 0, 0.12),
+    0 28px 56px rgba(0, 0, 0, 0.18),
+    0 60px 100px rgba(0, 0, 0, 0.16);
+
+  animation: cm-modal-in 0.36s cubic-bezier(.21, 1.02, .73, 1) both;
+}
+
+/* Top-left interior shine */
+.cert-modal::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  border-radius: inherit;
+  background:
+    radial-gradient(circle at 15% 10%, rgba(255,255,255,0.18), transparent 50%),
+    radial-gradient(circle at 85% 90%, rgba(255,255,255,0.05), transparent 40%),
+    linear-gradient(180deg, rgba(255,255,255,0.10) 0%, transparent 32%);
+}
+
+.cert-modal > * { position: relative; z-index: 1; }
+
+/* ── Close Button ────────────────────────────────────────────────────── */
+
+.cert-close {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  z-index: 10;
+  width: 36px;
+  height: 36px;
+  border-radius: 999px;
+  border: 1px solid var(--ot-border);
+  background: rgba(127, 127, 127, 0.08);
+  color: var(--ot-text-faint);
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  font-size: 1rem;
+  line-height: 1;
+  transition:
+    background   0.22s ease,
+    border-color 0.22s ease,
+    color        0.22s ease,
+    transform    0.28s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.cert-close:hover {
+  background: rgba(127, 127, 127, 0.15);
+  border-color: var(--ot-border-hard);
+  color: var(--ot-text);
+  transform: rotate(90deg) scale(1.08);
+}
+
+.cert-close:active {
+  transform: rotate(90deg) scale(0.94);
+}
+
+.cert-close:focus-visible {
+  outline: 2px solid var(--ot-text);
+  outline-offset: 3px;
+}
+
+/* ── Modal Header ────────────────────────────────────────────────────── */
+
+.cert-icon-slot {
+  width: 52px;
+  height: 52px;
+  border-radius: var(--ot-radius-lg);
+  border: 1px solid var(--ot-border);
+  background: var(--ot-surface);
+  display: grid;
+  place-items: center;
+  margin: 0 auto 16px;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.14),
+    0 2px 12px rgba(0,0,0,0.10),
+    0 1px 3px rgba(0,0,0,0.06);
+  transition:
+    transform   0.28s cubic-bezier(0.34, 1.56, 0.64, 1),
+    box-shadow  0.28s ease;
+}
+
+.cert-modal:hover .cert-icon-slot {
+  transform: translateY(-2px);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.18),
+    0 6px 20px rgba(0,0,0,0.14),
+    0 2px 6px rgba(0,0,0,0.08);
+}
+
+.cert-icon-slot svg,
+.cert-icon-slot img {
+  width: 26px;
+  height: 26px;
+  object-fit: contain;
+}
+
+.cert-title {
+  margin: 0 0 6px;
+  font-size: clamp(1.3rem, 2.5vw, 1.6rem);
+  font-weight: 800;
+  letter-spacing: -0.035em;
+  line-height: 1.18;
+  background: linear-gradient(
+    120deg,
+    var(--ot-grad-from)  0%,
+    var(--ot-grad-mid)  35%,
+    var(--ot-grad-to)   60%,
+    var(--ot-grad-mid)  80%,
+    var(--ot-grad-from) 100%
+  );
+  background-size: 300% 100%;
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: cm-gradient-shift 8s ease-in-out infinite;
+}
+
+.cert-subtitle {
+  margin: 0;
+  font-size: 0.9rem;
+  line-height: 1.6;
+  color: var(--ot-text-muted);
+  max-width: 38ch;
+  margin-inline: auto;
+  margin-bottom: clamp(18px, 3vw, 26px);
+}
+
+/* ── Divider ─────────────────────────────────────────────────────────── */
+
+.cert-divider {
+  height: 1px;
+  margin: 0 0 clamp(16px, 3vw, 24px);
+  background: linear-gradient(
+    90deg,
+    transparent       0%,
+    var(--ot-border) 30%,
+    var(--ot-border) 70%,
+    transparent       100%
+  );
+  opacity: 0.5;
+}
+
+/* ── Input Row ───────────────────────────────────────────────────────── */
+
+.cert-input-row {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 10px;
+  align-items: stretch;
+}
+
+.cert-input-row input {
+  min-width: 0;
+  padding: 13px 16px;
+  border-radius: var(--ot-radius-md);
+  border: 1px solid var(--ot-border);
+  background: var(--ot-surface);
+  color: var(--ot-text);
+  font-family: var(--ot-font);
+  font-size: 0.9375rem;
+  outline: none;
+  transition:
+    border-color var(--ot-transition),
+    box-shadow   var(--ot-transition),
+    background   var(--ot-transition);
+  box-shadow: inset 0 1px 3px rgba(0,0,0,0.05);
+}
+
+.cert-input-row input::placeholder {
+  color: var(--ot-text-faint);
+  font-weight: 400;
+}
+
+.cert-input-row input:focus {
+  border-color: var(--ot-border-hard);
+  background: var(--ot-glass-bg);
+  box-shadow:
+    inset 0 1px 3px rgba(0,0,0,0.04),
+    0 0 0 3px rgba(127, 127, 127, 0.13),
+    0 0 18px rgba(127, 127, 127, 0.08);
+}
+
+/* Verify Button */
+.cert-input-row button {
+  padding: 13px 22px;
+  border-radius: var(--ot-radius-md);
+  border: 1px solid transparent;
+  background: var(--ot-cta-bg);
+  color: var(--ot-cta-text);
+  font-family: var(--ot-font);
+  font-size: 0.9rem;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  white-space: nowrap;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transition:
+    background  var(--ot-transition),
+    box-shadow  var(--ot-transition),
+    transform   0.14s ease;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.14),
+    0 2px 6px rgba(0, 0, 0, 0.14),
+    0 6px 20px rgba(0, 0, 0, 0.18);
+}
+
+/* Static top-left shine */
+.cert-input-row button::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(140deg, rgba(255,255,255,0.12) 0%, transparent 55%);
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Shimmer sweep on hover */
+.cert-input-row button::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -75%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent               0%,
+    rgba(255, 255, 255, 0.22) 50%,
+    transparent               100%
+  );
+  transform: skewX(-18deg);
+  transition: left 0.55s cubic-bezier(0.16, 1, 0.3, 1);
+  z-index: 2;
+  pointer-events: none;
+}
+
+.cert-input-row button:hover::after {
+  left: 135%;
+}
+
+.cert-input-row button:hover {
+  background: var(--ot-cta-hover-bg);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.18),
+    0 4px 12px rgba(0, 0, 0, 0.20),
+    0 12px 32px rgba(0, 0, 0, 0.28);
+}
+
+.cert-input-row button:active {
+  transform: scale(0.97);
+  transition-duration: 0.08s;
+}
+
+.cert-input-row button:focus-visible {
+  outline: 2px solid var(--ot-cta-bg);
+  outline-offset: 3px;
+}
+
+/* ── Result Card ─────────────────────────────────────────────────────── */
+
+.cert-result-card {
+  position: relative;
+  margin-top: 20px;
+  padding: 20px;
+  text-align: left;
+  border-radius: var(--ot-radius-lg);
+  border: 1px solid var(--ot-border);
+  background:
+    linear-gradient(160deg, rgba(255,255,255,0.07), rgba(255,255,255,0.02)),
+    var(--ot-surface);
+  overflow: hidden;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.12),
+    inset 0 -1px 0 rgba(0,0,0,0.05),
+    0 2px 8px rgba(0,0,0,0.06),
+    0 8px 24px rgba(0,0,0,0.08);
+  transition:
+    box-shadow  0.28s ease,
+    transform   0.28s cubic-bezier(0.34, 1.56, 0.64, 1);
+  animation: cm-result-in 0.28s cubic-bezier(.21, 1.02, .73, 1) both;
+}
+
+/* Corner catch-light */
+.cert-result-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 60%;
+  height: 50%;
+  background: radial-gradient(circle at 10% 5%, rgba(255,255,255,0.10), transparent 70%);
+  pointer-events: none;
+  border-radius: inherit;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .cert-result-card:hover {
+    transform: translateY(-2px);
+    box-shadow:
+      inset 0 1px 0 rgba(255,255,255,0.14),
+      inset 0 -1px 0 rgba(0,0,0,0.05),
+      0 4px 12px rgba(0,0,0,0.10),
+      0 16px 36px rgba(0,0,0,0.14);
+  }
+}
+
+.cert-result-card > * + * { margin-top: 6px; }
+
+.cert-result-card h3 {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--ot-text);
+  letter-spacing: -0.015em;
+  line-height: 1.35;
+}
+
+.cert-result-card p {
+  margin: 4px 0 0;
+  font-size: 0.9rem;
+  line-height: 1.58;
+  color: var(--ot-text-muted);
+}
+
+.cert-result-card .cert-date {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 14px;
+  padding-top: 14px;
+  border-top: 1px solid var(--ot-border);
+  font-size: 0.82rem;
+  color: var(--ot-text-faint);
+  letter-spacing: 0.01em;
+}
+
+.cert-result-card .cert-date::before {
+  content: "";
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 999px;
+  background: var(--ot-text-faint);
+  flex-shrink: 0;
+  opacity: 0.6;
+}
+
+/* ── Status Badge ────────────────────────────────────────────────────── */
+
+.cert-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 5px 11px;
+  border-radius: 999px;
+  border: 1px solid var(--ot-border);
+  background: rgba(127, 127, 127, 0.08);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.10em;
+  text-transform: uppercase;
+  color: var(--ot-text);
+  margin-bottom: 10px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+}
+
+/* Glow-ring pulse dot */
+.cert-badge::before {
+  content: "";
+  width: 7px;
+  height: 7px;
+  border-radius: 999px;
+  background: var(--ot-text);
+  opacity: 0.7;
+  flex-shrink: 0;
+  animation: cm-pulse-ring 2.4s ease-in-out infinite;
+}
+
+/* ── Error State ─────────────────────────────────────────────────────── */
+
+.cert-error {
+  margin-top: 16px;
+  padding: 14px 16px;
+  border-radius: var(--ot-radius-md);
+  border: 1px solid rgba(100, 100, 100, 0.16);
+  background: rgba(100, 100, 100, 0.07);
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  text-align: left;
+  animation: cm-shake 0.38s cubic-bezier(.36,.07,.19,.97) both;
+}
+
+.cert-error::before {
+  content: "!";
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 22px;
+  height: 22px;
+  border-radius: 999px;
+  border: 1.5px solid var(--ot-text-faint);
+  font-size: 0.78rem;
+  font-weight: 800;
+  color: var(--ot-text-muted);
+  margin-top: 1px;
+}
+
+.cert-error span {
+  font-size: 0.9rem;
+  line-height: 1.55;
+  font-weight: 500;
+  color: var(--ot-text-muted);
+}
+
+/* ── Loading State ───────────────────────────────────────────────────── */
+
+.cert-loading {
+  margin-top: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.cert-loading-bar {
+  height: 14px;
+  border-radius: 999px;
+  background: linear-gradient(
+    90deg,
+    var(--ot-surface)     25%,
+    rgba(127, 127, 127, 0.10) 50%,
+    var(--ot-surface)     75%
+  );
+  background-size: 200% 100%;
+  animation: cm-shimmer 1.6s ease-in-out infinite;
+}
+
+.cert-loading-bar:nth-child(2) { width: 80%; animation-delay: 0.08s; }
+.cert-loading-bar:nth-child(3) { width: 55%; animation-delay: 0.16s; }
+
+/* ── Mobile — Bottom Sheet ≤560px ────────────────────────────────────── */
+
+@media (max-width: 560px) {
+  .cert-overlay {
+    align-items: flex-end;
+    padding: 0;
+    background:
+      url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.92' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E"),
+      rgba(0, 0, 0, 0.58);
+  }
+
+  .cert-modal {
+    width: 100%;
+    max-width: 100%;
+    border-radius: 26px 26px 0 0;
+    padding: 28px 20px;
+    padding-bottom: calc(36px + env(safe-area-inset-bottom, 0px));
+    animation: cm-sheet-in 0.34s cubic-bezier(.21, 1.02, .73, 1) both;
+    box-shadow:
+      0 0 0 1px var(--ot-border-glow),
+      inset 0 1px 0 rgba(255,255,255,0.18),
+      0 -8px 40px rgba(0, 0, 0, 0.22),
+      0 -24px 64px rgba(0, 0, 0, 0.18);
+  }
+
+  .cert-modal::before {
+    background:
+      linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.12) 40%, transparent 100%),
+      radial-gradient(circle at 15% 10%, rgba(255,255,255,0.16), transparent 50%);
+  }
+
+  /* Drag handle pill */
+  .cert-modal::after {
+    content: "";
+    position: absolute;
+    top: 10px;
+    left: 50%;
+    translate: -50% 0;
+    width: 36px;
+    height: 4px;
+    border-radius: 999px;
+    background: var(--ot-border-hard);
+    pointer-events: none;
+    opacity: 0.7;
+    z-index: 99;
+  }
+
+  .cert-input-row        { grid-template-columns: 1fr; }
+  .cert-input-row button { width: 100%; justify-content: center; }
+  .cert-title            { font-size: 1.25rem; }
+  .cert-subtitle         { font-size: 0.875rem; }
+}
+
+/* ── Certificate Modal Keyframes ─────────────────────────────────────── */
+
+@keyframes cm-overlay-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes cm-modal-in {
+  from {
+    opacity: 0;
+    transform: translateY(16px) scale(0.96);
+    filter: blur(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    filter: blur(0);
+  }
+}
+
+@keyframes cm-sheet-in {
+  from { transform: translateY(100%); opacity: 0.6; }
+  to   { transform: translateY(0);    opacity: 1; }
+}
+
+@keyframes cm-result-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes cm-gradient-shift {
+  0%   { background-position: 0%   50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 0%   50%; }
+}
+
+@keyframes cm-pulse-ring {
+  0%, 100% {
+    box-shadow: 0 0 0 0px rgba(127, 127, 127, 0.5);
+    opacity: 0.70;
+  }
+  50% {
+    box-shadow: 0 0 0 4px rgba(127, 127, 127, 0);
+    opacity: 0.40;
+  }
+}
+
+@keyframes cm-shimmer {
+  0%   { background-position:  200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+@keyframes cm-shake {
+  0%, 100% { transform: translateX(0); }
+  18%       { transform: translateX(-5px); }
+  36%       { transform: translateX(5px); }
+  54%       { transform: translateX(-3px); }
+  72%       { transform: translateX(3px); }
+}
+
+/* ── Reduced Motion: Certificate Modal ───────────────────────────────── */
+
+@media (prefers-reduced-motion: reduce) {
+  .cert-overlay,
+  .cert-modal,
+  .cert-close,
+  .cert-badge::before,
+  .cert-loading-bar,
+  .cert-result-card,
+  .cert-error,
+  .cert-title {
+    animation: none !important;
+    transition: none !important;
+    filter: none !important;
+  }
+
+  .cert-title {
+    background-position: 0% 50%;
+  }
+}
+
+/* ============================================================
+   MODAL-OPEN BODY STATE
+   Added to app.css — applied by Header.tsx when login modal is open.
+
+   Locks scroll, hides all fixed floating UI (theme toggle, FAB,
+   scroll-to-top, etc.) so nothing bleeds over the overlay.
+   ============================================================ */
+
+/* Prevent background scroll and iOS rubber-band */
+body.modal-open {
+  overflow: hidden;
+  touch-action: none;
+}
+
+/* Hide every common fixed/floating element site-wide.
+   Add your own class names below if you have others. */
+body.modal-open .theme-toggle,
+body.modal-open .theme-sidebar,
+body.modal-open .scroll-to-top,
+body.modal-open [class*="fab"],
+body.modal-open [class*="scroll-btn"],
+body.modal-open [class*="back-to-top"],
+body.modal-open [class*="theme-switcher"] {
+  opacity: 0 !important;
+  pointer-events: none !important;
+  transition: opacity 0.18s ease !important;
+}

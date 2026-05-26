@@ -1,7 +1,7 @@
 /* =========================================================
    ABOUT
    GLOBAL-ALIGNED • CLEAN • RESPONSIVE • LIGHTWEIGHT
-========================================================= */
+   ========================================================= */
 
 .aboutSection {
   position: relative;
@@ -16,6 +16,9 @@
 
   --about-grid-gap: clamp(1.6rem, 3vw, 3rem);
   --about-right-col: clamp(300px, 30vw, 460px);
+  --about-card-gap: clamp(0.7rem, 1vw, 1rem);
+  --about-card-radius: clamp(14px, 2vw, 24px);
+  --about-card-border: rgba(120, 120, 140, 0.12);
 
   transition:
     background 0.35s ease,
@@ -24,183 +27,146 @@
 
 /* =========================================================
    INNER WRAPPER
-========================================================= */
+   ========================================================= */
 
 .aboutContainer {
   width: 100%;
   max-width: var(--ot-content-max);
-
   margin-inline: auto;
 }
 
 /* =========================================================
-   MAIN GRID — base (≥768px two-column)
-   ───────────────────────────────────────────────────────
-   Row 1  col 1      → .aboutContent  (text)
-   Col 2  rows 1–2   → .aboutVisual   (animation, spans both rows)
-   Row 2  col 1      → .certificateGrid (sits under text only)
-========================================================= */
+   OUTER LAYOUT
+   ========================================================= */
 
-.aboutGrid {
+.aboutLayout {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(0.9rem, 1.4vw, 1.4rem);
+}
+
+/* =========================================================
+   TOP GRID — TEXT + VISUAL ONLY
+   ========================================================= */
+
+.aboutTopGrid {
   display: grid;
-
   grid-template-columns:
     minmax(0, 1fr)
-    fit-content(360px);
-
-  grid-template-rows: auto auto;
-
-  column-gap: min(20px, 2vw);
-  row-gap: 1.4rem;
-
+    minmax(240px, var(--about-right-col));
+  column-gap: var(--about-grid-gap);
   align-items: start;
 }
 
 /* =========================================================
-   LEFT CONTENT — col 1, row 1
-========================================================= */
+   LEFT CONTENT
+   ========================================================= */
 
 .aboutContent {
   display: flex;
   flex-direction: column;
-
   gap: 1.15rem;
-
   min-width: 0;
-
-  grid-column: 1;
-  grid-row: 1;
 }
 
 /* =========================================================
-   RIGHT VISUAL — col 2, spans rows 1 and 2
-========================================================= */
+   RIGHT VISUAL
+   ========================================================= */
 
 .aboutVisual {
   display: flex;
-
   justify-content: flex-end;
   align-items: flex-start;
-
   min-width: 0;
-
   padding-top: 0.35rem;
-
-  grid-column: 2;
-  grid-row: 1 / 3;
 }
 
 /* =========================================================
-   CERTIFICATE GRID — col 1 only, row 2
-   Sits under the text content, NOT stretching under the
-   animation. This keeps the cards at a natural size
-   proportional to the left text column.
-========================================================= */
+   CERTIFICATE GRID — INDEPENDENT FROM TOP GRID
+   ========================================================= */
 
 .certificateGrid {
   display: flex;
-
-  gap: clamp(0.7rem, 1vw, 1rem);
-
+  gap: var(--about-card-gap);
   min-width: 0;
-
   align-items: stretch;
-
-  grid-column: 1;
-  grid-row: 2;
+  width: min(
+    100%,
+    calc(100% - var(--about-right-col) - var(--about-grid-gap))
+  );
 }
 
 .certificateCard {
   position: relative;
-
   flex: 1 1 0;
-
   min-width: 0;
-
   overflow: hidden;
-
   isolation: isolate;
-
   aspect-ratio: 16 / 9;
-
-  border-radius: clamp(14px, 2vw, 24px);
-
+  border-radius: var(--about-card-radius);
   background: transparent;
+  border: 1px solid var(--about-card-border);
+  display: block;
+}
 
-  border: 1px solid rgba(120, 120, 140, 0.12);
+.certificateCard:focus-visible {
+  outline: 2px solid var(--ot-brand, var(--color-primary));
+  outline-offset: 3px;
 }
 
 .certificateImage {
   width: 100%;
   height: 100%;
-
   display: block;
-
   object-fit: cover;
   object-position: center;
+  background: var(--ot-surface, rgba(127, 127, 127, 0.08));
 }
 
 /* =========================================================
    TITLE
-========================================================= */
+   ========================================================= */
 
 .aboutTitle {
   margin: 0;
-
   max-width: 12ch;
-
   font-size: clamp(2.3rem, 5vw, 4.4rem);
-
   line-height: 0.96;
   letter-spacing: -0.065em;
-
   color: var(--color-text);
-
   text-wrap: balance;
 }
 
 /* =========================================================
    LEAD
-========================================================= */
+   ========================================================= */
 
 .aboutLead {
   margin: 0;
-
   max-width: 58ch;
-
   font-size: clamp(0.94rem, 0.18vw + 0.9rem, 1.02rem);
-
   line-height: clamp(1.66, 0.16vw + 1.62, 1.82);
-
   color: var(--color-text-muted);
-
   text-wrap: pretty;
 }
 
 /* =========================================================
    BODY
-========================================================= */
+   ========================================================= */
 
 .aboutBody {
   display: flex;
   flex-direction: column;
-
   gap: 0.9rem;
-
   max-width: 62ch;
 }
 
 .aboutBody p {
   margin: 0;
-
   font-size: clamp(0.9rem, 0.16vw + 0.88rem, 0.98rem);
-
   line-height: clamp(1.66, 0.16vw + 1.62, 1.82);
-
   text-align: justify;
-
   color: var(--color-text-muted);
-
   text-wrap: pretty;
 }
 
@@ -210,22 +176,16 @@
 
 /* =========================================================
    VISUAL FRAME
-========================================================= */
+   ========================================================= */
 
 .visualFrame {
-  width: clamp(240px, 26vw, 360px);
-
+  width: min(100%, clamp(240px, 26vw, 360px));
   aspect-ratio: 1 / 1;
-
   overflow: hidden;
-
   border-radius: clamp(18px, 2vw, 30px);
-
   display: grid;
   place-items: center;
-
   position: relative;
-
   background:
     radial-gradient(
       circle at 50% 35%,
@@ -237,26 +197,20 @@
       rgba(36, 36, 36, 0.96),
       rgba(10, 10, 10, 1)
     );
-
   border: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 .visualAnimation {
   width: 112% !important;
   height: 112% !important;
-
   display: block;
-
-  transform:
-    translateY(-4%)
-    scale(1.04);
-
+  transform: translateY(-4%) scale(1.04);
   transform-origin: center center;
 }
 
 /* =========================================================
    LARGE DESKTOP ≥1400px
-========================================================= */
+   ========================================================= */
 
 @media (min-width: 1400px) {
   .aboutSection {
@@ -271,7 +225,7 @@
 
 /* =========================================================
    DESKTOP 1200–1399px
-========================================================= */
+   ========================================================= */
 
 @media (min-width: 1200px) and (max-width: 1399px) {
   .aboutSection {
@@ -282,7 +236,7 @@
 
 /* =========================================================
    STANDARD DESKTOP 900–1199px
-========================================================= */
+   ========================================================= */
 
 @media (min-width: 900px) and (max-width: 1199px) {
   .aboutSection {
@@ -306,8 +260,7 @@
 
 /* =========================================================
    SMALLER DESKTOP / LARGE TABLET 768–899px
-   Two-column preserved; visual shrinks
-========================================================= */
+   ========================================================= */
 
 @media (min-width: 768px) and (max-width: 899px) {
   .aboutSection {
@@ -323,10 +276,7 @@
   .visualAnimation {
     width: 108% !important;
     height: 108% !important;
-
-    transform:
-      translateY(-3%)
-      scale(1.02);
+    transform: translateY(-3%) scale(1.02);
   }
 
   .aboutTitle {
@@ -353,36 +303,22 @@
 
 /* =========================================================
    WRAP / FLOW LAYOUT 641–767px
-   ───────────────────────────────────────────────────────
-   Grid: [1fr] [clamp(180px, 26vw, 200px)]
-   content  → col 1,    row 1
-   visual   → col 2,    row 1
-   certs    → col 1/-1, row 2 (full width at this size)
-========================================================= */
+   ========================================================= */
 
 @media (min-width: 641px) and (max-width: 767px) {
-  .aboutGrid {
+  .aboutTopGrid {
     grid-template-columns: 1fr clamp(180px, 26vw, 200px);
-    row-gap: 0.9rem;
     column-gap: 1.2rem;
-  }
-
-  .aboutContent {
-    grid-column: 1;
-    grid-row: 1;
+    align-items: start;
   }
 
   .aboutVisual {
-    grid-column: 2;
-    grid-row: 1;
     justify-content: flex-start;
     padding-top: 0;
   }
 
-  /* Full width at this narrower size — cards are small enough */
   .certificateGrid {
-    grid-column: 1 / -1;
-    grid-row: 2;
+    width: 100%;
   }
 
   .visualFrame {
@@ -394,10 +330,7 @@
   .visualAnimation {
     width: 108% !important;
     height: 108% !important;
-
-    transform:
-      translateY(-2%)
-      scale(1.02);
+    transform: translateY(-2%) scale(1.02);
   }
 
   .aboutTitle {
@@ -425,37 +358,34 @@
 
 /* =========================================================
    STACKED MOBILE 361–640px
-   Single-column. Visual drops below content.
-========================================================= */
+   ========================================================= */
 
 @media (min-width: 361px) and (max-width: 640px) {
   .aboutSection {
     padding-inline: 0.95rem;
   }
 
-  .aboutGrid {
+  .aboutLayout {
+    gap: 1rem;
+  }
+
+  .aboutTopGrid {
     grid-template-columns: 1fr;
-    grid-template-rows: unset;
     row-gap: 1rem;
   }
 
   .aboutContent {
-    grid-column: 1;
-    grid-row: 1;
     gap: 0.9rem;
   }
 
   .aboutVisual {
-    grid-column: 1;
-    grid-row: 2;
     justify-content: center;
     align-items: center;
     padding-top: 0.2rem;
   }
 
   .certificateGrid {
-    grid-column: 1;
-    grid-row: 3;
+    width: 100%;
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 0.75rem;
@@ -469,10 +399,7 @@
   .visualAnimation {
     width: 108% !important;
     height: 108% !important;
-
-    transform:
-      translateY(-2%)
-      scale(1.02);
+    transform: translateY(-2%) scale(1.02);
   }
 
   .aboutTitle {
@@ -500,23 +427,22 @@
 
 /* =========================================================
    COMPACT MOBILE ≤360px
-   Hide animation — text + certificates only
-========================================================= */
+   ========================================================= */
 
 @media (max-width: 360px) {
   .aboutSection {
     padding-inline: 0.9rem;
   }
 
-  .aboutGrid {
+  .aboutLayout {
+    gap: 0.95rem;
+  }
+
+  .aboutTopGrid {
     grid-template-columns: 1fr;
-    grid-template-rows: unset;
-    row-gap: 0.95rem;
   }
 
   .aboutContent {
-    grid-column: 1;
-    grid-row: 1;
     gap: 0.85rem;
   }
 
@@ -525,8 +451,7 @@
   }
 
   .certificateGrid {
-    grid-column: 1;
-    grid-row: 2;
+    width: 100%;
     display: grid;
     grid-template-columns: 1fr;
     gap: 0.7rem;
@@ -562,14 +487,11 @@
 
 /* =========================================================
    REDUCED MOTION
-========================================================= */
+   ========================================================= */
 
 @media (prefers-reduced-motion: reduce) {
   .visualAnimation {
     transition: none !important;
-
-    transform:
-      translateY(0%)
-      scale(1.01);
+    transform: translateY(0%) scale(1.01);
   }
 }

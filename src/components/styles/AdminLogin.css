@@ -1,0 +1,812 @@
+/* ==========================================================================
+   ADMIN LOGIN — OPENROOT
+   Dark-mode adaptive glass system for app.css ot-* architecture
+   VERSION: 2026.11
+   ========================================================================== */
+
+.admin-overlay {
+  --al-bg: var(--ot-bg);
+  --al-bg-soft: var(--ot-bg-soft);
+  --al-bg-dim: var(--ot-bg-dim);
+  --al-surface: var(--ot-surface);
+  --al-surface-alt: var(--ot-surface-alt, var(--ot-surface));
+  --al-glass: var(--ot-glass-bg);
+  --al-text: var(--ot-text);
+  --al-text-muted: var(--ot-text-muted);
+  --al-text-faint: var(--ot-text-faint);
+  --al-border: var(--ot-border);
+  --al-border-hard: var(--ot-border-hard);
+  --al-border-glow: var(--ot-border-glow);
+  --al-brand: var(--ot-brand);
+  --al-brand-2: var(--ot-brand-2);
+  --al-brand-soft: var(--ot-brand-soft);
+  --al-brand-dim: var(--ot-brand-dim);
+  --al-brand-mid: var(--ot-brand-mid);
+  --al-brand-border: var(--ot-brand-border);
+  --al-brand-glow: var(--ot-brand-glow);
+  --al-font: var(--ot-font, "Inter", system-ui, sans-serif);
+  --al-blur: var(--ot-blur, 20px);
+  --al-radius-xl: 22px;
+  --al-radius-lg: 16px;
+  --al-radius-md: 12px;
+  --al-radius-sm: 8px;
+  --al-transition: var(--ot-transition, 0.32s cubic-bezier(.21, 1.02, .73, 1));
+  --al-danger: #c5221f;
+  --al-danger-soft: rgba(197, 34, 31, 0.08);
+  --al-danger-border: rgba(197, 34, 31, 0.18);
+
+  /* adaptive glass helpers */
+  --al-card-fill: var(--al-glass);
+  --al-card-tint-top: rgba(255, 255, 255, 0.10);
+  --al-card-tint-bottom: rgba(255, 255, 255, 0.03);
+  --al-card-highlight-1: rgba(255, 255, 255, 0.18);
+  --al-card-highlight-2: rgba(255, 255, 255, 0.05);
+  --al-card-highlight-3: rgba(255, 255, 255, 0.10);
+  --al-soft-fill: color-mix(in srgb, var(--al-surface-alt) 86%, var(--al-bg) 14%);
+  --al-input-focus-fill: color-mix(in srgb, var(--al-glass) 88%, var(--al-bg) 12%);
+}
+
+[data-theme="dark"] .admin-overlay {
+  --al-card-fill: var(--ot-glass-bg);
+  --al-card-tint-top: rgba(255, 255, 255, 0.04);
+  --al-card-tint-bottom: rgba(255, 255, 255, 0.01);
+  --al-card-highlight-1: rgba(255, 255, 255, 0.08);
+  --al-card-highlight-2: rgba(255, 255, 255, 0.03);
+  --al-card-highlight-3: rgba(255, 255, 255, 0.05);
+  --al-soft-fill: color-mix(in srgb, var(--al-surface-alt) 88%, var(--al-bg) 12%);
+  --al-input-focus-fill: color-mix(in srgb, var(--al-glass) 92%, var(--al-bg) 8%);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme]) .admin-overlay {
+    --al-card-fill: var(--ot-glass-bg);
+    --al-card-tint-top: rgba(255, 255, 255, 0.04);
+    --al-card-tint-bottom: rgba(255, 255, 255, 0.01);
+    --al-card-highlight-1: rgba(255, 255, 255, 0.08);
+    --al-card-highlight-2: rgba(255, 255, 255, 0.03);
+    --al-card-highlight-3: rgba(255, 255, 255, 0.05);
+    --al-soft-fill: color-mix(in srgb, var(--al-surface-alt) 88%, var(--al-bg) 12%);
+    --al-input-focus-fill: color-mix(in srgb, var(--al-glass) 92%, var(--al-bg) 8%);
+  }
+}
+
+.admin-overlay,
+.admin-card,
+.admin-close,
+.admin-submit,
+.admin-state-btn,
+.admin-logout-btn,
+.admin-input,
+.admin-avatar {
+  box-sizing: border-box;
+}
+
+.admin-overlay *,
+.admin-overlay *::before,
+.admin-overlay *::after {
+  box-sizing: border-box;
+}
+
+.admin-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 99999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: clamp(16px, 4vw, 40px);
+  font-family: var(--al-font);
+  background:
+    url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.92' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.045'/%3E%3C/svg%3E"),
+    radial-gradient(ellipse 70% 60% at 50% 42%, rgba(255,255,255,0.07) 0%, transparent 100%),
+    radial-gradient(ellipse 100% 100% at 50% 50%, transparent 40%, rgba(0,0,0,0.35) 100%),
+    rgba(0, 0, 0, 0.62);
+  backdrop-filter: blur(10px) saturate(0.75);
+  -webkit-backdrop-filter: blur(10px) saturate(0.75);
+  animation: al-overlay-in 0.22s ease both;
+}
+
+.admin-card {
+  position: relative;
+  width: min(460px, 100%);
+  padding: clamp(24px, 5vw, 42px) clamp(20px, 5vw, 38px) clamp(20px, 4vw, 34px);
+  border-radius: var(--al-radius-xl);
+  color: var(--al-text);
+  isolation: isolate;
+  overflow: hidden;
+  background:
+    linear-gradient(160deg, var(--al-card-tint-top), var(--al-card-tint-bottom)),
+    var(--al-card-fill);
+  border: 1px solid var(--al-border-hard);
+  backdrop-filter: blur(var(--al-blur)) saturate(1.35);
+  -webkit-backdrop-filter: blur(var(--al-blur)) saturate(1.35);
+  box-shadow:
+    0 0 0 1px var(--al-border-glow),
+    inset 0 1px 0 rgba(255, 255, 255, 0.14),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.10),
+    0 2px 4px rgba(0, 0, 0, 0.06),
+    0 8px 24px rgba(0, 0, 0, 0.14),
+    0 28px 56px rgba(0, 0, 0, 0.20),
+    0 60px 100px rgba(0, 0, 0, 0.16);
+  animation: al-card-in 0.36s cubic-bezier(.21, 1.02, .73, 1) both;
+}
+
+.admin-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  border-radius: inherit;
+  background:
+    radial-gradient(circle at 15% 10%, var(--al-card-highlight-1), transparent 50%),
+    radial-gradient(circle at 85% 90%, var(--al-card-highlight-2), transparent 40%),
+    linear-gradient(180deg, var(--al-card-highlight-3) 0%, transparent 32%);
+}
+
+.admin-card::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1.5px;
+  z-index: 2;
+  pointer-events: none;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    var(--al-brand-border) 15%,
+    var(--al-brand) 50%,
+    var(--al-brand-border) 85%,
+    transparent 100%
+  );
+}
+
+.admin-card > * {
+  position: relative;
+  z-index: 1;
+}
+
+.admin-close {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  z-index: 10;
+  width: 36px;
+  height: 36px;
+  border-radius: 999px;
+  border: 1px solid var(--al-border);
+  background: rgba(127, 127, 127, 0.08);
+  color: var(--al-text-faint);
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  font-size: 1rem;
+  line-height: 1;
+  transition:
+    background 0.22s ease,
+    border-color 0.22s ease,
+    color 0.22s ease,
+    transform 0.28s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.admin-close:hover {
+  background: rgba(127, 127, 127, 0.15);
+  border-color: var(--al-border-hard);
+  color: var(--al-text);
+  transform: rotate(90deg) scale(1.08);
+}
+
+.admin-close:active {
+  transform: rotate(90deg) scale(0.94);
+}
+
+.admin-close:focus-visible {
+  outline: 2px solid var(--al-brand);
+  outline-offset: 3px;
+}
+
+.admin-body {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(16px, 3vw, 22px);
+}
+
+.admin-brand-section {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.admin-kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  width: fit-content;
+  padding: 5px 11px;
+  border-radius: 999px;
+  border: 1px solid var(--al-border);
+  background: rgba(127, 127, 127, 0.08);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.10em;
+  text-transform: uppercase;
+  color: var(--al-text);
+  box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+}
+
+.admin-title {
+  margin: 0;
+  font-size: clamp(1.3rem, 2.5vw, 1.6rem);
+  font-weight: 800;
+  letter-spacing: -0.035em;
+  line-height: 1.18;
+  background: linear-gradient(
+    120deg,
+    var(--al-text) 0%,
+    color-mix(in srgb, var(--al-text) 70%, var(--al-brand) 30%) 35%,
+    color-mix(in srgb, var(--al-text) 45%, var(--al-brand) 55%) 60%,
+    color-mix(in srgb, var(--al-text) 70%, var(--al-brand) 30%) 80%,
+    var(--al-text) 100%
+  );
+  background-size: 300% 100%;
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: al-gradient-shift 8s ease-in-out infinite;
+}
+
+.admin-subtitle {
+  margin: 0;
+  font-size: 0.9rem;
+  line-height: 1.6;
+  color: var(--al-text-muted);
+  max-width: 38ch;
+}
+
+.admin-divider {
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    var(--al-border-hard) 30%,
+    var(--al-border-hard) 70%,
+    transparent 100%
+  );
+  opacity: 0.5;
+}
+
+.admin-fields {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.admin-field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.admin-label {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--al-text-faint);
+}
+
+.admin-input {
+  width: 100%;
+  min-width: 0;
+  padding: 13px 16px;
+  border-radius: var(--al-radius-md);
+  border: 1px solid var(--al-border);
+  background: var(--al-surface);
+  color: var(--al-text);
+  font-family: var(--al-font);
+  font-size: 0.9375rem;
+  outline: none;
+  transition:
+    border-color var(--al-transition),
+    box-shadow var(--al-transition),
+    background var(--al-transition);
+  box-shadow: inset 0 1px 3px rgba(0,0,0,0.05);
+}
+
+.admin-input::placeholder {
+  color: var(--al-text-faint);
+  font-weight: 400;
+}
+
+.admin-input:focus {
+  border-color: var(--al-border-hard);
+  background: var(--al-input-focus-fill);
+  box-shadow:
+    inset 0 1px 3px rgba(0,0,0,0.04),
+    0 0 0 3px var(--al-brand-soft),
+    0 0 18px var(--al-brand-glow);
+}
+
+.admin-input:disabled {
+  opacity: 0.56;
+  cursor: not-allowed;
+}
+
+.admin-error {
+  margin-top: 4px;
+  padding: 14px 16px;
+  border-radius: var(--al-radius-md);
+  border: 1px solid var(--al-danger-border);
+  background: var(--al-danger-soft);
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  text-align: left;
+  animation: al-shake 0.38s cubic-bezier(.36,.07,.19,.97) both;
+}
+
+.admin-error::before {
+  content: "!";
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 22px;
+  height: 22px;
+  border-radius: 999px;
+  border: 1.5px solid color-mix(in srgb, var(--al-danger) 65%, transparent);
+  font-size: 0.78rem;
+  font-weight: 800;
+  color: var(--al-danger);
+  margin-top: 1px;
+}
+
+.admin-error span {
+  font-size: 0.9rem;
+  line-height: 1.55;
+  font-weight: 500;
+  color: color-mix(in srgb, var(--al-danger) 80%, var(--al-text) 20%);
+}
+
+.admin-submit,
+.admin-state-btn,
+.admin-logout-btn {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.admin-submit {
+  width: 100%;
+  height: 50px;
+  border-radius: var(--al-radius-md);
+  border: 1px solid transparent;
+  background: var(--al-brand);
+  color: #ffffff;
+  font-family: var(--al-font);
+  font-size: 0.92rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.14),
+    0 2px 6px rgba(0, 0, 0, 0.14),
+    0 6px 20px rgba(0, 0, 0, 0.18);
+  transition:
+    background var(--al-transition),
+    box-shadow var(--al-transition),
+    transform 0.14s ease;
+}
+
+.admin-submit::before,
+.admin-state-btn--primary::before,
+.admin-logout-btn::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(140deg, rgba(255,255,255,0.12) 0%, transparent 55%);
+  pointer-events: none;
+  z-index: 1;
+}
+
+.admin-submit::after,
+.admin-state-btn--primary::after,
+.admin-logout-btn::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -75%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.22) 50%, transparent 100%);
+  transform: skewX(-18deg);
+  transition: left 0.55s cubic-bezier(0.16, 1, 0.3, 1);
+  z-index: 2;
+  pointer-events: none;
+}
+
+.admin-submit:hover::after,
+.admin-state-btn--primary:hover::after,
+.admin-logout-btn:hover::after {
+  left: 135%;
+}
+
+.admin-submit:hover {
+  background: color-mix(in srgb, var(--al-brand) 88%, black 12%);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.18),
+    0 4px 12px rgba(0, 0, 0, 0.20),
+    0 12px 32px rgba(0, 0, 0, 0.28);
+}
+
+.admin-submit:active,
+.admin-state-btn:active,
+.admin-logout-btn:active {
+  transform: scale(0.97);
+  transition-duration: 0.08s;
+}
+
+.admin-submit:focus-visible,
+.admin-state-btn:focus-visible,
+.admin-logout-btn:focus-visible {
+  outline: 2px solid var(--al-brand);
+  outline-offset: 3px;
+}
+
+.admin-submit:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.admin-state,
+.admin-profile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  text-align: center;
+  min-height: 280px;
+}
+
+.admin-state-lottie {
+  width: 132px;
+  height: 132px;
+  overflow: hidden;
+  flex-shrink: 0;
+  border-radius: 18px;
+  border: 1px solid var(--al-border);
+  background: var(--al-soft-fill);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.12),
+    0 2px 12px rgba(0,0,0,0.08);
+  display: grid;
+  place-items: center;
+}
+
+.admin-state-heading {
+  font-size: 1.08rem;
+  font-weight: 700;
+  color: var(--al-text);
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+}
+
+.admin-state-msg {
+  font-size: 0.88rem;
+  color: var(--al-text-muted);
+  line-height: 1.68;
+  max-width: 34ch;
+}
+
+.admin-state-actions,
+.admin-profile-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+  max-width: 260px;
+}
+
+.admin-state-btn {
+  width: 100%;
+  height: 46px;
+  padding: 0 18px;
+  border-radius: var(--al-radius-md);
+  border: 1px solid var(--al-border);
+  background: var(--al-soft-fill);
+  color: var(--al-text);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-size: 0.88rem;
+  font-weight: 600;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.12),
+    0 2px 8px rgba(0,0,0,0.08);
+  transition:
+    background var(--al-transition),
+    box-shadow var(--al-transition),
+    transform 0.14s ease,
+    border-color var(--al-transition);
+}
+
+.admin-state-btn:hover {
+  background: color-mix(in srgb, var(--al-soft-fill) 82%, var(--al-bg) 18%);
+  border-color: var(--al-border-hard);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.14),
+    0 4px 12px rgba(0,0,0,0.10);
+}
+
+.admin-state-btn--primary {
+  background: var(--al-brand);
+  color: #ffffff;
+  border-color: transparent;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.14),
+    0 2px 6px rgba(0, 0, 0, 0.14),
+    0 6px 20px rgba(0, 0, 0, 0.18);
+}
+
+.admin-state-btn--primary:hover {
+  background: color-mix(in srgb, var(--al-brand) 88%, black 12%);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.18),
+    0 4px 12px rgba(0, 0, 0, 0.20),
+    0 12px 32px rgba(0, 0, 0, 0.28);
+}
+
+.admin-avatar {
+  width: 76px;
+  height: 76px;
+  display: grid;
+  place-items: center;
+  border-radius: var(--al-radius-lg);
+  border: 1px solid var(--al-brand-border);
+  background: linear-gradient(135deg, var(--al-brand) 0%, var(--al-brand-2) 100%);
+  font-size: 1.7rem;
+  font-weight: 800;
+  color: #ffffff;
+  box-shadow:
+    0 0 0 4px var(--al-brand-soft),
+    0 10px 26px rgba(0,0,0,0.16);
+}
+
+.admin-verified-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 11px;
+  border-radius: 999px;
+  border: 1px solid var(--al-brand-border);
+  background: var(--al-brand-soft);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.10em;
+  text-transform: uppercase;
+  color: var(--al-brand);
+  box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+}
+
+.admin-profile-name {
+  font-size: 0.92rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  color: var(--al-text);
+}
+
+.admin-profile-meta {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.admin-profile-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 14px 16px;
+  border-radius: var(--al-radius-md);
+  border: 1px solid var(--al-border);
+  background:
+    linear-gradient(160deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02)),
+    var(--al-soft-fill);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.10),
+    inset 0 -1px 0 rgba(0,0,0,0.05),
+    0 2px 8px rgba(0,0,0,0.06);
+}
+
+.admin-profile-row-label {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--al-text-faint);
+  flex-shrink: 0;
+}
+
+.admin-profile-row-value {
+  font-size: 0.8rem;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  color: var(--al-text-muted);
+  text-align: right;
+  word-break: break-all;
+}
+
+.admin-logout-btn {
+  width: 100%;
+  height: 46px;
+  padding: 0 18px;
+  border-radius: var(--al-radius-md);
+  border: 1px solid var(--al-danger-border);
+  background: linear-gradient(135deg, #b3201b 0%, #d92d20 100%);
+  color: #ffffff;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-size: 0.88rem;
+  font-weight: 700;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.14),
+    0 2px 6px rgba(0, 0, 0, 0.14),
+    0 6px 20px rgba(0, 0, 0, 0.18);
+  transition:
+    background var(--al-transition),
+    box-shadow var(--al-transition),
+    transform 0.14s ease;
+}
+
+.admin-logout-btn:hover {
+  background: linear-gradient(135deg, #a61d18 0%, #c6281d 100%);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.18),
+    0 4px 12px rgba(0, 0, 0, 0.20),
+    0 12px 32px rgba(0, 0, 0, 0.28);
+}
+
+@media (max-width: 560px) {
+  .admin-overlay {
+    align-items: flex-end;
+    padding: 0;
+    background:
+      url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.92' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E"),
+      rgba(0, 0, 0, 0.58);
+  }
+
+  .admin-card {
+    width: 100%;
+    max-width: 100%;
+    border-radius: 26px 26px 0 0;
+    padding: 32px 20px 40px;
+    padding-bottom: calc(36px + env(safe-area-inset-bottom, 0px));
+    animation: al-sheet-in 0.34s cubic-bezier(.21, 1.02, .73, 1) both;
+    box-shadow:
+      0 0 0 1px var(--al-border-glow),
+      inset 0 1px 0 rgba(255,255,255,0.18),
+      0 -8px 40px rgba(0, 0, 0, 0.22),
+      0 -24px 64px rgba(0, 0, 0, 0.18);
+  }
+
+  .admin-card::before {
+    background:
+      linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.12) 40%, transparent 100%),
+      radial-gradient(circle at 15% 10%, rgba(255,255,255,0.16), transparent 50%);
+  }
+
+  .admin-card::after {
+    content: "";
+    position: absolute;
+    top: 10px;
+    left: 50%;
+    translate: -50% 0;
+    width: 36px;
+    height: 4px;
+    border-radius: 999px;
+    background: var(--al-border-hard);
+    pointer-events: none;
+    opacity: 0.7;
+    z-index: 99;
+  }
+
+  .admin-close {
+    top: 18px;
+    right: 18px;
+    width: 38px;
+    height: 38px;
+  }
+
+  .admin-body,
+  .admin-state,
+  .admin-profile {
+    min-height: unset;
+  }
+
+  .admin-title {
+    font-size: 1.25rem;
+  }
+
+  .admin-subtitle,
+  .admin-state-msg {
+    font-size: 0.875rem;
+  }
+
+  .admin-state-lottie {
+    width: 108px;
+    height: 108px;
+  }
+
+  .admin-profile-row {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .admin-profile-row-value {
+    text-align: left;
+  }
+}
+
+@keyframes al-gradient-shift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+@keyframes al-overlay-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes al-card-in {
+  from {
+    opacity: 0;
+    transform: translateY(16px) scale(0.96);
+    filter: blur(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    filter: blur(0);
+  }
+}
+
+@keyframes al-sheet-in {
+  from { transform: translateY(100%); opacity: 0.6; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+@keyframes al-shake {
+  0%, 100% { transform: translateX(0); }
+  18% { transform: translateX(-5px); }
+  36% { transform: translateX(5px); }
+  54% { transform: translateX(-3px); }
+  72% { transform: translateX(3px); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .admin-overlay,
+  .admin-card,
+  .admin-close,
+  .admin-submit,
+  .admin-state-btn,
+  .admin-logout-btn,
+  .admin-state-lottie,
+  .admin-title,
+  .admin-error {
+    animation: none !important;
+    transition: none !important;
+    filter: none !important;
+  }
+
+  .admin-title {
+    background-position: 0% 50%;
+  }
+}

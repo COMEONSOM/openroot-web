@@ -13,9 +13,27 @@ import {
 
 import xAnimation from "../../animations/about.json";
 
-/* =========================================================
-   ABOUT
-========================================================= */
+type CertificateItem = {
+  href: string;
+  imageSrc: string;
+  imageAlt: string;
+  ariaLabel: string;
+};
+
+const CERTIFICATES: readonly CertificateItem[] = [
+  {
+    href: "https://www.linkedin.com/in/comeonsom/",
+    imageSrc: "/assets/about1.avif",
+    imageAlt: "Somnath Banerjee — Founder of Openroot Systems on LinkedIn",
+    ariaLabel: "Visit Somnath Banerjee's LinkedIn profile",
+  },
+  {
+    href: "https://chromewebstore.google.com/detail/openroot-gdrive-automatio/pndbnlfhpjinfneglecnpgijhcaffdng",
+    imageSrc: "/assets/about2.avif",
+    imageAlt: "Openroot GDrive Automation System on Chrome Web Store",
+    ariaLabel: "View Openroot GDrive Automation System on Chrome Web Store",
+  },
+] as const;
 
 function About() {
   return (
@@ -29,135 +47,117 @@ function About() {
     >
       <div className={styles.aboutContainer}>
         <motion.div
-          className={styles.aboutGrid}
+          className={styles.aboutLayout}
           variants={stagger()}
           initial="hidden"
           whileInView="visible"
           viewport={VP}
         >
-          {/* =================================================
-              LEFT CONTENT
-          ================================================= */}
-
-          <motion.div
-            className={styles.aboutContent}
-            variants={fadeUp}
-          >
-            <h2
-              id="about-heading"
-              className={styles.aboutTitle}
+          <div className={styles.aboutTopGrid}>
+            <motion.div
+              className={styles.aboutContent}
+              variants={fadeUp}
             >
-              About
-            </h2>
+              <h2
+                id="about-heading"
+                className={styles.aboutTitle}
+              >
+                About
+              </h2>
 
-            <p className={styles.aboutLead}>
-              Openroot Systems is a registered
-              MSME under the Government of India
-              with UDYAM Registration Number
-              UDYAM-WB-14-0263034.
-              We are also a registered employer
-              on the National Career Service
-              (NCS) portal.
-            </p>
-
-            <div className={styles.aboutBody}>
-              <p>
-                We build
-                <strong>
-                  {" "}custom software solutions
-                </strong>
-                , for MSMEs, Govt Departments
-                and Businesses.
-                Beyond software,
-                <strong>
-                  {" "}Openroot Systems
-                </strong>
-                {" "}is a platform for
-                <strong>
-                  {" "}skill development and
-                  empowerment
-                </strong>
-                , helping students,
-                working professionals,
-                and business owners become
-                confident in using
-                <strong>
-                  {" "}technology, AI,
-                  and finance.
-                </strong>
+              <p className={styles.aboutLead}>
+                Openroot Systems is a registered
+                MSME under the Government of India
+                with UDYAM Registration Number
+                UDYAM-WB-14-0263034.
+                We are also a registered employer
+                on the National Career Service
+                (NCS) portal.
               </p>
 
-              <p>
-                Our goal is simple:
-                make technology approachable,
-                affordable, and genuinely
-                helpful for people and
-                small businesses.
-              </p>
-            </div>
-          </motion.div>
+              <div className={styles.aboutBody}>
+                <p>
+                  We build
+                  <strong>
+                    {" "}custom software solutions
+                  </strong>
+                  , for MSMEs, Govt Departments
+                  and Businesses.
+                  Beyond software,
+                  <strong>
+                    {" "}Openroot Systems
+                  </strong>
+                  {" "}is a platform for
+                  <strong>
+                    {" "}skill development and
+                    empowerment
+                  </strong>
+                  , helping students,
+                  working professionals,
+                  and business owners become
+                  confident in using
+                  <strong>
+                    {" "}technology, AI,
+                    and finance.
+                  </strong>
+                </p>
 
-          {/* =================================================
-              RIGHT VISUAL
-          ================================================= */}
+                <p>
+                  Our goal is simple:
+                  make technology approachable,
+                  affordable, and genuinely
+                  helpful for people and
+                  small businesses.
+                </p>
+              </div>
+            </motion.div>
+
+            <motion.div
+              className={styles.aboutVisual}
+              variants={fadeUp}
+            >
+              <div className={styles.visualFrame}>
+                <Lottie
+                  animationData={xAnimation}
+                  loop
+                  autoplay
+                  className={styles.visualAnimation}
+                  aria-hidden="true"
+                  rendererSettings={{
+                    preserveAspectRatio: "xMidYMid slice",
+                  }}
+                />
+              </div>
+            </motion.div>
+          </div>
 
           <motion.div
-            className={styles.aboutVisual}
+            className={styles.proofLayer}
             variants={fadeUp}
           >
-            <div className={styles.visualFrame}>
-              <Lottie
-                animationData={xAnimation}
-                loop
-                autoplay
-                className={styles.visualAnimation}
-              />
+            <div className={styles.certificateGrid}>
+              {CERTIFICATES.map((item, index) => (
+                <a
+                  key={item.href}
+                  href={item.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={`${styles.certificateCard} ${index === 0 ? styles.cardPrimary : styles.cardSecondary}`}
+                  aria-label={item.ariaLabel}
+                >
+                  <img
+                    src={item.imageSrc}
+                    alt={item.imageAlt}
+                    className={styles.certificateImage}
+                    loading="lazy"
+                    decoding="async"
+                    draggable={false}
+                    width="1600"
+                    height="900"
+                  />
+                </a>
+              ))}
             </div>
-          </motion.div>
-
-          {/* =================================================
-              CERTIFICATE IMAGES
-              Direct child of aboutGrid — placed at col 1,
-              row 2 so it sits under text content only.
-          ================================================= */}
-
-          <motion.div
-            className={styles.certificateGrid}
-            variants={fadeUp}
-          >
-            {/* LinkedIn */}
-            <a
-              href="https://www.linkedin.com/in/comeonsom/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className={styles.certificateCard}
-              aria-label="Visit Somnath Banerjee's LinkedIn profile"
-            >
-              <img
-                src="/assets/about1.avif"
-                alt="Somnath Banerjee — Founder of Openroot Systems on LinkedIn"
-                className={styles.certificateImage}
-                loading="lazy"
-                draggable={false}
-              />
-            </a>
-
-            {/* Chrome Web Store */}
-            <a
-              href="https://chromewebstore.google.com/detail/openroot-gdrive-automatio/pndbnlfhpjinfneglecnpgijhcaffdng"
-              target="_blank"
-              rel="noopener noreferrer"
-              className={styles.certificateCard}
-              aria-label="View Openroot GDrive Automation System on Chrome Web Store"
-            >
-              <img
-                src="/assets/about2.avif"
-                alt="Openroot GDrive Automation System on Chrome Web Store"
-                className={styles.certificateImage}
-                loading="lazy"
-                draggable={false}
-              />
-            </a>
           </motion.div>
         </motion.div>
       </div>

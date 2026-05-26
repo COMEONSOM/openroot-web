@@ -1,12 +1,9 @@
-import { useState, useEffect, useRef, useContext } from "react";
-import gsap from "gsap";
-
-import CertificateModal from "../components/CertificateModal";
-import FaqModal         from "../components/FaqModal";
+import { Suspense, lazy, useEffect, useRef, useState } from "react";
 import { useTheme } from "../context/ThemeContext";
-
 import "./styles/Footer.css";
 
+const CertificateModal = lazy(() => import("../components/CertificateModal"));
+const FaqModal = lazy(() => import("../components/FaqModal"));
 
 // ─── Data ─────────────────────────────────────────────────────────────────────
 
@@ -43,54 +40,57 @@ const SITEMAP_LINKS = [
   },
 ];
 
-
 // ─── Component ────────────────────────────────────────────────────────────────
 
 export default function Footer() {
   const footerRef = useRef<HTMLElement | null>(null);
 
-  const [openFaq, setOpenFaq] = useState(false);
+  const [openFaq,    setOpenFaq]    = useState(false);
   const [openVerify, setOpenVerify] = useState(false);
 
   const { resolved } = useTheme();
 
-  // ✅ Theme-based logo
+  // Theme-based logo
   const logoSrc =
     resolved === "dark"
-      ? "/assets/openroot-white-nobg.avif" // white logo
-      : "/assets/openroot-black-nobg.png"; // dark logo (add this file)
+      ? "/assets/openroot-white-nobg.avif"
+      : "/assets/openroot-black-nobg.png";
 
-  // Auto-open certificate modal
+  // Auto-open certificate modal from URL param
   useEffect(() => {
     const certId = new URLSearchParams(window.location.search).get("cert");
     if (certId) setOpenVerify(true);
   }, []);
 
-  // GSAP animation
+  // Subtle entrance (Web Animations API — no GSAP dependency)
   useEffect(() => {
-    if (!footerRef.current) return;
-    gsap.fromTo(
-      footerRef.current,
-      { y: 40, opacity: 0 },
-      { y: 0, opacity: 1, duration: 1, ease: "power2.out" }
+    const el = footerRef.current;
+    if (!el || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+    el.animate(
+      [
+        { opacity: "0", transform: "translateY(18px)" },
+        { opacity: "1", transform: "translateY(0)" },
+      ],
+      { duration: 500, easing: "cubic-bezier(0.16, 1, 0.3, 1)", fill: "both" }
     );
   }, []);
 
   return (
     <footer ref={footerRef} className="footer-root">
 
-      {/* MAIN */}
+      {/* MAIN GRID */}
       <div className="footer-main">
         <div className="footer-grid">
 
           {/* SITEMAP */}
           <nav className="footer-sitemap" aria-label="Site map">
-
-            {/* ✅ REAL LOGO (dynamic) */}
             <img
               src={logoSrc}
               alt="Openroot"
               className="footer-logo-img"
+              loading="lazy"
+              decoding="async"
             />
 
             <span className="footer-label">Sitemap</span>
@@ -102,7 +102,10 @@ export default function Footer() {
                 </a>
               ))}
 
-              <a href="#" onClick={(e) => { e.preventDefault(); setOpenFaq(true); }}>
+              <a
+                href="#"
+                onClick={(e) => { e.preventDefault(); setOpenFaq(true); }}
+              >
                 FAQs
               </a>
 
@@ -110,6 +113,7 @@ export default function Footer() {
                 className="verify-btn"
                 onClick={() => setOpenVerify(true)}
                 type="button"
+                aria-label="Verify a certificate"
               >
                 Verify Certificate
               </button>
@@ -125,15 +129,17 @@ export default function Footer() {
                 target="_blank"
                 rel="noopener noreferrer"
                 className="footer-icon-btn"
+                aria-label="WhatsApp"
               >
-                <img src="/assets/whatsapp.svg" alt="WhatsApp" />
+                <img src="/assets/whatsapp.svg" alt="" aria-hidden="true" />
               </a>
 
               <a
                 href="mailto:connect.openroot@gmail.com"
                 className="footer-icon-btn"
+                aria-label="Email"
               >
-                <img src="/assets/gmail.svg" alt="Gmail" />
+                <img src="/assets/gmail.svg" alt="" aria-hidden="true" />
               </a>
             </div>
           </div>
@@ -147,8 +153,9 @@ export default function Footer() {
                 target="_blank"
                 rel="noopener noreferrer"
                 className="footer-icon-btn"
+                aria-label="X (Twitter)"
               >
-                <img src="/assets/x.svg" alt="X" />
+                <img src="/assets/x.svg" alt="" aria-hidden="true" />
               </a>
 
               <a
@@ -156,8 +163,9 @@ export default function Footer() {
                 target="_blank"
                 rel="noopener noreferrer"
                 className="footer-icon-btn"
+                aria-label="Facebook"
               >
-                <img src="/assets/facebook.svg" alt="Facebook" />
+                <img src="/assets/facebook.svg" alt="" aria-hidden="true" />
               </a>
             </div>
           </div>
@@ -167,7 +175,6 @@ export default function Footer() {
 
       {/* BASE */}
       <div className="footer-base">
-
         <div className="footer-trust">
           {TRUST_BADGES.map(({ src, alt }) => (
             <div key={src} className="footer-trust-item">
@@ -188,12 +195,17 @@ export default function Footer() {
             © 2026 Openroot Systems. All rights reserved.
           </span>
         </div>
-
       </div>
 
       {/* MODALS */}
-      <CertificateModal isOpen={openVerify} onClose={() => setOpenVerify(false)} />
-      <FaqModal isOpen={openFaq} onClose={() => setOpenFaq(false)} />
+      <Suspense fallback={null}>
+        {openVerify && (
+          <CertificateModal isOpen={openVerify} onClose={() => setOpenVerify(false)} />
+        )}
+        {openFaq && (
+          <FaqModal isOpen={openFaq} onClose={() => setOpenFaq(false)} />
+        )}
+      </Suspense>
 
     </footer>
   );

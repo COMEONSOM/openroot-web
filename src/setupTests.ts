@@ -12,6 +12,37 @@ class IntersectionObserverMock {
 
 vi.stubGlobal('IntersectionObserver', IntersectionObserverMock)
 
+vi.stubGlobal('matchMedia', vi.fn().mockImplementation((query: string) => ({
+    matches: query.includes('dark'),
+    media: query,
+    onchange: null,
+    addListener: vi.fn(),
+    removeListener: vi.fn(),
+    addEventListener: vi.fn(),
+    removeEventListener: vi.fn(),
+    dispatchEvent: vi.fn(),
+})))
+
+vi.stubGlobal('requestIdleCallback', vi.fn((callback: IdleRequestCallback) => {
+    return window.setTimeout(
+        () => callback({ didTimeout: false, timeRemaining: () => 0 } as IdleDeadline),
+        1
+    )
+}))
+
+vi.stubGlobal('cancelIdleCallback', vi.fn((id: number) => {
+    window.clearTimeout(id)
+}))
+
+vi.stubGlobal('scrollTo', vi.fn())
+
+Element.prototype.animate = vi.fn(() => ({
+    cancel: vi.fn(),
+    play: vi.fn(),
+    pause: vi.fn(),
+    finished: Promise.resolve(),
+})) as any
+
 // Mock Canvas for Lottie/Three.js
 HTMLCanvasElement.prototype.getContext = vi.fn((contextId) => {
     if (contextId === '2d') {

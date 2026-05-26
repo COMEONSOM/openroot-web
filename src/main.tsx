@@ -4,8 +4,6 @@ import { HelmetProvider } from "react-helmet-async";
 import { ThemeProvider } from "./context/ThemeContext";
 import App from "./App";
 import "./index.css";
-import "./components/styles/CertificateModal.css";
-import "@fortawesome/fontawesome-free/css/all.min.css";
 
 const rootElement = document.getElementById("root");
 
@@ -20,3 +18,19 @@ ReactDOM.createRoot(rootElement).render(
     </ThemeProvider>
   </HelmetProvider>
 );
+
+if (typeof window !== "undefined") {
+  const loadAnalytics = () => {
+    void import("./lib/firebaseAnalytics")
+      .then(({ initAnalytics }) => initAnalytics())
+      .catch(() => {
+        // Analytics is non-critical; ignore load failures.
+      });
+  };
+
+  if ("requestIdleCallback" in window) {
+    window.requestIdleCallback(loadAnalytics);
+  } else {
+    window.setTimeout(loadAnalytics, 1);
+  }
+}

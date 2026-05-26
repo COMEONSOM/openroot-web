@@ -1,9 +1,11 @@
 import { useParams, Link, useNavigate } from "react-router-dom";
 import { useState, useRef, useCallback, useEffect, memo } from "react";
+import { onAuthStateChanged, type User } from "firebase/auth";
 import { softwareList } from "../data/softwareList";
 import { softwareContent } from "../data/softwareContent";
 import { Helmet } from "react-helmet-async";
 import { SoftwareContent } from "../types/software";
+import { auth } from "../lib/firebase";
 import "../components/styles/softwarePage.css";
 
 // Maps slug → internal React Router path used AFTER login check
@@ -38,6 +40,36 @@ const TOOL_KEYWORDS: Record<string, string> = {
 const DEFAULT_KEYWORDS = (name: string, description: string) =>
   `${name}, free online tool, Openroot Systems, ${description.split(" ").slice(0, 6).join(" ")}, free software India`;
 
+function useMediaQuery(query: string): boolean {
+  const getMatches = () =>
+    typeof window !== "undefined" && typeof window.matchMedia === "function"
+      ? window.matchMedia(query).matches
+      : false;
+
+  const [matches, setMatches] = useState(getMatches);
+
+  useEffect(() => {
+    if (typeof window === "undefined" || typeof window.matchMedia !== "function") {
+      return;
+    }
+
+    const mediaQuery = window.matchMedia(query);
+    const handleChange = (event: MediaQueryListEvent) => setMatches(event.matches);
+
+    setMatches(mediaQuery.matches);
+
+    if (typeof mediaQuery.addEventListener === "function") {
+      mediaQuery.addEventListener("change", handleChange);
+      return () => mediaQuery.removeEventListener("change", handleChange);
+    }
+
+    mediaQuery.addListener(handleChange);
+    return () => mediaQuery.removeListener(handleChange);
+  }, [query]);
+
+  return matches;
+}
+
 /* ── VIDEO PLAYER ── */
 interface VideoPlayerProps { src: string; label: string; }
 
@@ -69,7 +101,7 @@ const VideoPlayer = memo(({ src, label }: VideoPlayerProps) => {
           <span className="sp-video-dot sp-video-dot--yellow" />
           <span className="sp-video-dot sp-video-dot--green" />
         </div>
-        <video ref={videoRef} src={src} muted loop playsInline preload="auto" className="sp-video" aria-label={label} />
+        <video ref={videoRef} src={src} muted loop playsInline preload="metadata" className="sp-video" aria-label={label} />
         <div className="sp-video-overlay" aria-hidden="true" />
         <button
           className={`sp-video-toggle ot-glass${paused ? " sp-video-toggle--paused" : ""}`}
@@ -96,7 +128,22 @@ export default function SoftwarePage() {
   const navigate  = useNavigate();
   const tool      = softwareList.find((t) => t.slug === slug);
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
+  const [user, setUser] = useState<User | null | undefined>(undefined);
+  const showDesktopVideo = useMediaQuery("(min-width: 861px)");
   const toggleFAQ = useCallback((i: number) => setActiveIndex((prev) => (prev === i ? null : i)), []);
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (nextUser) => {
+      if (nextUser) {
+        sessionStorage.setItem("openrootUserUID", nextUser.uid);
+      } else {
+        sessionStorage.removeItem("openrootUserUID");
+      }
+      setUser(nextUser);
+    });
+
+    return unsubscribe;
+  }, []);
 
   if (!tool) {
     return (
@@ -111,7 +158,7 @@ export default function SoftwarePage() {
   const formatText = (text: string) => text.split("\n\n").map((p, i) => <p key={i} className="sp-para">{p}</p>);
 
   const pageUrl    = `https://openroot.in/software/${tool.slug}`;
-  const videoSrc   = (tool as any).video as string | undefined;
+  const videoSrc   = tool.video;
   const hasVideo   = Boolean(videoSrc);
   const keywords   = TOOL_KEYWORDS[tool.slug] ?? DEFAULT_KEYWORDS(tool.name, tool.description);
 
@@ -177,8 +224,11 @@ export default function SoftwarePage() {
   // ── Launch flow ──────────────────────────────────────────────────────────
   const launch = () => {
     try {
-      const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
-      if (!isLoggedIn) {
+      if (user === undefined) {
+        alert("Please wait a moment while we finish checking your login status.");
+        return;
+      }
+      if (!user) {
         alert("Please log in first to access this tool.");
         return;
       }
@@ -186,10 +236,9 @@ export default function SoftwarePage() {
         navigate(INTERNAL_ROUTES[tool.slug]);
         return;
       }
-      const userUID = sessionStorage.getItem("openrootUserUID") || localStorage.getItem("openrootUserUID");
       const finalURL = new URL(tool.url);
-      if (userUID && !finalURL.searchParams.has("uid")) {
-        finalURL.searchParams.set("uid", encodeURIComponent(userUID));
+      if (!finalURL.searchParams.has("uid")) {
+        finalURL.searchParams.set("uid", user.uid);
       }
       window.location.href = finalURL.toString();
     } catch (err) {
@@ -286,14 +335,14 @@ export default function SoftwarePage() {
             <p className="sp-launch-note">Login required · Secure access</p>
           </div>
         </div>
-        {hasVideo && videoSrc && (
+        {hasVideo && videoSrc && showDesktopVideo && (
           <div className="sp-hero-video-desktop">
             <VideoPlayer src={videoSrc} label={`${tool.name} demo video`} />
           </div>
         )}
       </header>
 
-      {hasVideo && videoSrc && (
+      {hasVideo && videoSrc && !showDesktopVideo && (
         <div className="sp-hero-video-mobile">
           <VideoPlayer src={videoSrc} label={`${tool.name} demo video`} />
         </div>

@@ -71,14 +71,6 @@ export default function Banner({
 
   const slideCount = banners.length;
 
-  if (slideCount === 0) {
-    return (
-      <section className="home-banner placeholder" aria-live="polite">
-        <div className="banner-placeholder">NO BANNERS AVAILABLE</div>
-      </section>
-    );
-  }
-
   // ============================================================
   // INTERNAL STATE
   // ============================================================
@@ -133,7 +125,7 @@ export default function Banner({
   const startAutoRotate = useCallback(
     (delay: number = autoRotateMs) => {
       clearTimers();
-      if (prefersReducedMotion.current) return;
+      if (prefersReducedMotion.current || slideCount <= 1) return;
 
       intervalRef.current = setInterval(() => {
         setCurrent((c) => clampIndex(c + 1, slideCount));
@@ -259,6 +251,14 @@ export default function Banner({
     anim && !prefersReducedMotion.current
       ? "transform 0.5s ease-in-out"
       : "none";
+
+  if (slideCount === 0) {
+    return (
+      <section className="home-banner placeholder" aria-live="polite">
+        <div className="banner-placeholder">NO BANNERS AVAILABLE</div>
+      </section>
+    );
+  }
 
   // ============================================================
   // RENDER

@@ -217,7 +217,7 @@ flex-shrink: 0;
 /* ── BODY WRAPPER ─────────────────────────────────────── */
 
 .sp-body {
-max-width: min(860px, 96vw);
+max-width: min(767px, 96vw);
 margin-inline: auto;
 padding: clamp(2.5rem, 6vw, 4rem) clamp(1.25rem, 5vw, 2.5rem);
 display: flex;

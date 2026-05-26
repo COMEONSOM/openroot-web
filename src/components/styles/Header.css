@@ -1,360 +1,743 @@
-/* ============================================================
-   HEADER — BIOLUMINESCENT COMMAND BAR | Openroot
-   BLACK ONLY — no theme toggle
-============================================================ */
+/**
+ * ============================================================
+ * HEADER.CSS — OPENROOT
+ * Fixed visual system for Header.tsx
+ * VERSION: 2026.10 — mobile sheet fixed + controlled modal close
+ *
+ * Philosophy:
+ *   - Header background is always dark (#070707) — theme-agnostic
+ *   - All spacing, radius, easing + brand tokens from app.css
+ *   - Glass, shimmer, aurora, glow upgrades throughout
+ *   - Login choice modal matches the cert-modal glass system
+ *   - Mobile bottom-sheet handle is truly centered
+ *   - Clicking outside does NOT close the modal
+ * ============================================================
+ */
 
-@property --hdr-aurora-x {
-  syntax: "<percentage>";
-  inherits: false;
-  initial-value: 22%;
+/* ────────────────────────────────────────────────────────────
+   Scoped Reset
+──────────────────────────────────────────────────────────── */
+.header,
+.login-choice-overlay,
+.login-choice-modal,
+.login-modal-close,
+.login-button,
+.profile-button,
+.choice-btn,
+.avatar-fallback,
+.profile-avatar {
+  box-sizing: border-box;
 }
 
-@property --hdr-sweep {
-  syntax: "<percentage>";
-  inherits: false;
-  initial-value: -12%;
+.header *,
+.header *::before,
+.header *::after,
+.login-choice-overlay *,
+.login-choice-overlay *::before,
+.login-choice-overlay *::after {
+  box-sizing: border-box;
 }
 
-@property --ring-angle {
-  syntax: "<angle>";
-  inherits: false;
-  initial-value: 0deg;
-}
-
-/* ── HEADER WRAPPER ─────────────────────────────────────── */
-
+/* ────────────────────────────────────────────────────────────
+   HEADER SHELL
+──────────────────────────────────────────────────────────── */
 .header {
   position: sticky;
   top: 0;
-  z-index: 200;
+  z-index: 1000;
   width: 100%;
-  padding: 0.4rem clamp(1.5rem, 4vw, 2.5rem);
+  min-height: 78px;
+  padding: 0 var(--ot-page-inline);
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  isolation: isolate;
-  background: rgba(7, 9, 7, 0.92);
+  justify-content: space-between;
+  background: rgba(7, 7, 7, 0.88);
+  backdrop-filter: blur(20px) saturate(1.4);
+  -webkit-backdrop-filter: blur(20px) saturate(1.4);
   border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.04),
+    0 2px 6px rgba(0, 0, 0, 0.22),
+    0 8px 24px rgba(0, 0, 0, 0.18),
+    0 0 80px rgba(67, 97, 238, 0.06);
+  overflow: visible;
+  isolation: isolate;
 }
 
-/* Static border under photon trace */
 .header::before {
   content: "";
   position: absolute;
-  bottom: 0; left: 0; right: 0;
+  inset: 0 0 auto 0;
   height: 1px;
+  z-index: 2;
   pointer-events: none;
-  z-index: -1;
-  background: rgba(255, 255, 255, 0.07);
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.10) 15%,
+    rgba(255, 255, 255, 0.26) 40%,
+    var(--ot-brand) 50%,
+    rgba(255, 255, 255, 0.26) 60%,
+    rgba(255, 255, 255, 0.10) 85%,
+    transparent 100%
+  );
+  opacity: 0.55;
 }
 
-/* Photon trace — now uses #3F37C9 → #4361EE instead of green */
 .header::after {
   content: "";
   position: absolute;
-  bottom: 0; left: 0;
-  width: 100%;
-  height: 1px;
-  pointer-events: none;
+  inset: 0;
   z-index: 0;
-  --hdr-sweep: -12%;
-  background: linear-gradient(
-    90deg,
-    transparent                             0%,
-    transparent                             calc(var(--hdr-sweep) - 1%),
-    rgba(63, 55, 201, 0.30)                 calc(var(--hdr-sweep) + 1%),
-    #4361EE                                 calc(var(--hdr-sweep) + 3%),
-    rgba(67, 97, 238, 0.30)                 calc(var(--hdr-sweep) + 5%),
-    transparent                             calc(var(--hdr-sweep) + 7%),
-    transparent                             100%
-  );
-  animation: hdr-photon 5s cubic-bezier(0.4, 0, 0.55, 1) infinite;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse 55% 120% at 15% 50%, rgba(67, 97, 238, 0.07) 0%, transparent 100%),
+    radial-gradient(ellipse 40% 100% at 85% 50%, rgba(63, 55, 201, 0.05) 0%, transparent 100%);
+  filter: blur(18px);
+  opacity: 0.8;
 }
 
+.header > * { position: relative; z-index: 1; }
 
-@keyframes hdr-photon {
-  0%   { --hdr-sweep: -8%;  }
-  100% { --hdr-sweep: 108%; }
-}
-
-
-@media (max-width: 899px) {
-  .header {
-    width: 100vw;
-    max-width: 100vw;
-    margin-inline: calc(50% - 50vw);
-  }
-}
-
-
-/* ── LOGO ─────────────────────────────────────────────────── */
-
+/* ────────────────────────────────────────────────────────────
+   LOGO AREA
+──────────────────────────────────────────────────────────── */
 .header-logo {
   display: flex;
   align-items: center;
-  text-decoration: none;
-  position: relative;
+  flex-shrink: 0;
+  min-width: 0;
 }
 
-.header-logo::before {
-  content: "";
-  position: absolute;
-  inset: -12px -16px;
-  border-radius: 50%;
-  background: radial-gradient(
-    ellipse at center,
-    rgba(63, 55, 201, 0.14) 0%,
-    transparent 70%
-  );
-  opacity: 0;
-  transform: scale(0.7);
-  transition:
-    opacity   0.4s ease,
-    transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-  pointer-events: none;
-  z-index: -1;
+.header-logo a {
+  display: inline-flex;
+  align-items: center;
+  text-decoration: none;
+  outline: none;
+  border-radius: var(--ot-radius-md);
+  -webkit-tap-highlight-color: transparent;
+  transition: opacity var(--ot-transition-fast), transform var(--ot-transition-fast);
+}
+
+.header-logo a:focus-visible {
+  box-shadow: 0 0 0 3px var(--ot-brand-mid);
+  border-radius: var(--ot-radius-md);
 }
 
 .header-logo-img {
-  width: 110px;
-  height: auto;
+  display: block;
+  width: auto;
+  height: 36px;
+  max-width: min(260px, 46vw);
   object-fit: contain;
   user-select: none;
-  margin-block: 10px;
+  pointer-events: none;
+  filter: none;
   transition:
-    transform var(--t-base),
-    filter    var(--t-base);
+    opacity var(--ot-transition-fast),
+    transform var(--ot-transition-fast),
+    filter var(--ot-transition-fast);
 }
 
-@media (max-width: 480px)                      { .header-logo-img { width: 70px;  } }
-@media (min-width: 481px)  and (max-width:767px)  { .header-logo-img { width: 90px;  } }
-@media (min-width: 768px)  and (max-width:1023px) { .header-logo-img { width: 110px; } }
-@media (min-width: 1024px) and (max-width:1440px) { .header-logo-img { width: 140px; } }
-@media (min-width: 1441px)                     { .header-logo-img { width: 170px; } }
+@media (hover: hover) and (pointer: fine) {
+  .header-logo a:hover .header-logo-img {
+    opacity: 0.9;
+    transform: translateY(-1px);
+    filter: drop-shadow(0 0 8px var(--ot-brand-mid));
+  }
+}
 
-/* ── RIGHT ACTIONS ──────────────────────────────────────── */
-
+/* ────────────────────────────────────────────────────────────
+   RIGHT SIDE
+──────────────────────────────────────────────────────────── */
 .header-right {
   display: flex;
   align-items: center;
-  gap: var(--sp-md);
+  justify-content: flex-end;
+  gap: 10px;
+  flex-shrink: 0;
+  min-width: 0;
 }
 
-/* ── LOGIN — SONAR PULSE PILL ─────────────────────────────── */
-
-.login-animation {
-  position: relative;
+/* ────────────────────────────────────────────────────────────
+   SIGN IN BUTTON
+──────────────────────────────────────────────────────────── */
+.login-button {
+  appearance: none;
+  border: 1px solid transparent;
+  outline: none;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+  cursor: pointer;
+  height: 42px;
+  padding: 0 22px;
   display: inline-flex;
   align-items: center;
-  gap: 0.45rem;
-  padding: 0; /* no pill */
-  color: var(--ot-brand);
-  font-size: var(--fz-xs);
-  font-weight: 700;
-  letter-spacing: 0.04em;
-  cursor: pointer;
-  background: transparent;
-  border: none;
-  box-shadow: none;
-  backdrop-filter: none;
-  -webkit-backdrop-filter: none;
-  transform: translateX(0);
-  transition:
-    transform 0.22s var(--ease-spring),
-    color     0.22s ease;
-}
-
-/* remove shimmer */
-.login-animation::after {
-  content: none;
-}
-
-@media (hover: hover) and (pointer: fine) {
-  .login-animation:hover {
-    transform: translateX(4px);
-    color: var(--ot-brand); /* keep same color */
-  }
-}
-
-.login-animation:active {
-  transform: translateX(2px);
-  transition-duration: 0.08s;
-}
-
-.login-animation:focus-visible {
-  outline: 2px solid #4361EE;
-  outline-offset: 3px;
-}
-
-.login-lottie {
-  width: 44px;
-  height: 44px;
-  pointer-events: none;
-  position: relative;
-  z-index: 1;
-}
-
-.login-hint {
-  font-size: var(--fz-xs);
-  font-weight: 700;
-  letter-spacing: 0.05em;
+  justify-content: center;
+  background: #ffffff;
+  color: #0a0a0a;
+  border-radius: var(--ot-radius-md);
+  font-family: var(--ot-font);
+  font-size: 0.82rem;
+  font-weight: 800;
+  letter-spacing: 0.07em;
   text-transform: uppercase;
+  line-height: 1;
   white-space: nowrap;
-  user-select: none;
   position: relative;
-  z-index: 1;
+  overflow: hidden;
+  isolation: isolate;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.9),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.06),
+    0 2px 6px rgba(0, 0, 0, 0.22),
+    0 8px 20px rgba(0, 0, 0, 0.18);
+  transition:
+    transform var(--t-spring-fast),
+    box-shadow var(--ot-transition-fast),
+    background var(--ot-transition-fast);
 }
 
-@media (max-width: 480px) {
-  .login-lottie { width: 38px; height: 38px; }
-  .login-hint   { display: none; }
-}
-
-/* ── PROFILE — CONIC ORBITAL RING ─────────────────────────── */
-
-.profile-button {
-  position: relative;
-  display: grid;
-  place-items: center;
-  width: 46px;
-  height: 46px;
-  padding: 0;
-  border: none;
-  background: transparent;
-  border-radius: 50%;
-  cursor: pointer;
-  transition: transform var(--t-snap);
-}
-
-/* Rotating conic ring */
-.profile-button::before {
-  content: "";
-  position: absolute;
-  inset: -3px;
-  border-radius: 50%;
-  --ring-angle: 0deg;
-  background: conic-gradient(
-    from var(--ring-angle),
-    var(--ring-lo)  0deg,
-    var(--ring-mid) 60deg,
-    var(--ring-hi)  90deg,
-    var(--ring-mid) 120deg,
-    var(--ring-lo)  160deg,
-    var(--ring-lo)  360deg
-  );
-  animation: ring-orbit 4s linear infinite;
-  pointer-events: none;
-  z-index: 0;
-  opacity: 0.75;
-  transition: opacity 0.3s ease, animation-duration 0.3s ease;
-}
-
-@keyframes ring-orbit {
-  to { --ring-angle: 360deg; }
-}
-
-/* Mask that creates ring gap */
-.profile-button::after {
+.login-button::before {
   content: "";
   position: absolute;
   inset: 0;
-  border-radius: 50%;
-  background: rgba(7, 9, 7, 0.92);
+  border-radius: inherit;
+  background: linear-gradient(140deg, rgba(255,255,255,0.35) 0%, transparent 55%);
+  pointer-events: none;
   z-index: 1;
+}
+
+.login-button::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -80%;
+  width: 55%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.50) 50%,
+    transparent 100%
+  );
+  transform: skewX(-18deg);
+  transition: left 0.52s cubic-bezier(0.16, 1, 0.3, 1);
+  z-index: 2;
   pointer-events: none;
 }
 
-.profile-avatar,
-.avatar-fallback {
-  position: relative;
-  z-index: 2;
-  display: block;
-  object-fit: cover;
-  border-radius: 50%;
-  background: #111;
-  border: 2px solid rgba(255, 255, 255, 0.12);
-  transition:
-    border-color var(--t-snap),
-    box-shadow   var(--t-snap),
-    transform    var(--t-snap);
+.login-button:hover::after { left: 140%; }
+
+.login-button:hover {
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.95),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.06),
+    0 4px 12px rgba(0, 0, 0, 0.28),
+    0 14px 32px rgba(0, 0, 0, 0.22);
 }
 
-@media (hover: hover) and (pointer: fine) {
-  .profile-button:hover::before {
-    opacity: 1;
-    animation-duration: 2s;
-  }
+.login-button:active {
+  transform: translateY(0) scale(0.97);
+  transition-duration: 0.08s;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.8),
+    0 2px 8px rgba(0, 0, 0, 0.18);
+}
 
-  .profile-button:hover .profile-avatar,
-  .profile-button:hover .avatar-fallback {
-    border-color: rgba(42, 26, 215, 0.76);
-  }
+.login-button:focus-visible {
+  outline: none;
+  box-shadow:
+    0 0 0 2px #070707,
+    0 0 0 4px var(--ot-brand),
+    0 8px 24px rgba(0, 0, 0, 0.22);
+}
+
+/* ────────────────────────────────────────────────────────────
+   PROFILE BUTTON
+──────────────────────────────────────────────────────────── */
+.profile-button {
+  appearance: none;
+  border: 1.5px solid rgba(255, 255, 255, 0.18);
+  outline: none;
+  padding: 0;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+  width: 42px;
+  height: 42px;
+  display: grid;
+  place-items: center;
+  background: rgba(255, 255, 255, 0.10);
+  border-radius: 50%;
+  overflow: hidden;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.22),
+    0 2px 8px rgba(0, 0, 0, 0.28),
+    0 0 0 0px var(--ot-brand-mid);
+  transition:
+    transform var(--t-spring-fast),
+    box-shadow var(--ot-transition-fast),
+    border-color var(--ot-transition-fast);
+}
+
+.profile-button:hover {
+  transform: translateY(-1px) scale(1.04);
+  border-color: var(--ot-brand-border);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.28),
+    0 4px 14px rgba(0, 0, 0, 0.32),
+    0 0 0 3px var(--ot-brand-dim),
+    0 0 20px var(--ot-brand-glow);
 }
 
 .profile-button:active {
-  transform: scale(0.94);
+  transform: scale(0.95);
+  transition-duration: 0.08s;
 }
 
 .profile-button:focus-visible {
-  outline: 2px solid #4361EE;
-  outline-offset: 4px;
+  outline: none;
+  box-shadow:
+    0 0 0 2px #070707,
+    0 0 0 4px var(--ot-brand),
+    0 6px 16px rgba(0, 0, 0, 0.28);
+}
+
+/* ────────────────────────────────────────────────────────────
+   AVATAR STATES
+──────────────────────────────────────────────────────────── */
+.profile-avatar {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  border-radius: 50%;
 }
 
 .avatar-fallback {
+  width: 100%;
+  height: 100%;
   display: grid;
   place-items: center;
-  background: linear-gradient(135deg, #1a1a3a, #0e0e24);
-  color: #6480f5;
+  color: #0a0a0a;
+  font-family: var(--ot-font);
+  font-size: 0.88rem;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  background: linear-gradient(145deg, #ffffff 0%, #e8e8e8 100%);
+  border-radius: 50%;
+}
+
+/* ────────────────────────────────────────────────────────────
+   LOGIN CHOICE OVERLAY
+──────────────────────────────────────────────────────────── */
+.login-choice-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: clamp(16px, 4vw, 40px);
+  background:
+    url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.92' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.045'/%3E%3C/svg%3E"),
+    radial-gradient(ellipse 70% 60% at 50% 42%, rgba(255,255,255,0.06) 0%, transparent 100%),
+    radial-gradient(ellipse 100% 100% at 50% 50%, transparent 40%, rgba(0,0,0,0.35) 100%),
+    rgba(0, 0, 0, 0.68);
+  backdrop-filter: blur(12px) saturate(0.75);
+  -webkit-backdrop-filter: blur(12px) saturate(0.75);
+  animation: lc-overlay-in 0.22s ease both;
+}
+
+/* ────────────────────────────────────────────────────────────
+   LOGIN CHOICE MODAL
+──────────────────────────────────────────────────────────── */
+.login-choice-modal {
+  position: relative;
+  width: min(420px, 100%);
+  padding: clamp(24px, 5vw, 36px) clamp(20px, 5vw, 32px) clamp(20px, 4vw, 28px);
+  border-radius: var(--ot-radius-xl);
+  overflow: hidden;
+  isolation: isolate;
+  background: rgba(255, 255, 255, 0.94);
+  backdrop-filter: blur(24px) saturate(1.8);
+  -webkit-backdrop-filter: blur(24px) saturate(1.8);
+  color: #0a0a0a;
+  border: 1px solid rgba(0, 0, 0, 0.10);
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.6),
+    inset 0 1px 0 rgba(255, 255, 255, 0.95),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.04),
+    0 4px 12px rgba(0, 0, 0, 0.08),
+    0 20px 50px rgba(0, 0, 0, 0.28),
+    0 50px 100px rgba(0, 0, 0, 0.22);
+  animation: lc-modal-in 0.36s cubic-bezier(.21, 1.02, .73, 1) both;
+}
+
+.login-choice-modal::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  border-radius: inherit;
+  background:
+    radial-gradient(circle at 14% 8%, rgba(255,255,255,0.55), transparent 50%),
+    radial-gradient(circle at 88% 92%, rgba(255,255,255,0.18), transparent 42%),
+    linear-gradient(180deg, rgba(255,255,255,0.22) 0%, transparent 30%);
+}
+
+.login-choice-modal::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1.5px;
+  z-index: 2;
+  pointer-events: none;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    var(--ot-brand-border) 15%,
+    var(--ot-brand) 50%,
+    var(--ot-brand-border) 85%,
+    transparent 100%
+  );
+  border-radius: var(--ot-radius-xl) var(--ot-radius-xl) 0 0;
+}
+
+.login-choice-modal > * { position: relative; z-index: 1; }
+
+.login-choice-modal h2 {
+  margin: 6px 0 clamp(16px, 3vw, 22px);
+  font-family: var(--ot-font);
+  font-size: clamp(1.2rem, 2.5vw, 1.45rem);
+  line-height: 1.15;
+  font-weight: 800;
+  letter-spacing: -0.025em;
+  color: #0a0a0a;
+  text-align: center;
+}
+
+/* ────────────────────────────────────────────────────────────
+   CLOSE BUTTON
+──────────────────────────────────────────────────────────── */
+.login-modal-close {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  z-index: 10;
+  width: 36px;
+  height: 36px;
+  border-radius: 999px;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  display: grid;
+  place-items: center;
+  background: rgba(0, 0, 0, 0.05);
+  color: #555555;
+  font-size: 1rem;
+  line-height: 1;
+  cursor: pointer;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  transition:
+    background 0.22s ease,
+    border-color 0.22s ease,
+    color 0.22s ease,
+    transform 0.28s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.login-modal-close:hover {
+  background: rgba(0, 0, 0, 0.10);
+  border-color: rgba(0, 0, 0, 0.15);
+  color: #0a0a0a;
+  transform: rotate(90deg) scale(1.08);
+}
+
+.login-modal-close:active { transform: rotate(90deg) scale(0.94); }
+
+.login-modal-close:focus-visible {
+  outline: 2px solid var(--ot-brand);
+  outline-offset: 3px;
+}
+
+/* ────────────────────────────────────────────────────────────
+   CHOICE BUTTONS
+──────────────────────────────────────────────────────────── */
+.choice-btn {
+  width: 100%;
+  height: 50px;
+  margin-top: 10px;
+  border: 1px solid transparent;
+  border-radius: var(--ot-radius-md);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-family: var(--ot-font);
+  font-size: 0.92rem;
   font-weight: 700;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+  background: #0a0a0a;
+  color: #ffffff;
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.12),
+    0 2px 6px rgba(0, 0, 0, 0.18),
+    0 8px 20px rgba(0, 0, 0, 0.14);
+  transition:
+    background var(--ot-transition-fast),
+    box-shadow var(--t-spring-fast),
+    transform var(--t-spring-fast),
+    border-color var(--ot-transition-fast);
 }
 
-
-/* ── RESPONSIVE AVATAR SIZES ─────────────────────────────── */
-
-@media (max-width: 768px) {
-  .profile-avatar,
-  .avatar-fallback { width: 32px; height: 32px; font-size: 0.8rem; }
-  .profile-button  { width: 38px; height: 38px; }
+.choice-btn::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(140deg, rgba(255,255,255,0.10) 0%, transparent 55%);
+  pointer-events: none;
+  z-index: 1;
 }
 
-@media (min-width: 769px) and (max-width: 899px) {
-  .profile-avatar,
-  .avatar-fallback { width: 38px; height: 38px; font-size: 0.9rem; }
-  .profile-button  { width: 44px; height: 44px; }
+.choice-btn::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -80%;
+  width: 55%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.18) 50%,
+    transparent 100%
+  );
+  transform: skewX(-18deg);
+  transition: left 0.52s cubic-bezier(0.16, 1, 0.3, 1);
+  z-index: 2;
+  pointer-events: none;
 }
 
-@media (min-width: 900px) {
-  .profile-avatar,
-  .avatar-fallback { width: 46px; height: 46px; font-size: 1rem; }
-  .profile-button  { width: 52px; height: 52px; }
+.choice-btn:hover::after { left: 140%; }
+
+.choice-btn:hover {
+  transform: translateY(-2px);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.18),
+    0 4px 12px rgba(0, 0, 0, 0.22),
+    0 12px 28px rgba(0, 0, 0, 0.18);
 }
 
-/* ── REDUCED MOTION ──────────────────────────────────────── */
+.choice-btn:active {
+  transform: translateY(0) scale(0.97);
+  transition-duration: 0.08s;
+}
 
+.choice-btn:focus-visible {
+  outline: 2px solid var(--ot-brand);
+  outline-offset: 3px;
+}
+
+.choice-btn.admin {
+  background: rgba(67, 97, 238, 0.06);
+  color: #0a0a0a;
+  border-color: var(--ot-brand-border);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.55),
+    0 2px 6px rgba(63, 55, 201, 0.08);
+}
+
+.choice-btn.admin::after {
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(67, 97, 238, 0.22) 50%,
+    transparent 100%
+  );
+}
+
+.choice-btn.admin:hover {
+  background: rgba(67, 97, 238, 0.10);
+  border-color: var(--ot-brand);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.65),
+    0 0 0 3px var(--ot-brand-dim),
+    0 4px 14px rgba(63, 55, 201, 0.14),
+    0 0 24px var(--ot-brand-glow);
+}
+
+/* ────────────────────────────────────────────────────────────
+   RESPONSIVE
+──────────────────────────────────────────────────────────── */
+@media (max-width: 640px) {
+  .header {
+    min-height: 64px;
+    padding: 0 14px;
+  }
+
+  .header-logo-img {
+    height: 30px;
+    max-width: 42vw;
+  }
+
+  .login-button {
+    height: 38px;
+    padding: 0 16px;
+    font-size: 0.76rem;
+    letter-spacing: 0.06em;
+    border-radius: var(--ot-radius-sm);
+  }
+
+  .profile-button {
+    width: 38px;
+    height: 38px;
+  }
+
+  .login-choice-overlay {
+    align-items: flex-end;
+    justify-content: center;
+    padding: 0;
+    background: rgba(0, 0, 0, 0.62);
+  }
+
+  .login-choice-modal {
+    position: relative;
+    width: 100%;
+    max-width: 100%;
+    margin: 0;
+    border-radius: 26px 26px 0 0;
+    padding: 34px 20px 32px;
+    padding-top: 78px; /* makes room for handle + close button */
+    padding-bottom: calc(32px + env(safe-area-inset-bottom, 0px));
+    border: none;
+    box-shadow:
+      0 -8px 40px rgba(0, 0, 0, 0.22),
+      0 -24px 64px rgba(0, 0, 0, 0.18);
+  }
+
+  .login-choice-modal::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    border-radius: inherit;
+    pointer-events: none;
+    background:
+      linear-gradient(180deg, rgba(255,255,255,0.16) 0%, transparent 26%),
+      radial-gradient(circle at 18% 8%, rgba(255,255,255,0.14), transparent 42%);
+  }
+
+  /* Replace desktop top hairline with a truly centered drag handle */
+  .login-choice-modal::after {
+    content: "";
+    position: absolute;
+    top: 14px;
+    left: 50%;
+    width: 54px;
+    height: 6px;
+    transform: translateX(-50%);
+    border-radius: 999px;
+    background: rgba(0, 0, 0, 0.16);
+    pointer-events: none;
+    z-index: 6;
+  }
+
+  .login-choice-modal > * {
+    position: relative;
+    z-index: 1;
+  }
+
+  .login-choice-modal h2 {
+    margin-top: 0;
+    font-size: 1.15rem;
+  }
+
+  .choice-btn {
+    height: 48px;
+    font-size: 0.9rem;
+  }
+
+  .login-modal-close {
+    position: absolute;
+    top: 18px;
+    right: 18px;
+    left: auto;
+    width: 40px;
+    height: 40px;
+    z-index: 12;
+  }
+}
+
+@media (max-width: 420px) {
+  .header-logo-img {
+    height: 26px;
+  }
+
+  .login-button {
+    min-width: 100px;
+    padding: 0 12px;
+  }
+}
+
+/* ────────────────────────────────────────────────────────────
+   HEADER — LOCAL KEYFRAMES
+──────────────────────────────────────────────────────────── */
+@keyframes lc-overlay-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes lc-modal-in {
+  from {
+    opacity: 0;
+    transform: translateY(14px) scale(0.96);
+    filter: blur(5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    filter: blur(0);
+  }
+}
+
+@keyframes lc-sheet-in {
+  from {
+    transform: translateY(100%);
+    opacity: 0.6;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* ────────────────────────────────────────────────────────────
+   REDUCED MOTION
+──────────────────────────────────────────────────────────── */
 @media (prefers-reduced-motion: reduce) {
   .header,
-  .header::after,
-  .header-logo::before,
-  .login-animation,
-  .profile-button::before {
-    animation: none !important;
-  }
-
   .header-logo-img,
-  .login-animation,
+  .login-button,
+  .login-button::after,
   .profile-button,
-  .profile-avatar,
-  .avatar-fallback {
+  .avatar-fallback,
+  .login-choice-overlay,
+  .login-choice-modal,
+  .login-modal-close,
+  .choice-btn,
+  .choice-btn::after {
     transition: none !important;
-  }
-
-  .profile-button::before {
-    background: conic-gradient(
-      from 45deg,
-      var(--ring-lo) 0deg,
-      var(--ring-hi) 90deg,
-      var(--ring-lo) 160deg,
-      var(--ring-lo) 360deg
-    );
+    animation: none !important;
+    filter: none !important;
   }
 }

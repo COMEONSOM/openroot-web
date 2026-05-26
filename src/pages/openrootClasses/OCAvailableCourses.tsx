@@ -1,7 +1,6 @@
-import { useState, useMemo, useCallback, useRef, useEffect } from "react";
+import { useState, useMemo, useCallback, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Lottie from "lottie-react";
-import jsPDF from "jspdf";
 import "../openrootClasses/OCStyle/OCAvailableCourses.css";
 
 import FinanceLottie from "../../assets-oc/lotties/finance.json";
@@ -271,11 +270,6 @@ export default function AvailableCourses() {
   const { getCourseById } = useCourseLookup();
   const receiptRef = useRef<HTMLDivElement>(null);
   const paymentLockRef = useRef(false);
-  
-
-  useEffect(() => {
-    void loadRazorpayScript();
-  }, []);
 
   const handleBackToCourses = useCallback(() => {
     setIsDetailsOpen(false);
@@ -483,7 +477,8 @@ export default function AvailableCourses() {
     try {
       if (!selectedCourse) return;
 
-      const pdf = new jsPDF("p", "pt", "a4");
+      const { default: JsPDF } = await import("jspdf");
+      const pdf = new JsPDF("p", "pt", "a4");
       const pageWidth = pdf.internal.pageSize.getWidth();
 
       const primaryColor = "#7c3aed";

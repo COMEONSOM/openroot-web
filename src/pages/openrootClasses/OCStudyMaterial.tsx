@@ -75,68 +75,94 @@ function openViewMoreWindow(materials: StudyMaterialItem[]): void {
     return;
   }
 
-  const data = JSON.stringify(materials);
+  const doc = win.document;
+  doc.documentElement.lang = "en";
+  doc.title = "All Study Materials";
 
-  const html = `
-    <!doctype html>
-    <html>
-      <head>
-        <meta charset="utf-8"/>
-        <meta name="viewport" content="width=device-width, initial-scale=1"/>
-        <title>All Study Materials</title>
-        <style>
-          :root {
-            --bg: #f8fafc;
-            --card: #ffffff;
-            --text: #111827;
-            --shadow: 0 6px 18px rgba(0,0,0,0.1);
-            --radius: 16px;
-          }
-          * { box-sizing: border-box; }
-          body { margin: 0; font-family: Inter, system-ui, sans-serif; background: var(--bg); color: var(--text); }
-          header { padding: 20px; text-align: center; position: sticky; top: 0; background: var(--bg); }
-          h1 { margin: 0; font-size: 24px; }
-          .wrap { padding: 24px; max-width: 1280px; margin: 0 auto; }
-          .grid { display: grid; gap: 24px; grid-template-columns: repeat(5, 1fr); }
-          @media (max-width: 1023.98px) { .grid { grid-template-columns: repeat(4, 1fr); } }
-          @media (max-width: 639.98px)  { .grid { grid-template-columns: repeat(3, 1fr); } }
-          .card {
-            background: var(--card);
-            border-radius: var(--radius);
-            height: 160px;
-            display: flex; align-items: center; justify-content: center;
-            text-align: center; padding: 16px;
-            box-shadow: var(--shadow);
-            cursor: pointer;
-            transition: transform .2s ease, box-shadow .2s ease;
-          }
-          .card:hover { transform: translateY(-4px); box-shadow: 0 10px 25px rgba(0,0,0,.15); }
-          .title { font-weight: 700; }
-        </style>
-      </head>
-      <body>
-        <header><h1>All Study Materials</h1></header>
-        <div class="wrap">
-          <div class="grid" id="grid"></div>
-        </div>
-        <script>
-          const materials = ${data};
-          const grid = document.getElementById("grid");
-          materials.forEach(m => {
-            const card = document.createElement("div");
-            card.className = "card";
-            card.innerHTML = '<div class="title">'+m.title+'</div>';
-            card.onclick = () => window.open(m.link, "_blank", "noopener,noreferrer");
-            grid.appendChild(card);
-          });
-        </script>
-      </body>
-    </html>
+  while (doc.head.firstChild) {
+    doc.head.removeChild(doc.head.firstChild);
+  }
+
+  while (doc.body.firstChild) {
+    doc.body.removeChild(doc.body.firstChild);
+  }
+
+  const charset = doc.createElement("meta");
+  charset.setAttribute("charset", "utf-8");
+
+  const viewport = doc.createElement("meta");
+  viewport.name = "viewport";
+  viewport.content = "width=device-width, initial-scale=1";
+
+  const style = doc.createElement("style");
+  style.textContent = `
+    :root {
+      --bg: #f8fafc;
+      --card: #ffffff;
+      --text: #111827;
+      --shadow: 0 6px 18px rgba(0,0,0,0.1);
+      --radius: 16px;
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; font-family: Inter, system-ui, sans-serif; background: var(--bg); color: var(--text); }
+    header { padding: 20px; text-align: center; position: sticky; top: 0; background: var(--bg); }
+    h1 { margin: 0; font-size: 24px; }
+    .wrap { padding: 24px; max-width: 1280px; margin: 0 auto; }
+    .grid { display: grid; gap: 24px; grid-template-columns: repeat(5, 1fr); }
+    @media (max-width: 1023.98px) { .grid { grid-template-columns: repeat(4, 1fr); } }
+    @media (max-width: 639.98px)  { .grid { grid-template-columns: repeat(3, 1fr); } }
+    .card {
+      background: var(--card);
+      border-radius: var(--radius);
+      min-height: 160px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 16px;
+      box-shadow: var(--shadow);
+      cursor: pointer;
+      transition: transform .2s ease, box-shadow .2s ease;
+      border: 0;
+      width: 100%;
+      color: inherit;
+      font: inherit;
+    }
+    .card:hover { transform: translateY(-4px); box-shadow: 0 10px 25px rgba(0,0,0,.15); }
+    .title { font-weight: 700; }
   `;
 
-  win.document.open();
-  win.document.write(html);
-  win.document.close();
+  doc.head.append(charset, viewport, style);
+
+  const header = doc.createElement("header");
+  const heading = doc.createElement("h1");
+  heading.textContent = "All Study Materials";
+  header.appendChild(heading);
+
+  const wrap = doc.createElement("div");
+  wrap.className = "wrap";
+
+  const grid = doc.createElement("div");
+  grid.className = "grid";
+
+  materials.forEach((material) => {
+    const card = doc.createElement("button");
+    card.type = "button";
+    card.className = "card";
+    card.addEventListener("click", () => {
+      win.open(material.link, "_blank", "noopener,noreferrer");
+    });
+
+    const title = doc.createElement("div");
+    title.className = "title";
+    title.textContent = material.title;
+
+    card.appendChild(title);
+    grid.appendChild(card);
+  });
+
+  wrap.appendChild(grid);
+  doc.body.append(header, wrap);
 }
 
 // ============================================================
