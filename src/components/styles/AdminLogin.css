@@ -744,14 +744,6 @@
     height: 108px;
   }
 
-  .admin-profile-row {
-    align-items: flex-start;
-    flex-direction: column;
-  }
-
-  .admin-profile-row-value {
-    text-align: left;
-  }
 }
 
 @keyframes al-gradient-shift {
