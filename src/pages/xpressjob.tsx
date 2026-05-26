@@ -50,10 +50,11 @@ const ITI_CARDS: CardData[] = [
 
 
 const UGPG_CARDS: CardData[] = [
-  { id: 'ugpg-1', url: 'https://makaut1.ucanapply.com/smartexam/public/student', imgSrc: img('assets-rh/makaut_pnoufn'), imgAlt: 'MAKAUT' },
+  { id: 'ugpg-1', url: 'https://makaut1.ucanapply.com/smartexam/public/student', imgSrc: img('assets-rh/makaut_pnoufn'), imgAlt: 'MAKAUT-UG' },
   { id: 'ugpg-2', url: 'https://svmcm.wb.gov.in/', imgSrc: img('assets-rh/svmcm_wguoxv'), imgAlt: 'SVMCM' },
   { id: 'ugpg-3', url: 'https://www.nism.ac.in/', imgSrc: img('assets-rh/nism_okw994'), imgAlt: 'NISM' },
   { id: 'ugpg-4', url: 'https://admissionju.jadavpuruniversity.in/fengadmission/', imgSrc: img('assets-rh/ju_r2vgcv'), imgAlt: 'Jadavpur University' },
+  { id: 'ugpg-5', url: 'https://makautwb.ac.in/', imgSrc: img('production-images/makaut_pg_vkewja'), imgAlt: 'MAKAUT-PG' },
 ];
 
 
@@ -63,6 +64,7 @@ const GOVT_CARDS: CardData[] = [
   { id: 'govt-3', url: 'https://unifiedportal-mem.epfindia.gov.in/', imgSrc: img('assets-rh/unifiedportal_rmfgqt'), imgAlt: 'Unified Portal' },
   { id: 'govt-4', url: 'https://passbook.epfindia.gov.in/MemberPassBook/login', imgSrc: img('assets-rh/PFpassbook_gjxnhk'), imgAlt: 'PFpassbook' },
   { id: 'govt-5', url: 'https://portal.esic.gov.in/EmployeePortal/login.aspx', imgSrc: img('assets-rh/esic_jd3ynx'), imgAlt: 'ESIC' },
+  { id: 'govt-6', url: 'https://socialsecurity.wb.gov.in/login', imgSrc: img('production-images/annapurna-portal_nokt0q'), imgAlt: 'Annapurna Portal' },
 ];
 
 
@@ -97,11 +99,19 @@ const INVEST_CARDS: CardData[] = [
 const JOB_CARDS: CardData[] = [
   { id: 'job-1', url: 'https://rrbrecruitmentstaging.net/#/auth/landing',   imgSrc: img('assets-rh/rrb_nv0pt4'),          imgAlt: 'RRB',                        jobType: 'central' },
   { id: 'job-2', url: 'https://drdo.gov.in/drdo/',                          imgSrc: img('assets-rh/DRDO_tny47z'),         imgAlt: 'DRDO',                       jobType: 'central' },
-  { id: 'job-3', url: 'https://wbpsc.gov.in',                               imgSrc: img('assets-rh/wbpsc_jx06od.png'),   imgAlt: 'WBPSC',                      jobType: 'state'   },
-  { id: 'job-4', url: 'https://www.grse.in/career/',                        imgSrc: img('assets-rh/grse-logo_cw8xcg'),   imgAlt: 'GRSE',                       jobType: 'psu'     },
-  { id: 'job-5', url: 'https://careers.bhel.in/index.jsp',                  imgSrc: img('assets-rh/bhel_iv3bdc'),        imgAlt: 'BHEL',                       jobType: 'psu'     },
-  { id: 'job-6', url: 'https://iocl.com/latest-job-opening',                imgSrc: img('assets-rh/iocllogo_qpttuz'),    imgAlt: 'IOCL',                       jobType: 'psu'     },
-  { id: 'job-7', url: 'https://madrasfert.co.in/resources/recruitment/',    imgSrc: img('assets-rh/madras-fert_nnks9s'), imgAlt: 'Madras-Fertilizers-Limited', jobType: 'psu'     },
+  { id: 'job-3', url: 'https://wbpsc.gov.in',                               imgSrc: img('assets-rh/wbpsc_jx06od.png'),    imgAlt: 'WBPSC',                      jobType: 'state'   },
+  { id: 'job-4', url: 'https://www.grse.in/career/',                        imgSrc: img('assets-rh/grse-logo_cw8xcg'),    imgAlt: 'GRSE',                       jobType: 'psu'     },
+  { id: 'job-5', url: 'https://careers.bhel.in/index.jsp',                  imgSrc: img('assets-rh/bhel_iv3bdc'),         imgAlt: 'BHEL',                       jobType: 'psu'     },
+  { id: 'job-6', url: 'https://iocl.com/latest-job-opening',                imgSrc: img('assets-rh/iocllogo_qpttuz'),     imgAlt: 'IOCL',                       jobType: 'psu'     },
+  { id: 'job-7', url: 'https://madrasfert.co.in/resources/recruitment/',    imgSrc: img('assets-rh/madras-fert_nnks9s'),  imgAlt: 'Madras-Fertilizers-Limited', jobType: 'psu'     },
+  { id: 'job-8', url: 'https://sbi.bank.in/web/careers',                    imgSrc: img('production-images/sbi_careers_uxcxi2'),         imgAlt: 'SBI Careers',                jobType: 'psu'     },
+  { id: 'job-9', url: 'https://cdn.digialm.com/EForms/configuredHtml/1258/97495/Index.html', imgSrc: img('production-images/coalindia_reerav'),   imgAlt: 'Coal India',        jobType: 'psu'     },
+  { id: 'job-10', url: 'https://careers.meconlimited.co.in/',               imgSrc: img('production-images/mecon_lbpwxq'),               imgAlt: 'MECON',                      jobType: 'psu'     },
+  { id: 'job-11', url: 'https://www.nbccindia.in/webEnglish/jobs',          imgSrc: img('production-images/nbcc_w1ul1g'),                imgAlt: 'NBCC',                       jobType: 'psu'     },
+  { id: 'job-12', url: 'https://www.ecil.co.in/jobopenings',                imgSrc: img('production-images/ecil_u56e4u'),                imgAlt: 'ECIL',                       jobType: 'psu'     },
+  { id: 'job-13', url: 'https://mudira.nalcoindia.co.in/rec_portal/default.aspx',            imgSrc: img('production-images/nalco_nqcifw'),       imgAlt: 'Nalco',             jobType: 'psu'     },
+  { id: 'job-14', url: 'https://www.joinindiannavy.gov.in/en/account/account/state',         imgSrc: img('production-images/indian-navy_jffv8f'), imgAlt: 'Indian Navy',       jobType: 'central' },
+  { id: 'job-15', url: 'https://www.cdac.in/index.aspx?id=current_jobs',                     imgSrc: img('production-images/cdac_t3owh1'),        imgAlt: 'CDAC',              jobType: 'psu'     },
 ];
 
 

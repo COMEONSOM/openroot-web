@@ -143,6 +143,11 @@ npm run test
 npm run build
 ```
 
+
+npm install sharp fast-glob      --- for image compression (one time)
+npm run compress                 ---- for every time compression
+
+
 Create a `.env` file in the root with your Firebase config:
 
 ```env example
