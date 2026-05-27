@@ -42,6 +42,7 @@ const OPENROOT_USER_UID_KEY = "openrootUserUID";
 const OPENROOT_PROFILE_DETAILS_KEY = "openrootOpenProfileDetails";
 const IS_LOGGED_IN_KEY = "isLoggedIn";
 
+// ── Provider icons ───────────────────────────────────────────
 const GoogleIcon = memo(() => (
   <svg
     width="18"
@@ -156,6 +157,7 @@ const VerifiedBadgeIcon = memo(() => (
 ));
 VerifiedBadgeIcon.displayName = "VerifiedBadgeIcon";
 
+// ── Helpers ───────────────────────────────────────────────────
 const getFirebaseErrorMessage = (error: unknown): string => {
   const code = (error as { code?: string } | null)?.code;
 
@@ -163,7 +165,7 @@ const getFirebaseErrorMessage = (error: unknown): string => {
     case "auth/popup-closed-by-user":
       return "Login cancelled.";
     case "auth/popup-blocked":
-      return "Popup blocked by the browser. Please allow popups and try again.";
+      return "Popup blocked. Please allow popups and try again.";
     case "auth/account-exists-with-different-credential":
       return "This email is already registered with a different provider.";
     case "auth/network-request-failed":
@@ -179,8 +181,7 @@ const getFirebaseErrorMessage = (error: unknown): string => {
 
 const isRestrictedBrowser = (): boolean => {
   if (typeof navigator === "undefined") return false;
-  const ua = navigator.userAgent || "";
-  return /FBAN|FBAV|Instagram|WhatsApp|Line|WebView/i.test(ua);
+  return /FBAN|FBAV|Instagram|WhatsApp|Line|WebView/i.test(navigator.userAgent ?? "");
 };
 
 const getUsername = (user: User): string => {
@@ -196,12 +197,10 @@ const getUsername = (user: User): string => {
 };
 
 const getInitial = (name?: string | null): string =>
-  name?.trim()?.charAt(0)?.toUpperCase() || "O";
+  name?.trim()?.charAt(0)?.toUpperCase() ?? "O";
 
-const safe = (
-  value: string | null | undefined,
-  fallback = "Not specified"
-): string => value || fallback;
+const safe = (value: string | null | undefined, fallback = "Not specified"): string =>
+  value || fallback;
 
 const getProfilePhoto = (user: User): string | null => {
   if (!user.photoURL) return null;
@@ -217,7 +216,7 @@ const syncUserSession = (user: User, username: string) => {
     sessionStorage.setItem(OPENROOT_USER_UID_KEY, user.uid);
     localStorage.setItem(IS_LOGGED_IN_KEY, "true");
   } catch {
-    // optional storage
+    // optional
   }
 };
 
@@ -229,15 +228,12 @@ const clearUserSession = () => {
     sessionStorage.removeItem(OPENROOT_USER_UID_KEY);
     sessionStorage.removeItem(OPENROOT_PROFILE_DETAILS_KEY);
   } catch {
-    // optional storage
+    // optional
   }
 };
 
-export default memo(function UserLoginModal({
-  onClose,
-  onLogin,
-  onLogout,
-}: LoginModalProps) {
+// ── Component ──────────────────────────────────────────────────
+export default memo(function UserLoginModal({ onClose, onLogin, onLogout }: LoginModalProps) {
   const [step, setStep] = useState<Step>("loading");
   const [userData, setUserData] = useState<User | null>(null);
   const [username, setUsername] = useState("guest@openroot");
@@ -248,7 +244,7 @@ export default memo(function UserLoginModal({
 
   const isAuthenticating = authenticatingProvider !== null;
 
-  const modalRef = useRef<HTMLDivElement | null>(null);
+  const shellRef = useRef<HTMLDivElement | null>(null);
   const successTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const successIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const mountedRef = useRef(true);
@@ -281,9 +277,9 @@ export default memo(function UserLoginModal({
   }, [clearSuccessTimers]);
 
   useEffect(() => {
-    if (step !== "loading" && modalRef.current) {
+    if (shellRef.current) {
       gsap.fromTo(
-        modalRef.current,
+        shellRef.current,
         { y: 40, opacity: 0 },
         { y: 0, opacity: 1, duration: 0.45, ease: "power2.out" }
       );
@@ -392,7 +388,6 @@ export default memo(function UserLoginModal({
       setUserData(null);
       setUsername("guest@openroot");
       clearUserSession();
-      setAuthenticatingProvider(null);
       onLogout?.();
       resetToInitial();
       onClose?.();
@@ -405,28 +400,8 @@ export default memo(function UserLoginModal({
     }
   }, [onClose, onLogout, resetToInitial]);
 
-  const handleOverlayMouseDown = useCallback(
-    (e: React.MouseEvent<HTMLDivElement>) => {
-      if (
-        step === "success" ||
-        step === "profile" ||
-        step === "error" ||
-        step === "confirmLogout"
-      ) {
-        return;
-      }
-
-      const target = e.target as HTMLElement | null;
-      if (target?.classList?.contains("auth-overlay")) {
-        onClose?.();
-      }
-    },
-    [onClose, step]
-  );
-
   const handleFacebookLogin = useCallback(() => {
     if (isRestrictedBrowser()) {
-      setAuthenticatingProvider(null);
       setErrorMessage(
         "Facebook login is not supported in this in-app browser. Please open the site in Chrome or Safari and try again."
       );
@@ -441,7 +416,7 @@ export default memo(function UserLoginModal({
     return (
       <div className="auth-overlay">
         <div className="auth-shell">
-          <div className="auth-card auth-center" ref={modalRef}>
+          <div className="auth-card auth-center" ref={shellRef}>
             <p>Authenticating…</p>
           </div>
         </div>
@@ -450,16 +425,13 @@ export default memo(function UserLoginModal({
   }
 
   return (
-    <div
-      className="auth-overlay"
-      onMouseDown={handleOverlayMouseDown}
-      role="presentation"
-    >
+    <div className="auth-overlay" role="presentation">
       <div
         className="auth-shell"
         role="dialog"
         aria-modal="true"
         aria-labelledby="login-modal-title"
+        ref={shellRef}
       >
         {step !== "success" && step !== "error" && (
           <button className="modal-close" onClick={onClose} aria-label="Close modal">
@@ -467,7 +439,7 @@ export default memo(function UserLoginModal({
           </button>
         )}
 
-        <div className="auth-card" ref={modalRef}>
+        <div className="auth-card">
           <span className="ue-corner ue-corner--tl" />
           <span className="ue-corner ue-corner--tr" />
           <span className="ue-corner ue-corner--bl" />
@@ -495,7 +467,7 @@ export default memo(function UserLoginModal({
                     </span>
                     <span className="btn-label">
                       {authenticatingProvider === "google"
-                        ? "Connecting..."
+                        ? "Connecting…"
                         : "Continue with Google"}
                     </span>
                   </button>
@@ -511,7 +483,7 @@ export default memo(function UserLoginModal({
                     </span>
                     <span className="btn-label">
                       {authenticatingProvider === "facebook"
-                        ? "Connecting..."
+                        ? "Connecting…"
                         : "Continue with Facebook"}
                     </span>
                   </button>
@@ -527,7 +499,7 @@ export default memo(function UserLoginModal({
                     </span>
                     <span className="btn-label">
                       {authenticatingProvider === "github"
-                        ? "Connecting..."
+                        ? "Connecting…"
                         : "Continue with GitHub"}
                     </span>
                   </button>

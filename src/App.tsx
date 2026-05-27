@@ -4,7 +4,6 @@ import React, {
   lazy,
   memo,
   useEffect,
-  useRef,
   useState,
 } from "react";
 import {
@@ -22,7 +21,6 @@ import { ThemeToggle } from "./components/ThemeToggle/ThemeToggle";
 import BackToTop from "./context/BackToTop";
 import ScrollToTop from "./context/ScrollToTop";
 
-// ── ALWAYS loaded (visible on homepage, must be instant) ─────────────────────
 import Header from "./components/Header";
 import Navbar from "./components/Navbar";
 import AboutCompany from "./components/about/AboutCompany";
@@ -30,31 +28,55 @@ import Footer from "./components/Footer";
 
 import "./App.css";
 
-// ── LAZY loaded (separate JS chunks, only downloaded when user visits that page)
-const UserLoginModal  = lazy(() => import("./components/LoginModal"));
+// ── Lazy pages ────────────────────────────────────────────────
+const UserLoginModal = lazy(() => import("./components/LoginModal"));
 const AdminLoginModal = lazy(() => import("./components/AdminLogin"));
-const SoftwareHub     = lazy(() => import("./pages/SoftwareHub"));
-const SoftwarePage    = lazy(() => import("./pages/SoftwarePage"));
-const SoftwareSolutions      = lazy(() => import("./pages/SoftwareSolutions"));
-const CertificateModal       = lazy(() => import("./components/CertificateModal"));
-const PrivacyPolicy          = lazy(() => import("./pages/Legal/privacy-policy"));
-const Terms                  = lazy(() => import("./pages/Legal/terms"));
-const License                = lazy(() => import("./pages/Legal/SoftwareLicense-coevas"));
-const OpenrootGDriveSupport  = lazy(() => import("./pages/Legal/openroot-GDrive-support"));
-const XpressJob              = lazy(() => import("./pages/xpressjob"));
-const CoeasTerminal          = lazy(() => import("./pages/coevas"));
-const CoevasTerms            = lazy(() => import("./pages/Legal/coevas-legal-terms"));
-const Makaut                 = lazy(() => import("./pages/makaut"));
-const TravelExpenseManager   = lazy(() => import("./pages/TravelExpenseManager"));
-const OCLayout               = lazy(() => import("./pages/openrootClasses/OCLayout"));
-const GDrive                 = lazy(() => import("./pages/GDrive"));
+const SoftwareHub = lazy(() => import("./pages/SoftwareHub"));
+const SoftwarePage = lazy(() => import("./pages/SoftwarePage"));
+const SoftwareSolutions = lazy(() => import("./pages/SoftwareSolutions"));
+const CertificateModal = lazy(() => import("./components/CertificateModal"));
+const PrivacyPolicy = lazy(() => import("./pages/Legal/privacy-policy"));
+const Terms = lazy(() => import("./pages/Legal/terms"));
+const License = lazy(() => import("./pages/Legal/SoftwareLicense-coevas"));
+const OpenrootGDriveSupport = lazy(() => import("./pages/Legal/openroot-GDrive-support"));
+const XpressJob = lazy(() => import("./pages/xpressjob"));
+const CoeasTerminal = lazy(() => import("./pages/coevas"));
+const CoevasTerms = lazy(() => import("./pages/Legal/coevas-legal-terms"));
+const Makaut = lazy(() => import("./pages/makaut"));
+const TravelExpenseManager = lazy(() => import("./pages/TravelExpenseManager"));
+const OCLayout = lazy(() => import("./pages/openrootClasses/OCLayout"));
+const GDrive = lazy(() => import("./pages/GDrive"));
 
-// ── SEO meta constants ────────────────────────────────────────────────────────
-const SITE_URL  = "https://openroot.in";
-const OG_IMAGE  = `${SITE_URL}/assets/company-icon.png`;
+// ── SEO constants ──────────────────────────────────────────────
+const SITE_URL = "https://openroot.in";
+const OG_IMAGE = `${SITE_URL}/assets/company-icon.png`;
 const SITE_NAME = "Openroot Systems";
 
-// ── Shared layout shells ──────────────────────────────────────────────────────
+// ── Admin session ──────────────────────────────────────────────
+const ADMIN_SESSION_KEY = "openrootAdmin";
+
+interface AdminData {
+  email: string;
+  role: string;
+  verified: boolean;
+  username: string;
+}
+
+function readAdminSession(): AdminData | null {
+  if (typeof window === "undefined") return null;
+
+  try {
+    const raw = sessionStorage.getItem(ADMIN_SESSION_KEY);
+    if (!raw) return null;
+
+    const parsed = JSON.parse(raw) as AdminData;
+    return parsed?.verified ? parsed : null;
+  } catch {
+    return null;
+  }
+}
+
+// ── Shared layout shells ──────────────────────────────────────
 const HomeShell: React.FC<{ children: React.ReactNode }> = memo(({ children }) => (
   <>
     <Header />
@@ -74,7 +96,7 @@ const HeaderShell: React.FC<{ children: React.ReactNode }> = memo(({ children })
 ));
 HeaderShell.displayName = "HeaderShell";
 
-// ── Loading fallback ──────────────────────────────────────────────────────────
+// ── Loading fallback ──────────────────────────────────────────
 const PageLoader = memo(() => (
   <div
     style={{
@@ -91,7 +113,7 @@ const PageLoader = memo(() => (
 ));
 PageLoader.displayName = "PageLoader";
 
-// ── AUTH GUARD ────────────────────────────────────────────────────────────────
+// ── Auth guard ────────────────────────────────────────────────
 const RequireAuth: React.FC<{ children: React.ReactNode }> = memo(({ children }) => {
   const [user, setUser] = useState<User | null | undefined>(undefined);
 
@@ -102,20 +124,31 @@ const RequireAuth: React.FC<{ children: React.ReactNode }> = memo(({ children })
       } else {
         sessionStorage.removeItem("openrootUserUID");
       }
+
       setUser(nextUser);
     });
+
     return unsubscribe;
   }, []);
 
-  if (user === undefined) return <PageLoader />;
-  if (!user) return <Navigate to="/userlogin" replace />;
+  const isAdmin = Boolean(readAdminSession());
+
+  if (user === undefined && !isAdmin) {
+    return <PageLoader />;
+  }
+
+  if (!user && !isAdmin) {
+    return <Navigate to="/userlogin" replace />;
+  }
+
   return <>{children}</>;
 });
 RequireAuth.displayName = "RequireAuth";
 
-// ── LOGIN ROUTES ──────────────────────────────────────────────────────────────
+// ── Login routes ───────────────────────────────────────────────
 const UserLoginRoute = memo(() => {
   const navigate = useNavigate();
+
   return (
     <HeaderShell>
       <Suspense fallback={<PageLoader />}>
@@ -128,6 +161,7 @@ UserLoginRoute.displayName = "UserLoginRoute";
 
 const AdminLoginRoute = memo(() => {
   const navigate = useNavigate();
+
   return (
     <HeaderShell>
       <Suspense fallback={<PageLoader />}>
@@ -138,7 +172,7 @@ const AdminLoginRoute = memo(() => {
 });
 AdminLoginRoute.displayName = "AdminLoginRoute";
 
-// ── 404 ───────────────────────────────────────────────────────────────────────
+// ── 404 ───────────────────────────────────────────────────────
 const NotFound = memo(() => (
   <div style={{ padding: "100px", textAlign: "center" }}>
     <Helmet>
@@ -151,38 +185,39 @@ const NotFound = memo(() => (
 ));
 NotFound.displayName = "NotFound";
 
-// ── APP CONTENT ───────────────────────────────────────────────────────────────
+// ── App content ────────────────────────────────────────────────
 function AppContent() {
+  const location = useLocation();
+
+  const isLoginRoute =
+    location.pathname === "/userlogin" ||
+    location.pathname === "/adminlogin";
+
   return (
     <>
       <ScrollToTop />
 
-      {/*
-        ThemeToggle already self-guards via useLocation() inside its own
-        component — it only renders on "/" and "/software/*" routes.
-        No route check needed here.
-      */}
-      <ThemeToggle position="bottom-right" offset={24} />
+      {!isLoginRoute && (
+        <ThemeToggle position="bottom-right" offset={24} />
+      )}
 
       <Suspense fallback={<PageLoader />}>
         <Routes>
           {/* Legacy redirects */}
-          <Route path="/user-login"  element={<Navigate to="/userlogin"  replace />} />
+          <Route path="/user-login" element={<Navigate to="/userlogin" replace />} />
           <Route path="/admin-login" element={<Navigate to="/adminlogin" replace />} />
 
-          {/* Login pages — theme is inherited from app.css, no overrides */}
-          <Route path="/userlogin"  element={<UserLoginRoute />} />
+          {/* Auth */}
+          <Route path="/userlogin" element={<UserLoginRoute />} />
           <Route path="/adminlogin" element={<AdminLoginRoute />} />
 
-          {/* HOME */}
+          {/* Home */}
           <Route
             path="/"
             element={
               <HomeShell>
                 <Helmet>
-                  <title>
-                    {SITE_NAME} – Custom Software, AI Tools & Web Solutions
-                  </title>
+                  <title>{SITE_NAME} – Custom Software, AI Tools & Web Solutions</title>
                   <meta
                     name="description"
                     content="Openroot Systems builds robust Automation Software, React-based Websites, Web Extensions, and Windows Applications. We also provide free, high-utility tools for students and professionals."
@@ -192,28 +227,19 @@ function AppContent() {
                     content="Openroot Systems, custom software development, React websites, Windows applications, web extensions, automation software, free tools for students India, NIOR AI, MAKAUT grade calculator, productivity software"
                   />
                   <link rel="canonical" href={SITE_URL} />
-                  <meta
-                    name="robots"
-                    content="index, follow, max-snippet:-1, max-image-preview:large"
-                  />
-                  <meta property="og:type"        content="website" />
-                  <meta property="og:url"         content={SITE_URL} />
-                  <meta property="og:site_name"   content={SITE_NAME} />
-                  <meta property="og:locale"      content="en_IN" />
-                  <meta
-                    property="og:title"
-                    content={`${SITE_NAME} – Software Development & Automation`}
-                  />
+                  <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large" />
+                  <meta property="og:type" content="website" />
+                  <meta property="og:url" content={SITE_URL} />
+                  <meta property="og:site_name" content={SITE_NAME} />
+                  <meta property="og:locale" content="en_IN" />
+                  <meta property="og:title" content={`${SITE_NAME} – Software Development & Automation`} />
                   <meta
                     property="og:description"
                     content="From Automation Software and React Websites to powerful free utilities like AI assistants and expense trackers. We build tech that saves you time."
                   />
                   <meta property="og:image" content={OG_IMAGE} />
-                  <meta name="twitter:card"        content="summary_large_image" />
-                  <meta
-                    name="twitter:title"
-                    content={`${SITE_NAME} – Automation, Web Apps & Free Tools`}
-                  />
+                  <meta name="twitter:card" content="summary_large_image" />
+                  <meta name="twitter:title" content={`${SITE_NAME} – Automation, Web Apps & Free Tools`} />
                   <meta
                     name="twitter:description"
                     content="Building real-world solutions: React sites, Windows apps, browser extensions, and a suite of free productivity tools for India."
@@ -225,7 +251,7 @@ function AppContent() {
             }
           />
 
-          {/* CERTIFICATE VERIFICATION */}
+          {/* Certificate */}
           <Route
             path="/certificate-verification"
             element={
@@ -243,7 +269,7 @@ function AppContent() {
             }
           />
 
-          {/* SOFTWARE HUB */}
+          {/* Software hub */}
           <Route
             path="/software"
             element={
@@ -261,7 +287,6 @@ function AppContent() {
             }
           />
 
-          {/* SOFTWARE PAGE (dynamic slug) */}
           <Route
             path="/software/:slug"
             element={
@@ -271,10 +296,9 @@ function AppContent() {
             }
           />
 
-          {/* SOFTWARE SOLUTIONS */}
           <Route path="/software-solutions" element={<SoftwareSolutions />} />
 
-          {/* FOUNDER (static HTML embed) */}
+          {/* Founder */}
           <Route
             path="/founder"
             element={
@@ -288,38 +312,20 @@ function AppContent() {
             }
           />
 
-          {/* LEGAL */}
-          <Route path="/terms"          element={<Terms />} />
-          <Route path="/CoevasTerms"    element={<CoevasTerms />} />
+          {/* Legal */}
+          <Route path="/terms" element={<Terms />} />
+          <Route path="/CoevasTerms" element={<CoevasTerms />} />
           <Route path="/privacy-policy" element={<PrivacyPolicy />} />
-          <Route path="/license"        element={<License />} />
-          <Route path="/support"        element={<OpenrootGDriveSupport />} />
+          <Route path="/license" element={<License />} />
+          <Route path="/support" element={<OpenrootGDriveSupport />} />
 
-          {/* TOOLS — all protected behind RequireAuth */}
-          <Route
-            path="/xpress-job"
-            element={<RequireAuth><XpressJob /></RequireAuth>}
-          />
-          <Route
-            path="/coevas-terminal"
-            element={<RequireAuth><CoeasTerminal /></RequireAuth>}
-          />
-          <Route
-            path="/makaut-grade-pro"
-            element={<RequireAuth><Makaut /></RequireAuth>}
-          />
-          <Route
-            path="/travel-expense-manager"
-            element={<RequireAuth><TravelExpenseManager /></RequireAuth>}
-          />
-          <Route
-            path="/openroot-classes"
-            element={<RequireAuth><OCLayout /></RequireAuth>}
-          />
-          <Route
-            path="/gdrive-web-extension"
-            element={<RequireAuth><GDrive /></RequireAuth>}
-          />
+          {/* Protected tools */}
+          <Route path="/xpress-job" element={<RequireAuth><XpressJob /></RequireAuth>} />
+          <Route path="/coevas-terminal" element={<RequireAuth><CoeasTerminal /></RequireAuth>} />
+          <Route path="/makaut-grade-pro" element={<RequireAuth><Makaut /></RequireAuth>} />
+          <Route path="/travel-expense-manager" element={<RequireAuth><TravelExpenseManager /></RequireAuth>} />
+          <Route path="/openroot-classes" element={<RequireAuth><OCLayout /></RequireAuth>} />
+          <Route path="/gdrive-web-extension" element={<RequireAuth><GDrive /></RequireAuth>} />
 
           {/* 404 */}
           <Route path="*" element={<NotFound />} />
@@ -329,7 +335,6 @@ function AppContent() {
   );
 }
 
-// ── APP ───────────────────────────────────────────────────────────────────────
 export default function App() {
   return (
     <BrowserRouter>

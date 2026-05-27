@@ -104,14 +104,16 @@ const JOB_CARDS: CardData[] = [
   { id: 'job-5', url: 'https://careers.bhel.in/index.jsp',                  imgSrc: img('assets-rh/bhel_iv3bdc'),         imgAlt: 'BHEL',                       jobType: 'psu'     },
   { id: 'job-6', url: 'https://iocl.com/latest-job-opening',                imgSrc: img('assets-rh/iocllogo_qpttuz'),     imgAlt: 'IOCL',                       jobType: 'psu'     },
   { id: 'job-7', url: 'https://madrasfert.co.in/resources/recruitment/',    imgSrc: img('assets-rh/madras-fert_nnks9s'),  imgAlt: 'Madras-Fertilizers-Limited', jobType: 'psu'     },
-  { id: 'job-8', url: 'https://sbi.bank.in/web/careers',                    imgSrc: img('production-images/sbi_careers_uxcxi2'),         imgAlt: 'SBI Careers',                jobType: 'psu'     },
+  { id: 'job-8', url: 'https://sbi.bank.in/web/careers',                    imgSrc: img('production-images/sbi_careers_uxcxi2'),                  imgAlt: 'SBI Careers',       jobType: 'psu'     },
   { id: 'job-9', url: 'https://cdn.digialm.com/EForms/configuredHtml/1258/97495/Index.html', imgSrc: img('production-images/coalindia_reerav'),   imgAlt: 'Coal India',        jobType: 'psu'     },
-  { id: 'job-10', url: 'https://careers.meconlimited.co.in/',               imgSrc: img('production-images/mecon_lbpwxq'),               imgAlt: 'MECON',                      jobType: 'psu'     },
-  { id: 'job-11', url: 'https://www.nbccindia.in/webEnglish/jobs',          imgSrc: img('production-images/nbcc_w1ul1g'),                imgAlt: 'NBCC',                       jobType: 'psu'     },
-  { id: 'job-12', url: 'https://www.ecil.co.in/jobopenings',                imgSrc: img('production-images/ecil_u56e4u'),                imgAlt: 'ECIL',                       jobType: 'psu'     },
+  { id: 'job-10', url: 'https://careers.meconlimited.co.in/',               imgSrc: img('production-images/mecon_lbpwxq'),                        imgAlt: 'MECON',             jobType: 'psu'     },
+  { id: 'job-11', url: 'https://www.nbccindia.in/webEnglish/jobs',          imgSrc: img('production-images/nbcc_w1ul1g'),                         imgAlt: 'NBCC',              jobType: 'psu'     },
+  { id: 'job-12', url: 'https://www.ecil.co.in/jobopenings',                imgSrc: img('production-images/ecil_u56e4u'),                         imgAlt: 'ECIL',              jobType: 'psu'     },
   { id: 'job-13', url: 'https://mudira.nalcoindia.co.in/rec_portal/default.aspx',            imgSrc: img('production-images/nalco_nqcifw'),       imgAlt: 'Nalco',             jobType: 'psu'     },
   { id: 'job-14', url: 'https://www.joinindiannavy.gov.in/en/account/account/state',         imgSrc: img('production-images/indian-navy_jffv8f'), imgAlt: 'Indian Navy',       jobType: 'central' },
   { id: 'job-15', url: 'https://www.cdac.in/index.aspx?id=current_jobs',                     imgSrc: img('production-images/cdac_t3owh1'),        imgAlt: 'CDAC',              jobType: 'psu'     },
+  { id: 'job-16', url: 'https://csc.gov.in/careers',                        imgSrc: img('production-images/csc_ncnfb1'),                          imgAlt: 'CSC',               jobType: 'central' },
+  { id: 'job-17', url: 'https://www.meity.gov.in/offerings/vacancies?page=1',                imgSrc: img('production-images/meity_u8srdj'),       imgAlt: 'MEITY',             jobType: 'central' },
 ];
 
 

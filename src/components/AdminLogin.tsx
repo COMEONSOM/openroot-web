@@ -6,8 +6,14 @@ import Lottie from "lottie-react";
 import successAnimation from "../animations/successfullogin.json";
 import failedAnimation from "../animations/failedlogin.json";
 
-import { auth } from "../lib/firebase";
-import { signInWithEmailAndPassword, signOut } from "firebase/auth";
+// ── IMPORTANT: do NOT import Firebase auth here. ──────────────
+// Admin login intentionally avoids signInWithEmailAndPassword so
+// it never writes to the shared Firebase auth instance. If it
+// did, onAuthStateChanged in LoginModal would fire and render the
+// admin's Firebase account as a regular-user profile — the exact
+// bug seen in the screenshot. Credentials are verified against
+// env vars only; no Firebase auth state is mutated.
+// ─────────────────────────────────────────────────────────────
 
 interface AdminData {
   email: string;
@@ -27,32 +33,23 @@ type Step = "initial" | "verifying" | "success" | "error" | "profile" | "confirm
 const ADMIN_SESSION_KEY = "openrootAdmin";
 const ADMIN_SESSION_SYNC_EVENT = "openroot-admin-session-sync";
 
-/**
- * Optional whitelist.
- * Add in .env if you want more than one admin:
- * VITE_ADMIN_ALLOWED_EMAILS=admin@openroot.in,another@openroot.in
- */
+// ── Allowed email list (comma-separated in VITE_ADMIN_ALLOWED_EMAILS)
 const ADMIN_ALLOWED_EMAILS = (() => {
   const raw = import.meta.env.VITE_ADMIN_ALLOWED_EMAILS as string | undefined;
   const fallback = ["admin@openroot.in"];
-
   if (!raw) return fallback;
-
-  const parsed = raw
-    .split(",")
-    .map((item) => item.trim().toLowerCase())
-    .filter(Boolean);
-
+  const parsed = raw.split(",").map((e) => e.trim().toLowerCase()).filter(Boolean);
   return parsed.length ? parsed : fallback;
 })();
 
+const ADMIN_PASSWORD = import.meta.env.VITE_ADMIN_PASSWORD as string | undefined;
+
+// ── Session helpers ──────────────────────────────────────────
 const readAdminSession = (): AdminData | null => {
   if (typeof window === "undefined") return null;
-
   try {
     const raw = sessionStorage.getItem(ADMIN_SESSION_KEY);
     if (!raw) return null;
-
     const parsed = JSON.parse(raw) as AdminData;
     return {
       email: parsed.email,
@@ -85,36 +82,7 @@ const getAdminUsername = (email: string): string => {
   return `${base}@openroot`;
 };
 
-const isAllowedAdminEmail = (email: string): boolean => {
-  const normalized = email.trim().toLowerCase();
-  return ADMIN_ALLOWED_EMAILS.includes(normalized);
-};
-
-const getFirebaseErrorMessage = (error: unknown): string => {
-  const code = (error as { code?: string } | null)?.code;
-
-  switch (code) {
-    case "auth/invalid-email":
-      return "Invalid email address.";
-    case "auth/user-disabled":
-      return "This admin account has been disabled.";
-    case "auth/user-not-found":
-      return "Admin account not found.";
-    case "auth/wrong-password":
-      return "Wrong password.";
-    case "auth/invalid-credential":
-      return "Invalid email or password.";
-    case "auth/too-many-requests":
-      return "Too many attempts. Please try again later.";
-    case "auth/network-request-failed":
-      return "Network error. Please check your connection and try again.";
-    case "auth/operation-not-allowed":
-      return "Email/Password sign-in is not enabled in Firebase.";
-    default:
-      return "Login failed. Please try again.";
-  }
-};
-
+// ── Icons ─────────────────────────────────────────────────────
 const LogoutIcon = memo(() => (
   <svg
     width="14"
@@ -169,6 +137,7 @@ const ShieldIcon = memo(() => (
 ));
 ShieldIcon.displayName = "ShieldIcon";
 
+// ── Component ─────────────────────────────────────────────────
 export default memo(function AdminLogin({ onClose, onLogin, onLogout }: AdminLoginProps) {
   const [step, setStep] = useState<Step>("initial");
   const [email, setEmail] = useState("");
@@ -188,21 +157,21 @@ export default memo(function AdminLogin({ onClose, onLogin, onLogout }: AdminLog
     }
   }, []);
 
+  // Restore session on mount
   useEffect(() => {
     mountedRef.current = true;
-
-    const savedAdmin = readAdminSession();
-    if (savedAdmin) {
-      setAdminData(savedAdmin);
+    const saved = readAdminSession();
+    if (saved) {
+      setAdminData(saved);
       setStep("profile");
     }
-
     return () => {
       mountedRef.current = false;
       clearSuccessTimer();
     };
   }, [clearSuccessTimer]);
 
+  // GSAP card entrance on each step change
   useEffect(() => {
     if (cardRef.current) {
       gsap.fromTo(
@@ -213,21 +182,21 @@ export default memo(function AdminLogin({ onClose, onLogin, onLogout }: AdminLog
     }
   }, [step]);
 
+  // Auto-advance success → profile
   useEffect(() => {
     if (step !== "success") {
       clearSuccessTimer();
       return;
     }
-
     clearSuccessTimer();
     successTimerRef.current = setTimeout(() => {
       if (!mountedRef.current) return;
       setStep("profile");
     }, 1800);
-
     return clearSuccessTimer;
   }, [step, clearSuccessTimer]);
 
+  // ── Login: env-var verification ONLY — no Firebase auth ────
   const handleLogin = useCallback(async () => {
     setErrorMessage("");
 
@@ -243,26 +212,27 @@ export default memo(function AdminLogin({ onClose, onLogin, onLogout }: AdminLog
     setStep("verifying");
 
     try {
-      const credential = await signInWithEmailAndPassword(
-        auth,
-        trimmedEmail,
-        trimmedPassword
-      );
+      // Simulate async round-trip so the UI feels deliberate
+      await new Promise<void>((resolve) => setTimeout(resolve, 900));
 
-      const adminEmail = credential.user.email ?? trimmedEmail;
+      if (!mountedRef.current) return;
 
-      if (!isAllowedAdminEmail(adminEmail)) {
-        await signOut(auth);
-        setErrorMessage("You are authenticated, but you are not authorised as admin.");
+      const emailAllowed = ADMIN_ALLOWED_EMAILS.includes(trimmedEmail);
+      const passwordMatches = ADMIN_PASSWORD
+        ? trimmedPassword === ADMIN_PASSWORD
+        : false;
+
+      if (!emailAllowed || !passwordMatches) {
+        setErrorMessage("Invalid credentials. Access denied.");
         setStep("error");
         return;
       }
 
       const admin: AdminData = {
-        email: adminEmail,
+        email: trimmedEmail,
         role: "admin",
         verified: true,
-        username: getAdminUsername(adminEmail),
+        username: getAdminUsername(trimmedEmail),
       };
 
       sessionStorage.setItem(ADMIN_SESSION_KEY, JSON.stringify(admin));
@@ -272,26 +242,20 @@ export default memo(function AdminLogin({ onClose, onLogin, onLogout }: AdminLog
       onLogin?.(admin);
       emitAdminSessionSync();
       setStep("success");
-    } catch (error: unknown) {
-      console.error("ADMIN LOGIN ERROR:", error);
-      setErrorMessage(getFirebaseErrorMessage(error));
-      setStep("error");
-    } finally {
+    } catch {
       if (mountedRef.current) {
-        setLoading(false);
+        setErrorMessage("Login failed. Please try again.");
+        setStep("error");
       }
+    } finally {
+      if (mountedRef.current) setLoading(false);
     }
   }, [email, password, onLogin]);
 
-  const handleLogout = useCallback(async () => {
-    setErrorMessage("");
-
-    try {
-      await signOut(auth);
-    } catch {
-      // even if auth signOut fails, clear local admin session below
-    }
-
+  // ── Logout: clear session only — no Firebase signOut ───────
+  // Calling signOut(auth) here would terminate any active regular-
+  // user Firebase session, which is a side-effect we must avoid.
+  const handleLogout = useCallback(() => {
     clearAdminSession();
     setAdminData(null);
     setEmail("");
@@ -301,15 +265,6 @@ export default memo(function AdminLogin({ onClose, onLogin, onLogout }: AdminLog
     onClose?.();
     emitAdminSessionSync();
   }, [onClose, onLogout]);
-
-  const handleOverlayClick = useCallback(
-    (e: React.MouseEvent<HTMLDivElement>) => {
-      if ((e.target as HTMLElement)?.classList?.contains("admin-overlay")) {
-        onClose?.();
-      }
-    },
-    [onClose]
-  );
 
   const handleKeyDown = useCallback(
     (e: React.KeyboardEvent) => {
@@ -321,7 +276,7 @@ export default memo(function AdminLogin({ onClose, onLogin, onLogout }: AdminLog
   );
 
   return (
-    <div className="admin-overlay" onMouseDown={handleOverlayClick} role="presentation">
+    <div className="admin-overlay" role="presentation">
       <div
         className="admin-card"
         ref={cardRef}
@@ -336,6 +291,7 @@ export default memo(function AdminLogin({ onClose, onLogin, onLogout }: AdminLog
           </button>
         )}
 
+        {/* ── Initial: credential form ── */}
         {step === "initial" && (
           <div className="admin-body">
             <div className="admin-brand-section">
@@ -358,7 +314,7 @@ export default memo(function AdminLogin({ onClose, onLogin, onLogout }: AdminLog
                   id="admin-email"
                   type="email"
                   className="admin-input"
-                  placeholder="admin@openroot.in"
+                  placeholder="example@gmail.com"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   autoComplete="email"
@@ -402,6 +358,7 @@ export default memo(function AdminLogin({ onClose, onLogin, onLogout }: AdminLog
           </div>
         )}
 
+        {/* ── Verifying intermediate ── */}
         {step === "verifying" && (
           <div className="admin-state">
             <p className="admin-state-heading">Verifying credentials…</p>
@@ -409,6 +366,7 @@ export default memo(function AdminLogin({ onClose, onLogin, onLogout }: AdminLog
           </div>
         )}
 
+        {/* ── Success ── */}
         {step === "success" && (
           <div className="admin-state">
             <div className="admin-state-lottie">
@@ -419,6 +377,7 @@ export default memo(function AdminLogin({ onClose, onLogin, onLogout }: AdminLog
           </div>
         )}
 
+        {/* ── Error ── */}
         {step === "error" && (
           <div className="admin-state">
             <div className="admin-state-lottie">
@@ -438,6 +397,7 @@ export default memo(function AdminLogin({ onClose, onLogin, onLogout }: AdminLog
           </div>
         )}
 
+        {/* ── Profile ── */}
         {step === "profile" && adminData && (
           <div className="admin-profile">
             <div className="admin-avatar">A</div>
@@ -471,6 +431,7 @@ export default memo(function AdminLogin({ onClose, onLogin, onLogout }: AdminLog
           </div>
         )}
 
+        {/* ── Confirm logout ── */}
         {step === "confirmLogout" && (
           <div className="admin-state">
             <p className="admin-state-heading">Sign out?</p>
@@ -480,7 +441,7 @@ export default memo(function AdminLogin({ onClose, onLogin, onLogout }: AdminLog
             <div className="admin-state-actions">
               <button
                 className="admin-state-btn admin-state-btn--primary"
-                onClick={() => void handleLogout()}
+                onClick={handleLogout}
               >
                 <LogoutIcon />
                 Yes, Sign Out

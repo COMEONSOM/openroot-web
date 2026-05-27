@@ -8,17 +8,41 @@ import { SoftwareContent } from "../types/software";
 import { auth } from "../lib/firebase";
 import "../components/styles/softwarePage.css";
 
-// Maps slug → internal React Router path used AFTER login check
+// ── Admin session reader ───────────────────────────────────────
+// Mirrors the same helper in App.tsx — no shared module needed,
+// both read the same sessionStorage key.
+const ADMIN_SESSION_KEY = "openrootAdmin";
+
+interface AdminSessionData {
+  email:    string;
+  role:     string;
+  verified: boolean;
+  username: string;
+}
+
+function readAdminSession(): AdminSessionData | null {
+  if (typeof window === "undefined") return null;
+  try {
+    const raw = sessionStorage.getItem(ADMIN_SESSION_KEY);
+    if (!raw) return null;
+    const parsed = JSON.parse(raw) as AdminSessionData;
+    return parsed?.verified ? parsed : null;
+  } catch {
+    return null;
+  }
+}
+
+// ── Internal route map ────────────────────────────────────────
 const INTERNAL_ROUTES: Record<string, string> = {
-  "xpress-job": "/xpress-job",
-  "coevas-terminal": "/coevas-terminal",
-  "makaut-grade-pro": "/makaut-grade-pro",
+  "xpress-job":             "/xpress-job",
+  "coevas-terminal":        "/coevas-terminal",
+  "makaut-grade-pro":       "/makaut-grade-pro",
   "travel-expense-manager": "/travel-expense-manager",
-  "openroot-classes": "/openroot-classes",
-  "gdrive-web-extension": "/gdrive-web-extension",
+  "openroot-classes":       "/openroot-classes",
+  "gdrive-web-extension":   "/gdrive-web-extension",
 };
 
-// ── SEO keyword map: add / extend per tool slug ──────────────────────────────
+// ── SEO keyword map ───────────────────────────────────────────
 const TOOL_KEYWORDS: Record<string, string> = {
   "xpress-job":
     "XpressJob, job updates, career resources, student resources, MAKAUT resources",
@@ -36,10 +60,10 @@ const TOOL_KEYWORDS: Record<string, string> = {
     "MAKAUT grade calculator, MAKAUT percentage calculator, MAKAUT CGPA calculator, WBUT grade calculator, engineering grade India",
 };
 
-// Default fallback keywords used when a slug has no specific entry
 const DEFAULT_KEYWORDS = (name: string, description: string) =>
   `${name}, free online tool, Openroot Systems, ${description.split(" ").slice(0, 6).join(" ")}, free software India`;
 
+// ── Media query hook ──────────────────────────────────────────
 function useMediaQuery(query: string): boolean {
   const getMatches = () =>
     typeof window !== "undefined" && typeof window.matchMedia === "function"
@@ -49,13 +73,10 @@ function useMediaQuery(query: string): boolean {
   const [matches, setMatches] = useState(getMatches);
 
   useEffect(() => {
-    if (typeof window === "undefined" || typeof window.matchMedia !== "function") {
-      return;
-    }
+    if (typeof window === "undefined" || typeof window.matchMedia !== "function") return;
 
     const mediaQuery = window.matchMedia(query);
     const handleChange = (event: MediaQueryListEvent) => setMatches(event.matches);
-
     setMatches(mediaQuery.matches);
 
     if (typeof mediaQuery.addEventListener === "function") {
@@ -124,11 +145,15 @@ VideoPlayer.displayName = "VideoPlayer";
 
 /* ── MAIN PAGE ── */
 export default function SoftwarePage() {
-  const { slug } = useParams<{ slug: string }>();
+  const { slug }  = useParams<{ slug: string }>();
   const navigate  = useNavigate();
   const tool      = softwareList.find((t) => t.slug === slug);
+
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
+
+  // Firebase user — undefined while resolving, null when not logged in
   const [user, setUser] = useState<User | null | undefined>(undefined);
+
   const showDesktopVideo = useMediaQuery("(min-width: 861px)");
   const toggleFAQ = useCallback((i: number) => setActiveIndex((prev) => (prev === i ? null : i)), []);
 
@@ -141,7 +166,6 @@ export default function SoftwarePage() {
       }
       setUser(nextUser);
     });
-
     return unsubscribe;
   }, []);
 
@@ -154,22 +178,26 @@ export default function SoftwarePage() {
     );
   }
 
-  const content: SoftwareContent = softwareContent[slug!] ?? { overview: tool.description, features: [], purpose: "" };
-  const formatText = (text: string) => text.split("\n\n").map((p, i) => <p key={i} className="sp-para">{p}</p>);
+  const content: SoftwareContent = softwareContent[slug!] ?? {
+    overview: tool.description,
+    features: [],
+    purpose: "",
+  };
 
-  const pageUrl    = `https://openroot.in/software/${tool.slug}`;
-  const videoSrc   = tool.video;
-  const hasVideo   = Boolean(videoSrc);
-  const keywords   = TOOL_KEYWORDS[tool.slug] ?? DEFAULT_KEYWORDS(tool.name, tool.description);
+  const formatText = (text: string) =>
+    text.split("\n\n").map((p, i) => <p key={i} className="sp-para">{p}</p>);
 
-  // ── SEO: richer title variants ───────────────────────────────────────────
-  // Pattern: "<Tool Name> – Free [Category] Tool | Openroot Systems"
-  const pageTitle  = tool.seoTitle
+  const pageUrl  = `https://openroot.in/software/${tool.slug}`;
+  const videoSrc = tool.video;
+  const hasVideo = Boolean(videoSrc);
+  const keywords = TOOL_KEYWORDS[tool.slug] ?? DEFAULT_KEYWORDS(tool.name, tool.description);
+
+  const pageTitle = tool.seoTitle
     ?? `${tool.name} – Free Online Tool by Openroot Systems`;
-  const pageDesc   = tool.seoDescription
+  const pageDesc  = tool.seoDescription
     ?? `${tool.description} Use ${tool.name} for free on Openroot Systems – no download required.`;
 
-  // ── JSON-LD schemas ──────────────────────────────────────────────────────
+  // ── JSON-LD ──────────────────────────────────────────────────
   const faqs = [
     { q: `What is ${tool.name}?`,    a: tool.description },
     { q: "How do I use it?",         a: "Click the Launch Tool button above. You will need to be logged in to your Openroot account." },
@@ -180,65 +208,78 @@ export default function SoftwarePage() {
   const softwareSchema = {
     "@context": "https://schema.org",
     "@type": "SoftwareApplication",
-    "name": tool.name,
-    "url": pageUrl,
-    "description": pageDesc,
-    "applicationCategory": "WebApplication",
-    "operatingSystem": "Web",
-    "offers": {
-      "@type": "Offer",
-      "price": "0",
-      "priceCurrency": "INR"
-    },
-    "publisher": {
+    name: tool.name,
+    url: pageUrl,
+    description: pageDesc,
+    applicationCategory: "WebApplication",
+    operatingSystem: "Web",
+    offers: { "@type": "Offer", price: "0", priceCurrency: "INR" },
+    publisher: {
       "@type": "Organization",
-      "name": "Openroot Systems",
-      "url": "https://openroot.in",
-      "logo": "https://openroot.in/assets/company-icon.png"
+      name: "Openroot Systems",
+      url: "https://openroot.in",
+      logo: "https://openroot.in/assets/company-icon.png",
     },
-    ...(content.features.length > 0 && {
-      "featureList": content.features.join(", ")
-    })
+    ...(content.features.length > 0 && { featureList: content.features.join(", ") }),
   };
 
   const faqSchema = {
     "@context": "https://schema.org",
     "@type": "FAQPage",
-    "mainEntity": faqs.map(({ q, a }) => ({
+    mainEntity: faqs.map(({ q, a }) => ({
       "@type": "Question",
-      "name": q,
-      "acceptedAnswer": { "@type": "Answer", "text": a }
-    }))
+      name: q,
+      acceptedAnswer: { "@type": "Answer", text: a },
+    })),
   };
 
   const breadcrumbSchema = {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
-    "itemListElement": [
-      { "@type": "ListItem", "position": 1, "name": "Home",         "item": "https://openroot.in" },
-      { "@type": "ListItem", "position": 2, "name": "Software Hub", "item": "https://openroot.in/software" },
-      { "@type": "ListItem", "position": 3, "name": tool.name,      "item": pageUrl }
-    ]
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Home",         item: "https://openroot.in" },
+      { "@type": "ListItem", position: 2, name: "Software Hub", item: "https://openroot.in/software" },
+      { "@type": "ListItem", position: 3, name: tool.name,      item: pageUrl },
+    ],
   };
 
-  // ── Launch flow ──────────────────────────────────────────────────────────
+  // ── Launch flow ───────────────────────────────────────────────
+  // Access is granted when EITHER:
+  //   (a) Firebase has a resolved user        — regular user login
+  //   (b) A verified admin session exists     — admin login
+  //
+  // Admin login does not write to Firebase auth, so checking only
+  // `user` would always block admins (the original bug).
   const launch = () => {
     try {
-      if (user === undefined) {
+      // Read admin session synchronously — no async needed
+      const adminData = readAdminSession();
+      const isAdmin   = Boolean(adminData);
+
+      // Firebase still resolving AND no admin present → wait
+      if (user === undefined && !isAdmin) {
         alert("Please wait a moment while we finish checking your login status.");
         return;
       }
-      if (!user) {
+
+      // Neither Firebase user nor admin → prompt login
+      if (!user && !isAdmin) {
         alert("Please log in first to access this tool.");
         return;
       }
+
+      // Internal React Router navigation (most tools)
       if (INTERNAL_ROUTES[tool.slug]) {
         navigate(INTERNAL_ROUTES[tool.slug]);
         return;
       }
-      const finalURL = new URL(tool.url);
+
+      // External URL fallback (e.g. nior-ai or future external tools)
+      // Use admin UID placeholder if no Firebase user
+      const uid       = user?.uid ?? "admin";
+      const finalURL  = new URL(tool.url);
       if (!finalURL.searchParams.has("uid")) {
-        finalURL.searchParams.set("uid", user.uid);
+        finalURL.searchParams.set("uid", uid);
       }
       window.location.href = finalURL.toString();
     } catch (err) {
@@ -260,16 +301,11 @@ export default function SoftwarePage() {
   return (
     <div className="sp-root">
       <Helmet>
-        {/* ── Primary meta ── */}
         <title>{pageTitle}</title>
         <meta name="description" content={pageDesc} />
         <meta name="keywords"    content={keywords} />
         <link rel="canonical"    href={pageUrl} />
-
-        {/* ── Robots ── */}
         <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
-
-        {/* ── Open Graph ── */}
         <meta property="og:type"        content="website" />
         <meta property="og:url"         content={pageUrl} />
         <meta property="og:title"       content={`${tool.name} – Free Tool | Openroot Systems`} />
@@ -277,21 +313,17 @@ export default function SoftwarePage() {
         <meta property="og:image"       content="https://openroot.in/assets/company-icon.png" />
         <meta property="og:site_name"   content="Openroot Systems" />
         <meta property="og:locale"      content="en_IN" />
-
-        {/* ── Twitter Card ── */}
         <meta name="twitter:card"        content="summary_large_image" />
         <meta name="twitter:site"        content="@openrootin" />
         <meta name="twitter:title"       content={`${tool.name} | Openroot Systems`} />
         <meta name="twitter:description" content={pageDesc} />
         <meta name="twitter:image"       content="https://openroot.in/assets/company-icon.png" />
-
-        {/* ── JSON-LD structured data ── */}
         <script type="application/ld+json">{JSON.stringify(softwareSchema)}</script>
         <script type="application/ld+json">{JSON.stringify(faqSchema)}</script>
         <script type="application/ld+json">{JSON.stringify(breadcrumbSchema)}</script>
       </Helmet>
 
-      {/* ── Semantic breadcrumb (visible + crawlable) ── */}
+      {/* Breadcrumb */}
       <nav aria-label="Breadcrumb" className="sp-breadcrumb">
         <ol itemScope itemType="https://schema.org/BreadcrumbList" style={{ display: "flex", gap: "6px", listStyle: "none", padding: 0, margin: 0, fontSize: "0.8rem", opacity: 0.6 }}>
           <li itemProp="itemListElement" itemScope itemType="https://schema.org/ListItem">
@@ -313,18 +345,20 @@ export default function SoftwarePage() {
       </nav>
 
       <header className={`sp-hero${hasVideo ? " sp-hero--split" : ""}`}>
-        <div className="sp-hero-glow" aria-hidden="true" />
-        <div className="sp-hero-grid" aria-hidden="true" />
+        <div className="sp-hero-glow"     aria-hidden="true" />
+        <div className="sp-hero-grid"     aria-hidden="true" />
         <div className="sp-hero-text">
-          {/* h1 includes tool name + brand keyword for exact-match SEO */}
           <h1 className="sp-hero-title">
             <span>{tool.name}</span>
-            {/* Visually hidden brand anchor for search context */}
             <span className="sr-only"> – Free Tool by Openroot Systems</span>
           </h1>
           <p className="sp-hero-desc">{tool.description}</p>
           <div className="sp-hero-actions">
-            <button className="sp-launch-btn ot-active-scale ot-focus-brand" onClick={launch} type="button">
+            <button
+              className="sp-launch-btn ot-active-scale ot-focus-brand"
+              onClick={launch}
+              type="button"
+            >
               <span className="sp-launch-btn-icon" aria-hidden="true">
                 <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
                   <polygon points="5 3 19 12 5 21 5 3" />
@@ -349,7 +383,7 @@ export default function SoftwarePage() {
       )}
 
       <div className="sp-body">
-        {/* ── Overview — h2 includes keyword ── */}
+        {/* Overview */}
         <section className="sp-section" aria-labelledby="section-overview">
           <p className="ot-kicker ot-kicker--brand sp-section-label">Overview</p>
           <h2 id="section-overview" className="sp-section-title">What is {tool.name}?</h2>
@@ -383,7 +417,7 @@ export default function SoftwarePage() {
           </section>
         )}
 
-        {/* ── FAQ — schema-ready markup ── */}
+        {/* FAQ */}
         <section className="sp-section" aria-labelledby="section-faq">
           <p className="ot-kicker ot-kicker--brand sp-section-label">FAQ</p>
           <h2 id="section-faq" className="sp-section-title">Common Questions about {tool.name}</h2>
