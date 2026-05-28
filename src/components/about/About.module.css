@@ -1,158 +1,51 @@
-/* =========================================================
-   ABOUT
-   GLOBAL-ALIGNED • CLEAN • RESPONSIVE • LIGHTWEIGHT
-   ========================================================= */
-
 .aboutSection {
   position: relative;
-  overflow: hidden;
+  overflow: visible;
   isolation: isolate;
-
-  padding-top: 0;
+  padding-top: clamp(5.3rem, 8vw, 9rem);
   padding-inline: var(--ot-page-inline);
-  padding-bottom: var(--ot-section-bottom);
-
-  background: var(--ot-section-bg);
+  padding-bottom: clamp(5rem, 10vw, 10rem);
+  background: transparent;
 
   --about-grid-gap: clamp(1.6rem, 3vw, 3rem);
   --about-right-col: clamp(300px, 30vw, 460px);
-  --about-card-gap: clamp(0.7rem, 1vw, 1rem);
-  --about-card-radius: clamp(14px, 2vw, 24px);
-  --about-card-border: rgba(120, 120, 140, 0.12);
+  --about-card-gap: clamp(0.8rem, 1vw, 1rem);
+  --about-card-radius: clamp(16px, 2vw, 24px);
 
-  transition:
-    background 0.35s ease,
-    color 0.35s ease;
+  --about-title: var(--ac-about-text);
+  --about-text: var(--ac-about-text-soft);
+  --about-text-strong: var(--ac-about-text);
 }
 
-/* =========================================================
-   INNER WRAPPER
-   ========================================================= */
 
-.aboutContainer {
-  width: 100%;
-  max-width: var(--ot-content-max);
-  margin-inline: auto;
-}
-
-/* =========================================================
-   OUTER LAYOUT
-   ========================================================= */
 
 .aboutLayout {
   display: flex;
   flex-direction: column;
-  gap: clamp(0.9rem, 1.4vw, 1.4rem);
+  gap: clamp(1rem, 1.6vw, 1.6rem);
 }
-
-/* =========================================================
-   TOP GRID — TEXT + VISUAL ONLY
-   ========================================================= */
 
 .aboutTopGrid {
-  display: grid;
-  grid-template-columns:
-    minmax(0, 1fr)
-    minmax(240px, var(--about-right-col));
+  --ac-visual-width: var(--about-right-col);
   column-gap: var(--about-grid-gap);
-  align-items: start;
 }
-
-/* =========================================================
-   LEFT CONTENT
-   ========================================================= */
 
 .aboutContent {
-  display: flex;
-  flex-direction: column;
-  gap: 1.15rem;
-  min-width: 0;
-}
-
-/* =========================================================
-   RIGHT VISUAL
-   ========================================================= */
-
-.aboutVisual {
-  display: flex;
-  justify-content: flex-end;
-  align-items: flex-start;
-  min-width: 0;
-  padding-top: 0.35rem;
-}
-
-/* =========================================================
-   CERTIFICATE GRID — INDEPENDENT FROM TOP GRID
-   ========================================================= */
-
-.certificateGrid {
-  display: flex;
-  gap: var(--about-card-gap);
-  min-width: 0;
-  align-items: stretch;
-  width: min(
-    100%,
-    calc(100% - var(--about-right-col) - var(--about-grid-gap))
-  );
-}
-
-.certificateCard {
   position: relative;
-  flex: 1 1 0;
-  min-width: 0;
-  overflow: hidden;
-  isolation: isolate;
-  aspect-ratio: 16 / 9;
-  border-radius: var(--about-card-radius);
-  background: transparent;
-  border: 1px solid var(--about-card-border);
-  display: block;
 }
-
-.certificateCard:focus-visible {
-  outline: 2px solid var(--ot-brand, var(--color-primary));
-  outline-offset: 3px;
-}
-
-.certificateImage {
-  width: 100%;
-  height: 100%;
-  display: block;
-  object-fit: cover;
-  object-position: center;
-  background: var(--ot-surface, rgba(127, 127, 127, 0.08));
-}
-
-/* =========================================================
-   TITLE
-   ========================================================= */
 
 .aboutTitle {
-  margin: 0;
   max-width: 12ch;
   font-size: clamp(2.3rem, 5vw, 4.4rem);
-  line-height: 0.96;
-  letter-spacing: -0.065em;
-  color: var(--color-text);
-  text-wrap: balance;
+  color: var(--about-title);
 }
-
-/* =========================================================
-   LEAD
-   ========================================================= */
 
 .aboutLead {
-  margin: 0;
   max-width: 58ch;
-  font-size: clamp(0.94rem, 0.18vw + 0.9rem, 1.02rem);
-  line-height: clamp(1.66, 0.16vw + 1.62, 1.82);
-  color: var(--color-text-muted);
-  text-wrap: pretty;
+  font-size: clamp(0.96rem, 0.2vw + 0.92rem, 1.03rem);
+  line-height: 1.76;
+  color: var(--about-text);
 }
-
-/* =========================================================
-   BODY
-   ========================================================= */
 
 .aboutBody {
   display: flex;
@@ -163,335 +56,81 @@
 
 .aboutBody p {
   margin: 0;
-  font-size: clamp(0.9rem, 0.16vw + 0.88rem, 0.98rem);
-  line-height: clamp(1.66, 0.16vw + 1.62, 1.82);
-  text-align: justify;
-  color: var(--color-text-muted);
-  text-wrap: pretty;
+  font-size: clamp(0.92rem, 0.16vw + 0.9rem, 1rem);
+  line-height: 1.76;
+  color: var(--about-text);
 }
 
 .aboutBody strong {
-  color: var(--color-text);
+  color: var(--about-text-strong);
 }
 
-/* =========================================================
-   VISUAL FRAME
-   ========================================================= */
 
 .visualFrame {
-  width: min(100%, clamp(240px, 26vw, 360px));
+  --ac-frame-max: 360px; /* same as Services/shared default */
+
+  position: relative;
+  width: min(100%, var(--ac-frame-max));
   aspect-ratio: 1 / 1;
   overflow: hidden;
-  border-radius: clamp(18px, 2vw, 30px);
   display: grid;
   place-items: center;
-  position: relative;
-  background:
-    radial-gradient(
-      circle at 50% 35%,
-      rgba(67, 97, 238, 0.1) 0%,
-      transparent 42%
-    ),
-    linear-gradient(
-      180deg,
-      rgba(36, 36, 36, 0.96),
-      rgba(10, 10, 10, 1)
-    );
-  border: 1px solid rgba(255, 255, 255, 0.08);
+
+  border-radius: 30px; /* same as Services */
+  background: transparent !important;
+  border: 1px solid transparent;
+  box-shadow: none !important;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+
+.visualFrame::before,
+.visualFrame::after {
+  background: transparent !important;
 }
 
 .visualAnimation {
-  width: 112% !important;
-  height: 112% !important;
-  display: block;
-  transform: translateY(-4%) scale(1.04);
+  width: 116% !important;   /* same as Services */
+  height: 116% !important;  /* same as Services */
+  transform: translate(0%, -4%) scale(1.12); /* same as Services */
   transform-origin: center center;
 }
 
-/* =========================================================
-   LARGE DESKTOP ≥1400px
-   ========================================================= */
-
-@media (min-width: 1400px) {
-  .aboutSection {
-    --about-right-col: clamp(380px, 29vw, 520px);
-    --about-grid-gap: clamp(2rem, 3vw, 3.5rem);
-  }
-
-  .aboutBody {
-    max-width: 66ch;
-  }
-}
-
-/* =========================================================
-   DESKTOP 1200–1399px
-   ========================================================= */
-
-@media (min-width: 1200px) and (max-width: 1399px) {
-  .aboutSection {
-    --about-right-col: clamp(340px, 27vw, 440px);
-    --about-grid-gap: clamp(1.8rem, 2.8vw, 3rem);
-  }
-}
-
-/* =========================================================
-   STANDARD DESKTOP 900–1199px
-   ========================================================= */
-
-@media (min-width: 900px) and (max-width: 1199px) {
-  .aboutSection {
-    --about-right-col: clamp(280px, 24vw, 320px);
-    --about-grid-gap: 1.6rem;
-  }
-
-  .aboutLead {
-    max-width: 54ch;
-  }
-
-  .aboutBody {
-    max-width: 56ch;
-  }
-
-  .aboutBody p {
-    font-size: 0.94rem;
-    line-height: 1.72;
-  }
-}
-
-/* =========================================================
-   SMALLER DESKTOP / LARGE TABLET 768–899px
-   ========================================================= */
-
-@media (min-width: 768px) and (max-width: 899px) {
-  .aboutSection {
-    --about-right-col: 240px;
-    --about-grid-gap: 1.4rem;
-  }
-
+@media (max-width: 767px) {
   .visualFrame {
-    width: 100%;
+    width: min(280px, 82%);
     border-radius: 22px;
-  }
-
-  .visualAnimation {
-    width: 108% !important;
-    height: 108% !important;
-    transform: translateY(-3%) scale(1.02);
-  }
-
-  .aboutTitle {
-    max-width: 100%;
-    font-size: clamp(1.9rem, 4.5vw, 2.8rem);
-  }
-
-  .aboutLead {
-    max-width: 100%;
-    font-size: 0.93rem;
-    line-height: 1.7;
-  }
-
-  .aboutBody {
-    max-width: 100%;
-  }
-
-  .aboutBody p {
-    font-size: 0.92rem;
-    line-height: 1.7;
-    text-align: left;
+    margin-inline: auto;
   }
 }
-
-/* =========================================================
-   WRAP / FLOW LAYOUT 641–767px
-   ========================================================= */
-
-@media (min-width: 641px) and (max-width: 767px) {
-  .aboutTopGrid {
-    grid-template-columns: 1fr clamp(180px, 26vw, 200px);
-    column-gap: 1.2rem;
-    align-items: start;
-  }
-
-  .aboutVisual {
-    justify-content: flex-start;
-    padding-top: 0;
-  }
-
-  .certificateGrid {
-    width: 100%;
-  }
-
-  .visualFrame {
-    width: 100%;
-    max-width: none;
-    border-radius: 20px;
-  }
-
-  .visualAnimation {
-    width: 108% !important;
-    height: 108% !important;
-    transform: translateY(-2%) scale(1.02);
-  }
-
-  .aboutTitle {
-    font-size: clamp(1.85rem, 5vw, 2.5rem);
-    max-width: 100%;
-  }
-
-  .aboutLead {
-    max-width: 100%;
-    font-size: 0.93rem;
-    line-height: 1.7;
-  }
-
-  .aboutBody {
-    max-width: 100%;
-    gap: 0.75rem;
-  }
-
-  .aboutBody p {
-    font-size: 0.91rem;
-    line-height: 1.66;
-    text-align: left;
-  }
-}
-
-/* =========================================================
-   STACKED MOBILE 361–640px
-   ========================================================= */
-
-@media (min-width: 361px) and (max-width: 640px) {
-  .aboutSection {
-    padding-inline: 0.95rem;
-  }
-
-  .aboutLayout {
-    gap: 1rem;
-  }
-
-  .aboutTopGrid {
-    grid-template-columns: 1fr;
-    row-gap: 1rem;
-  }
-
-  .aboutContent {
-    gap: 0.9rem;
-  }
-
-  .aboutVisual {
-    justify-content: center;
-    align-items: center;
-    padding-top: 0.2rem;
-  }
-
-  .certificateGrid {
-    width: 100%;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 0.75rem;
-  }
-
-  .visualFrame {
-    width: min(260px, 80%);
-    border-radius: 22px;
-  }
-
-  .visualAnimation {
-    width: 108% !important;
-    height: 108% !important;
-    transform: translateY(-2%) scale(1.02);
-  }
-
-  .aboutTitle {
-    max-width: 100%;
-    font-size: clamp(1.65rem, 7vw, 2.1rem);
-  }
-
-  .aboutLead {
-    max-width: 100%;
-    text-align: left;
-    font-size: 0.9rem;
-    line-height: 1.66;
-  }
-
-  .aboutBody {
-    max-width: 100%;
-  }
-
-  .aboutBody p {
-    text-align: left;
-    font-size: 0.89rem;
-    line-height: 1.66;
-  }
-}
-
-/* =========================================================
-   COMPACT MOBILE ≤360px
-   ========================================================= */
-
-@media (max-width: 360px) {
-  .aboutSection {
-    padding-inline: 0.9rem;
-  }
-
-  .aboutLayout {
-    gap: 0.95rem;
-  }
-
-  .aboutTopGrid {
-    grid-template-columns: 1fr;
-  }
-
-  .aboutContent {
-    gap: 0.85rem;
-  }
-
-  .aboutVisual {
-    display: none !important;
-  }
-
-  .certificateGrid {
-    width: 100%;
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 0.7rem;
-  }
-
-  .certificateCard {
-    border-radius: 16px;
-  }
-
-  .aboutTitle {
-    max-width: 100%;
-    font-size: 1.35rem;
-    letter-spacing: -0.05em;
-  }
-
-  .aboutLead {
-    max-width: 100%;
-    text-align: left;
-    font-size: 0.86rem;
-    line-height: 1.6;
-  }
-
-  .aboutBody {
-    max-width: 100%;
-  }
-
-  .aboutBody p {
-    text-align: left;
-    font-size: 0.85rem;
-    line-height: 1.6;
-  }
-}
-
-/* =========================================================
-   REDUCED MOTION
-   ========================================================= */
 
 @media (prefers-reduced-motion: reduce) {
   .visualAnimation {
-    transition: none !important;
-    transform: translateY(0%) scale(1.01);
+    transform: translate(0%, -4%) scale(1.04);
+  }
+}
+
+@media (max-width: 899px) {
+  .aboutTitle {
+    max-width: 100%;
+    font-size: clamp(1.8rem, 6vw, 2.8rem);
+  }
+
+  .aboutLead,
+  .aboutBody p {
+    max-width: 100%;
+    font-size: 0.92rem;
+    line-height: 1.7;
+  }
+}
+
+@media (max-width: 640px) {
+  .aboutSection {
+    padding-top: 4.6rem;
+    padding-bottom: 4.4rem;
+  }
+
+  .aboutTitle {
+    font-size: clamp(1.65rem, 8vw, 2.2rem);
   }
 }

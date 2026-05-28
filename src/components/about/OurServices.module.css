@@ -1,52 +1,30 @@
-/* ==========================================================
-   OUR SERVICES — OPENROOT SYSTEMS
-   GLOBAL-ALIGNED · PRODUCTION READY
-========================================================== */
-
 .servicesSection {
   position: relative;
-  overflow: hidden;
+  overflow: visible;
   isolation: isolate;
 
-  /* Keep the section aligned to the same rhythm as the navbar */
-  padding-top: 0;
+  padding-top: clamp(4.2rem, 7vw, 7rem);
   padding-inline: var(--ot-page-inline);
-  padding-bottom: var(--ot-section-bottom);
+  padding-bottom: clamp(4rem, 7vw, 6.5rem);
+  background: transparent;
 
-  background: var(--ot-section-bg);
+  --svc-col-gap: clamp(1rem, 1.5vw, 1.5rem);
+  --svc-visual-width: clamp(300px, 30vw, 460px);
+  --svc-frame-radius: 30px;
 
-  /* The right side is controlled by variables so it stays stable
-     across breakpoints without creating a large content-to-visual gap. */
-  --svc-col-gap: clamp(0.85rem, 1.4vw, 1.25rem);
-  --svc-visual-width: clamp(300px, 32vw, 520px);
-  --svc-frame-radius: 32px;
-
-  transition:
-    background 0.35s ease,
-    color 0.35s ease;
+  --svc-title: var(--ac-services-text);
+  --svc-text: var(--ac-services-text-soft);
+  --svc-strong: var(--ac-services-text);
+  --svc-line: var(--ac-border-soft);
+  --svc-card-border: var(--ac-border-soft);
 }
 
-/* ==========================================================
-   INNER WRAPPER
-========================================================== */
 
-.servicesInner {
-  position: relative;
-  z-index: 1;
-
-  width: 100%;
-  max-width: var(--ot-content-max);
-  margin-inline: auto;
-}
-
-/* ==========================================================
-   SECTION HEADER
-========================================================== */
 
 .servicesHeader {
   display: flex;
   align-items: flex-start;
-  margin-bottom: var(--sp-lg);
+  margin-bottom: clamp(1.4rem, 2vw, 2rem);
 }
 
 .servicesEyebrowRow {
@@ -55,145 +33,80 @@
   gap: 0.8rem;
 }
 
-.servicesEyebrowText {
-  position: relative;
-  display: inline-flex;
-  align-items: center;
-  gap: 0.55rem;
-  margin: 0;
-
-  font-size: clamp(1rem, 2.2vw, 1.45rem);
-  font-weight: 800;
-  letter-spacing: -0.035em;
-  line-height: 1.15;
-
-  color: var(--ot-text);
-  background: none;
-  -webkit-text-fill-color: currentColor;
+.servicesEyebrowLine {
+  width: 32px;
+  height: 3px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--ac-brand-violet), var(--ac-brand-cyan));
 }
 
-/* ==========================================================
-   STACK
-========================================================== */
+.servicesEyebrowText {
+  margin: 0;
+  font-size: clamp(1rem, 2vw, 1.3rem);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  color: var(--svc-title);
+}
 
 .servicesStack {
   display: flex;
   flex-direction: column;
-  gap: clamp(2.8rem, 5vw, 4rem);
-}
-
-/* ==========================================================
-   CARD
-========================================================== */
-
-.serviceCard {
-  position: relative;
+  gap: clamp(3rem, 5vw, 4rem);
 }
 
 .serviceCard + .serviceCard {
-  padding-top: clamp(2.8rem, 5vw, 4rem);
-  border-top: 1px solid rgba(120, 120, 140, 0.12);
+  padding-top: clamp(3rem, 5vw, 4rem);
+  border-top: 1px dashed var(--svc-line);
 }
-
-/* ==========================================================
-   CARD INNER — base (≥900px desktop)
-========================================================== */
 
 .serviceInner {
-  display: grid;
-  grid-template-columns:
-    minmax(0, 1fr)
-    minmax(0, var(--svc-visual-width));
+  --ac-visual-width: var(--svc-visual-width);
   gap: var(--svc-col-gap);
-  align-items: start;
 }
 
-/* ==========================================================
-   CONTENT
-========================================================== */
 
-.serviceContent {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-  min-width: 0;
-  max-width: 100%;
-}
 
 .serviceTag {
   display: inline-flex;
-
   align-items: center;
   justify-content: center;
-
   align-self: flex-start;
-
   width: fit-content;
-  max-width: max-content;
-
-  padding:
-    0.48rem
-    0.9rem;
-
+  padding: 0.52rem 0.92rem;
   border-radius: 999px;
-
   font-size: 0.74rem;
   font-weight: 800;
-
   letter-spacing: 0.08em;
   text-transform: uppercase;
-
-  white-space: nowrap;
-
-  color: var(--ot-brand-2);
-
-  background:
-    rgba(100, 128, 245, 0.08);
-
-  border:
-    1px solid rgba(100, 128, 245, 0.16);
+  color: color-mix(in srgb, var(--ac-brand-blue) 78%, var(--svc-title));
+  background: color-mix(in srgb, var(--ac-brand-blue) 14%, transparent);
+  border: 1px solid color-mix(in srgb, var(--ac-brand-blue) 20%, transparent);
 }
 
 .serviceTitle {
-  margin: 0;
   max-width: 12ch;
-
-  font-size: clamp(2rem, 4vw, 4rem);
-  line-height: 0.96;
-  letter-spacing: -0.065em;
-
-  color: var(--color-text);
-  text-wrap: balance;
+  font-size: clamp(2rem, 4vw, 4.1rem);
+  color: var(--svc-title);
 }
 
-.serviceIntro {
-  margin: 0;
-
-  max-width: 62ch;
-
-  font-size: clamp(0.92rem, 0.22vw + 0.88rem, 1.03rem);
-  line-height: clamp(1.62, 0.2vw + 1.58, 1.82);
-
-  text-align: justify;
-  color: var(--color-text-muted);
-
-  text-wrap: pretty;
+.serviceIntro,
+.serviceNote {
+  font-size: clamp(0.94rem, 0.22vw + 0.9rem, 1.02rem);
+  line-height: 1.78;
+  color: var(--svc-text);
 }
 
 .serviceSubheading {
   margin: 0.2rem 0 0;
-
   font-size: 1.04rem;
   line-height: 1.6;
-
-  color: var(--color-text);
+  color: var(--svc-strong);
 }
 
 .serviceList {
   display: flex;
   flex-direction: column;
   gap: 0.78rem;
-
   margin: 0;
   padding: 0;
   list-style: none;
@@ -202,656 +115,99 @@
 .serviceList li {
   display: flex;
   gap: 10px;
-
   font-size: clamp(0.9rem, 0.18vw + 0.86rem, 0.98rem);
-  line-height: clamp(1.58, 0.18vw + 1.56, 1.76);
-
-  color: var(--color-text-muted);
-
-  text-wrap: pretty;
+  line-height: 1.72;
+  color: var(--svc-text);
 }
 
 .serviceList li::before {
   content: "•";
   flex-shrink: 0;
-
-  color: var(--ot-brand-2);
+  color: var(--ac-brand-cyan);
   font-size: 1.15rem;
   line-height: 1;
 }
 
-.serviceNote {
-  position: relative;
 
-  margin-top: 0.9rem;
-  padding-left: 0.9rem;
-
-  border-left: 2px solid rgba(100, 128, 245, 0.18);
-
-  font-size: clamp(0.9rem, 0.2vw + 0.86rem, 1rem);
-  line-height: clamp(1.62, 0.2vw + 1.58, 1.82);
-
-  color: var(--color-text);
-
-  text-wrap: pretty;
-}
-
-/* ==========================================================
-   VISUAL PANEL
-========================================================== */
-
-.serviceVisual {
-  display: flex;
-  align-items: flex-start;
-  justify-content: flex-end;
-  width: 100%;
-  min-width: 0;
-}
 
 .serviceVisualSticky {
   position: sticky;
   top: 110px;
-
   display: flex;
   flex-direction: column;
   align-items: center;
-
-  gap: 1.4rem;
+  gap: 1rem;
   width: 100%;
-  min-width: 0;
 }
 
 .serviceVisualFrame {
-  --svc-crop-x: 0%;
-  --svc-crop-y: -5%;
-  --svc-crop-scale: 1.14;
-
-  position: relative;
-
-  width: 100%;
-  aspect-ratio: 1 / 1;
-
-  overflow: hidden;
+  --ac-frame-max: 360px;
   border-radius: var(--svc-frame-radius);
-
-  display: grid;
-  place-items: center;
-
   background: #ffffff;
-  border: 1px solid var(--color-border-strong);
+  border: 1px solid var(--svc-card-border);
 }
 
 .serviceAnimation {
   width: 116% !important;
   height: 116% !important;
-
-  display: block;
-
-  transform:
-    translate(var(--svc-crop-x), var(--svc-crop-y))
-    scale(var(--svc-crop-scale));
-
-  transform-origin: center center;
-  will-change: transform;
+  transform: translate(0%, -4%) scale(1.12);
 }
 
-/* ==========================================================
-   CTA
-========================================================== */
+
 
 .serviceCTA {
-  appearance: none;
-  border: none;
-  outline: none;
-
-  cursor: pointer;
   min-width: 220px;
-  max-width: 100%;
-
-  padding: 0.95rem 1.2rem;
+  padding: 0.98rem 1.24rem;
   border-radius: 18px;
-
   font-size: 0.96rem;
   font-weight: 700;
   letter-spacing: -0.02em;
-
-  color: white;
-  background: linear-gradient(135deg, var(--ot-brand), var(--ot-brand-2));
-
-  transition:
-    transform 0.22s ease,
-    box-shadow 0.22s ease;
-
-  will-change: transform;
+  background: linear-gradient(135deg, var(--ac-brand-blue));
 }
 
-.serviceCTA:hover {
-  transform: translateY(-2px);
-}
-
-.serviceCTA:active {
-  transform: scale(0.985);
-}
-
-/* Mobile CTA — hidden by default; revealed at specific breakpoints */
-.mobileCTA {
-  display: none;
-  justify-content: center;
-  align-items: center;
-  justify-self: center;
-}
-
-/* ==========================================================
-   XXL SCREENS ≥1800px
-   Largest animation, widest text, generous spacing
-========================================================== */
-
-@media (min-width: 1800px) {
+@media (max-width: 767px) {
   .servicesSection {
-    --svc-col-gap: 1.25rem;
-    --svc-visual-width: clamp(420px, 28vw, 560px);
+    padding-top: 3.6rem;
+    padding-bottom: 3.8rem;
   }
 
-  .serviceTitle {
-    font-size: clamp(2.4rem, 3.2vw, 4.4rem);
-  }
-
-  .serviceIntro {
-    max-width: 68ch;
-  }
-}
-
-/* ==========================================================
-   LARGE SCREENS 1400–1799px
-========================================================== */
-
-@media (min-width: 1400px) and (max-width: 1799px) {
-  .servicesSection {
-    --svc-col-gap: 1.1rem;
-    --svc-visual-width: clamp(380px, 30vw, 460px);
-  }
-}
-
-/* ==========================================================
-   MEDIUM-LARGE 1200–1399px
-========================================================== */
-
-@media (min-width: 1200px) and (max-width: 1399px) {
-  .servicesSection {
-    --svc-col-gap: 1rem;
-    --svc-visual-width: clamp(340px, 29vw, 420px);
-  }
-}
-
-/* ==========================================================
-   TEXT DENSITY — all screens ≤1200px
-========================================================== */
-
-@media (max-width: 1200px) {
-  .serviceIntro {
-    max-width: 58ch;
-  }
-
-  .serviceNote {
-    max-width: 58ch;
-  }
-}
-
-/* ==========================================================
-   STANDARD DESKTOP 900–1199px
-   Two-column preserved; animation slightly smaller
-========================================================== */
-
-@media (min-width: 900px) and (max-width: 1199px) {
-  .servicesSection {
-    --svc-col-gap: 0.95rem;
-    --svc-visual-width: clamp(280px, 28vw, 360px);
-  }
-
-  .serviceVisualSticky {
-    top: 96px;
-  }
-
-  .serviceAnimation {
-    width: 114% !important;
-    height: 114% !important;
-
-    transform:
-      translate(var(--svc-crop-x), var(--svc-crop-y))
-      scale(1.08);
-  }
-
-  .serviceIntro {
-    font-size: 0.94rem;
-    line-height: 1.68;
-    max-width: 54ch;
-  }
-
-  .serviceList li {
-    font-size: 0.92rem;
-    line-height: 1.66;
-  }
-
-  .serviceNote {
-    font-size: 0.93rem;
-    line-height: 1.68;
-    max-width: 54ch;
-  }
-}
-
-/* ==========================================================
-   SMALLER DESKTOP / LARGE TABLET 768–899px
-   Still two-column; animation shrinks further
-========================================================== */
-
-@media (min-width: 768px) and (max-width: 899px) {
-  .servicesSection {
-    --svc-col-gap: 0.9rem;
-    --svc-visual-width: clamp(240px, 27vw, 300px);
-  }
-
-  .serviceVisualSticky {
-    position: sticky;
-    top: 88px;
-  }
-
-  .serviceAnimation {
-    width: 112% !important;
-    height: 112% !important;
-
-    transform:
-      translate(var(--svc-crop-x), var(--svc-crop-y))
-      scale(1.06);
-  }
-
-  .serviceTitle {
-    max-width: 100%;
-    font-size: clamp(1.9rem, 4.5vw, 2.8rem);
-  }
-
-  .serviceIntro {
-    font-size: 0.93rem;
-    line-height: 1.7;
-    max-width: 52ch;
-    text-align: left;
-  }
-
-  .serviceList li {
-    font-size: 0.91rem;
-    line-height: 1.66;
-  }
-
-  .serviceNote {
-    font-size: 0.92rem;
-    line-height: 1.7;
-    max-width: 52ch;
-  }
-}
-
-/* ==========================================================
-   WRAP / FLOW LAYOUT 641–767px
-   ─────────────────────────────────────────────────────────
-   Strategy: dissolve .serviceContent into the parent grid
-   via display:contents so every child becomes a direct grid
-   item. This lets us place the animation in column 2 beside
-   ONLY the subheading + bullet list rows, creating a
-   text-wraps-image effect — no HTML changes required.
-
-   Grid columns: [1fr] [155px]
-   ┌────────────────────────┬────────────┐
-   │ tag pill               │            │ ← row 1 (spans both)
-   ├────────────────────────┤            │
-   │ title                  │            │ ← row 2 (spans both)
-   ├────────────────────────┤            │
-   │ intro paragraph        │            │ ← row 3 (spans both)
-   ├────────────────────────┤ animation  │
-   │ subheading             │   frame    │ ← row 4 (col 1 | col 2)
-   ├────────────────────────┤            │
-   │ bullet list            │            │ ← row 5 (col 1 | col 2)
-   ├────────────────────────┴────────────┤
-   │ note                                │ ← row 6 (spans both)
-   ├─────────────────────────────────────┤
-   │ CTA button                          │ ← row 7 (spans both)
-   └─────────────────────────────────────┘
-========================================================== */
-
-@media (min-width: 641px) and (max-width: 767px) {
-  .servicesSection {
-    --svc-col-gap: 0.85rem;
-    --svc-visual-width: 155px;
-    --svc-frame-radius: 18px;
-  }
-
-  .servicesStack {
-    gap: 2.8rem;
-  }
-
-  .serviceCard + .serviceCard {
-    padding-top: 2.8rem;
-  }
-
-  /* Two-column grid: text | animation */
   .serviceInner {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) minmax(0, var(--svc-visual-width));
-    gap: 0.7rem var(--svc-col-gap);
-    align-items: start;
-  }
-
-  /* ── Dissolve serviceContent so its children join the grid ── */
-  .serviceContent {
-    display: contents;
-  }
-
-  /* ── Full-width rows ── */
-  .serviceTag {
-    grid-column: 1 / -1;
-    grid-row: 1;
-    align-self: start;
+    row-gap: 1rem;
   }
 
   .serviceTitle {
-    grid-column: 1 / -1;
-    grid-row: 2;
-    font-size: clamp(1.75rem, 6vw, 2.5rem);
     max-width: 100%;
+    font-size: clamp(1.7rem, 7vw, 2.5rem);
   }
 
-  .serviceIntro {
-    grid-column: 1 / -1;
-    grid-row: 3;
-    font-size: 0.94rem;
+  .serviceIntro,
+  .serviceNote {
+    max-width: 100%;
+    font-size: 0.92rem;
     line-height: 1.7;
-    text-align: left;
-    max-width: 100%;
-  }
-
-  /* ── Left-column rows (beside animation) ── */
-  .serviceSubheading {
-    grid-column: 1;
-    grid-row: 4;
-    align-self: start;
-    margin-top: 0;
-    font-size: 0.98rem;
-  }
-
-  .serviceList {
-    grid-column: 1;
-    grid-row: 5;
-    align-self: start;
-    gap: 0.65rem;
   }
 
   .serviceList li {
     font-size: 0.9rem;
-    line-height: 1.64;
-  }
-
-  /* ── Back to full-width ── */
-  .serviceNote {
-    grid-column: 1 / -1;
-    grid-row: 6;
-    font-size: 0.92rem;
-    line-height: 1.7;
-    max-width: 100%;
-  }
-
-  /* Mobile CTA — full width at bottom */
-  .mobileCTA {
-    display: flex !important;
-    justify-content: center;
-    width: auto;
-    min-width: 0;
-    margin-top: 0.4rem;
-  }
-
-  /* ── Animation panel: col 2, spans rows 4-5 ── */
-  .serviceVisual {
-    display: flex !important;
-    grid-column: 2;
-    grid-row: 4 / 6;
-    justify-content: flex-end;
-    align-items: flex-start;
-    align-self: start;
-    width: 100%;
+    line-height: 1.68;
   }
 
   .serviceVisualSticky {
     position: static;
-    width: 100%;
-    gap: 0;
+    gap: 0.9rem;
   }
 
-  .serviceVisualFrame {
-    width: 100%;
-    max-width: none;
-    border-radius: 18px;
-    aspect-ratio: 1 / 1;
-  }
-
-  .serviceAnimation {
-    width: 116% !important;
-    height: 116% !important;
-
-    transform:
-      translate(var(--svc-crop-x), var(--svc-crop-y))
-      scale(1.1);
-  }
-
-  /* Hide the desktop CTA that lives inside the visual panel */
-  .serviceVisual .serviceCTA {
-    display: none;
-  }
-}
-
-/* ==========================================================
-   STACKED MOBILE LAYOUT 361–640px
-   ─────────────────────────────────────────────────────────
-   Single-column grid. display:contents on .serviceContent
-   again so we can control order across the full column:
-
-   ┌─────────────────────────────────────┐
-   │ tag → title → intro → sub → list → note   (rows 1-6)
-   ├─────────────────────────────────────┤
-   │ animation (centred)                 │ ← row 7
-   ├─────────────────────────────────────┤
-   │ CTA button                          │ ← row 8
-   └─────────────────────────────────────┘
-========================================================== */
-
-@media (min-width: 361px) and (max-width: 640px) {
-  .servicesStack {
-    gap: 2.5rem;
-  }
-
-  .serviceCard + .serviceCard {
-    padding-top: 2.5rem;
-  }
-
-  .serviceInner {
-    display: grid;
-    grid-template-columns: 1fr;
-    row-gap: 0.9rem;
-    align-items: start;
-  }
-
-  /* Dissolve serviceContent so children join the grid */
-  .serviceContent {
-    display: contents;
-  }
-
-  /* Explicit row order for content children */
-  .serviceTag       { grid-row: 1; }
-  .serviceTitle     { grid-row: 2; }
-  .serviceIntro     { grid-row: 3; }
-  .serviceSubheading { grid-row: 4; }
-  .serviceList      { grid-row: 5; }
-  .serviceNote      { grid-row: 6; }
-
-  /* Typography */
-  .serviceTitle {
-    font-size: clamp(1.75rem, 8vw, 2.6rem);
-    max-width: 100%;
-    line-height: 1;
-  }
-
-  .serviceIntro {
-    font-size: 0.93rem;
-    line-height: 1.68;
-    text-align: left;
-    max-width: 100%;
-  }
-
-  .serviceList li {
-    font-size: 0.91rem;
-    line-height: 1.65;
-  }
-
-  .serviceNote {
-    font-size: 0.92rem;
-    line-height: 1.68;
-    max-width: 100%;
-    margin-top: 0;
-  }
-
-  /* Animation: row 7, centred */
-  .serviceVisual {
-    display: flex !important;
-    grid-row: 7;
-    justify-content: center;
-    align-items: center;
-    margin-top: 0.4rem;
-  }
-
-  .serviceVisualSticky {
-    position: static;
-    align-items: center;
-    width: 100%;
-    gap: 0;
-  }
-
-  .serviceVisualFrame {
-    width: min(260px, 78%);
-    margin: 0 auto;
-    border-radius: 22px;
-  }
-
-  .serviceAnimation {
-    width: 116% !important;
-    height: 116% !important;
-
-    transform:
-      translate(var(--svc-crop-x), var(--svc-crop-y))
-      scale(1.1);
-  }
-
-  /* Hide CTA inside visual panel */
-  .serviceVisual .serviceCTA {
-    display: none;
-  }
-
-  /* Mobile CTA: row 8, full width */
-  .mobileCTA {
-    display: flex !important;
-    grid-row: 8;
-    width: auto;
-    justify-content: center;
-    margin-top: 0.4rem;
+  .serviceCTAWrap {
+    margin-top: 0.1rem;
   }
 
   .serviceCTA {
-    width: fit-content;
+    min-width: min(220px, 100%);
   }
 }
-
-/* ==========================================================
-   COMPACT MOBILE ≤360px
-   Hide animation entirely — text + CTA only
-========================================================== */
-
-@media (max-width: 360px) {
-  .servicesSection {
-    padding-inline: 0.95rem;
-  }
-
-  .servicesStack {
-    gap: 2.2rem;
-  }
-
-  .serviceCard + .serviceCard {
-    padding-top: 2.2rem;
-  }
-
-  /* Single-column block layout; re-enable flex on content */
-  .serviceInner {
-    display: block;
-  }
-
-  .serviceContent {
-    display: flex;
-    flex-direction: column;
-    gap: 0.85rem;
-  }
-
-  /* Hide animation completely */
-  .serviceVisual {
-    display: none !important;
-  }
-
-  /* Show mobile CTA */
-  .mobileCTA {
-    display: flex !important;
-    width: auto;
-    justify-content: center;
-    margin-top: 0.6rem;
-  }
-
-  .serviceCTA {
-    width: fit-content;
-  }
-
-  /* Compact typography */
-  .serviceTitle {
-    font-size: 1.45rem;
-    max-width: 100%;
-    letter-spacing: -0.05em;
-  }
-
-  .serviceIntro {
-    font-size: 0.88rem;
-    line-height: 1.65;
-    text-align: left;
-    max-width: 100%;
-  }
-
-  .serviceSubheading {
-    font-size: 0.94rem;
-  }
-
-  .serviceList li {
-    font-size: 0.87rem;
-    line-height: 1.62;
-  }
-
-  .serviceNote {
-    font-size: 0.88rem;
-    line-height: 1.65;
-    max-width: 100%;
-  }
-}
-
-/* ==========================================================
-   ACCESSIBILITY
-========================================================== */
 
 @media (prefers-reduced-motion: reduce) {
-  .serviceCTA {
-    transition: none;
-  }
-
   .serviceAnimation {
-    transform:
-      translate(var(--svc-crop-x), var(--svc-crop-y))
-      scale(1.02);
+    transform: scale(1.04);
   }
 }

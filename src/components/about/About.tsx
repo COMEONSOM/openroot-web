@@ -45,7 +45,7 @@ function About() {
       viewport={VP}
       aria-labelledby="about-heading"
     >
-      <div className={styles.aboutContainer}>
+      <div className={`${styles.aboutContainer} ac-section-inner`}>
         <motion.div
           className={styles.aboutLayout}
           variants={stagger()}
@@ -53,75 +53,53 @@ function About() {
           whileInView="visible"
           viewport={VP}
         >
-          <div className={styles.aboutTopGrid}>
+          <div className={`${styles.aboutTopGrid} ac-two-col`}>
             <motion.div
-              className={styles.aboutContent}
+              className={`${styles.aboutContent} ac-copy-col`}
               variants={fadeUp}
             >
               <h2
                 id="about-heading"
-                className={styles.aboutTitle}
+                className={`${styles.aboutTitle} ac-title-display`}
               >
                 About
               </h2>
 
-              <p className={styles.aboutLead}>
-                Openroot Systems is a registered
-                MSME under the Government of India
-                with UDYAM Registration Number
-                UDYAM-WB-14-0263034.
-                We are also a registered employer
-                on the National Career Service
-                (NCS) portal.
+              <p className={`${styles.aboutLead} ac-body-copy`}>
+                Openroot Systems is a registered MSME under the Government of India
+                with UDYAM Registration Number UDYAM-WB-14-0263034. We are also a
+                registered employer on the National Career Service (NCS) portal.
               </p>
 
               <div className={styles.aboutBody}>
                 <p>
                   We build
-                  <strong>
-                    {" "}custom software solutions
-                  </strong>
-                  , for MSMEs, Govt Departments
-                  and Businesses.
-                  Beyond software,
-                  <strong>
-                    {" "}Openroot Systems
-                  </strong>
-                  {" "}is a platform for
-                  <strong>
-                    {" "}skill development and
-                    empowerment
-                  </strong>
-                  , helping students,
-                  working professionals,
-                  and business owners become
+                  <strong> custom software solutions</strong>, for MSMEs, Govt
+                  Departments and Businesses. Beyond software,
+                  <strong> Openroot Systems</strong> is a platform for
+                  <strong> skill development and empowerment</strong>, helping
+                  students, working professionals, and business owners become
                   confident in using
-                  <strong>
-                    {" "}technology, AI,
-                    and finance.
-                  </strong>
+                  <strong> technology, AI, and finance.</strong>
                 </p>
 
                 <p>
-                  Our goal is simple:
-                  make technology approachable,
-                  affordable, and genuinely
-                  helpful for people and
-                  small businesses.
+                  Our goal is simple: make technology approachable, affordable,
+                  and genuinely helpful for people and small businesses.
                 </p>
               </div>
             </motion.div>
 
             <motion.div
-              className={styles.aboutVisual}
+              className={`${styles.aboutVisual} ac-visual-col ac-visual-col-center`}
               variants={fadeUp}
             >
-              <div className={styles.visualFrame}>
+              <div className={`${styles.visualFrame} ac-visual-frame`}>
                 <Lottie
                   animationData={xAnimation}
                   loop
                   autoplay
-                  className={styles.visualAnimation}
+                  className={`${styles.visualAnimation} ac-anim`}
                   aria-hidden="true"
                   rendererSettings={{
                     preserveAspectRatio: "xMidYMid slice",
@@ -130,35 +108,6 @@ function About() {
               </div>
             </motion.div>
           </div>
-
-          <motion.div
-            className={styles.proofLayer}
-            variants={fadeUp}
-          >
-            <div className={styles.certificateGrid}>
-              {CERTIFICATES.map((item, index) => (
-                <a
-                  key={item.href}
-                  href={item.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className={`${styles.certificateCard} ${index === 0 ? styles.cardPrimary : styles.cardSecondary}`}
-                  aria-label={item.ariaLabel}
-                >
-                  <img
-                    src={item.imageSrc}
-                    alt={item.imageAlt}
-                    className={styles.certificateImage}
-                    loading="lazy"
-                    decoding="async"
-                    draggable={false}
-                    width="1600"
-                    height="900"
-                  />
-                </a>
-              ))}
-            </div>
-          </motion.div>
         </motion.div>
       </div>
     </motion.section>
