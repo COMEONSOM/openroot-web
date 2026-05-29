@@ -61,7 +61,7 @@ function Mission() {
   const cta = (
     <div className={s.ctaRow}>
       <a href="/software" className={s.btnPrimary}>
-        <span>Explore Our Services</span>
+        <span>Explore Free Tools</span>
         <svg
           width="13"
           height="13"

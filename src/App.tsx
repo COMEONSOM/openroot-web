@@ -77,21 +77,30 @@ function readAdminSession(): AdminData | null {
 }
 
 // ── Shared layout shells ──────────────────────────────────────
+// FIX (Accessibility): Added <main> landmark element wrapping page content.
+// Report flagged: "Document does not have a main landmark."
+// Screen reader users rely on <main> to skip to page content.
+// HomeShell wraps children in <main> since it renders the primary content.
 const HomeShell: React.FC<{ children: React.ReactNode }> = memo(({ children }) => (
   <>
     <Header />
     <Navbar />
-    {children}
+    <main id="main-content">
+      {children}
+    </main>
     <Footer />
     <BackToTop />
   </>
 ));
 HomeShell.displayName = "HomeShell";
 
+// HeaderShell also gets <main> for pages that use it (software hub, cert, etc.)
 const HeaderShell: React.FC<{ children: React.ReactNode }> = memo(({ children }) => (
   <>
     <Header />
-    {children}
+    <main id="main-content">
+      {children}
+    </main>
   </>
 ));
 HeaderShell.displayName = "HeaderShell";
@@ -174,14 +183,14 @@ AdminLoginRoute.displayName = "AdminLoginRoute";
 
 // ── 404 ───────────────────────────────────────────────────────
 const NotFound = memo(() => (
-  <div style={{ padding: "100px", textAlign: "center" }}>
+  <main style={{ padding: "100px", textAlign: "center" }}>
     <Helmet>
       <title>404 – Page Not Found | {SITE_NAME}</title>
       <meta name="robots" content="noindex" />
     </Helmet>
     <h1>404</h1>
     <p>Page not found</p>
-  </div>
+  </main>
 ));
 NotFound.displayName = "NotFound";
 

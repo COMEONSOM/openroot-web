@@ -2,6 +2,9 @@
  * ============================================================
  * HEADER COMPONENT — OPENROOT
  * VERSION: 2026.11 — fixed route paths + removed dead code
+ * FIX: Added explicit width/height on logo image (CLS fix)
+ *      Report: image served at 497x115 displayed at 197x45,
+ *              missing width/height causing layout shift.
  * ============================================================
  */
 
@@ -83,6 +86,9 @@ const UserAvatar = memo(({ user, admin }: UserAvatarProps) => {
         alt="User avatar"
         className="profile-avatar"
         referrerPolicy="no-referrer"
+        // FIX: explicit dimensions prevent layout shift
+        width={32}
+        height={32}
       />
     );
   }
@@ -123,7 +129,6 @@ const Header = () => {
 
   const closeModal = useCallback(() => setShowLoginChoice(false), []);
 
-  // ── FIX: use canonical routes without hyphens ──────────────
   const openProfile = useCallback(() => {
     if (admin) {
       navigate("/adminlogin");
@@ -154,12 +159,23 @@ const Header = () => {
       <header className="header">
         <div className="header-logo">
           <Link to="/">
+            {/*
+              FIX (CLS + image sizing):
+              - Added explicit width={197} height={45} — matches the actual
+                displayed size (197x45) so browser reserves space before load.
+              - Report flagged missing dimensions causing layout shifts (CLS).
+              - Report also flagged image is oversized (497x115 served vs 197x45
+                displayed) — resize the source asset to 394x90 (2x for retina)
+                and serve it at that size to save the 4.5 KiB.
+            */}
             <img
               src="/assets/openroot-white-nobg.avif"
               className="header-logo-img"
               alt="Openroot"
               fetchPriority="high"
               decoding="async"
+              width={197}
+              height={45}
             />
           </Link>
         </div>

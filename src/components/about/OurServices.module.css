@@ -6,7 +6,6 @@
   padding-top: clamp(4.2rem, 7vw, 7rem);
   padding-inline: var(--ot-page-inline);
   padding-bottom: clamp(4rem, 7vw, 6.5rem);
-  background: transparent;
 
   --svc-col-gap: clamp(1rem, 1.5vw, 1.5rem);
   --svc-visual-width: clamp(300px, 30vw, 460px);
@@ -18,28 +17,22 @@
   --svc-line: var(--ac-border-soft);
   --svc-card-border: var(--ac-border-soft);
 }
-
-
-
 .servicesHeader {
   display: flex;
   align-items: flex-start;
   margin-bottom: clamp(1.4rem, 2vw, 2rem);
 }
-
 .servicesEyebrowRow {
   display: flex;
   align-items: center;
   gap: 0.8rem;
 }
-
 .servicesEyebrowLine {
   width: 32px;
   height: 3px;
   border-radius: 999px;
   background: linear-gradient(90deg, var(--ac-brand-violet), var(--ac-brand-cyan));
 }
-
 .servicesEyebrowText {
   margin: 0;
   font-size: clamp(1rem, 2vw, 1.3rem);
@@ -47,25 +40,19 @@
   letter-spacing: -0.03em;
   color: var(--svc-title);
 }
-
 .servicesStack {
   display: flex;
   flex-direction: column;
   gap: clamp(3rem, 5vw, 4rem);
 }
-
 .serviceCard + .serviceCard {
   padding-top: clamp(3rem, 5vw, 4rem);
   border-top: 1px dashed var(--svc-line);
 }
-
 .serviceInner {
   --ac-visual-width: var(--svc-visual-width);
   gap: var(--svc-col-gap);
 }
-
-
-
 .serviceTag {
   display: inline-flex;
   align-items: center;
@@ -82,27 +69,23 @@
   background: color-mix(in srgb, var(--ac-brand-blue) 14%, transparent);
   border: 1px solid color-mix(in srgb, var(--ac-brand-blue) 20%, transparent);
 }
-
 .serviceTitle {
   max-width: 12ch;
   font-size: clamp(2rem, 4vw, 4.1rem);
   color: var(--svc-title);
 }
-
 .serviceIntro,
 .serviceNote {
   font-size: clamp(0.94rem, 0.22vw + 0.9rem, 1.02rem);
   line-height: 1.78;
   color: var(--svc-text);
 }
-
 .serviceSubheading {
   margin: 0.2rem 0 0;
   font-size: 1.04rem;
   line-height: 1.6;
   color: var(--svc-strong);
 }
-
 .serviceList {
   display: flex;
   flex-direction: column;
@@ -111,7 +94,6 @@
   padding: 0;
   list-style: none;
 }
-
 .serviceList li {
   display: flex;
   gap: 10px;
@@ -119,7 +101,6 @@
   line-height: 1.72;
   color: var(--svc-text);
 }
-
 .serviceList li::before {
   content: "•";
   flex-shrink: 0;
@@ -127,9 +108,6 @@
   font-size: 1.15rem;
   line-height: 1;
 }
-
-
-
 .serviceVisualSticky {
   position: sticky;
   top: 110px;
@@ -139,22 +117,17 @@
   gap: 1rem;
   width: 100%;
 }
-
 .serviceVisualFrame {
   --ac-frame-max: 360px;
   border-radius: var(--svc-frame-radius);
   background: #ffffff;
   border: 1px solid var(--svc-card-border);
 }
-
 .serviceAnimation {
   width: 116% !important;
   height: 116% !important;
   transform: translate(0%, -4%) scale(1.12);
 }
-
-
-
 .serviceCTA {
   min-width: 220px;
   padding: 0.98rem 1.24rem;
@@ -170,37 +143,30 @@
     padding-top: 3.6rem;
     padding-bottom: 3.8rem;
   }
-
   .serviceInner {
     row-gap: 1rem;
   }
-
   .serviceTitle {
     max-width: 100%;
     font-size: clamp(1.7rem, 7vw, 2.5rem);
   }
-
   .serviceIntro,
   .serviceNote {
     max-width: 100%;
     font-size: 0.92rem;
     line-height: 1.7;
   }
-
   .serviceList li {
     font-size: 0.9rem;
     line-height: 1.68;
   }
-
   .serviceVisualSticky {
     position: static;
     gap: 0.9rem;
   }
-
   .serviceCTAWrap {
     margin-top: 0.1rem;
   }
-
   .serviceCTA {
     min-width: min(220px, 100%);
   }

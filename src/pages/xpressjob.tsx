@@ -54,7 +54,7 @@ const UGPG_CARDS: CardData[] = [
   { id: 'ugpg-2', url: 'https://svmcm.wb.gov.in/', imgSrc: img('assets-rh/svmcm_wguoxv'), imgAlt: 'SVMCM' },
   { id: 'ugpg-3', url: 'https://www.nism.ac.in/', imgSrc: img('assets-rh/nism_okw994'), imgAlt: 'NISM' },
   { id: 'ugpg-4', url: 'https://admissionju.jadavpuruniversity.in/fengadmission/', imgSrc: img('assets-rh/ju_r2vgcv'), imgAlt: 'Jadavpur University' },
-  { id: 'ugpg-5', url: 'https://makautwb.ac.in/', imgSrc: img('production-images/makaut_pg_vkewja'), imgAlt: 'MAKAUT-PG' },
+  { id: 'ugpg-5', url: 'https://makautwb.ac.in/', imgSrc: img('production-images/makaut_pg_upvyyk'), imgAlt: 'MAKAUT-PG' },
 ];
 
 
@@ -64,7 +64,9 @@ const GOVT_CARDS: CardData[] = [
   { id: 'govt-3', url: 'https://unifiedportal-mem.epfindia.gov.in/', imgSrc: img('assets-rh/unifiedportal_rmfgqt'), imgAlt: 'Unified Portal' },
   { id: 'govt-4', url: 'https://passbook.epfindia.gov.in/MemberPassBook/login', imgSrc: img('assets-rh/PFpassbook_gjxnhk'), imgAlt: 'PFpassbook' },
   { id: 'govt-5', url: 'https://portal.esic.gov.in/EmployeePortal/login.aspx', imgSrc: img('assets-rh/esic_jd3ynx'), imgAlt: 'ESIC' },
-  { id: 'govt-6', url: 'https://socialsecurity.wb.gov.in/login', imgSrc: img('production-images/annapurna-portal_nokt0q'), imgAlt: 'Annapurna Portal' },
+  { id: 'govt-6', url: 'https://food.wb.gov.in/', imgSrc: img('production-images/wb-ration-services_w56oi1'), imgAlt: 'WB Ration Services' },
+  { id: 'govt-7', url: 'https://socialsecurity.wb.gov.in/login', imgSrc: img('production-images/annapurna-portal_jtvfxa'), imgAlt: 'Annapurna Portal' },
+  { id: 'govt-8', url: 'https://wb.gov.in/', imgSrc: img('production-images/wbgov_ncoxlb'), imgAlt: 'West Bengal Government' },
 ];
 
 
@@ -72,17 +74,18 @@ const AI_CARDS: CardData[] = [
   { id: 'ai-1',  url: 'https://app.flowcv.com/resumes',          imgSrc: img('assets-rh/resume_hw2yh7'),          imgAlt: 'resume' },
   { id: 'ai-2',  url: 'https://playground.com/',                  imgSrc: img('assets-rh/playground_zco9cz'),      imgAlt: 'Playground' },
   { id: 'ai-3',  url: 'https://icons8.com/',                      imgSrc: img('assets-rh/icons8_sxvnp8'),          imgAlt: 'icons8' },
-  { id: 'ai-4',  url: 'https://www.widecanvas.ai/',               imgSrc: img('assets-rh/wide_mggcdb.avif'),       imgAlt: 'WideCanvas' },
+  { id: 'ai-4',  url: 'https://www.widecanvas.ai/',               imgSrc: img('assets-rh/wide_mggcdb'),       imgAlt: 'WideCanvas' },
   { id: 'ai-5',  url: 'https://squoosh.app/',                     imgSrc: img('assets-rh/squoosh_dwhzif'),         imgAlt: 'squoosh' },
-  { id: 'ai-6',  url: 'https://animegenius.live3d.io/',           imgSrc: img('assets-rh/anime_eevsei'),           imgAlt: 'Anime Maker' },
-  { id: 'ai-7',  url: 'https://www.oxaam.com/',                   imgSrc: img('assets-rh/oxii_pizjy7'),            imgAlt: 'ox' },
-  { id: 'ai-8',  url: 'https://lottiefiles.com/',                 imgSrc: img('assets-rh/lottie_onkqtq'),          imgAlt: 'lottie' },
-  { id: 'ai-9',  url: 'https://reactbits.dev/',                   imgSrc: img('assets-rh/reactbits_k3mckb'),       imgAlt: 'reactbits' },
-  { id: 'ai-10', url: 'https://gradienty.codes/',                 imgSrc: img('assets-rh/gradienty_lrfznd'),       imgAlt: 'gradienty' },
-  { id: 'ai-11', url: 'https://spline.design/',                   imgSrc: img('assets-rh/spline_kcutlx'),          imgAlt: 'spline' },
-  { id: 'ai-12', url: 'https://www.cloudflare.com/en-in/',        imgSrc: img('assets-rh/cloudflare_bnfm30'),      imgAlt: 'Cloudflare' },
-  { id: 'ai-13', url: 'https://console.cloud.google.com/',        imgSrc: img('assets-rh/google-console_rjtqct'), imgAlt: 'console.cloud.google' },
-  { id: 'ai-14', url: 'https://skillshop.withgoogle.com/',        imgSrc: img('assets-rh/google-skillshop_oqqxw1'), imgAlt: 'skillshop.withgoogle' },
+  { id: 'ai-6', url: 'https://imresizer.com/',                     imgSrc: img('production-images/imresizer_dx4cs9'),      imgAlt: 'Imresizer' },
+  { id: 'ai-7',  url: 'https://animegenius.live3d.io/',           imgSrc: img('assets-rh/anime_eevsei'),           imgAlt: 'Anime Maker' },
+  { id: 'ai-8',  url: 'https://www.oxaam.com/',                   imgSrc: img('assets-rh/oxii_pizjy7'),            imgAlt: 'ox' },
+  { id: 'ai-9',  url: 'https://lottiefiles.com/',                 imgSrc: img('assets-rh/lottie_onkqtq'),          imgAlt: 'lottie' },
+  { id: 'ai-10',  url: 'https://reactbits.dev/',                   imgSrc: img('assets-rh/reactbits_k3mckb'),       imgAlt: 'reactbits' },
+  { id: 'ai-11', url: 'https://gradienty.codes/',                 imgSrc: img('assets-rh/gradienty_lrfznd'),       imgAlt: 'gradienty' },
+  { id: 'ai-12', url: 'https://spline.design/',                   imgSrc: img('assets-rh/spline_kcutlx'),          imgAlt: 'spline' },
+  { id: 'ai-13', url: 'https://www.cloudflare.com/en-in/',        imgSrc: img('assets-rh/cloudflare_bnfm30'),      imgAlt: 'Cloudflare' },
+  { id: 'ai-14', url: 'https://console.cloud.google.com/',        imgSrc: img('assets-rh/google-console_rjtqct'), imgAlt: 'console.cloud.google' },
+  { id: 'ai-15', url: 'https://skillshop.withgoogle.com/',        imgSrc: img('assets-rh/google-skillshop_oqqxw1'), imgAlt: 'skillshop.withgoogle' },
 ];
 
 

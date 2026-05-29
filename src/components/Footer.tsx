@@ -8,9 +8,9 @@ const FaqModal = lazy(() => import("../components/FaqModal"));
 // ─── Data ─────────────────────────────────────────────────────────────────────
 
 const TRUST_BADGES = [
-  { src: "/assets/google-analytics-badge.avif", alt: "Google Analytics Certified" },
-  { src: "/assets/msme-logo.avif",              alt: "MSME Registered"            },
-  { src: "/assets/hubspot-badge.avif",          alt: "HubSpot Certified"          },
+  { src: "/assets/google-analytics-badge.avif", alt: "Google Analytics Certified", width: 120, height: 40 },
+  { src: "/assets/msme-logo.avif",              alt: "MSME Registered",            width: 80,  height: 40 },
+  { src: "/assets/hubspot-badge.avif",          alt: "HubSpot Certified",          width: 120, height: 40 },
 ];
 
 const SITEMAP_LINKS = [
@@ -85,12 +85,20 @@ export default function Footer() {
 
           {/* SITEMAP */}
           <nav className="footer-sitemap" aria-label="Site map">
+            {/*
+              FIX (CLS): Added explicit width/height on footer logo.
+              Report flagged all footer images as missing dimensions,
+              causing layout shifts. Using the same displayed dimensions
+              as the header logo since it's the same asset.
+            */}
             <img
               src={logoSrc}
               alt="Openroot"
               className="footer-logo-img"
               loading="lazy"
               decoding="async"
+              width={160}
+              height={37}
             />
 
             <span className="footer-label">Sitemap</span>
@@ -131,7 +139,8 @@ export default function Footer() {
                 className="footer-icon-btn"
                 aria-label="WhatsApp"
               >
-                <img src="/assets/whatsapp.svg" alt="" aria-hidden="true" />
+                {/* FIX: explicit dimensions on social icon images */}
+                <img src="/assets/whatsapp.svg" alt="" aria-hidden="true" width={24} height={24} />
               </a>
 
               <a
@@ -139,7 +148,7 @@ export default function Footer() {
                 className="footer-icon-btn"
                 aria-label="Email"
               >
-                <img src="/assets/gmail.svg" alt="" aria-hidden="true" />
+                <img src="/assets/gmail.svg" alt="" aria-hidden="true" width={24} height={24} />
               </a>
             </div>
           </div>
@@ -155,7 +164,7 @@ export default function Footer() {
                 className="footer-icon-btn"
                 aria-label="X (Twitter)"
               >
-                <img src="/assets/x.svg" alt="" aria-hidden="true" />
+                <img src="/assets/x.svg" alt="" aria-hidden="true" width={24} height={24} />
               </a>
 
               <a
@@ -165,7 +174,7 @@ export default function Footer() {
                 className="footer-icon-btn"
                 aria-label="Facebook"
               >
-                <img src="/assets/facebook.svg" alt="" aria-hidden="true" />
+                <img src="/assets/facebook.svg" alt="" aria-hidden="true" width={24} height={24} />
               </a>
             </div>
           </div>
@@ -176,8 +185,14 @@ export default function Footer() {
       {/* BASE */}
       <div className="footer-base">
         <div className="footer-trust">
-          {TRUST_BADGES.map(({ src, alt }) => (
+          {TRUST_BADGES.map(({ src, alt, width, height }) => (
             <div key={src} className="footer-trust-item">
+              {/*
+                FIX (CLS): Added explicit width/height on every trust badge.
+                Report listed all three trust logos as missing dimensions.
+                Dimensions are set to approximate display sizes; adjust if
+                your CSS renders them at different sizes.
+              */}
               <img
                 src={src}
                 alt={alt}
@@ -185,6 +200,8 @@ export default function Footer() {
                 draggable={false}
                 loading="lazy"
                 decoding="async"
+                width={width}
+                height={height}
               />
             </div>
           ))}

@@ -22,7 +22,7 @@
   /* ── Text ───────────────────────────────────────────────── */
   --ot-text:            #0a0a0a;
   --ot-text-muted:      #4a4a4a;
-  --ot-text-faint:      #888888;
+  --ot-text-faint:      #836363;
 
   /* ── Borders ────────────────────────────────────────────── */
   --ot-border:          rgba(0, 0, 0, 0.12);
@@ -2458,9 +2458,9 @@ html[data-theme="dark"] {
   --ac-shadow-soft: 0 16px 40px rgba(0, 0, 0, 0.28);
   --ac-shadow-deep: 0 24px 60px rgba(0, 0, 0, 0.5);
 
-  --ac-services-bg-a: #0d1526;
-  --ac-services-bg-b: #0d1526;
-  --ac-services-spot: transparent;
+  --ac-services-bg-a: #000000;
+  --ac-services-bg-b: #000000;
+  --ac-services-spot: #000000;
   --ac-services-text: #f6f8ff;
   --ac-services-text-soft: #a8b5cc;
 
@@ -2522,9 +2522,9 @@ html[data-theme="dark"] {
     --ac-shadow-soft: 0 16px 40px rgba(0, 0, 0, 0.28);
     --ac-shadow-deep: 0 24px 60px rgba(0, 0, 0, 0.5);
 
-    --ac-services-bg-a: #0d1526;
-    --ac-services-bg-b: #0d1526;
-    --ac-services-spot: transparent;
+    --ac-services-bg-a: #000000;
+    --ac-services-bg-b: #000000;
+    --ac-services-spot:#000000;
     --ac-services-text: #f6f8ff;
     --ac-services-text-soft: #a8b5cc;
 

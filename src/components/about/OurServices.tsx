@@ -2,13 +2,18 @@
  * ============================================================
  * OUR SERVICES — OPENROOT SYSTEMS
  * SEAMLESS FLOW VERSION
+ * FIX: Lazy-load Lottie animations to reduce initial JS parse
+ *      and execution time. Report showed 2,210ms LCP element
+ *      render delay and 907ms long task in index-rXxAaXAp.js.
+ *      Lottie + two large JSON animation files were loaded
+ *      eagerly, contributing to main-thread saturation.
+ *      Now loaded only when the section enters the viewport.
  * ============================================================
  */
 
-import { memo } from "react";
+import { memo, useState, useRef, useEffect, lazy, Suspense } from "react";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
-import Lottie from "lottie-react";
 
 import styles from "./OurServices.module.css";
 
@@ -22,8 +27,9 @@ import {
   VP,
 } from "../../motion/variants";
 
-import softwareAnimation from "../../animations/software.json";
-import classesAnimation from "../../animations/classes.json";
+// FIX: Lazy-load Lottie component — it's a heavy library (~50 KB parsed).
+// Only imported when the component actually mounts.
+const Lottie = lazy(() => import("lottie-react"));
 
 type ServiceBlock = OfferCard & {
   animationData: object;
@@ -39,21 +45,43 @@ function getOfferByTag(tag: string): OfferCard {
   return found;
 }
 
-const SERVICE_BLOCKS: ServiceBlock[] = [
-  {
-    ...getOfferByTag("Software Solutions"),
-    animationData: softwareAnimation,
-  },
-  {
-    ...getOfferByTag("Openroot Classes"),
-    animationData: classesAnimation,
-  },
-];
+// FIX: Lazy-load animation JSON data using dynamic import.
+// These two JSON files (~several hundred KB uncompressed) were previously
+// bundled into the main chunk, inflating index-rXxAaXAp.js and contributing
+// to the 82.5 KB unused JS and 907ms long task reported.
+// They now load only when this section is visible in the viewport.
+async function loadAnimations(): Promise<{ software: object; classes: object }> {
+  const [softwareModule, classesModule] = await Promise.all([
+    import("../../animations/software.json"),
+    import("../../animations/classes.json"),
+  ]);
+  return {
+    software: softwareModule.default,
+    classes: classesModule.default,
+  };
+}
+
+// Placeholder shown while animation data is loading
+const AnimationPlaceholder = () => (
+  <div
+    className={`${styles.serviceAnimation} ac-anim`}
+    style={{
+      background: "var(--ot-surface, rgba(255,255,255,0.04))",
+      borderRadius: "12px",
+      minHeight: "200px",
+    }}
+    aria-hidden="true"
+  />
+);
 
 function ServiceCard({
   card,
+  animationData,
+  animationsReady,
 }: {
   card: ServiceBlock;
+  animationData: object | null;
+  animationsReady: boolean;
 }) {
   const navigate = useNavigate();
 
@@ -112,12 +140,20 @@ function ServiceCard({
         <div className={`${styles.serviceVisual} ac-visual-col`}>
           <div className={styles.serviceVisualSticky}>
             <div className={`${styles.serviceVisualFrame} ac-visual-frame`}>
-              <Lottie
-                animationData={card.animationData}
-                loop
-                autoplay
-                className={`${styles.serviceAnimation} ac-anim`}
-              />
+              {/* FIX: Only render Lottie once animation data is loaded.
+                  Show placeholder in the meantime to avoid layout shift. */}
+              {animationsReady && animationData ? (
+                <Suspense fallback={<AnimationPlaceholder />}>
+                  <Lottie
+                    animationData={animationData}
+                    loop
+                    autoplay
+                    className={`${styles.serviceAnimation} ac-anim`}
+                  />
+                </Suspense>
+              ) : (
+                <AnimationPlaceholder />
+              )}
             </div>
 
             <div className={`${styles.serviceCTAWrap} ac-cta-wrap ac-cta-wrap-center`}>
@@ -139,8 +175,48 @@ function ServiceCard({
 }
 
 function OurServices() {
+  const sectionRef = useRef<HTMLElement | null>(null);
+
+  // FIX: Track whether animation assets have been loaded.
+  // We use an IntersectionObserver to defer loading until the section
+  // is near the viewport, keeping the initial bundle lean.
+  const [animationsReady, setAnimationsReady] = useState(false);
+  const [animationMap, setAnimationMap] = useState<Record<string, object>>({});
+
+  useEffect(() => {
+    const el = sectionRef.current;
+    if (!el) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting) {
+          observer.disconnect();
+          loadAnimations().then(({ software, classes }) => {
+            setAnimationMap({
+              "Software Solutions": software,
+              "Openroot Classes": classes,
+            });
+            setAnimationsReady(true);
+          });
+        }
+      },
+      // Start loading when section is 200px from viewport edge
+      { rootMargin: "200px" }
+    );
+
+    observer.observe(el);
+
+    return () => observer.disconnect();
+  }, []);
+
+  const SERVICE_BLOCKS: ServiceBlock[] = [
+    { ...getOfferByTag("Software Solutions"), animationData: {} },
+    { ...getOfferByTag("Openroot Classes"),   animationData: {} },
+  ];
+
   return (
     <motion.section
+      ref={sectionRef}
       className={styles.servicesSection}
       variants={fadeIn}
       initial="hidden"
@@ -181,6 +257,8 @@ function OurServices() {
             <ServiceCard
               key={card.tag}
               card={card}
+              animationData={animationMap[card.tag] ?? null}
+              animationsReady={animationsReady}
             />
           ))}
         </motion.div>
