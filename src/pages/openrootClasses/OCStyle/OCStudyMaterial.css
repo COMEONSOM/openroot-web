@@ -68,7 +68,6 @@
 
 .study-material .study-card:hover {
   transform: translateY(-8px) scale(1.02);
-  box-shadow: 0 14px 30px rgba(124, 58, 237, 0.15);
 }
 
 .study-material .study-card:focus-visible {

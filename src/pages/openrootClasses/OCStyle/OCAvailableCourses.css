@@ -72,7 +72,6 @@
 #available-courses .step.active {
   background: var(--primary);
   color: white;
-  box-shadow: 0 0 0 4px var(--primary-soft);
 }
 
 /* ───────── Course Grid ───────── */
@@ -102,12 +101,10 @@
   background: #ffffff;
   border-radius: var(--radius-md);
   box-shadow: var(--shadow-soft);
-  transition: var(--transition);
 }
 
 #available-courses .course-item:hover {
-  transform: translateY(-8px);
-  box-shadow: var(--shadow-hover);
+  transform: translateY(-2px);
 }
 
 #available-courses .course-thumbnail {
@@ -185,13 +182,14 @@
   display: flex;
   flex-wrap: wrap;
   align-items: center;
+  border-radius: var(--radius-md);
   gap: 16px;
 }
 
 #available-courses .price {
-  background: var(--primary);
-  color: white;
-  border: none;
+  background: #ffffff;
+  color: #5b21b6;
+  border: 1px solid rgba(0, 0, 0, 0.1);
   border-radius: var(--radius-md);
   padding: 12px 22px;
   font-size: 1rem;
@@ -202,19 +200,17 @@
   background: linear-gradient(135deg, #7c3aed, #5b21b6);
   color: white;
   border: none;
-  border-radius: 50px;
-  padding: 14px 30px;
+  border-radius: var(--radius-md);
+  padding: 12px 22px;
   font-size: 1rem;
   font-weight: 700;
   letter-spacing: 0.3px;
   cursor: pointer;
-  box-shadow: 0 10px 20px rgba(124, 58, 237, 0.4);
-  transition: var(--transition);
 }
 
 #available-courses .pay-button:hover {
-  transform: translateY(-3px) scale(1.03);
-  box-shadow: 0 16px 40px rgba(124, 58, 237, 0.5);
+  background: linear-gradient(135deg, #2fff59, #7cff6d);
+  color: #414141;
 }
 
 /* ───────── Trust Badges ───────── */
@@ -420,9 +416,6 @@
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  box-shadow: 0 10px 26px rgba(124, 58, 237, 0.24);
-  transition: transform 0.2s ease, box-shadow 0.2s ease,
-    background 0.2s ease, color 0.2s ease;
 }
 
 /* primary = download */
@@ -455,17 +448,6 @@
     justify-content: center;
   }
 }
-
-
-/* =======================
-   Student Details Modal
-   ======================= */
-
-/*
-  The modal uses a fixed overlay (position: fixed) so it escapes
-  the component DOM. We scope via .modal-backdrop and .checkout-modal
-  with a high-specificity prefix to stay safe.
-*/
 
 /* dimmed overlay */
 .modal-backdrop {

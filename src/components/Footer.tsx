@@ -157,6 +157,27 @@ export default function Footer() {
           <div className="footer-card">
             <span className="footer-label">Follow</span>
             <div className="footer-icon-row">
+
+              <a
+                href="https://github.com/COMEONSOM"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="footer-icon-btn"
+                aria-label="GitHub"
+              >
+                <img src="/assets/github.svg" alt="" aria-hidden="true" width={24} height={24} />
+              </a>
+
+              <a
+                href="https://in.linkedin.com/in/comeonsom"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="footer-icon-btn"
+                aria-label="LinkedIn"
+              >
+                <img src="/assets/linkedin.svg" alt="" aria-hidden="true" width={24} height={24} />
+              </a>
+
               <a
                 href="https://x.com/comeonsom_"
                 target="_blank"

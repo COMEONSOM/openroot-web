@@ -3,7 +3,6 @@ import Banner from "./OCBanner";
 import AvailableCourses from "./OCAvailableCourses";
 import FreeContent from "./OCFreeContent";
 import StudyMaterial from "./OCStudyMaterial";
-import Footer from "./OCFooter";
 
 export default function OCLayout() {
   return (
@@ -13,7 +12,6 @@ export default function OCLayout() {
       <AvailableCourses />
       <StudyMaterial />
       <FreeContent />
-      <Footer />
     </>
   );
 }

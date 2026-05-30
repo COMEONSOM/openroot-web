@@ -104,7 +104,7 @@ const COURSE_DATA = Object.freeze<Course[]>([
     ],
     duration: "1 Month • 8 Classes • 2 Classes / Week",
     totalFee: 650,
-    priceLabel: "Total Fee: ₹650 • One-Time Payment",
+    priceLabel: "Total Fee: ₹650",
   },
   {
     id: 2,
@@ -130,7 +130,7 @@ const COURSE_DATA = Object.freeze<Course[]>([
     ],
     duration: "1 Month • 8 Classes • 2 Classes / Week",
     totalFee: 850,
-    priceLabel: "Total Fee: ₹850 • One-Time Payment",
+    priceLabel: "Total Fee: ₹850",
   },
 ]);
 
@@ -717,7 +717,7 @@ export default function AvailableCourses() {
                 />
                 <h4>{course.name}</h4>
                 <p>{course.duration}</p>
-                <span className="price-chip">💰 {course.priceLabel}</span>
+                <span className="price-chip">{course.priceLabel}</span>
               </motion.li>
             ))}
           </ul>
@@ -753,7 +753,7 @@ export default function AvailableCourses() {
               </div>
 
               <div className="price-and-pay">
-                <button className="price">💰 {selectedCourse.priceLabel}</button>
+                <button className="price">{selectedCourse.priceLabel}</button>
 
                 <motion.button
                   className="pay-button glowing"

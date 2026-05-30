@@ -113,7 +113,6 @@
 
 #free-content .video-card:hover {
   transform: translateY(-3px);
-  box-shadow: 0 6px 14px var(--fc-color-shadow-medium);
 }
 
 /* Large screen: 5 visible */
