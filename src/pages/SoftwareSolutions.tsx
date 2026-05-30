@@ -118,7 +118,6 @@ const SoftwareSolutions: React.FC = () => {
         <div className="ss-hero-glow" aria-hidden="true" />
         <div className="ss-hero-grid" aria-hidden="true" />
         <div className="ss-container">
-          <div className="ss-eyebrow ss-reveal">Software Solutions · Openroot</div>
           <h1 className="ss-hero-title ss-reveal">
             Your Business Deserves<br />
             <span className="ss-gradient-text">More Than a Broken Website</span>
@@ -141,7 +140,7 @@ const SoftwareSolutions: React.FC = () => {
 
           {/* TRUST BAR */}
           <div className="ss-trust-bar ss-reveal">
-            {["Fixed Pricing", "No Lock-In", "Real Support", "Long-Term Maintenance"].map(t => (
+            {["Fixed Pricing", "Real Support", "Long-Term Maintenance"].map(t => (
               <span key={t} className="ss-trust-chip">
                 <span className="ss-trust-dot" aria-hidden="true" />
                 {t}
@@ -155,7 +154,6 @@ const SoftwareSolutions: React.FC = () => {
       <section className="ss-section ss-pain">
         <div className="ss-container">
           <div className="ss-section-header ss-reveal">
-            <span className="ss-eyebrow">Sound Familiar?</span>
             <h2 className="ss-section-title">
               We Know Exactly<br />
               <span className="ss-gradient-text">What You've Been Through</span>
@@ -175,9 +173,6 @@ const SoftwareSolutions: React.FC = () => {
               </article>
             ))}
           </div>
-          <p className="ss-pain-closer ss-reveal">
-            If any of this hit home — you're in the right place.
-          </p>
         </div>
       </section>
 
@@ -185,7 +180,6 @@ const SoftwareSolutions: React.FC = () => {
       <section className="ss-section ss-services">
         <div className="ss-container">
           <div className="ss-section-header ss-reveal">
-            <span className="ss-eyebrow">Our Services</span>
             <h2 className="ss-section-title">
               Whatever You Need,<br />
               <span className="ss-gradient-text">We Build It Right</span>
@@ -202,7 +196,6 @@ const SoftwareSolutions: React.FC = () => {
                   <div className="ss-service-icon-wrap">
                     <Icon d={s.icon} />
                   </div>
-                  <span className="ss-service-tag">{s.tag}</span>
                 </div>
                 <h3 className="ss-service-title">{s.label}</h3>
                 <p className="ss-service-desc">{s.desc}</p>
@@ -221,7 +214,6 @@ const SoftwareSolutions: React.FC = () => {
       <section className="ss-section ss-why">
         <div className="ss-container">
           <div className="ss-section-header ss-reveal">
-            <span className="ss-eyebrow">Why Openroot</span>
             <h2 className="ss-section-title">
               We Don't Just Build.<br />
               <span className="ss-gradient-text">We Take Responsibility.</span>
@@ -249,7 +241,6 @@ const SoftwareSolutions: React.FC = () => {
       <section className="ss-section ss-pricing">
         <div className="ss-container">
           <div className="ss-section-header ss-reveal">
-            <span className="ss-eyebrow">Transparent Pricing</span>
             <h2 className="ss-section-title">
               No Hidden Fees.<br />
               <span className="ss-gradient-text">No Nasty Surprises.</span>
@@ -300,16 +291,16 @@ const SoftwareSolutions: React.FC = () => {
                   <tr>
                     <th>What You Expect</th>
                     <th className="ss-col-them">Most Agencies</th>
-                    <th className="ss-col-us">Openroot ✓</th>
+                    <th className="ss-col-us">We ✓</th>
                   </tr>
                 </thead>
                 <tbody>
                   {[
-                    ["Upfront fixed pricing", "❌ Quote changes", "✅ Always fixed"],
-                    ["Own your files & domain", "❌ Locked in", "✅ Yours fully"],
-                    ["Reachable after launch", "❌ Radio silence", "✅ WhatsApp / call"],
-                    ["Reasonable maintenance", "❌ ₹10k+/year", "✅ ₹3–6k/year"],
-                    ["Long-term relationship", "❌ One & done", "✅ We grow with you"],
+                    ["Upfront fixed pricing",<span style={{ color: "#ef4444" }}>✘</span>, <span style={{ color: "#22c55e" }}>✓</span>],
+                    ["Own your files & domain", <span style={{ color: "#ef4444" }}>✘</span>, <span style={{ color: "#22c55e" }}>✓</span>],
+                    ["Reachable after launch", <span style={{ color: "#ef4444" }}>✘</span>, <span style={{ color: "#22c55e" }}>✓</span>],
+                    ["Reasonable maintenance", <span style={{ color: "#ef4444" }}>✘</span>, <span style={{ color: "#22c55e" }}>✓</span>],
+                    ["Long-term relationship", <span style={{ color: "#ef4444" }}>✘</span>, <span style={{ color: "#22c55e" }}>✓</span>],
                   ].map(([feat, them, us], i) => (
                     <tr key={i}>
                       <td>{feat}</td>
@@ -328,9 +319,8 @@ const SoftwareSolutions: React.FC = () => {
       <section className="ss-section ss-process" id="process">
         <div className="ss-container">
           <div className="ss-section-header ss-reveal">
-            <span className="ss-eyebrow">Our Process</span>
             <h2 className="ss-section-title">
-              From Idea to Launch —<br />
+              From Idea to Launch,<br />
               <span className="ss-gradient-text">No Technical Stress</span>
             </h2>
             <p className="ss-section-sub">
@@ -362,14 +352,14 @@ const SoftwareSolutions: React.FC = () => {
             </blockquote>
             <p className="ss-philosophy-body">
               We don't optimise for one-time payments. We optimise for clients who
-              stay with us because we keep earning their trust — with honest work,
+              stay with us because we keep earning their trust, with honest work,
               fair pricing, and software that actually helps their business.
               <br /><br />
-              Every business we work with, we treat as a long-term partnership.
+              Every business we work with, we treat as a longterm partnership.
               Your win is our case study. Your referral is our best marketing.
               That's the only model we believe in.
             </p>
-            <div className="ss-philosophy-sig">— Openroot Team</div>
+            <div className="ss-philosophy-sig">— Openroot Foundation</div>
           </div>
         </div>
       </section>
@@ -379,14 +369,13 @@ const SoftwareSolutions: React.FC = () => {
         <div className="ss-cta-glow" aria-hidden="true" />
         <div className="ss-container">
           <div className="ss-cta-inner ss-reveal">
-            <span className="ss-eyebrow">Let's Talk</span>
             <h2 className="ss-cta-title">
               Your First Step Costs<br />
               <span className="ss-gradient-text">Exactly ₹0</span>
             </h2>
             <p className="ss-cta-sub">
-              Book a free 15-minute Google Meet. No obligation, no pressure.
-              Walk away with clarity on what you need — even if you don't hire us.
+              Book a free 15 minute Google Meet. No obligation, no pressure.
+              Walk away with clarity on what you need, even if you don't hire us.
             </p>
             <div className="ss-cta-actions">
               <button className="ss-btn-primary ss-btn-xl" onClick={handleWhatsApp}>
@@ -397,9 +386,6 @@ const SoftwareSolutions: React.FC = () => {
                 Start on WhatsApp
               </button>
             </div>
-            <p className="ss-cta-reassure">
-              Free consultation · No credit card · Just a conversation
-            </p>
           </div>
         </div>
       </section>

@@ -5,19 +5,13 @@
 
 #web-extension-section {
   position: relative;
-
   overflow: hidden;
-
   width: 100%;
-
   padding:
     var(--section-padding-top)
     var(--section-padding-x)
     var(--section-padding-bottom);
-
-  background:
-    var(--ot-section-bg);
-
+  background: #afc2f9;
   isolation: isolate;
 }
 
@@ -35,7 +29,6 @@
 
 #web-extension-section .we-container {
   width: min(100%, var(--ot-container));
-
   margin-inline: auto;
 }
 
@@ -45,42 +38,25 @@
 
 #web-extension-section .we-header {
   text-align: center;
-
-  margin-bottom:
-    clamp(2rem, 4vw, 3rem);
+  margin-bottom: clamp(2rem, 4vw, 3rem);
 }
 
 #web-extension-section .we-title {
-  margin-top: 20px;
-
-  font-size:
-    clamp(2.2rem, 5vw, 4.4rem);
-
+  margin-top: 50px;
+  font-size: clamp(1.7rem, 3vw, 3.4rem);
   font-weight: 900;
-
   line-height: 0.96;
-
   letter-spacing: -0.065em;
-
-  color:
-    var(--color-text);
-
+  color: var(--color-text);
   text-wrap: balance;
 }
 
 #web-extension-section .we-subtitle {
-  margin:
-    1rem auto 0;
-
+  margin: 1rem auto 0;
   max-width: 64ch;
-
-  font-size:
-    clamp(0.96rem, 1.4vw, 1.04rem);
-
+  font-size: clamp(0.96rem, 1.4vw, 1.04rem);
   line-height: 1.9;
-
-  color:
-    var(--color-text-muted);
+  color: var(--color-text-muted);
 }
 
 /* =============================================================================
@@ -89,14 +65,10 @@
 
 #web-extension-section .we-grid {
   display: grid;
-
   grid-template-columns:
     minmax(320px, 0.82fr)
     minmax(0, 1.18fr);
-
-  gap:
-    clamp(1rem, 2vw, 1.4rem);
-
+  gap: clamp(1rem, 2vw, 1.4rem);
   align-items: stretch;
 }
 
@@ -106,14 +78,9 @@
 
 #web-extension-section .we-step-rail,
 #web-extension-section .we-action-card {
-  background:
-    var(--ot-card-bg);
-
-  border:
-    1px solid var(--ot-card-border);
-
-  border-radius:
-    var(--ot-radius-lg);
+  background: var(--ot-card-bg);
+  border: 1px solid var(--ot-card-border);
+  border-radius: var(--ot-radius-lg);
 }
 
 /* =============================================================================
@@ -123,11 +90,8 @@
 #web-extension-section .we-step-rail {
   display: flex;
   flex-direction: column;
-
   gap: 1rem;
-
-  padding:
-    clamp(1rem, 2vw, 1.3rem);
+  padding: clamp(1rem, 2vw, 1.3rem);
 }
 
 /* =============================================================================
@@ -137,9 +101,7 @@
 #web-extension-section .we-progress-wrap {
   display: flex;
   flex-direction: column;
-
   gap: 0.7rem;
-
   padding-bottom: 0.5rem;
 }
 
@@ -147,47 +109,32 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-
   gap: 1rem;
-
   font-size: 0.74rem;
   font-weight: 700;
-
   letter-spacing: 0.06em;
   text-transform: uppercase;
-
-  color:
-    var(--color-text-muted);
+  color: var(--color-text-muted);
 }
 
 #web-extension-section .we-progress-bar {
   position: relative;
-
   width: 100%;
   height: 7px;
-
   overflow: hidden;
-
   border-radius: 999px;
-
-  background:
-    rgba(88, 101, 242, 0.08);
+  background: rgba(88, 101, 242, 0.08);
 }
 
 #web-extension-section .we-progress-fill {
   height: 100%;
-
   border-radius: inherit;
-
-  background:
-    linear-gradient(
-      90deg,
-      var(--ot-brand),
-      var(--ot-brand-2)
-    );
-
-  transition:
-    width 0.3s ease;
+  background: linear-gradient(
+    90deg,
+    var(--ot-brand),
+    var(--ot-brand-2)
+  );
+  transition: width 0.3s ease;
 }
 
 /* =============================================================================
@@ -197,7 +144,6 @@
 #web-extension-section .we-step-list {
   display: flex;
   flex-direction: column;
-
   gap: 0.8rem;
 }
 
@@ -208,27 +154,15 @@
 #web-extension-section .we-step-card,
 #web-extension-section .we-tutorial-card {
   width: 100%;
-
   display: flex;
   align-items: flex-start;
-
   gap: 0.95rem;
-
   padding: 1rem;
-
-  border-radius:
-    calc(var(--ot-radius-md) + 2px);
-
-  border:
-    1px solid transparent;
-
-  background:
-    transparent;
-
+  border-radius: calc(var(--ot-radius-md) + 2px);
+  border: 1px solid transparent;
+  background: transparent;
   text-align: left;
-
   cursor: pointer;
-
   transition:
     border-color 0.18s ease,
     background 0.18s ease;
@@ -236,20 +170,14 @@
 
 #web-extension-section .we-step-card:hover,
 #web-extension-section .we-tutorial-card:hover {
-  background:
-    rgba(88, 101, 242, 0.03);
-
-  border-color:
-    rgba(88, 101, 242, 0.08);
+  background: rgba(88, 101, 242, 0.03);
+  border-color: rgba(88, 101, 242, 0.08);
 }
 
 #web-extension-section .we-step-card.is-active,
 #web-extension-section .we-tutorial-card.is-active {
-  background:
-    rgba(88, 101, 242, 0.05);
-
-  border-color:
-    rgba(88, 101, 242, 0.12);
+  background: rgba(88, 101, 242, 0.05);
+  border-color: rgba(88, 101, 242, 0.12);
 }
 
 /* =============================================================================
@@ -259,26 +187,18 @@
 #web-extension-section .we-step-number {
   width: 52px;
   height: 52px;
-
   flex-shrink: 0;
-
   display: grid;
   place-items: center;
-
   border-radius: 16px;
-
-  background:
-    linear-gradient(
-      135deg,
-      var(--ot-brand),
-      var(--ot-brand-2)
-    );
-
+  background: linear-gradient(
+    135deg,
+    var(--ot-brand),
+    var(--ot-brand-2)
+  );
   color: #ffffff;
-
   font-size: 0.92rem;
   font-weight: 900;
-
   letter-spacing: -0.02em;
 }
 
@@ -294,28 +214,17 @@
 #web-extension-section .we-step-content h4,
 #web-extension-section .we-tutorial-copy h4 {
   margin: 0;
-
-  font-size:
-    clamp(0.95rem, 1.3vw, 1rem);
-
+  font-size: clamp(0.95rem, 1.3vw, 1rem);
   font-weight: 800;
-
   line-height: 1.5;
-
-  color:
-    var(--color-text);
+  color: var(--color-text);
 }
 
 #web-extension-section .we-tutorial-copy p {
-  margin:
-    0.45rem 0 0;
-
+  margin: 0.45rem 0 0;
   font-size: 0.86rem;
-
   line-height: 1.7;
-
-  color:
-    var(--color-text-muted);
+  color: var(--color-text-muted);
 }
 
 /* =============================================================================
@@ -324,18 +233,11 @@
 
 #web-extension-section .we-rail-note {
   margin-top: auto;
-
   padding-top: 1rem;
-
-  border-top:
-    1px solid rgba(120,120,140,0.1);
-
+  border-top: 1px solid rgba(120, 120, 140, 0.1);
   font-size: 0.9rem;
-
   line-height: 1.8;
-
-  color:
-    var(--color-text-muted);
+  color: var(--color-text-muted);
 }
 
 /* =============================================================================
@@ -345,11 +247,8 @@
 #web-extension-section .we-action-card {
   display: flex;
   flex-direction: column;
-
   min-width: 0;
-
-  padding:
-    clamp(1.2rem, 2vw, 1.8rem);
+  padding: clamp(1.2rem, 2vw, 1.8rem);
 }
 
 /* =============================================================================
@@ -360,9 +259,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-
   gap: 1rem;
-
   margin-bottom: 1rem;
 }
 
@@ -370,25 +267,13 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-
-  padding:
-    0.48rem
-    0.9rem;
-
+  padding: 0.48rem 0.9rem;
   border-radius: 999px;
-
-  background:
-    rgba(88, 101, 242, 0.06);
-
-  border:
-    1px solid rgba(88, 101, 242, 0.1);
-
-  color:
-    var(--ot-brand);
-
+  background: rgba(88, 101, 242, 0.06);
+  border: 1px solid rgba(88, 101, 242, 0.1);
+  color: var(--ot-brand);
   font-size: 0.72rem;
   font-weight: 800;
-
   letter-spacing: 0.08em;
   text-transform: uppercase;
 }
@@ -396,12 +281,9 @@
 #web-extension-section .we-step-counter {
   font-size: 0.76rem;
   font-weight: 700;
-
   letter-spacing: 0.08em;
   text-transform: uppercase;
-
-  color:
-    var(--color-text-muted);
+  color: var(--color-text-muted);
 }
 
 /* =============================================================================
@@ -410,33 +292,20 @@
 
 #web-extension-section .we-preview {
   position: relative;
-
   width: 100%;
-
   min-height: 320px;
-
   display: flex;
   align-items: center;
   justify-content: center;
-
   overflow: hidden;
-
-  padding:
-    clamp(0.8rem, 1.5vw, 1rem);
-
-  border-radius:
-    calc(var(--ot-radius-md) + 4px);
-
-  background:
-    rgba(88, 101, 242, 0.02);
-
-  border:
-    1px solid rgba(120,120,140,0.1);
+  padding: clamp(0.8rem, 1.5vw, 1rem);
+  border-radius: calc(var(--ot-radius-md) + 4px);
+  background: rgba(88, 101, 242, 0.02);
+  border: 1px solid rgba(120, 120, 140, 0.1);
 }
 
 #web-extension-section .we-preview-link {
   display: block;
-
   width: 100%;
   height: 100%;
 }
@@ -444,15 +313,10 @@
 #web-extension-section .we-preview-image {
   width: 100%;
   height: 100%;
-
   max-height: 360px;
-
   object-fit: contain;
-
   display: block;
-
   border-radius: 14px;
-
   user-select: none;
 }
 
@@ -463,28 +327,18 @@
 #web-extension-section .we-content-block {
   display: flex;
   flex-direction: column;
-
   align-items: center;
-
   text-align: center;
-
   padding-top: 1.2rem;
 }
 
 #web-extension-section .we-main-description {
   margin: 0;
-
   max-width: 58ch;
-
-  font-size:
-    clamp(1rem, 1.4vw, 1.12rem);
-
+  font-size: clamp(1rem, 1.4vw, 1.12rem);
   font-weight: 500;
-
   line-height: 1.8;
-
-  color:
-    var(--color-text);
+  color: var(--color-text);
 }
 
 /* =============================================================================
@@ -495,11 +349,8 @@
   display: flex;
   align-items: center;
   justify-content: center;
-
   gap: 0.85rem;
-
   margin-top: auto;
-
   padding-top: 1.6rem;
 }
 
@@ -518,41 +369,27 @@
 #web-extension-section .we-button,
 #web-extension-section .we-secondary-button {
   min-height: 48px;
-
   display: inline-flex;
   align-items: center;
   justify-content: center;
-
-  padding:
-    0.9rem
-    1.25rem;
-
-  border-radius:
-    calc(var(--ot-radius-md) + 2px);
-
+  padding: 0.9rem 1.25rem;
+  border-radius: calc(var(--ot-radius-md) + 2px);
   font-size: 0.9rem;
   font-weight: 700;
-
   cursor: pointer;
-
   transition:
     background 0.18s ease,
     border-color 0.18s ease,
     opacity 0.18s ease;
 }
 
-/* PRIMARY */
-
 #web-extension-section .we-button {
   border: none;
-
-  background:
-    linear-gradient(
-      135deg,
-      var(--ot-brand),
-      var(--ot-brand-2)
-    );
-
+  background: linear-gradient(
+    135deg,
+    var(--ot-brand),
+    var(--ot-brand-2)
+  );
   color: #ffffff;
 }
 
@@ -560,22 +397,14 @@
   opacity: 0.96;
 }
 
-/* SECONDARY */
-
 #web-extension-section .we-secondary-button {
-  border:
-    1px solid #111111;
-
-  background:
-    var(--ot-card-bg);
-
-  color:
-    var(--color-text);
+  border: 1px solid #111111;
+  background: var(--ot-card-bg);
+  color: var(--color-text);
 }
 
 #web-extension-section .we-secondary-button:hover {
-  background:
-    rgba(88, 101, 242, 0.03);
+  background: rgba(88, 101, 242, 0.03);
 }
 
 /* =============================================================================
@@ -583,33 +412,22 @@
 ============================================================================= */
 
 @media (max-width: 980px) {
-
   #web-extension-section .we-grid {
     grid-template-columns: 1fr;
   }
-
-  /* Hide left navigation rail */
 
   #web-extension-section .we-step-rail {
     display: none;
   }
 
-  /* Show mobile navigation */
-
   #web-extension-section .we-mobile-nav {
     display: flex;
-
     align-items: center;
     justify-content: space-between;
-
     gap: 1rem;
-
     margin-top: 1.5rem;
-
     padding-top: 1.25rem;
-
-    border-top:
-      1px solid rgba(120,120,140,0.1);
+    border-top: 1px solid rgba(120, 120, 140, 0.1);
   }
 
   #web-extension-section .we-mobile-nav:has(button:only-child) {
@@ -622,9 +440,13 @@
 ============================================================================= */
 
 @media (max-width: 640px) {
-
   #web-extension-section .we-action-card {
     padding: 1rem;
+  }
+
+  #web-extension-section .we-action-top {
+    flex-direction: column;
+    align-items: flex-start;
   }
 
   #web-extension-section .we-preview {
@@ -633,16 +455,25 @@
 
   #web-extension-section .we-main-description {
     font-size: 1rem;
-
     line-height: 1.85;
   }
 
   #web-extension-section .we-mobile-nav {
-    flex-wrap: wrap;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    flex-wrap: nowrap;
+  }
+
+  #web-extension-section .we-mobile-nav:has(button:only-child) {
+    justify-content: flex-end;
   }
 
   #web-extension-section .we-button,
   #web-extension-section .we-secondary-button {
-    flex: 1;
+    flex: 0 0 auto;
+    width: auto;
+    white-space: nowrap;
   }
 }

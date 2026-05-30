@@ -92,20 +92,15 @@ export default function WebExtensionSection(): React.JSX.Element {
 
   const currentStep = STEPS[activeStep];
 
-  const isFirst = activeStep === 0;
-  const isLast = activeStep === STEPS.length - 1;
+  const isFirst = activeStep === 0 && !isTutorialMode;
+  const isLast = isTutorialMode;
 
   /* =============================================================================
      ACTIONS
   ============================================================================= */
 
   const openExtensionPage = () => {
-    window.open(
-      EXTENSION_URL,
-      "_blank",
-      "noopener,noreferrer"
-    );
-
+    window.open(EXTENSION_URL, "_blank", "noopener,noreferrer");
     setActiveStep(1);
     setIsTutorialMode(false);
   };
@@ -120,14 +115,24 @@ export default function WebExtensionSection(): React.JSX.Element {
   };
 
   const goNext = () => {
-    if (!isLast) {
+    if (isTutorialMode) return;
+
+    if (activeStep < STEPS.length - 1) {
       setActiveStep((prev) => (prev + 1) as StepKey);
       setIsTutorialMode(false);
+    } else {
+      setIsTutorialMode(true);
     }
   };
 
   const goPrev = () => {
-    if (!isFirst) {
+    if (isTutorialMode) {
+      setIsTutorialMode(false);
+      setActiveStep((STEPS.length - 1) as StepKey);
+      return;
+    }
+
+    if (activeStep > 0) {
       setActiveStep((prev) => (prev - 1) as StepKey);
       setIsTutorialMode(false);
     }
@@ -137,17 +142,11 @@ export default function WebExtensionSection(): React.JSX.Element {
      DYNAMIC CONTENT
   ============================================================================= */
 
-  const currentTitle = isTutorialMode
-    ? TUTORIAL.title
-    : currentStep.title;
+  const currentTitle = isTutorialMode ? TUTORIAL.title : currentStep.title;
 
-  const currentShort = isTutorialMode
-    ? TUTORIAL.short
-    : currentStep.short;
+  const currentShort = isTutorialMode ? TUTORIAL.short : currentStep.short;
 
-  const currentNote = isTutorialMode
-    ? TUTORIAL.note
-    : currentStep.note;
+  const currentNote = isTutorialMode ? TUTORIAL.note : currentStep.note;
 
   const currentPreview = isTutorialMode
     ? TUTORIAL.previewImage
@@ -162,22 +161,18 @@ export default function WebExtensionSection(): React.JSX.Element {
     : `${activeStep + 1} / ${STEPS.length}`;
 
   return (
-    <section
-      id="web-extension-section"
-      className="we-section"
-    >
+    <section id="web-extension-section" className="we-section">
       <div className="we-container">
         {/* =====================================================
             HEADER
         ===================================================== */}
 
         <div className="we-header">
-          <h2 className="we-title">
-            Install & Start Using the Extension
-          </h2>
+          <h2 className="we-title">Install & Start Using the Extension</h2>
 
           <p className="we-subtitle">
-            Follow the guided setup process to install and use the extension properly.
+            Follow the guided setup process to install and use the extension
+            properly.
           </p>
         </div>
 
@@ -217,6 +212,7 @@ export default function WebExtensionSection(): React.JSX.Element {
                     index === activeStep && !isTutorialMode ? "is-active" : ""
                   }`}
                   onClick={() => handleStepClick(index)}
+                  type="button"
                 >
                   <div className="we-step-number">{step.number}</div>
 
@@ -238,9 +234,7 @@ export default function WebExtensionSection(): React.JSX.Element {
               </div>
             </button>
 
-            <div className="we-rail-note">
-              {currentNote}
-            </div>
+            <div className="we-rail-note">{currentNote}</div>
           </aside>
 
           {/* =================================================
@@ -249,13 +243,9 @@ export default function WebExtensionSection(): React.JSX.Element {
 
           <div className="we-action-card">
             <div className="we-action-top">
-              <div className="we-action-badge">
-                {currentBadge}
-              </div>
+              <div className="we-action-badge">{currentBadge}</div>
 
-              <div className="we-step-counter">
-                {currentCounter}
-              </div>
+              <div className="we-step-counter">{currentCounter}</div>
             </div>
 
             <div className="we-preview">
@@ -283,24 +273,25 @@ export default function WebExtensionSection(): React.JSX.Element {
             </div>
 
             <div className="we-content-block">
-              <p className="we-main-description">
-                {currentShort}
-              </p>
+              <p className="we-main-description">{currentShort}</p>
             </div>
 
             <div className="we-toolbar">
               {!isTutorialMode && activeStep === 0 && currentStep.button && (
-                <button className="we-button" onClick={openExtensionPage}>
+                <button
+                  type="button"
+                  className="we-button"
+                  onClick={openExtensionPage}
+                >
                   {currentStep.button}
                 </button>
               )}
             </div>
 
-            {/* Mobile-only navigation.
-                CSS should show this only on smaller screens and hide the left rail. */}
             <div className="we-mobile-nav">
-              {!isTutorialMode && !isFirst && (
+              {!isFirst && (
                 <button
+                  type="button"
                   className="we-secondary-button"
                   onClick={goPrev}
                 >
@@ -308,12 +299,11 @@ export default function WebExtensionSection(): React.JSX.Element {
                 </button>
               )}
 
-              {!isTutorialMode && !isLast && (
-                <button
-                  className="we-button"
-                  onClick={goNext}
-                >
-                  Next →
+              {!isLast && (
+                <button type="button" className="we-button" onClick={goNext}>
+                  {activeStep === STEPS.length - 1 && !isTutorialMode
+                    ? "How to Use →"
+                    : "Next →"}
                 </button>
               )}
             </div>
