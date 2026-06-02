@@ -24,7 +24,7 @@ import React from "react";
 const ALLOWED_SLUGS = new Set([
   "travel-expense-manager",
   "nior-ai",
-  "xpress-job",
+  "newsletter",
   "openroot-classes",
   "coevas-terminal",
   "makaut-grade-pro",
@@ -132,7 +132,7 @@ const Icons = {
     </svg>
   ),
 
-  XpressJob: (
+  NewsLetter: (
     <svg
       viewBox="0 0 24 24"
       width="20"
@@ -183,7 +183,7 @@ const Icons = {
 const iconMap: Record<string, React.ReactNode> = {
   "travel-expense-manager": Icons.travelExpense,
   "nior-ai": Icons.NiorAI,
-  "xpress-job": Icons.XpressJob,
+  "newsletter": Icons.NewsLetter,
   "openroot-classes": Icons.Classes,
   "coevas-terminal": Icons.Coevas,
   "makaut-grade-pro": Icons.makaut,
@@ -196,7 +196,7 @@ const iconMap: Record<string, React.ReactNode> = {
 
 const SITELINK_PAGES = [
   { name: "NIOR AI", url: "https://openroot.in/software/nior-ai" },
-  { name: "XpressJob", url: "https://openroot.in/software/xpress-job" },
+  { name: "Newsletter", url: "https://openroot.in/software/newsletter" },
   { name: "MAKAUT Grade Calculator", url: "https://openroot.in/software/makaut-grade-pro" },
   { name: "Travel Expense Manager", url: "https://openroot.in/software/travel-expense-manager" },
   { name: "Openroot Classes", url: "https://openroot.in/software/openroot-classes" },

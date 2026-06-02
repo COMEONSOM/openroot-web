@@ -45,16 +45,16 @@ const breadcrumbSchema = {
 
 // ── Page ─────────────────────────────────────────────────────────────────────
 export default function SoftwareHub() {
-  const FEATURED_SLUGS = ["XpressJob", "nior-ai", "travel-expense-manager"] as const;
+  const FEATURED_SLUGS = ["newsletter", "nior-ai", "travel-expense-manager"] as const;
   const featuredTools  = softwareList.filter(t => FEATURED_SLUGS.includes(t.slug as any));
 
   return (
     <div className="sh-root">
       <Helmet>
-        <title>Openroot Software Hub – Free AI Tools, Job Updates & Productivity Apps</title>
+        <title>Openroot Software Hub – Free to use innovative softwares, Job Updates & more</title>
         <meta
           name="description"
-          content="Explore free tools by Openroot Systems: NIOR AI, MAKAUT Grade Calculator, Travel Expense Manager, XpressJob, Coevas Terminal and more. No download required."
+          content="Explore free tools by Openroot Systems: NIOR AI, Travel Expense Manager, NewsLetter, Coevas Terminal and more."
         />
         <meta
           name="keywords"

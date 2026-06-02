@@ -34,7 +34,7 @@ function readAdminSession(): AdminSessionData | null {
 
 // ── Internal route map ────────────────────────────────────────
 const INTERNAL_ROUTES: Record<string, string> = {
-  "xpress-job":             "/xpress-job",
+  "newsletter":             "/newsletter",
   "coevas-terminal":        "/coevas-terminal",
   "makaut-grade-pro":       "/makaut-grade-pro",
   "travel-expense-manager": "/travel-expense-manager",
@@ -44,8 +44,8 @@ const INTERNAL_ROUTES: Record<string, string> = {
 
 // ── SEO keyword map ───────────────────────────────────────────
 const TOOL_KEYWORDS: Record<string, string> = {
-  "xpress-job":
-    "XpressJob, job updates, career resources, student resources, MAKAUT resources",
+  "newsletter":
+    "NewsLetter, job updates, career resources, student resources, MAKAUT resources",
   "coevas-terminal":
     "Coevas terminal, online terminal, web terminal, browser terminal, Openroot Coevas",
   "makaut-grade-pro":
@@ -292,7 +292,7 @@ export default function SoftwarePage() {
     { href: "/software/nior-ai",                label: "NIOR AI" },
     { href: "/software/travel-expense-manager", label: "Travel Expense Manager" },
     { href: "/certificate-verification",        label: "Certificate Verification" },
-    { href: "/software/xpress-job",             label: "Resources & Job Updates" },
+    { href: "/software/newsletter",             label: "NewsLetter" },
     { href: "/software/makaut-grade-pro",       label: "Makaut Grade Calculator" },
     { href: "/software/coevas-terminal",        label: "Coevas Terminal" },
     { href: "/software/gdrive-web-extension",   label: "GDrive Automation" },

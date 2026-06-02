@@ -39,7 +39,7 @@ const PrivacyPolicy = lazy(() => import("./pages/Legal/privacy-policy"));
 const Terms = lazy(() => import("./pages/Legal/terms"));
 const License = lazy(() => import("./pages/Legal/SoftwareLicense-coevas"));
 const OpenrootGDriveSupport = lazy(() => import("./pages/Legal/openroot-GDrive-support"));
-const XpressJob = lazy(() => import("./pages/xpressjob"));
+const NewsLetter = lazy(() => import("./pages/NewsLetter"));
 const CoeasTerminal = lazy(() => import("./pages/coevas"));
 const CoevasTerms = lazy(() => import("./pages/Legal/coevas-legal-terms"));
 const Makaut = lazy(() => import("./pages/makaut"));
@@ -329,7 +329,7 @@ function AppContent() {
           <Route path="/support" element={<OpenrootGDriveSupport />} />
 
           {/* Protected tools */}
-          <Route path="/xpress-job" element={<RequireAuth><XpressJob /></RequireAuth>} />
+          <Route path="/newsletter" element={<RequireAuth><NewsLetter /></RequireAuth>} />
           <Route path="/coevas-terminal" element={<RequireAuth><CoeasTerminal /></RequireAuth>} />
           <Route path="/makaut-grade-pro" element={<RequireAuth><Makaut /></RequireAuth>} />
           <Route path="/travel-expense-manager" element={<RequireAuth><TravelExpenseManager /></RequireAuth>} />

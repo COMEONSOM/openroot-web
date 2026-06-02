@@ -1,5 +1,5 @@
 // ============================================================
-// OPENROOT XpressJob — XpressJob.tsx
+// OPENROOT NewsLetter — NewsLetter.tsx
 // VERSION: 2.0.0 — Full rewrite
 // ============================================================
 
@@ -12,7 +12,7 @@ import React, {
   useMemo,
 } from 'react';
 import gsap from 'gsap';
-import '../components/styles/XpressJob.css';
+import '../components/styles/NewsLetter.css';
 
 
 // ─── Constants ───────────────────────────────────────────────
@@ -157,7 +157,7 @@ function injectJsonLd(id: string, data: object): void {
 
 // ─── SEO configuration ───────────────────────────────────────
 const SEO_TITLE =
-  'XpressJob — Govt Job Updates 2026 | Central, State & PSU Jobs India | ITI, UG/PG Admissions';
+  'NewsLetter — Govt Job Updates 2026 | Central, State & PSU Jobs India | ITI, UG/PG Admissions';
 
 const SEO_DESCRIPTION =
   'Find the latest government job vacancies 2026 — RRB, DRDO, WBPSC, BHEL, IOCL & more. Central, State & PSU recruitment, ITI/Diploma admissions, UG/PG college portals, investment tools, and productivity platforms — all in one place.';
@@ -232,8 +232,8 @@ const SEO_KEYWORDS = [
 const WEBSITE_SCHEMA = {
   '@context': 'https://schema.org',
   '@type': 'WebSite',
-  name: 'XpressJob by Openroot Systems',
-  url: 'https://openroot.in/xpressjob',
+  name: 'NewsLetter by Openroot Systems',
+  url: 'https://openroot.in/newsletter',
   description: SEO_DESCRIPTION,
   inLanguage: ['en-IN', 'en'],
   publisher: {
@@ -249,7 +249,7 @@ const WEBSITE_SCHEMA = {
     '@type': 'SearchAction',
     target: {
       '@type': 'EntryPoint',
-      urlTemplate: 'https://openroot.in/xpressjob?q={search_term_string}',
+      urlTemplate: 'https://openroot.in/newsletter?q={search_term_string}',
     },
     'query-input': 'required name=search_term_string',
   },
@@ -277,7 +277,7 @@ const BREADCRUMB_SCHEMA = {
   '@type': 'BreadcrumbList',
   itemListElement: [
     { '@type': 'ListItem', position: 1, name: 'Home',       item: 'https://openroot.in' },
-    { '@type': 'ListItem', position: 2, name: 'XpressJob',  item: 'https://openroot.in/xpressjob' },
+    { '@type': 'ListItem', position: 2, name: 'NewsLetter',  item: 'https://openroot.in/newsletter' },
   ],
 };
 
@@ -320,9 +320,9 @@ function resolveUID(): string {
     const p       = new URLSearchParams(window.location.search);
     const fromUrl = p.get('uid') ?? p.get('user');
     const fromMain= safeGet('openrootUserUID');
-    const cached  = safeGet('xpressjob_current_uid');
+    const cached  = safeGet('newsletter_current_uid');
     const uid     = fromUrl ? decodeURIComponent(fromUrl) : (fromMain ?? cached ?? 'guest_user');
-    if (uid !== cached) safeSet('xpressjob_current_uid', uid);
+    if (uid !== cached) safeSet('newsletter_current_uid', uid);
     return uid;
   } catch { return 'guest_user'; }
 }
@@ -435,7 +435,7 @@ const CardGrid: React.FC<CardGridProps> = React.memo(({ segId, cards, starredIds
       if (protocol === 'http:' || protocol === 'https:') {
         window.open(url, '_blank', 'noopener,noreferrer');
       }
-    } catch { console.warn('[XpressJob] Blocked invalid URL:', url); }
+    } catch { console.warn('[NewsLetter] Blocked invalid URL:', url); }
   }, []);
 
 
@@ -477,7 +477,7 @@ Toast.displayName = 'Toast';
 
 
 // ─── Main ─────────────────────────────────────────────────────
-const XpressJob: React.FC = () => {
+const NewsLetter: React.FC = () => {
   const userUID = useRef(resolveUID()).current;
 
 
@@ -504,15 +504,15 @@ const XpressJob: React.FC = () => {
     setMeta('name', 'robots',             'index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1');
     setMeta('name', 'author',             'Openroot Systems');
     setMeta('name', 'theme-color',        '#0b0040');
-    setMeta('name', 'application-name',   'XpressJob');
+    setMeta('name', 'application-name',   'NewsLetter');
 
     // ── Open Graph (Facebook / WhatsApp / LinkedIn previews) ─
     setMeta('property', 'og:type',        'website');
-    setMeta('property', 'og:site_name',   'XpressJob — Openroot Systems');
+    setMeta('property', 'og:site_name',   'NewsLetter — Openroot Systems');
     setMeta('property', 'og:title',       SEO_TITLE);
     setMeta('property', 'og:description', SEO_DESCRIPTION);
-    setMeta('property', 'og:url',         'https://openroot.in/xpressjob');
-    setMeta('property', 'og:image',       'https://openroot.in/assets/xpressjob-og.png');
+    setMeta('property', 'og:url',         'https://openroot.in/newsletter');
+    setMeta('property', 'og:image',       'https://openroot.in/assets/company-icon.png');
     setMeta('property', 'og:image:width', '1200');
     setMeta('property', 'og:image:height','630');
     setMeta('property', 'og:locale',      'en_IN');
@@ -521,7 +521,7 @@ const XpressJob: React.FC = () => {
     setMeta('name', 'twitter:card',        'summary_large_image');
     setMeta('name', 'twitter:title',       SEO_TITLE);
     setMeta('name', 'twitter:description', SEO_DESCRIPTION);
-    setMeta('name', 'twitter:image',       'https://openroot.in/assets/xpressjob-og.png');
+    setMeta('name', 'twitter:image',       'https://openroot.in/assets/company-icon.png');
     setMeta('name', 'twitter:site',        '@OpenrootSystems');
 
     // ── Geo meta (India targeting) ───────────────────────────
@@ -531,7 +531,7 @@ const XpressJob: React.FC = () => {
     setMeta('name', 'ICBM',               '22.5726, 88.3639');
 
     // ── Canonical ────────────────────────────────────────────
-    setLink('canonical', 'https://openroot.in/xpressjob');
+    setLink('canonical', 'https://openroot.in/newsletter');
 
     // ── JSON-LD structured data ───────────────────────────────
     injectJsonLd('xj-schema-website',    WEBSITE_SCHEMA);
@@ -559,7 +559,7 @@ const XpressJob: React.FC = () => {
     if (saveTimerRef.current) clearTimeout(saveTimerRef.current);
     saveTimerRef.current = setTimeout(() => {
       try { safeSet(storageKey(userUID), JSON.stringify(data)); }
-      catch (e) { console.warn('[XpressJob] Failed to persist starred cards:', e); }
+      catch (e) { console.warn('[NewsLetter] Failed to persist starred cards:', e); }
     }, SAVE_DEBOUNCE_MS);
   }, [userUID]);
 
@@ -598,9 +598,9 @@ const XpressJob: React.FC = () => {
   useEffect(() => {
     if (!HAS_LOCAL) return;
     const handler = (ev: StorageEvent) => {
-      if (ev.key !== 'openrootUserUID' && ev.key !== 'xpressjob_current_uid') return;
+      if (ev.key !== 'openrootUserUID' && ev.key !== 'newsletter_current_uid') return;
       if (!ev.newValue || ev.newValue === userUID) return;
-      safeSet('xpressjob_current_uid', ev.newValue);
+      safeSet('newsletter_current_uid', ev.newValue);
       setTimeout(() => window.location.reload(), 80);
     };
     window.addEventListener('storage', handler);
@@ -686,7 +686,7 @@ const XpressJob: React.FC = () => {
 
   // ── Render ──────────────────────────────────────────────────
   return (
-    <div className="xpressjob">
+    <div className="newsletter">
       {toast && <Toast message={toast} />}
 
 
@@ -699,14 +699,14 @@ const XpressJob: React.FC = () => {
         <div className="xj-logo-wrapper">
           <img
             src="/assets/openroot-white-nobg.png"
-            alt="Openroot XpressJob"
+            alt="Openroot NewsLetter"
             className="xj-site-logo"
             loading="lazy"
             decoding="async"
             width={120}
             height={40}
           />
-          <span className="xj-logo-text">#XpressJob</span>
+          <span className="xj-logo-text">#NewsLetter</span>
         </div>
 
 
@@ -795,7 +795,7 @@ const XpressJob: React.FC = () => {
           }}
           aria-hidden="true"
         >
-          <h1>XpressJob — Government Jobs India 2026 | Sarkari Naukri | ITI, UG/PG, PSU Recruitment</h1>
+          <h1>NewsLetter — Government Jobs India 2026 | Sarkari Naukri | ITI, UG/PG, PSU Recruitment</h1>
           <p>
             Find the latest government job vacancies in India 2026. Browse Central Government jobs,
             State Government jobs, PSU recruitment notifications, RRB railway jobs, DRDO defence jobs,
@@ -874,4 +874,4 @@ const XpressJob: React.FC = () => {
 };
 
 
-export default XpressJob;
+export default NewsLetter;

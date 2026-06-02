@@ -1,13 +1,13 @@
 /* ============================================================
-   XPRESSJOB.CSS — scoped to .xpressjob
-   Matches XpressJob.tsx v2.0.0
+   NewsLetter.css — scoped to .newsletter
+   Matches NewsLetter.tsx v2.0.0
    Single breakpoint: 900px (≤899 mobile, ≥900 desktop)
    ============================================================ */
 
 
 
 /* ── DESIGN TOKENS ─────────────────────────────────────────── */
-.xpressjob {
+.newsletter {
   --xj-bg-grad:    linear-gradient(135deg, #200202 0%, #0b0040 40%, #010003 100%);
   --xj-bg-radial:  radial-gradient(circle at 30% 30%, #e7dd17 0%, #65f349 25%, #366fea 55%, #0c0c04 100%);
 
@@ -50,7 +50,7 @@
 
 
 /* ── ROOT WRAPPER ──────────────────────────────────────────── */
-.xpressjob {
+.newsletter {
   position: relative;
   min-height: 100vh;
   font-family: var(--xj-font);
@@ -64,7 +64,7 @@
 
 
 /* Grid overlay */
-.xpressjob::before {
+.newsletter::before {
   content: "";
   position: absolute;
   inset: 0;
@@ -80,13 +80,13 @@
 
 
 @media (max-width: 899px) {
-  .xpressjob::before { opacity: 0.05; }
+  .newsletter::before { opacity: 0.05; }
 }
 
 
 
 /* ── AMBIENT ORBS ──────────────────────────────────────────── */
-.xpressjob .xj-tech-orb {
+.newsletter .xj-tech-orb {
   position: absolute;
   width: 150px;
   height: 150px;
@@ -99,22 +99,22 @@
 }
 
 
-.xpressjob .xj-tech-orb:nth-of-type(1) {
+.newsletter .xj-tech-orb:nth-of-type(1) {
   top: 12%; left: 6%;
   background: radial-gradient(circle, rgba(102,0,255,0.22), transparent 70%);
 }
-.xpressjob .xj-tech-orb:nth-of-type(2) {
+.newsletter .xj-tech-orb:nth-of-type(2) {
   bottom: 8%; right: 18%;
   background: radial-gradient(circle, rgba(0,102,255,0.16), transparent 70%);
 }
-.xpressjob .xj-tech-orb:nth-of-type(3) {
+.newsletter .xj-tech-orb:nth-of-type(3) {
   top: 48%; right: 34%;
   background: radial-gradient(circle, rgba(180,0,255,0.12), transparent 70%);
 }
 
 
 @media (max-width: 899px) {
-  .xpressjob .xj-tech-orb { display: none; }
+  .newsletter .xj-tech-orb { display: none; }
 }
 
 
@@ -129,7 +129,7 @@
   creates a paint layer that traps absolute/fixed children in
   WebKit/Blink. Keeping isolation:auto lets the dropdown z-index work.
 */
-.xpressjob .xj-site-header {
+.newsletter .xj-site-header {
   position: fixed;
   top: 0;
   left: 0;
@@ -151,7 +151,7 @@
 
 
 /* Animated gradient underline */
-.xpressjob .xj-site-header::after {
+.newsletter .xj-site-header::after {
   content: "";
   position: absolute;
   bottom: 0; left: 0; right: 0;
@@ -171,7 +171,7 @@
 
 
 @media (max-width: 899px) {
-  .xpressjob .xj-site-header {
+  .newsletter .xj-site-header {
     height: 62px;
     padding: 0 1rem;
   }
@@ -180,7 +180,7 @@
 
 
 /* ── LOGO ──────────────────────────────────────────────────── */
-.xpressjob .xj-logo-wrapper {
+.newsletter .xj-logo-wrapper {
   flex: 0 0 auto;
   display: flex;
   align-items: center;
@@ -190,13 +190,13 @@
 }
 
 
-.xpressjob .xj-site-logo {
+.newsletter .xj-site-logo {
   width: 120px;
   height: auto;
 }
 
 
-.xpressjob .xj-logo-text {
+.newsletter .xj-logo-text {
   font-size: 1rem;
   font-weight: 700;
   letter-spacing: 2px;
@@ -217,8 +217,8 @@
 
 
 @media (max-width: 480px) {
-  .xpressjob .xj-logo-text { display: none; }
-  .xpressjob .xj-site-logo { width: 100px; }
+  .newsletter .xj-logo-text { display: none; }
+  .newsletter .xj-site-logo { width: 100px; }
 }
 
 
@@ -229,7 +229,7 @@
   justify-content:flex-end — pins all children to the right edge.
   position:relative — anchors the dropdown (absolute/fixed aware).
 */
-.xpressjob .xj-navbar {
+.newsletter .xj-navbar {
   flex: 1 1 auto;
   display: flex;
   align-items: center;
@@ -242,14 +242,14 @@
 
 /* ── DESKTOP NAV LINKS ─────────────────────────────────────── */
 /* Hidden by default — shown at ≥900px */
-.xpressjob .xj-nav-links {
+.newsletter .xj-nav-links {
   display: none;
   align-items: center;
   gap: 1.4rem;
 }
 
 
-.xpressjob .xj-nav-links a {
+.newsletter .xj-nav-links a {
   font-size: 0.95rem;
   font-weight: 500;
   color: var(--xj-white);
@@ -259,7 +259,7 @@
 }
 
 
-.xpressjob .xj-nav-links a::after {
+.newsletter .xj-nav-links a::after {
   content: "";
   position: absolute;
   left: 0; bottom: -4px;
@@ -269,11 +269,11 @@
 }
 
 
-.xpressjob .xj-nav-links a:hover        { color: var(--xj-cyan); }
-.xpressjob .xj-nav-links a:hover::after  { width: 100%; }
+.newsletter .xj-nav-links a:hover        { color: var(--xj-cyan); }
+.newsletter .xj-nav-links a:hover::after  { width: 100%; }
 
 
-.xpressjob .xj-nav-links a:focus-visible {
+.newsletter .xj-nav-links a:focus-visible {
   outline: 2px solid var(--xj-cyan);
   outline-offset: 3px;
   border-radius: 2px;
@@ -287,7 +287,7 @@
   button's border-radius so it never bleeds into the header.
   Hidden by default — shown at ≤899px.
 */
-.xpressjob .xj-menu-toggle {
+.newsletter .xj-menu-toggle {
   display: none;
   flex-direction: column;
   justify-content: center;
@@ -309,7 +309,7 @@
 
 
 /* Conic glow — only animates on hover/open to save GPU */
-.xpressjob .xj-menu-toggle::before {
+.newsletter .xj-menu-toggle::before {
   content: "";
   position: absolute;
   inset: -50%;
@@ -322,14 +322,14 @@
 }
 
 
-.xpressjob .xj-menu-toggle:hover::before,
-.xpressjob .xj-menu-toggle.xj-open::before {
+.newsletter .xj-menu-toggle:hover::before,
+.newsletter .xj-menu-toggle.xj-open::before {
   opacity: 1;
   animation: xj-rotate-border 2s linear infinite;
 }
 
 
-.xpressjob .xj-menu-toggle:hover {
+.newsletter .xj-menu-toggle:hover {
   box-shadow: var(--xj-glow-cyan);
   border-color: var(--xj-cyan);
 }
@@ -342,7 +342,7 @@
 
 
 /* ── HAMBURGER LINES — CSS X animation ────────────────────── */
-.xpressjob .xj-menu-line {
+.newsletter .xj-menu-line {
   display: block;
   width: 20px;
   height: 2px;
@@ -358,24 +358,15 @@
 }
 
 
-.xpressjob .xj-menu-toggle.xj-open .xj-menu-line:nth-child(1) { transform: translateY(7px)  rotate(45deg);  }
-.xpressjob .xj-menu-toggle.xj-open .xj-menu-line:nth-child(2) { opacity: 0; transform: scaleX(0);            }
-.xpressjob .xj-menu-toggle.xj-open .xj-menu-line:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+.newsletter .xj-menu-toggle.xj-open .xj-menu-line:nth-child(1) { transform: translateY(7px)  rotate(45deg);  }
+.newsletter .xj-menu-toggle.xj-open .xj-menu-line:nth-child(2) { opacity: 0; transform: scaleX(0);            }
+.newsletter .xj-menu-toggle.xj-open .xj-menu-line:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
 
 
 
 /* ── MOBILE DROPDOWN ───────────────────────────────────────── */
-/*
-  position:fixed — escapes position:sticky + backdrop-filter stacking
-  context entirely. Both isolation:isolate and backdrop-filter on the
-  same ancestor create a paint layer that traps position:absolute
-  children in WebKit/Blink. fixed positions relative to the viewport,
-  bypassing every ancestor stacking context.
 
-  NEVER use display:none — it kills CSS transitions.
-  visibility + opacity + pointer-events handle show/hide instead.
-*/
-.xpressjob .xj-menu-dropdown {
+.newsletter .xj-menu-dropdown {
   position: fixed;
   top: 72px;
   right: 1rem;
@@ -412,20 +403,18 @@
 
 
 /* Open state — React adds .xj-open class */
-.xpressjob .xj-menu-dropdown.xj-open {
+.newsletter .xj-menu-dropdown.xj-open {
   opacity: 1;
   visibility: visible;
   pointer-events: auto;
   transform: translateY(0) scale(1);
 }
 
-
-.xpressjob .xj-menu-dropdown li {
+.newsletter .xj-menu-dropdown li {
   margin: 0;
 }
 
-
-.xpressjob .xj-menu-dropdown a {
+.newsletter .xj-menu-dropdown a {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -446,56 +435,41 @@
     transform    0.18s ease;
 }
 
-
-.xpressjob .xj-menu-dropdown a:hover {
+.newsletter .xj-menu-dropdown a:hover {
   color: var(--xj-cyan);
   background: rgba(0,245,255,0.08);
   border-color: rgba(0,245,255,0.25);
   transform: translateX(3px);
 }
 
-
-.xpressjob .xj-menu-dropdown a:focus-visible {
+.newsletter .xj-menu-dropdown a:focus-visible {
   outline: 2px solid var(--xj-cyan);
   outline-offset: 2px;
   border-radius: 10px;
 }
 
-
-
 /* ── RESPONSIVE BREAKPOINTS (single source: 900px) ────────── */
 
 /* Mobile — ≤899px */
 @media (max-width: 899px) {
-  .xpressjob .xj-nav-links   { display: none; }
-  .xpressjob .xj-menu-toggle { display: flex; }
-  .xpressjob .xj-menu-dropdown {
+  .newsletter .xj-nav-links   { display: none; }
+  .newsletter .xj-menu-toggle { display: flex; }
+  .newsletter .xj-menu-dropdown {
     top: 62px;
     right: 0.75rem;
     width: 190px;
   }
 }
 
-
 /* Desktop — ≥900px */
 @media (min-width: 900px) {
-  .xpressjob .xj-nav-links   { display: flex; }
-  .xpressjob .xj-menu-toggle { display: none; }
-  /*
-    xj-menu-dropdown intentionally NOT hidden with display:none here.
-    It's already invisible via visibility:hidden.
-    display:none would break the transition on resize edge cases.
-  */
+  .newsletter .xj-nav-links   { display: flex; }
+  .newsletter .xj-menu-toggle { display: none; }
 }
 
-
-
 /* ── MAIN CONTAINER ────────────────────────────────────────── */
-/*
-  padding-top offsets fixed header height so first section
-  isn't hidden beneath the header bar.
-*/
-.xpressjob .xj-container {
+
+.newsletter .xj-container {
   position: relative;
   z-index: 1;
   max-width: 1500px;
@@ -503,30 +477,25 @@
   padding: calc(72px + 1.75rem) 1rem 0;
 }
 
-
 @media (max-width: 899px) {
-  .xpressjob .xj-container {
+  .newsletter .xj-container {
     padding-top: calc(62px + 1.25rem);
   }
 }
 
-
-
 /* ── SECTION ───────────────────────────────────────────────── */
-.xpressjob .xj-section-container {
+.newsletter .xj-section-container {
   margin-bottom: var(--xj-section-gap);
   scroll-margin-top: 6rem;
   animation: xj-fade-in 220ms ease-in-out;
 }
-
 
 @keyframes xj-fade-in {
   from { opacity: 0; transform: translateY(8px); }
   to   { opacity: 1; transform: translateY(0); }
 }
 
-
-.xpressjob .xj-section-title {
+.newsletter .xj-section-title {
   font-size: clamp(1.15rem, 2vw, 1.8rem);
   color: var(--xj-white);
   font-weight: 700;
@@ -534,10 +503,8 @@
   text-align: left;
 }
 
-
-
 /* ── CARD GRID ─────────────────────────────────────────────── */
-.xpressjob .xj-card-grid {
+.newsletter .xj-card-grid {
   display: grid;
   gap: 0.75rem;
   grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
@@ -547,25 +514,23 @@
 
 
 @media (min-width: 1200px) {
-  .xpressjob .xj-card-grid { grid-template-columns: repeat(7, 1fr); gap: 1.25rem; }
+  .newsletter .xj-card-grid { grid-template-columns: repeat(7, 1fr); gap: 1.25rem; }
 }
 @media (min-width: 1024px) and (max-width: 1199px) {
-  .xpressjob .xj-card-grid { grid-template-columns: repeat(5, 1fr); }
+  .newsletter .xj-card-grid { grid-template-columns: repeat(5, 1fr); }
 }
 @media (min-width: 768px) and (max-width: 1023px) {
-  .xpressjob .xj-card-grid { grid-template-columns: repeat(4, 1fr); }
+  .newsletter .xj-card-grid { grid-template-columns: repeat(4, 1fr); }
 }
 @media (max-width: 767px) {
-  .xpressjob .xj-card-grid { grid-template-columns: repeat(3, 1fr); }
+  .newsletter .xj-card-grid { grid-template-columns: repeat(3, 1fr); }
 }
 @media (max-width: 420px) {
-  .xpressjob .xj-card-grid { grid-template-columns: repeat(2, 1fr); }
+  .newsletter .xj-card-grid { grid-template-columns: repeat(2, 1fr); }
 }
 
-
-
 /* ── CARD ──────────────────────────────────────────────────── */
-.xpressjob .xj-card {
+.newsletter .xj-card {
   width: 100%;
   max-height: 120px;
   background: #34362c81;
@@ -582,7 +547,7 @@
 }
 
 
-.xpressjob .xj-job-card {
+.newsletter .xj-job-card {
   width: 100%;
   max-height: 120px;
   background: #ffffff;
@@ -600,30 +565,26 @@
 
 
 @media (hover: hover) and (pointer: fine) {
-  .xpressjob .xj-card:hover,
-  .xpressjob .xj-job-card:hover {
+  .newsletter .xj-card:hover,
+  .newsletter .xj-job-card:hover {
     transform: translateY(-6px);
     box-shadow: 0 12px 30px rgba(0,0,0,0.42);
     border-color: var(--xj-accent);
   }
 }
 
-
-.xpressjob .xj-card:focus-visible,
-.xpressjob .xj-job-card:focus-visible {
+.newsletter .xj-card:focus-visible,
+.newsletter .xj-job-card:focus-visible {
   outline: 2px solid var(--xj-cyan);
   outline-offset: 2px;
 }
 
-
-.xpressjob .xj-hidden {
+.newsletter .xj-hidden {
   display: none !important;
 }
 
-
-
 /* ── IMAGE WRAPPER ─────────────────────────────────────────── */
-.xpressjob .xj-img-wrapper {
+.newsletter .xj-img-wrapper {
   margin-top: 0.4rem;
   height: 140px;
   display: flex;
@@ -635,8 +596,7 @@
   position: relative;
 }
 
-
-.xpressjob .xj-img-wrapper img {
+.newsletter .xj-img-wrapper img {
   width: 100%;
   height: 100%;
   object-fit: contain;
@@ -644,10 +604,8 @@
   display: block;
 }
 
-
-
 /* ── LIVE BADGE ────────────────────────────────────────────── */
-.xpressjob .xj-live {
+.newsletter .xj-live {
   position: absolute;
   top: 4px; left: 9px;
   padding: 4px 10px;
@@ -663,8 +621,7 @@
   box-shadow: 0 0 20px rgba(255,0,64,0.5);
 }
 
-
-.xpressjob .xj-live::before {
+.newsletter .xj-live::before {
   content: "";
   position: absolute;
   left: -4px; top: 50%;
@@ -675,22 +632,18 @@
   animation: xj-live-dot 1s ease-in-out infinite;
 }
 
-
 @keyframes xj-live-pulse {
   0%, 100% { transform: scale(1); }
   50%       { transform: scale(1.05); }
 }
-
 
 @keyframes xj-live-dot {
   0%, 100% { opacity: 1; box-shadow: 0 0 5px #fff; }
   50%       { opacity: 0.5; box-shadow: 0 0 15px #fff; }
 }
 
-
-
 /* ── STAR BUTTON ───────────────────────────────────────────── */
-.xpressjob .xj-star-btn {
+.newsletter .xj-star-btn {
   position: absolute;
   top: -1px; right: 9px;
   width: 24px; height: 24px;
@@ -715,8 +668,7 @@
     box-shadow    var(--xj-t-fast) ease;
 }
 
-
-.xpressjob .xj-star-btn:hover {
+.newsletter .xj-star-btn:hover {
   transform: scale(1.2) rotate(15deg);
   background: rgba(255,200,0,0.2);
   border-color: gold;
@@ -724,24 +676,20 @@
   box-shadow: 0 0 20px rgba(255,200,0,0.4);
 }
 
-
-.xpressjob .xj-star-btn.xj-starred {
+.newsletter .xj-star-btn.xj-starred {
   background: rgba(255,200,0,0.3);
   color: gold;
   border-color: gold;
   animation: xj-star-pulse 1.5s ease infinite;
 }
 
-
 @keyframes xj-star-pulse {
   0%, 100% { box-shadow: 0 0 10px rgba(255,200,0,0.4); }
   50%       { box-shadow: 0 0 25px rgba(255,200,0,0.8); }
 }
 
-
-
 /* ── JOB FILTERS ───────────────────────────────────────────── */
-.xpressjob .xj-job-filters {
+.newsletter .xj-job-filters {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
@@ -749,8 +697,7 @@
   margin: 1.25rem auto;
 }
 
-
-.xpressjob .xj-filter-btn {
+.newsletter .xj-filter-btn {
   background: rgba(255,255,255,0.04);
   border: 1px solid var(--xj-card-border);
   color: var(--xj-white);
@@ -765,24 +712,20 @@
     border-color 220ms ease;
 }
 
-
-.xpressjob .xj-filter-btn:hover,
-.xpressjob .xj-filter-btn.xj-active {
+.newsletter .xj-filter-btn:hover,
+.newsletter .xj-filter-btn.xj-active {
   background: linear-gradient(90deg, rgba(11,15,239,0.95), rgba(72,9,220,0.85));
   border-color: transparent;
   transform: translateY(-2px);
 }
 
-
-.xpressjob .xj-filter-btn:focus-visible {
+.newsletter .xj-filter-btn:focus-visible {
   outline: 2px solid var(--xj-cyan);
   outline-offset: 2px;
 }
 
-
-
 /* ── TOAST ─────────────────────────────────────────────────── */
-.xpressjob .xj-toast {
+.newsletter .xj-toast {
   position: fixed;
   bottom: 24px;
   left: 50%;
@@ -804,16 +747,13 @@
   animation: xj-toast-in 0.25s ease;
 }
 
-
 @keyframes xj-toast-in {
   from { opacity: 0; transform: translateX(-50%) translateY(10px); }
   to   { opacity: 1; transform: translateX(-50%) translateY(0); }
 }
 
-
-
 /* ── FOOTER ────────────────────────────────────────────────── */
-.xpressjob .xj-site-footer {
+.newsletter .xj-site-footer {
   position: relative;
   z-index: 1;
   display: flex;
@@ -825,8 +765,7 @@
   font-weight: bold;
 }
 
-
-.xpressjob .xj-site-footer::before {
+.newsletter .xj-site-footer::before {
   content: "";
   position: absolute;
   top: 0; left: 50%;
@@ -837,59 +776,50 @@
   animation: xj-glow-line 6s linear infinite;
 }
 
-
 @keyframes xj-glow-line {
   0%   { background-position: 0% 0; }
   100% { background-position: 200% 0; }
 }
 
-
-.xpressjob .xj-footer-bottom {
+.newsletter .xj-footer-bottom {
   display: flex;
   flex-direction: column;
   align-items: center;
   width: 100%;
 }
 
-
-.xpressjob .xj-footer-bottom p {
+.newsletter .xj-footer-bottom p {
   margin: 0.2rem 0;
   font-size: 0.88rem;
   opacity: 0.9;
 }
 
-
-.xpressjob .xj-version-label {
+.newsletter .xj-version-label {
   margin-top: 0.75rem;
   font-size: 0.75rem;
   color: rgba(255,255,255,0.45);
   pointer-events: none;
 }
 
-
 @media (min-width: 601px) {
-  .xpressjob .xj-version-label {
+  .newsletter .xj-version-label {
     position: absolute;
     bottom: 10px; right: 14px;
     margin-top: 0;
   }
 }
 
-
-
 /* ── GLOBAL FOCUS RING ─────────────────────────────────────── */
-.xpressjob :focus-visible {
+.newsletter :focus-visible {
   outline: 2px solid var(--xj-accent);
   outline-offset: 3px;
 }
 
-
-
 /* ── REDUCED MOTION ────────────────────────────────────────── */
 @media (prefers-reduced-motion: reduce) {
-  .xpressjob *,
-  .xpressjob *::before,
-  .xpressjob *::after {
+  .newsletter *,
+  .newsletter *::before,
+  .newsletter *::after {
     animation-duration:        0.001ms !important;
     animation-iteration-count: 1       !important;
     transition-duration:       0.001ms !important;

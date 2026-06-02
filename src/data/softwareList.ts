@@ -7,10 +7,10 @@ const CLOUD = "https://res.cloudinary.com/dydh05l1u/video/upload";  // aryan clo
 export const softwareList: Software[] = [
 
   {
-    name: "Resources & Govt. Job Updates",
-    shortName: "XpressJob",
-    slug: "xpress-job",
-    url: "/xpress-job",
+    name: "NewsLetter",
+    shortName: "NewsLetter",
+    slug: "newsletter",
+    url: "/newsletter",
     video: `${CLOUD}/resource-hub-demo_rlkmkr.mp4`,
     description: "A curated collection of important websites, tools and job updates for students and learners.",
     seoTitle: "Govt. Websites & Job Updates for Students and Job Seekers | Openroot Systems",

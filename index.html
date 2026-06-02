@@ -2,8 +2,8 @@
 <html lang="en">
 
 <head>
-  
-  <!-- THEME — must run before any render to prevent flash -->
+
+  <!-- THEME — prevent flash -->
   <script>
     (function () {
       try {
@@ -22,23 +22,36 @@
   <!-- Viewport -->
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
 
-  <!-- Color scheme — prevents browser UI flash -->
+  <!-- Browser Color Scheme -->
   <meta name="color-scheme" content="light dark" />
 
   <!-- Primary SEO -->
-  <title>Openroot Systems | AI Tools, Education & Software Solutions</title>
+  <title>
+    Openroot Systems | Software Solutions, Finance & AI Learning Programs, Government Job Updates
+  </title>
 
   <meta
     name="description"
-    content="Openroot Systems empowers students and small businesses with AI tools, productivity software, financial education and innovative digital solutions."
+    content="Openroot Systems is a registered company under the Government of India. We develop custom software solutions as well as free to use innovative softwares, We also conduct AI prompt engineering and Finance learning programs. After multiple requests by our students we also started to provide government job updates in our newsletter."
   />
 
   <meta name="robots" content="index, follow" />
 
-  <!-- Sitemap -->
-  <link rel="sitemap" type="application/xml" href="https://openroot.in/sitemap.xml" />
+  <link rel="canonical" href="https://openroot.in/" />
 
-  <!-- Favicon -->
+  <meta name="author" content="Openroot Systems" />
+  <meta name="language" content="English" />
+  <meta name="geo.region" content="IN-WB" />
+  <meta name="geo.country" content="India" />
+
+  <!-- Sitemap -->
+  <link
+    rel="sitemap"
+    type="application/xml"
+    href="https://openroot.in/sitemap.xml"
+  />
+
+  <!-- Favicons -->
   <link rel="icon" type="image/x-icon" href="https://openroot.in/favicon.ico?v=2" />
   <link rel="icon" type="image/png" sizes="32x32" href="https://openroot.in/favicon-32x32.png?v=2" />
   <link rel="icon" type="image/png" sizes="16x16" href="https://openroot.in/favicon-16x16.png?v=2" />
@@ -47,20 +60,22 @@
   <meta name="apple-mobile-web-app-title" content="Openroot Systems" />
   <meta name="application-name" content="Openroot Systems" />
 
-  <!-- Theme color — matches --ot-bg in dark mode -->
   <meta name="theme-color" content="#0a0a0a" />
 
+  <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link rel="preconnect" href="https://openroot-hypersite.firebaseapp.com" crossorigin />
   <link rel="preconnect" href="https://firebase.googleapis.com" crossorigin />
   <link rel="preconnect" href="https://apis.google.com" crossorigin />
+
   <link
     rel="preload"
     as="style"
     href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
     onload="this.onload=null;this.rel='stylesheet'"
   />
+
   <noscript>
     <link
       rel="stylesheet"
@@ -68,58 +83,83 @@
     />
   </noscript>
 
-  <!-- OpenGraph -->
-  <meta property="og:title" content="Openroot Systems – AI Tools & Software Solutions" />
-  <meta
-    property="og:description"
-    content="Explore Openroot tools including NIOR AI, Resource Hub, Travel Expense Manager and digital utilities for students and businesses."
-  />
+  <!-- Open Graph -->
+  <meta property="og:title"
+    content="Openroot Systems | Software Solutions & AI Learning Programs" />
+
+  <meta property="og:description"
+    content="Openroot Systems is a registered company under the Government of India providing custom softwares, AI learning programs and Innovative free to use softwares." />
+
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://openroot.in/" />
   <meta property="og:site_name" content="Openroot Systems" />
-  <meta property="og:image" content="https://openroot.in/assets/company-icon.png" />
+  <meta property="og:locale" content="en_IN" />
+  <meta property="og:country-name" content="India" />
 
-  <!-- Twitter Card -->
+  <meta property="og:image"
+    content="https://openroot.in/assets/company-icon.png" />
+
+  <!-- Twitter -->
   <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="Openroot Systems – AI Tools & Software" />
-  <meta name="twitter:description" content="Openroot builds AI tools, productivity software and digital solutions for students and MSMEs." />
-  <meta name="twitter:image" content="https://openroot.in/assets/company-icon.png" />
 
-  <!-- Organization Schema -->
+  <meta name="twitter:title"
+    content="Openroot Systems | Software Solutions & AI Learning Programs" />
+
+  <meta name="twitter:description"
+    content="Custom softwares, AI learning programs and innovative free to use softwares." />
+
+  <meta name="twitter:image"
+    content="https://openroot.in/assets/company-icon.png" />
+
+  <!-- ORGANIZATION SCHEMA -->
   <script type="application/ld+json">
   {
-    "@context": "https://schema.org",
-    "@type": "Organization",
-    "name": "Openroot Systems",
-    "url": "https://openroot.in",
-    "logo": "https://openroot.in/logo.png",
-    "description": "Openroot Systems develops AI tools, productivity software and educational platforms for students and businesses.",
-    "sameAs": [
-      "https://www.facebook.com/OpenrootSystems",
-      "https://x.com/comeonsom_",
-      "https://www.linkedin.com/in/somnath-banerjee-Om980"
+    "@context":"https://schema.org",
+    "@type":"Organization",
+    "@id":"https://openroot.in/#organization",
+    "name":"Openroot Systems",
+    "url":"https://openroot.in",
+    "logo":"https://openroot.in/logo.png",
+    "description":"Openroot Systems is a registered company under the Government of India providing custom softwares, AI learning programs and Innovative free to use softwares.",
+    "founder":{
+      "@type":"Person",
+      "name":"Somnath Banerjee"
+    },
+    "identifier":{
+      "@type":"PropertyValue",
+      "name":"UDYAM Registration",
+      "value":"UDYAM-WB-14-0263034"
+    },
+    "sameAs":[
+      "https://github.com/COMEONSOM",
+      "https://www.linkedin.com/in/comeonsom/"
     ]
   }
   </script>
 
-  <!-- Website Schema -->
+  <!-- WEBSITE SCHEMA -->
   <script type="application/ld+json">
   {
-    "@context": "https://schema.org",
-    "@type": "WebSite",
-    "name": "Openroot Systems",
-    "url": "https://openroot.in",
-    "potentialAction": {
-      "@type": "SearchAction",
-      "target": "https://openroot.in/search?q={search_term_string}",
-      "query-input": "required name=search_term_string"
+    "@context":"https://schema.org",
+    "@type":"WebSite",
+    "@id":"https://openroot.in/#website",
+    "name":"Openroot Systems",
+    "url":"https://openroot.in",
+    "publisher":{
+      "@id":"https://openroot.in/#organization"
     }
   }
   </script>
 
   <style>
-    html { overflow-y: scroll; }
-    .header-logo-img { width: 197px; height: 45px; }
+    html {
+      overflow-y: scroll;
+    }
+
+    .header-logo-img {
+      width: 197px;
+      height: 45px;
+    }
   </style>
 
 </head>

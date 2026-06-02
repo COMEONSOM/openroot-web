@@ -31,12 +31,13 @@ Openroot Systems is a product-focused software company that builds **clean, scal
 
 | Product | Category | Description |
 |---|---|---|
-| [Travel Expense Manager](https://openroot.in/openroot-travel-expense-manager/) | Finance Utility | Track group travel expenses and auto-calculate who owes whom |
-| [Resources & Job Updates](https://openroot.in/XpressJob/) | Resource Platform | Curated tools, websites and job updates for students |
+| [Travel Expense Manager](https://openroot.in/software/travel-expense-manager) | Finance Utility | Track group travel expenses and auto-calculate who owes whom |
+| [NewsLetter](https://openroot.in/software/newsletter) | Resource Platform | Curated tools, websites and job updates for students |
 | [NIOR AI](https://openroot-time-ai-module.web.app/) | AI Tool | AI-powered assistant for financial insights and decision support |
-| [Openroot Classes](https://openroot-classes-firebase.web.app/) | Education Platform | Training in prompt engineering, financial literacy and productivity |
-| [Coevas Media Downloader](https://openroot.in/Coevas-Systems-Openroot/) | Media Utility | Download video/audio from YouTube, Instagram, Facebook, Threads |
-| [Makaut GPA Calculator](https://openroot.in/openroot-makaut_grade_and_percentage-calculator/) | Education Platform | GPA and percentage calculator for MAKAUT students |
+| [Openroot Classes](https://openroot.in/software/openroot-classes) | Education Platform | Training in prompt engineering, financial literacy and productivity |
+| [YT Video Downloader](https://openroot.in/software/coevas-terminal) | Media Utility | Download video/audio from YouTube, Instagram, Facebook, Threads |
+| [Makaut GPA Calculator](https://openroot.in/software/makaut-grade-pro) | Education Platform | GPA and percentage calculator for MAKAUT students |
+| [Openroot GDrive Automation](https://openroot.in/software/gdrive-web-extension) | Chrome Extension | Automatic Google Drive File Renaming Systems |
 
 ---
 
@@ -271,6 +272,7 @@ PORT=5000
 - Start command: `npm start`
 
 ---
+### SHOW stats command --- start stats.html
 
 ## Engineering Standards
 
