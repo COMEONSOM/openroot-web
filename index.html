@@ -50,18 +50,11 @@
   <!-- Theme color — matches --ot-bg in dark mode -->
   <meta name="theme-color" content="#0a0a0a" />
 
-  <!-- FIX 1: Preconnect — existing fonts origins (kept) + added Firebase & Google API origins
-       from report: "Preconnect candidates" saving 300–330 ms each -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link rel="preconnect" href="https://openroot-hypersite.firebaseapp.com" crossorigin />
   <link rel="preconnect" href="https://firebase.googleapis.com" crossorigin />
   <link rel="preconnect" href="https://apis.google.com" crossorigin />
-
-  <!-- FIX 2: Google Fonts — non-render-blocking load via media trick.
-       Report flagged this at 780 ms blocking. Using media="print" + onload swap
-       defers it out of the critical path entirely. The <noscript> fallback
-       covers users with JS disabled. -->
   <link
     rel="preload"
     as="style"
@@ -124,11 +117,8 @@
   }
   </script>
 
-  <!-- FIX 3: Add <main> landmark via CSS reset trick is not possible here;
-       handled in App.tsx instead. Scroll stabiliser kept. -->
   <style>
     html { overflow-y: scroll; }
-    /* FIX 4: Reserve space for header logo to prevent CLS before image loads */
     .header-logo-img { width: 197px; height: 45px; }
   </style>
 

@@ -16,7 +16,17 @@ const app = express();
 // MIDDLEWARES
 // ============================================================
 
-app.use(cors());
+app.use(
+  cors({
+    origin: [
+      "https://openroot.in",
+      "https://www.openroot.in",
+      "http://localhost:5173"
+    ],
+    methods: ["GET", "POST"],
+    credentials: true,
+  })
+);
 app.use(bodyParser.json());
 
 // ============================================================

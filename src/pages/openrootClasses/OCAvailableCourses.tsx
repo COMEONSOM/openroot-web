@@ -12,7 +12,7 @@ import logo from "../../assets-oc/open-root-light.png";
 import msmeLogo from "../../assets-oc/msme-logo.png";
 
 const API_URL =
-  import.meta.env.VITE_API_URL || "https://openroot-classes.onrender.com";
+  import.meta.env.VITE_API_URL || "https://openroot-systems.onrender.com";
 
 const RAZORPAY_KEY_ID = import.meta.env.VITE_RAZORPAY_KEY_ID as
   | string

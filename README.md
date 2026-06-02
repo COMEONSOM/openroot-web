@@ -181,6 +181,11 @@ openroot-web/
 
 ## Getting Started
 
+Development Workflow
+git status -> npm run build -> git add . -> git commit -m "your message" -> 
+git push origin main -> firebase deploy --only hosting
+
+
 ### Frontend
 
 ```bash
