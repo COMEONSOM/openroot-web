@@ -1,0 +1,21 @@
+{
+  "name": "openroot-web-server",
+  "version": "1.0.0",
+  "description": "Openroot Systems Payment Backend",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js"
+  },
+  "keywords": [],
+  "author": "Openroot Systems",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^2.2.0",
+    "cors": "^2.8.5",
+    "crypto": "^1.0.1",
+    "dotenv": "^17.2.3",
+    "express": "^5.1.0",
+    "razorpay": "^2.9.6"
+  }
+}
