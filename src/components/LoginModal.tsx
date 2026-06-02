@@ -1,10 +1,8 @@
-import { useState, useEffect, useRef, useCallback, memo } from "react";
+import { useState, useEffect, useRef, useCallback, memo, lazy, Suspense } from "react";
 import "./styles/LoginModal.css";
 
 import gsap from "gsap";
-import Lottie from "lottie-react";
-import successAnimation from "../animations/successfullogin.json";
-import failedAnimation from "../animations/failedlogin.json";
+const Lottie = lazy(() => import("lottie-react"));
 
 import {
   auth,
@@ -243,6 +241,8 @@ export default memo(function UserLoginModal({ onClose, onLogin, onLogout }: Logi
     useState<ProviderName | null>(null);
 
   const isAuthenticating = authenticatingProvider !== null;
+  const [successAnimation, setSuccessAnimation] = useState<object | null>(null);
+  const [failedAnimation, setFailedAnimation] = useState<object | null>(null);
 
   const shellRef = useRef<HTMLDivElement | null>(null);
   const successTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -321,6 +321,18 @@ export default memo(function UserLoginModal({ onClose, onLogin, onLogout }: Logi
 
     return unsubscribe;
   }, [onLogin]);
+
+  useEffect(() => {
+    void Promise.all([
+      fetch("/lotties/successfullogin.json")
+        .then((r) => r.json())
+        .then(setSuccessAnimation),
+
+      fetch("/lotties/failedlogin.json")
+        .then((r) => r.json())
+        .then(setFailedAnimation),
+    ]).catch(console.error);
+  }, []);
 
   useEffect(() => {
     if (step !== "success") {
@@ -513,7 +525,15 @@ export default memo(function UserLoginModal({ onClose, onLogin, onLogout }: Logi
 
             {step === "success" && (
               <div className="auth-center">
-                <Lottie animationData={successAnimation} loop={false} autoplay />
+                {successAnimation && (
+                  <Suspense fallback={null}>
+                    <Lottie
+                      animationData={successAnimation}
+                      loop={false}
+                      autoplay
+                    />
+                  </Suspense>
+                )}
                 <p>Login successful!</p>
                 <p>
                   Closing in <strong>{Math.max(countdown, 0)}s</strong>
@@ -523,7 +543,15 @@ export default memo(function UserLoginModal({ onClose, onLogin, onLogout }: Logi
 
             {step === "error" && (
               <div className="auth-center">
-                <Lottie animationData={failedAnimation} loop={false} autoplay />
+                {failedAnimation && (
+                  <Suspense fallback={null}>
+                    <Lottie
+                      animationData={failedAnimation}
+                      loop={false}
+                      autoplay
+                    />
+                  </Suspense>
+                )}
                 <p>{errorMessage}</p>
                 <button className="btn retry" onClick={resetToInitial}>
                   <span className="btn-icon">

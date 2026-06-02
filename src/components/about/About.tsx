@@ -1,6 +1,11 @@
-import { memo } from "react";
+import {
+  memo,
+  lazy,
+  Suspense,
+  useEffect,
+  useState,
+} from "react";
 import { motion } from "framer-motion";
-import Lottie from "lottie-react";
 
 import styles from "./About.module.css";
 
@@ -11,7 +16,7 @@ import {
   stagger,
 } from "../../motion/variants";
 
-import xAnimation from "../../animations/about.json";
+const Lottie = lazy(() => import("lottie-react"));
 
 type CertificateItem = {
   href: string;
@@ -36,6 +41,17 @@ const CERTIFICATES: readonly CertificateItem[] = [
 ] as const;
 
 function About() {
+  const [animationData, setAnimationData] = useState<object | null>(null);
+
+  useEffect(() => {
+    fetch("/lotties/about.json")
+      .then((res) => res.json())
+      .then(setAnimationData)
+      .catch((error) => {
+        console.error("Failed to load about animation:", error);
+      });
+  }, []);
+
   return (
     <motion.section
       className={styles.aboutSection}
@@ -66,9 +82,10 @@ function About() {
               </h2>
 
               <p className={`${styles.aboutLead} ac-body-copy`}>
-                Openroot Systems is a registered MSME under the Government of India
-                with UDYAM Registration Number UDYAM-WB-14-0263034. We are also a
-                registered employer on the National Career Service (NCS) portal.
+                Openroot Systems is a registered MSME under the Government of
+                India with UDYAM Registration Number UDYAM-WB-14-0263034. We
+                are also a registered employer on the National Career Service
+                (NCS) portal.
               </p>
 
               <div className={styles.aboutBody}>
@@ -84,8 +101,9 @@ function About() {
                 </p>
 
                 <p>
-                  Our goal is simple: make technology approachable, affordable,
-                  and genuinely helpful for people and small businesses.
+                  Our goal is simple: make technology approachable,
+                  affordable, and genuinely helpful for people and small
+                  businesses.
                 </p>
               </div>
             </motion.div>
@@ -95,16 +113,20 @@ function About() {
               variants={fadeUp}
             >
               <div className={`${styles.visualFrame} ac-visual-frame`}>
-                <Lottie
-                  animationData={xAnimation}
-                  loop
-                  autoplay
-                  className={`${styles.visualAnimation} ac-anim`}
-                  aria-hidden="true"
-                  rendererSettings={{
-                    preserveAspectRatio: "xMidYMid slice",
-                  }}
-                />
+                {animationData && (
+                  <Suspense fallback={null}>
+                    <Lottie
+                      animationData={animationData}
+                      loop
+                      autoplay
+                      className={`${styles.visualAnimation} ac-anim`}
+                      aria-hidden="true"
+                      rendererSettings={{
+                        preserveAspectRatio: "xMidYMid slice",
+                      }}
+                    />
+                  </Suspense>
+                )}
               </div>
             </motion.div>
           </div>

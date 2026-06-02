@@ -1,10 +1,17 @@
-import { useState, useEffect, useRef, useCallback, memo } from "react";
+import {
+  useState,
+  useEffect,
+  useRef,
+  useCallback,
+  memo,
+  lazy,
+  Suspense,
+} from "react";
+
+const Lottie = lazy(() => import("lottie-react"));
 import "./styles/AdminLogin.css";
 
 import gsap from "gsap";
-import Lottie from "lottie-react";
-import successAnimation from "../animations/successfullogin.json";
-import failedAnimation from "../animations/failedlogin.json";
 
 // ── IMPORTANT: do NOT import Firebase auth here. ──────────────
 // Admin login intentionally avoids signInWithEmailAndPassword so
@@ -145,6 +152,8 @@ export default memo(function AdminLogin({ onClose, onLogin, onLogout }: AdminLog
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [adminData, setAdminData] = useState<AdminData | null>(null);
+  const [successAnimation, setSuccessAnimation] = useState<object | null>(null);
+  const [failedAnimation, setFailedAnimation] = useState<object | null>(null);
 
   const cardRef = useRef<HTMLDivElement | null>(null);
   const successTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -170,6 +179,20 @@ export default memo(function AdminLogin({ onClose, onLogin, onLogout }: AdminLog
       clearSuccessTimer();
     };
   }, [clearSuccessTimer]);
+
+  useEffect(() => {
+    void Promise.all([
+      fetch("/lotties/successfullogin.json")
+        .then((res) => res.json())
+        .then(setSuccessAnimation),
+
+      fetch("/lotties/failedlogin.json")
+        .then((res) => res.json())
+        .then(setFailedAnimation),
+    ]).catch((error) => {
+      console.error("Failed to load admin animations:", error);
+    });
+  }, []);
 
   // GSAP card entrance on each step change
   useEffect(() => {
@@ -370,7 +393,14 @@ export default memo(function AdminLogin({ onClose, onLogin, onLogout }: AdminLog
         {step === "success" && (
           <div className="admin-state">
             <div className="admin-state-lottie">
-              <Lottie animationData={successAnimation} loop={false} />
+              {successAnimation && (
+                <Suspense fallback={null}>
+                  <Lottie
+                    animationData={successAnimation}
+                    loop={false}
+                  />
+                </Suspense>
+              )}
             </div>
             <p className="admin-state-heading">Access granted</p>
             <p className="admin-state-msg">Welcome back, admin.</p>
@@ -381,7 +411,14 @@ export default memo(function AdminLogin({ onClose, onLogin, onLogout }: AdminLog
         {step === "error" && (
           <div className="admin-state">
             <div className="admin-state-lottie">
-              <Lottie animationData={failedAnimation} loop={false} />
+              {failedAnimation && (
+                <Suspense fallback={null}>
+                  <Lottie
+                    animationData={failedAnimation}
+                    loop={false}
+                  />
+                </Suspense>
+              )}
             </div>
             <p className="admin-state-heading">Authentication failed</p>
             <p className="admin-state-msg">{errorMessage}</p>

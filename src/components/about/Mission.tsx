@@ -1,10 +1,16 @@
-import { memo, useEffect, useState } from "react";
+import {
+  memo,
+  useEffect,
+  useState,
+  lazy,
+  Suspense,
+} from "react";
 import { motion } from "framer-motion";
-import Lottie from "lottie-react";
 import { Link } from "react-router-dom";
 
-import missionAnim from "../../animations/mission.json";
 import s from "./Mission.module.css";
+
+const Lottie = lazy(() => import("lottie-react"));
 
 const EASE = [0.22, 1, 0.36, 1] as const;
 const VP = { once: true, amount: 0.18 };
@@ -58,6 +64,22 @@ function useFitsVisual() {
 function Mission() {
   const showVisual = useFitsVisual();
 
+  const [animationData, setAnimationData] = useState<object | null>(null);
+
+  useEffect(() => {
+    fetch("/lotties/mission.json")
+      .then((res) => {
+        if (!res.ok) {
+          throw new Error("Failed to load mission animation");
+        }
+        return res.json();
+      })
+      .then(setAnimationData)
+      .catch((error) => {
+        console.error("Failed to load mission animation:", error);
+      });
+  }, []);
+
   const cta = (
     <div className={s.ctaRow}>
       <a href="/software" className={s.btnPrimary}>
@@ -91,6 +113,7 @@ function Mission() {
         animate={{ x: [0, 20, 0], y: [0, 14, 0] }}
         transition={{ duration: 18, repeat: Infinity, ease: "easeInOut" }}
       />
+
       <motion.div
         className={s.orbB}
         aria-hidden="true"
@@ -111,7 +134,10 @@ function Mission() {
             viewport={VP}
           >
             <div className={s.missionCopy}>
-              <motion.div className={s.sectionTitleBlock} variants={fadeUp}>
+              <motion.div
+                className={s.sectionTitleBlock}
+                variants={fadeUp}
+              >
                 <motion.h2
                   id="mission-heading"
                   className={`${s.sectionTitle} ac-title-display`}
@@ -121,7 +147,10 @@ function Mission() {
                 </motion.h2>
               </motion.div>
 
-              <motion.p className={s.missionCopyP} variants={fadeUp}>
+              <motion.p
+                className={s.missionCopyP}
+                variants={fadeUp}
+              >
                 Built for people, powered by purpose. Our mission is to{" "}
                 <strong className={s.missionStrong}>
                   open new roots of innovation, opportunity, and digital
@@ -134,7 +163,10 @@ function Mission() {
                 — regardless of income, background, or location.
               </motion.p>
 
-              <motion.p className={s.missionCopyP} variants={fadeUp}>
+              <motion.p
+                className={s.missionCopyP}
+                variants={fadeUp}
+              >
                 Every solution is meant to be{" "}
                 <strong className={s.missionStrong}>
                   understandable, maintainable, and truly helpful
@@ -142,7 +174,10 @@ function Mission() {
                 — not just impressive on paper.
               </motion.p>
 
-              <motion.p className={s.missionCopyP} variants={fadeUp}>
+              <motion.p
+                className={s.missionCopyP}
+                variants={fadeUp}
+              >
                 Whether through a simple finance tool, a powerful AI workflow,
                 or an in-depth class,{" "}
                 <strong className={s.missionStrong}>
@@ -176,13 +211,20 @@ function Mission() {
             >
               <div className={`${s.lottieWrap} ac-lottie-frame`}>
                 <span className={s.lottieGlow} />
-                <Lottie
-                  animationData={missionAnim}
-                  loop
-                  autoplay
-                  className={`${s.lottieAnimation} ac-lottie-anim`}
-                  rendererSettings={{ preserveAspectRatio: "xMidYMid meet" }}
-                />
+
+                {animationData && (
+                  <Suspense fallback={null}>
+                    <Lottie
+                      animationData={animationData}
+                      loop
+                      autoplay
+                      className={`${s.lottieAnimation} ac-lottie-anim`}
+                      rendererSettings={{
+                        preserveAspectRatio: "xMidYMid meet",
+                      }}
+                    />
+                  </Suspense>
+                )}
               </div>
             </motion.div>
           )}

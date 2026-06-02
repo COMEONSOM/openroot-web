@@ -21,8 +21,6 @@ import {
   VP,
 } from "../../motion/variants";
 
-// FIX: Lazy-load Lottie component — it's a heavy library (~50 KB parsed).
-// Only imported when the component actually mounts.
 const Lottie = lazy(() => import("lottie-react"));
 
 type ServiceBlock = OfferCard & {
@@ -39,19 +37,18 @@ function getOfferByTag(tag: string): OfferCard {
   return found;
 }
 
-// FIX: Lazy-load animation JSON data using dynamic import.
-// These two JSON files (~several hundred KB uncompressed) were previously
-// bundled into the main chunk, inflating index-rXxAaXAp.js and contributing
-// to the 82.5 KB unused JS and 907ms long task reported.
-// They now load only when this section is visible in the viewport.
-async function loadAnimations(): Promise<{ software: object; classes: object }> {
-  const [softwareModule, classesModule] = await Promise.all([
-    import("../../animations/software.json"),
-    import("../../animations/classes.json"),
+async function loadAnimations(): Promise<{
+  software: object;
+  classes: object;
+}> {
+  const [software, classes] = await Promise.all([
+    fetch("/lotties/software.json").then((res) => res.json()),
+    fetch("/lotties/classes.json").then((res) => res.json()),
   ]);
+
   return {
-    software: softwareModule.default,
-    classes: classesModule.default,
+    software,
+    classes,
   };
 }
 

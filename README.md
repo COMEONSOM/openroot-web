@@ -139,7 +139,6 @@ openroot-web/
 │   └── .env.example            # .env is in root .gitignore
 │
 └── src/
-    ├── animations/             # Lottie JSON files (login, success, error states)
     ├── components/
     │   ├── about/              # WhatWeOffer, WhoWeAre, WhyWeImportant
     │   ├── styles/             # Component-scoped CSS files
