@@ -1,22 +1,11 @@
 // ============================================================
-// STUDY MATERIAL COMPONENT — CLEAN + STABLE -- VERSION 2025.8
-// MAX 2 ROWS VISIBLE, VIEW-MORE TILE INSIDE GRID
+// STUDY MATERIAL COMPONENT — BUNDLE-OPTIMIZED VERSION
+// JSON ANIMATIONS LOADED FROM /public/lotties
 // ============================================================
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Lottie from "lottie-react";
 import "../openrootClasses/OCStyle/OCStudyMaterial.css";
-
-// ============================================================
-// STUDY MATERIAL DATA
-// ============================================================
-
-import promptAnim from "../../assets-oc/lotties/prompt.json";
-import pythonAnim from "../../assets-oc/lotties/python.json";
-import sqlAnim from "../../assets-oc/lotties/MySQL.json";
-import financeAnim from "../../assets-oc/lotties/finance.json";
-import CSEAnim from "../../assets-oc/lotties/cse-basics.json";
-import interviewAnim from "../../assets-oc/lotties/HR Interview.json";
 
 // ============================================================
 // TYPES
@@ -25,7 +14,11 @@ import interviewAnim from "../../assets-oc/lotties/HR Interview.json";
 interface StudyMaterialItem {
   title: string;
   link: string;
-  animation: unknown;
+  animationFile: string;
+}
+
+interface LottieData {
+  [key: string]: unknown;
 }
 
 // ============================================================
@@ -33,12 +26,36 @@ interface StudyMaterialItem {
 // ============================================================
 
 const STUDY_MATERIALS: StudyMaterialItem[] = [
-  { title: "PROMPT ENGINEERING", link: "https://drive.google.com/drive/folders/1w793Z3QJj0yorZJvDKMDLT",      animation: promptAnim    },
-  { title: "PYTHON",             link: "https://drive.google.com/drive/folders/1IQerh93elt4mBQRdRZ_42yYv4Dv0ipTm", animation: pythonAnim    },
-  { title: "SQL",                link: "https://drive.google.com/drive/folders/1AdrThpT8qlMxuWQenc7LF-ryW4FIpBBx", animation: sqlAnim       },
-  { title: "FINANCE",            link: "https://drive.google.com/drive/folders/1tnPiNCIiElutXDcEveQppmMkbGp1Q8Q1", animation: financeAnim   },
-  { title: "CSE BASICS",         link: "https://drive.google.com/drive/folders/1kgOl_U_rbCHRChY2F6JdCiUW7qsEnaWt", animation: CSEAnim       },
-  { title: "INTERVIEW Q&A",      link: "https://drive.google.com/drive/folders/1CKFBndpl6IafBLBLo4ywFvbi35uMZzGJ", animation: interviewAnim },
+  {
+    title: "PROMPT ENGINEERING",
+    link: "https://drive.google.com/drive/folders/1w793Z3QJj0yorZJvDKMDLT",
+    animationFile: "/lotties/prompt.json",
+  },
+  {
+    title: "PYTHON",
+    link: "https://drive.google.com/drive/folders/1IQerh93elt4mBQRdRZ_42yYv4Dv0ipTm",
+    animationFile: "/lotties/python.json",
+  },
+  {
+    title: "SQL",
+    link: "https://drive.google.com/drive/folders/1AdrThpT8qlMxuWQenc7LF-ryW4FIpBBx",
+    animationFile: "/lotties/MySQL.json",
+  },
+  {
+    title: "FINANCE",
+    link: "https://drive.google.com/drive/folders/1tnPiNCIiElutXDcEveQppmMkbGp1Q8Q1",
+    animationFile: "/lotties/finance.json",
+  },
+  {
+    title: "CSE BASICS",
+    link: "https://drive.google.com/drive/folders/1kgOl_U_rbCHRChY2F6JdCiUW7qsEnaWt",
+    animationFile: "/lotties/cse-basics.json",
+  },
+  {
+    title: "INTERVIEW Q&A",
+    link: "https://drive.google.com/drive/folders/1CKFBndpl6IafBLBLo4ywFvbi35uMZzGJ",
+    animationFile: "/lotties/HR%20Interview.json",
+  },
 ];
 
 // ============================================================
@@ -47,10 +64,12 @@ const STUDY_MATERIALS: StudyMaterialItem[] = [
 
 function useMaxPerRow(): number {
   const get = (): number => {
+    if (typeof window === "undefined") return 5;
+
     const w = window.innerWidth;
-    if (w < 640)  return 3; // MOBILE
-    if (w < 1024) return 4; // TABLET / MEDIUM
-    return 5;               // LARGE
+    if (w < 640) return 3;
+    if (w < 1024) return 4;
+    return 5;
   };
 
   const [cols, setCols] = useState<number>(get);
@@ -62,6 +81,59 @@ function useMaxPerRow(): number {
   }, []);
 
   return cols;
+}
+
+// ============================================================
+// LOTTIE LOADER HOOK
+// ============================================================
+
+function useStudyMaterialAnimations(materials: StudyMaterialItem[]) {
+  const [animations, setAnimations] = useState<Record<string, LottieData | null>>(
+    {}
+  );
+  const [loading, setLoading] = useState<boolean>(true);
+
+  useEffect(() => {
+    let isMounted = true;
+
+    const loadAll = async () => {
+      try {
+        const entries = await Promise.all(
+          materials.map(async (item) => {
+            try {
+              const res = await fetch(item.animationFile);
+              if (!res.ok) {
+                throw new Error(`Failed to fetch ${item.animationFile}`);
+              }
+              const data = (await res.json()) as LottieData;
+              return [item.animationFile, data] as const;
+            } catch {
+              return [item.animationFile, null] as const;
+            }
+          })
+        );
+
+        if (!isMounted) return;
+
+        const next: Record<string, LottieData | null> = {};
+        for (const [file, data] of entries) {
+          next[file] = data;
+        }
+
+        setAnimations(next);
+      } finally {
+        if (isMounted) setLoading(false);
+      }
+    };
+
+    void loadAll();
+
+    return () => {
+      isMounted = false;
+    };
+  }, [materials]);
+
+  return { animations, loading };
 }
 
 // ============================================================
@@ -174,9 +246,13 @@ function StudyMaterial(): React.JSX.Element {
   const maxVisible = maxPerRow * 2;
   const showViewMore = STUDY_MATERIALS.length > maxVisible;
 
-  const visibleCards: StudyMaterialItem[] = showViewMore
-    ? STUDY_MATERIALS.slice(0, maxVisible - 1)
-    : STUDY_MATERIALS.slice(0, maxVisible);
+  const visibleCards: StudyMaterialItem[] = useMemo(() => {
+    return showViewMore
+      ? STUDY_MATERIALS.slice(0, maxVisible - 1)
+      : STUDY_MATERIALS.slice(0, maxVisible);
+  }, [showViewMore, maxVisible]);
+
+  const { animations, loading } = useStudyMaterialAnimations(STUDY_MATERIALS);
 
   const handleOpenLink = (url: string): void => {
     if (url) window.open(url, "_blank", "noopener,noreferrer");
@@ -186,30 +262,50 @@ function StudyMaterial(): React.JSX.Element {
     <section id="study-material" className="study-material">
       <h2 className="study-title">📚 Study Materials</h2>
 
-      {/* GRID */}
       <div
         className="study-grid"
         style={{ gridTemplateColumns: `repeat(${maxPerRow}, 1fr)` }}
       >
-        {visibleCards.map((item, idx) => (
-          <button
-            key={`${item.title}-${idx}`}
-            className="study-card"
-            onClick={() => handleOpenLink(item.link)}
-          >
-            <div className="study-animation">
-              <Lottie animationData={item.animation} loop />
-            </div>
-            <span className="study-label">{item.title}</span>
-          </button>
-        ))}
+        {visibleCards.map((item, idx) => {
+          const animationData = animations[item.animationFile];
 
-        {/* VIEW-MORE TILE */}
+          return (
+            <button
+              key={`${item.title}-${idx}`}
+              className="study-card"
+              onClick={() => handleOpenLink(item.link)}
+              type="button"
+            >
+              <div className="study-animation">
+                {!loading && animationData ? (
+                  <Lottie animationData={animationData} loop />
+                ) : (
+                  <div
+                    style={{
+                      width: "100%",
+                      height: "100%",
+                      display: "grid",
+                      placeItems: "center",
+                      fontSize: 14,
+                      fontWeight: 600,
+                      opacity: 0.7,
+                    }}
+                  >
+                    Loading...
+                  </div>
+                )}
+              </div>
+              <span className="study-label">{item.title}</span>
+            </button>
+          );
+        })}
+
         {showViewMore && (
           <button
             id="view-more-card"
             className="study-card"
             onClick={() => openViewMoreWindow(STUDY_MATERIALS)}
+            type="button"
           >
             <div
               className="study-animation"

@@ -1,10 +1,13 @@
-import { useState, useMemo, useCallback, useRef } from "react";
+// ============================================================
+// AVAILABLE COURSES COMPONENT — BUNDLE-OPTIMIZED VERSION
+// JSON ANIMATIONS LOADED FROM /public/lotties
+// ============================================================
+
+import { useState, useMemo, useCallback, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Lottie from "lottie-react";
 import "../openrootClasses/OCStyle/OCAvailableCourses.css";
 
-import FinanceLottie from "../../assets-oc/lotties/finance.json";
-import PromptLottie from "../../assets-oc/lotties/prompt_course.json";
 import logo from "../../assets-oc/open-root-light.png";
 import msmeLogo from "../../assets-oc/msme-logo.png";
 
@@ -23,7 +26,7 @@ const RAZORPAY_SCRIPT_TIMEOUT_MS = 15000;
 interface Course {
   id: number;
   name: string;
-  animation: unknown;
+  animationFile: string;
   description: string[];
   duration: string;
   totalFee: number;
@@ -81,6 +84,8 @@ interface RazorpayConstructor {
   new (options: RazorpayOptions): RazorpayInstance;
 }
 
+type LottieData = Record<string, unknown> | null;
+
 declare global {
   interface Window {
     Razorpay?: RazorpayConstructor;
@@ -89,11 +94,11 @@ declare global {
 
 // ─── Data ────────────────────────────────────────────────────────────────────
 
-const COURSE_DATA = Object.freeze<Course[]>([
+const COURSE_DATA: readonly Course[] = [
   {
     id: 1,
     name: "Investing & Finance",
-    animation: FinanceLottie,
+    animationFile: "/lotties/finance.json",
     description: [
       "Stock Market From Zero (Demat, Buy/Sell, Basics, Fundamentals)",
       "How to Research Companies & Analyze Stocks",
@@ -109,7 +114,7 @@ const COURSE_DATA = Object.freeze<Course[]>([
   {
     id: 2,
     name: "Prompt Engineering",
-    animation: PromptLottie,
+    animationFile: "/lotties/prompt_course.json",
     description: [
       "Prompt Engineering Basics — How to write clear prompts to control AI output",
       "AI Image Generation using ChatGPT, Gemini, Grok and other tools",
@@ -132,7 +137,7 @@ const COURSE_DATA = Object.freeze<Course[]>([
     totalFee: 850,
     priceLabel: "Total Fee: ₹850",
   },
-]);
+];
 
 // ─── Hook ────────────────────────────────────────────────────────────────────
 
@@ -148,6 +153,53 @@ const useCourseLookup = () => {
   );
 
   return { getCourseById };
+};
+
+const useCourseAnimations = () => {
+  const [animations, setAnimations] = useState<Record<string, LottieData>>({});
+  const [loading, setLoading] = useState<boolean>(true);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    const load = async (): Promise<void> => {
+      try {
+        const entries = await Promise.all(
+          COURSE_DATA.map(async (course) => {
+            try {
+              const res = await fetch(course.animationFile);
+              if (!res.ok) {
+                throw new Error(`Failed to load ${course.animationFile}`);
+              }
+              const data = (await res.json()) as Record<string, unknown>;
+              return [course.animationFile, data] as const;
+            } catch {
+              return [course.animationFile, null] as const;
+            }
+          })
+        );
+
+        if (cancelled) return;
+
+        const next: Record<string, LottieData> = {};
+        for (const [file, data] of entries) {
+          next[file] = data;
+        }
+
+        setAnimations(next);
+      } finally {
+        if (!cancelled) setLoading(false);
+      }
+    };
+
+    void load();
+
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  return { animations, loading };
 };
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
@@ -268,6 +320,7 @@ export default function AvailableCourses() {
   const [formErrors, setFormErrors] = useState<FormErrors>({});
 
   const { getCourseById } = useCourseLookup();
+  const { animations, loading } = useCourseAnimations();
   const receiptRef = useRef<HTMLDivElement>(null);
   const paymentLockRef = useRef(false);
 
@@ -282,7 +335,7 @@ export default function AvailableCourses() {
     setStudentEmail("");
     setStudentPhone("");
   }, []);
-  // ---------- COURSE CLICK ----------
+
   const handleCourseClick = useCallback(
     (id: number) => {
       const course = getCourseById(id);
@@ -299,7 +352,6 @@ export default function AvailableCourses() {
     [getCourseById]
   );
 
-  // ---------- BACK ----------
   const handleBack = useCallback(() => {
     if (isPaying) return;
 
@@ -311,7 +363,6 @@ export default function AvailableCourses() {
     }
   }, [viewState, isPaying]);
 
-  // ---------- DETAILS MODAL ----------
   const openDetailsModal = useCallback(() => {
     setFormErrors({});
     setIsDetailsOpen(true);
@@ -345,7 +396,6 @@ export default function AvailableCourses() {
     return Object.keys(errors).length === 0;
   }, [studentName, studentEmail, studentPhone]);
 
-  // ---------- PAYMENT ----------
   const handleConfirmDetailsAndPay = useCallback(async () => {
     if (!selectedCourse) return;
     if (!validateForm()) return;
@@ -457,8 +507,6 @@ export default function AvailableCourses() {
         theme: { color: "#7c3aed" },
       };
 
-      console.log("Razorpay:", window.Razorpay);
-
       const rzp = new window.Razorpay(options);
       rzp.open();
     } catch (err) {
@@ -472,7 +520,6 @@ export default function AvailableCourses() {
     }
   }, [selectedCourse, validateForm, studentName, studentEmail, studentPhone]);
 
-  // ---------- PDF ----------
   const handleDownloadReceipt = async (): Promise<void> => {
     try {
       if (!selectedCourse) return;
@@ -587,7 +634,7 @@ export default function AvailableCourses() {
       pdf.text(selectedCourse.name, tableLeft + 10, y + 18);
       pdf.text(String(selectedCourse.id), tableLeft + 230, y + 18);
       pdf.text(
-        `₹${selectedCourse.totalFee}`,
+        `${selectedCourse.totalFee} INR`,
         tableLeft + tableWidth - 80,
         y + 18
       );
@@ -633,7 +680,7 @@ export default function AvailableCourses() {
 
       pdf.setFontSize(16);
       pdf.setTextColor(primaryColor);
-      pdf.text(`₹${selectedCourse.totalFee}`, totalBoxX + 16, totalBoxY + 40);
+      pdf.text(`${selectedCourse.totalFee} INR`, totalBoxX + 16, totalBoxY + 40);
 
       const footerY = 780;
       pdf.setDrawColor(230);
@@ -661,7 +708,6 @@ export default function AvailableCourses() {
     }
   };
 
-  // ---------- WHATSAPP SHARE ----------
   const handleShareWhatsapp = useCallback(() => {
     if (!selectedCourse || !paymentMeta) return;
 
@@ -680,8 +726,6 @@ export default function AvailableCourses() {
     const url = `https://wa.me/${phone}?text=${encoded}`;
     window.open(url, "_blank", "noopener,noreferrer");
   }, [selectedCourse, paymentMeta]);
-
-  // ─── JSX ──────────────────────────────────────────────────────────────────
 
   return (
     <div className="courses-section-wrapper">
@@ -702,24 +746,42 @@ export default function AvailableCourses() {
 
         {viewState === "list" && (
           <ul className="course-list">
-            {COURSE_DATA.map((course) => (
-              <motion.li
-                key={course.id}
-                className="course-item premium-card"
-                whileHover={{ y: -6, scale: 1.03 }}
-                whileTap={{ scale: 0.98 }}
-                onClick={() => handleCourseClick(course.id)}
-              >
-                <Lottie
-                  animationData={course.animation}
-                  loop
-                  className="course-thumbnail"
-                />
-                <h4>{course.name}</h4>
-                <p>{course.duration}</p>
-                <span className="price-chip">{course.priceLabel}</span>
-              </motion.li>
-            ))}
+            {COURSE_DATA.map((course) => {
+              const animationData = animations[course.animationFile];
+
+              return (
+                <motion.li
+                  key={course.id}
+                  className="course-item premium-card"
+                  whileHover={{ y: -6, scale: 1.03 }}
+                  whileTap={{ scale: 0.98 }}
+                  onClick={() => handleCourseClick(course.id)}
+                >
+                  <div className="course-thumbnail">
+                    {!loading && animationData ? (
+                      <Lottie animationData={animationData} loop />
+                    ) : (
+                      <div
+                        style={{
+                          width: "100%",
+                          height: "100%",
+                          display: "grid",
+                          placeItems: "center",
+                          fontSize: 14,
+                          fontWeight: 600,
+                          opacity: 0.7,
+                        }}
+                      >
+                        Loading...
+                      </div>
+                    )}
+                  </div>
+                  <h4>{course.name}</h4>
+                  <p>{course.duration}</p>
+                  <span className="price-chip">{course.priceLabel}</span>
+                </motion.li>
+              );
+            })}
           </ul>
         )}
 
@@ -834,7 +896,9 @@ export default function AvailableCourses() {
                       type="tel"
                       value={studentPhone}
                       onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                        setStudentPhone(e.target.value.replace(/\D/g, "").slice(0, 10))
+                        setStudentPhone(
+                          e.target.value.replace(/\D/g, "").slice(0, 10)
+                        )
                       }
                       placeholder="10-digit mobile number"
                       autoComplete="tel"

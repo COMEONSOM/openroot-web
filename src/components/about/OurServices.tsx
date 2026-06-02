@@ -2,12 +2,6 @@
  * ============================================================
  * OUR SERVICES — OPENROOT SYSTEMS
  * SEAMLESS FLOW VERSION
- * FIX: Lazy-load Lottie animations to reduce initial JS parse
- *      and execution time. Report showed 2,210ms LCP element
- *      render delay and 907ms long task in index-rXxAaXAp.js.
- *      Lottie + two large JSON animation files were loaded
- *      eagerly, contributing to main-thread saturation.
- *      Now loaded only when the section enters the viewport.
  * ============================================================
  */
 

@@ -31,6 +31,6 @@ if (typeof window !== "undefined") {
   if ("requestIdleCallback" in window) {
     window.requestIdleCallback(loadAnalytics);
   } else {
-    window.setTimeout(loadAnalytics, 1);
+    setTimeout(loadAnalytics, 1);
   }
 }
