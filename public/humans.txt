@@ -1,0 +1,26 @@
+/* TEAM */
+
+Organization: Openroot Systems
+Website: https://openroot.in
+
+Founder:
+Somnath Banerjee
+
+Role:
+Founder & Developer
+
+MSME Registration:
+UDYAM-WB-14-0263034
+
+Technology:
+React
+Vite
+Firebase
+Node.js
+Render
+
+Mission:
+To make technology, AI, finance education and digital solutions accessible to everyone.
+
+Official Website:
+https://openroot.in

@@ -1,6 +1,7 @@
 import { Suspense, lazy, useEffect, useRef, useState } from "react";
 import { useTheme } from "../context/ThemeContext";
 import "./styles/Footer.css";
+import { Link } from "react-router-dom";
 
 const CertificateModal = lazy(() => import("../components/CertificateModal"));
 const FaqModal = lazy(() => import("../components/FaqModal"));
@@ -91,15 +92,21 @@ export default function Footer() {
               causing layout shifts. Using the same displayed dimensions
               as the header logo since it's the same asset.
             */}
-            <img
-              src={logoSrc}
-              alt="Openroot"
-              className="footer-logo-img"
-              loading="lazy"
-              decoding="async"
-              width={160}
-              height={37}
-            />
+            <Link
+              to="/openroot-systems"
+              aria-label="Openroot Systems Official Information"
+              title="Openroot Systems Official Information"
+            >
+              <img
+                src={logoSrc}
+                alt="Openroot Systems"
+                className="footer-logo-img"
+                loading="lazy"
+                decoding="async"
+                width={160}
+                height={37}
+              />
+            </Link>
 
             <span className="footer-label">Sitemap</span>
 

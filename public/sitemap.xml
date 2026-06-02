@@ -110,4 +110,11 @@
     <priority>0.4</priority>
   </url>
 
+  <url>
+    <loc>https://openroot.in/openroot-systems</loc>
+    <lastmod>2026-04-18</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.4</priority>
+  </url>
+
 </urlset>

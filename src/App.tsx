@@ -27,6 +27,7 @@ import AboutCompany from "./components/about/AboutCompany";
 import Footer from "./components/Footer";
 
 import "./App.css";
+import OpenrootSystems from "./pages/OpenrootSystems";
 
 // ── Lazy pages ────────────────────────────────────────────────
 const UserLoginModal = lazy(() => import("./components/LoginModal"));
@@ -327,6 +328,7 @@ function AppContent() {
           <Route path="/privacy-policy" element={<PrivacyPolicy />} />
           <Route path="/license" element={<License />} />
           <Route path="/support" element={<OpenrootGDriveSupport />} />
+          <Route path="/openroot-systems" element={<OpenrootSystems />}/>
 
           {/* Protected tools */}
           <Route path="/newsletter" element={<RequireAuth><NewsLetter /></RequireAuth>} />
