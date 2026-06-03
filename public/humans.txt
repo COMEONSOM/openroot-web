@@ -1,26 +1,43 @@
 /* TEAM */
 
 Organization: Openroot Systems
-Website: https://openroot.in
+Official Website: https://openroot.in
+MSME Registration: UDYAM-WB-14-0263034
 
-Founder:
-Somnath Banerjee
+Founder & Developer:
+  Name: Somnath Banerjee
+  Role: Founder, Lead Developer & Product Designer
+  LinkedIn: https://www.linkedin.com/in/comeonsom/
+  GitHub: https://github.com/COMEONSOM
+  Twitter/X: https://x.com/comeonsom_
+  Profile: https://openroot.in/founder
 
-Role:
-Founder & Developer
+/* THANKS */
 
-MSME Registration:
-UDYAM-WB-14-0263034
+  Open source community
+  React, Vite, Firebase teams
+  Our students and users across India
 
-Technology:
-React
-Vite
-Firebase
-Node.js
-Render
+/* SITE */
 
-Mission:
-To make technology, AI, finance education and digital solutions accessible to everyone.
+  Standards: HTML5, CSS3, WAI-ARIA, Schema.org
+  Components: React 18, TypeScript, Vite
+  Hosting: Firebase Hosting
+  Analytics: Google Analytics 4
+  Payments: Razorpay
+  Last Update: 2026/06/02
+  Language: English
 
-Official Website:
-https://openroot.in
+/* CONTACT */
+
+  Email: connect.openroot@gmail.com
+  WhatsApp: https://wa.me/917866049865
+  YouTube: https://youtube.com/@knowledge.openroot
+  Facebook: https://www.facebook.com/OpenrootSystems
+
+/* LEGAL */
+
+  Openroot Systems is a registered MSME under the Government of India.
+  UDYAM Registration Number: UDYAM-WB-14-0263034
+  Based in West Bengal, India.
+  The only official website is https://openroot.in

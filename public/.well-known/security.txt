@@ -1,0 +1,16 @@
+-----BEGIN PGP SIGNED MESSAGE-----
+
+# Openroot Systems – Security Disclosure Policy
+# https://openroot.in/.well-known/security.txt
+# Compliant with RFC 9116
+
+Contact: mailto:connect.openroot@gmail.com
+Expires: 2027-06-01T00:00:00.000Z
+Preferred-Languages: en, bn
+Canonical: https://openroot.in/.well-known/security.txt
+Policy: https://openroot.in/security-policy
+Acknowledgments: https://openroot.in/security-acknowledgments
+
+# IMPORTANT BRAND NOTICE
+# The only official website of Openroot Systems is https://openroot.in
+# MSME Registration: UDYAM-WB-14-0263034

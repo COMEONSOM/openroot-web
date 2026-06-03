@@ -25,17 +25,17 @@ const SITEMAP_LINKS = [
   },
   {
     label:  "Released Softwares",
-    href:   "#released-softwares-section",
+    href:   "/software",
   },
   {
     label:  "Watch Content",
-    href:   "https://youtube.com/@knowledge.openroot?si=9QyqR0bMkKmY8HPq",
+    href:   "https://www.youtube.com/@openrootsystems",
     rel:    "noopener noreferrer" as const,
     target: "_blank" as const,
   },
   {
     label:  "Music Production",
-    href:   "https://www.youtube.com/channel/UCx4LkoSQfZtlIKDtH9y3zRA",
+    href:   "https://www.youtube.com/@somu.youtube",
     rel:    "noopener noreferrer" as const,
     target: "_blank" as const,
   },
@@ -186,7 +186,7 @@ export default function Footer() {
               </a>
 
               <a
-                href="https://x.com/comeonsom_"
+                href="https://x.com/comeonsomx"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="footer-icon-btn"

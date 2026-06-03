@@ -50,8 +50,9 @@ const GDrive = lazy(() => import("./pages/GDrive"));
 
 // ── SEO constants ──────────────────────────────────────────────
 const SITE_URL = "https://openroot.in";
-const OG_IMAGE = `${SITE_URL}/assets/company-icon.png`;
+const OG_IMAGE = `${SITE_URL}/assets/OPENROOT-image.avif`;
 const SITE_NAME = "Openroot Systems";
+const ORG_ID = `${SITE_URL}/#organization`;
 
 // ── Admin session ──────────────────────────────────────────────
 const ADMIN_SESSION_KEY = "openrootAdmin";
@@ -65,11 +66,9 @@ interface AdminData {
 
 function readAdminSession(): AdminData | null {
   if (typeof window === "undefined") return null;
-
   try {
     const raw = sessionStorage.getItem(ADMIN_SESSION_KEY);
     if (!raw) return null;
-
     const parsed = JSON.parse(raw) as AdminData;
     return parsed?.verified ? parsed : null;
   } catch {
@@ -78,10 +77,6 @@ function readAdminSession(): AdminData | null {
 }
 
 // ── Shared layout shells ──────────────────────────────────────
-// FIX (Accessibility): Added <main> landmark element wrapping page content.
-// Report flagged: "Document does not have a main landmark."
-// Screen reader users rely on <main> to skip to page content.
-// HomeShell wraps children in <main> since it renders the primary content.
 const HomeShell: React.FC<{ children: React.ReactNode }> = memo(({ children }) => (
   <>
     <Header />
@@ -95,7 +90,6 @@ const HomeShell: React.FC<{ children: React.ReactNode }> = memo(({ children }) =
 ));
 HomeShell.displayName = "HomeShell";
 
-// HeaderShell also gets <main> for pages that use it (software hub, cert, etc.)
 const HeaderShell: React.FC<{ children: React.ReactNode }> = memo(({ children }) => (
   <>
     <Header />
@@ -134,23 +128,15 @@ const RequireAuth: React.FC<{ children: React.ReactNode }> = memo(({ children })
       } else {
         sessionStorage.removeItem("openrootUserUID");
       }
-
       setUser(nextUser);
     });
-
     return unsubscribe;
   }, []);
 
   const isAdmin = Boolean(readAdminSession());
 
-  if (user === undefined && !isAdmin) {
-    return <PageLoader />;
-  }
-
-  if (!user && !isAdmin) {
-    return <Navigate to="/userlogin" replace />;
-  }
-
+  if (user === undefined && !isAdmin) return <PageLoader />;
+  if (!user && !isAdmin) return <Navigate to="/userlogin" replace />;
   return <>{children}</>;
 });
 RequireAuth.displayName = "RequireAuth";
@@ -158,7 +144,6 @@ RequireAuth.displayName = "RequireAuth";
 // ── Login routes ───────────────────────────────────────────────
 const UserLoginRoute = memo(() => {
   const navigate = useNavigate();
-
   return (
     <HeaderShell>
       <Suspense fallback={<PageLoader />}>
@@ -171,7 +156,6 @@ UserLoginRoute.displayName = "UserLoginRoute";
 
 const AdminLoginRoute = memo(() => {
   const navigate = useNavigate();
-
   return (
     <HeaderShell>
       <Suspense fallback={<PageLoader />}>
@@ -198,7 +182,6 @@ NotFound.displayName = "NotFound";
 // ── App content ────────────────────────────────────────────────
 function AppContent() {
   const location = useLocation();
-
   const isLoginRoute =
     location.pathname === "/userlogin" ||
     location.pathname === "/adminlogin";
@@ -221,20 +204,20 @@ function AppContent() {
           <Route path="/userlogin" element={<UserLoginRoute />} />
           <Route path="/adminlogin" element={<AdminLoginRoute />} />
 
-          {/* Home */}
+          {/* ── HOME ─────────────────────────────────────────── */}
           <Route
             path="/"
             element={
               <HomeShell>
                 <Helmet>
-                  <title>{SITE_NAME} – Custom Software, AI Tools & Web Solutions</title>
+                  <title>{SITE_NAME} | Custom Software, AI Tools & Free Productivity Apps – India</title>
                   <meta
                     name="description"
-                    content="Openroot Systems builds robust Automation Software, React-based Websites, Web Extensions, and Windows Applications. We also provide free, high-utility tools for students and professionals."
+                    content="Openroot Systems is a Government of India registered MSME (UDYAM-WB-14-0263034). We build custom software, AI tools, browser extensions, and offer prompt engineering & finance courses. Free tools: MAKAUT grade calculator, travel expense manager, government job updates."
                   />
                   <meta
                     name="keywords"
-                    content="Openroot Systems, custom software development, React websites, Windows applications, web extensions, automation software, free tools for students India, NIOR AI, MAKAUT grade calculator, productivity software"
+                    content="Openroot Systems, custom software India, AI tools India, prompt engineering course, MSME software, government job updates, MAKAUT grade calculator, finance course India"
                   />
                   <link rel="canonical" href={SITE_URL} />
                   <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large" />
@@ -242,61 +225,88 @@ function AppContent() {
                   <meta property="og:url" content={SITE_URL} />
                   <meta property="og:site_name" content={SITE_NAME} />
                   <meta property="og:locale" content="en_IN" />
-                  <meta property="og:title" content={`${SITE_NAME} – Software Development & Automation`} />
-                  <meta
-                    property="og:description"
-                    content="From Automation Software and React Websites to powerful free utilities like AI assistants and expense trackers. We build tech that saves you time."
-                  />
+                  <meta property="og:title" content={`${SITE_NAME} | Custom Software, AI Tools & Free Productivity Apps`} />
+                  <meta property="og:description" content="Government of India registered MSME. Custom software, AI assistants, prompt engineering & finance education, and free student tools." />
                   <meta property="og:image" content={OG_IMAGE} />
                   <meta name="twitter:card" content="summary_large_image" />
-                  <meta name="twitter:title" content={`${SITE_NAME} – Automation, Web Apps & Free Tools`} />
-                  <meta
-                    name="twitter:description"
-                    content="Building real-world solutions: React sites, Windows apps, browser extensions, and a suite of free productivity tools for India."
-                  />
+                  <meta name="twitter:site" content="@comeonsom_" />
+                  <meta name="twitter:title" content={`${SITE_NAME} | Custom Software, AI Tools & Free Apps`} />
+                  <meta name="twitter:description" content="Govt of India registered MSME. Custom software, AI tools, prompt engineering & finance courses, free MAKAUT calculator, job updates." />
                   <meta name="twitter:image" content={OG_IMAGE} />
+                  <script type="application/ld+json">{JSON.stringify({
+                    "@context": "https://schema.org",
+                    "@type": "BreadcrumbList",
+                    "itemListElement": [
+                      { "@type": "ListItem", "position": 1, "name": "Openroot Systems", "item": SITE_URL }
+                    ]
+                  })}</script>
                 </Helmet>
                 <AboutCompany />
               </HomeShell>
             }
           />
 
-          {/* Certificate */}
+          {/* ── CERTIFICATE VERIFICATION ─────────────────────── */}
           <Route
             path="/certificate-verification"
             element={
               <HeaderShell>
                 <Helmet>
-                  <title>Verify Your Openroot Certificate – Instant & Tamper-Proof</title>
-                  <meta
-                    name="description"
-                    content="Received an Openroot certificate? Verify it instantly using our official secure verification tool."
-                  />
+                  <title>Verify Openroot Certificate – Instant & Tamper-Proof | {SITE_NAME}</title>
+                  <meta name="description" content="Verify the authenticity of any Openroot Systems certificate instantly using our official secure verification portal. Tamper-proof and reliable." />
                   <link rel="canonical" href={`${SITE_URL}/certificate-verification`} />
+                  <meta name="robots" content="index, follow" />
+                  <meta property="og:title" content="Verify Openroot Certificate – Official Verification Tool" />
+                  <meta property="og:url" content={`${SITE_URL}/certificate-verification`} />
+                  <script type="application/ld+json">{JSON.stringify({
+                    "@context": "https://schema.org",
+                    "@type": "BreadcrumbList",
+                    "itemListElement": [
+                      { "@type": "ListItem", "position": 1, "name": "Home", "item": SITE_URL },
+                      { "@type": "ListItem", "position": 2, "name": "Certificate Verification", "item": `${SITE_URL}/certificate-verification` }
+                    ]
+                  })}</script>
                 </Helmet>
                 <CertificateModal isOpen={true} onClose={() => {}} />
               </HeaderShell>
             }
           />
 
-          {/* Software hub */}
+          {/* ── SOFTWARE HUB ─────────────────────────────────── */}
           <Route
             path="/software"
             element={
               <HeaderShell>
                 <Helmet>
-                  <title>All Free Tools in One Place – {SITE_NAME} Software Hub</title>
-                  <meta
-                    name="description"
-                    content="Browse every free tool built by Openroot Systems."
-                  />
+                  <title>All Products & Free Tools – {SITE_NAME} Software Hub</title>
+                  <meta name="description" content="Browse all free tools and products by Openroot Systems: NIOR AI, MAKAUT Grade Calculator, Travel Expense Manager, Openroot Classes, GDrive Automation, Job Updates portal and more." />
                   <link rel="canonical" href={`${SITE_URL}/software`} />
+                  <meta name="robots" content="index, follow" />
+                  <meta property="og:title" content="Openroot Systems Software Hub – All Products & Free Tools" />
+                  <meta property="og:url" content={`${SITE_URL}/software`} />
+                  <script type="application/ld+json">{JSON.stringify({
+                    "@context": "https://schema.org",
+                    "@type": "BreadcrumbList",
+                    "itemListElement": [
+                      { "@type": "ListItem", "position": 1, "name": "Home", "item": SITE_URL },
+                      { "@type": "ListItem", "position": 2, "name": "Software Hub", "item": `${SITE_URL}/software` }
+                    ]
+                  })}</script>
+                  <script type="application/ld+json">{JSON.stringify({
+                    "@context": "https://schema.org",
+                    "@type": "CollectionPage",
+                    "name": "Openroot Systems – All Products & Free Tools",
+                    "url": `${SITE_URL}/software`,
+                    "description": "Complete catalog of software products and free tools by Openroot Systems.",
+                    "publisher": { "@id": ORG_ID }
+                  })}</script>
                 </Helmet>
                 <SoftwareHub />
               </HeaderShell>
             }
           />
 
+          {/* ── INDIVIDUAL SOFTWARE PAGES ────────────────────── */}
           <Route
             path="/software/:slug"
             element={
@@ -306,37 +316,226 @@ function AppContent() {
             }
           />
 
-          <Route path="/software-solutions" element={<SoftwareSolutions />} />
-
-          {/* Founder */}
+          {/* ── SOFTWARE SOLUTIONS (B2B) ──────────────────────── */}
           <Route
-            path="/founder"
+            path="/software-solutions"
             element={
-              <iframe
-                src="/founder.html"
-                title="Founder – Openroot Systems"
-                sandbox="allow-scripts allow-popups allow-popups-to-escape-sandbox"
-                referrerPolicy="no-referrer"
-                style={{ width: "100%", height: "100vh", border: "none" }}
-              />
+              <>
+                <Helmet>
+                  <title>Custom Software Development Services – {SITE_NAME}</title>
+                  <meta name="description" content="Openroot Systems offers professional custom software development, business automation, government software, MSME solutions and web application development services in India." />
+                  <link rel="canonical" href={`${SITE_URL}/software-solutions`} />
+                  <meta name="robots" content="index, follow" />
+                  <meta property="og:title" content="Custom Software Development Services – Openroot Systems" />
+                  <meta property="og:url" content={`${SITE_URL}/software-solutions`} />
+                  <script type="application/ld+json">{JSON.stringify({
+                    "@context": "https://schema.org",
+                    "@type": "BreadcrumbList",
+                    "itemListElement": [
+                      { "@type": "ListItem", "position": 1, "name": "Home", "item": SITE_URL },
+                      { "@type": "ListItem", "position": 2, "name": "Software Solutions", "item": `${SITE_URL}/software-solutions` }
+                    ]
+                  })}</script>
+                  <script type="application/ld+json">{JSON.stringify({
+                    "@context": "https://schema.org",
+                    "@type": "Service",
+                    "serviceType": "Custom Software Development",
+                    "name": "Openroot Systems Software Development Services",
+                    "url": `${SITE_URL}/software-solutions`,
+                    "provider": { "@id": ORG_ID },
+                    "areaServed": { "@type": "Country", "name": "India" },
+                    "description": "Custom software development, business automation, government software, MSME solutions and React web app development.",
+                    "hasOfferCatalog": {
+                      "@type": "OfferCatalog",
+                      "name": "Software Development Services",
+                      "itemListElement": [
+                        { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Custom Software Development" } },
+                        { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Business Automation Solutions" } },
+                        { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Government Department Software" } },
+                        { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "MSME Software Solutions" } },
+                        { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Enterprise Web Applications" } }
+                      ]
+                    }
+                  })}</script>
+                </Helmet>
+                <SoftwareSolutions />
+              </>
             }
           />
 
-          {/* Legal */}
-          <Route path="/terms" element={<Terms />} />
-          <Route path="/CoevasTerms" element={<CoevasTerms />} />
-          <Route path="/privacy-policy" element={<PrivacyPolicy />} />
-          <Route path="/license" element={<License />} />
-          <Route path="/support" element={<OpenrootGDriveSupport />} />
-          <Route path="/openroot-systems" element={<OpenrootSystems />}/>
+          {/* ── FOUNDER ──────────────────────────────────────── */}
+          <Route
+            path="/founder"
+            element={
+              <>
+                <Helmet>
+                  <title>Somnath Banerjee – Founder of Openroot Systems</title>
+                  <meta name="description" content="Learn about Somnath Banerjee, founder and lead developer of Openroot Systems – a Government of India registered MSME building AI tools, software solutions and educational platforms." />
+                  <link rel="canonical" href={`${SITE_URL}/founder`} />
+                  <meta name="robots" content="index, follow" />
+                  <script type="application/ld+json">{JSON.stringify({
+                    "@context": "https://schema.org",
+                    "@type": "ProfilePage",
+                    "name": "Somnath Banerjee – Founder of Openroot Systems",
+                    "url": `${SITE_URL}/founder`,
+                    "mainEntity": {
+                      "@type": "Person",
+                      "name": "Somnath Banerjee",
+                      "jobTitle": "Founder & Lead Developer",
+                      "worksFor": { "@id": ORG_ID },
+                      "url": `${SITE_URL}/founder`,
+                      "sameAs": [
+                        "https://github.com/COMEONSOM",
+                        "https://www.linkedin.com/in/comeonsom/",
+                        "https://x.com/comeonsom_"
+                      ]
+                    }
+                  })}</script>
+                </Helmet>
+                <iframe
+                  src="/founder.html"
+                  title="Somnath Banerjee – Founder of Openroot Systems"
+                  sandbox="allow-scripts allow-popups allow-popups-to-escape-sandbox"
+                  referrerPolicy="no-referrer"
+                  style={{ width: "100%", height: "100vh", border: "none" }}
+                />
+              </>
+            }
+          />
 
-          {/* Protected tools */}
-          <Route path="/newsletter" element={<RequireAuth><NewsLetter /></RequireAuth>} />
-          <Route path="/coevas-terminal" element={<RequireAuth><CoeasTerminal /></RequireAuth>} />
-          <Route path="/makaut-grade-pro" element={<RequireAuth><Makaut /></RequireAuth>} />
-          <Route path="/travel-expense-manager" element={<RequireAuth><TravelExpenseManager /></RequireAuth>} />
-          <Route path="/openroot-classes" element={<RequireAuth><OCLayout /></RequireAuth>} />
-          <Route path="/gdrive-web-extension" element={<RequireAuth><GDrive /></RequireAuth>} />
+          {/* ── LEGAL ────────────────────────────────────────── */}
+          <Route
+            path="/terms"
+            element={
+              <>
+                <Helmet>
+                  <title>Terms & Conditions – {SITE_NAME}</title>
+                  <meta name="description" content="Terms and conditions for using Openroot Systems products and services at openroot.in." />
+                  <link rel="canonical" href={`${SITE_URL}/terms`} />
+                  <meta name="robots" content="index, follow" />
+                </Helmet>
+                <Terms />
+              </>
+            }
+          />
+          <Route path="/CoevasTerms" element={<CoevasTerms />} />
+          <Route
+            path="/privacy-policy"
+            element={
+              <>
+                <Helmet>
+                  <title>Privacy Policy – {SITE_NAME}</title>
+                  <meta name="description" content="Privacy policy for Openroot Systems. Learn how we collect, use, and protect your information at openroot.in." />
+                  <link rel="canonical" href={`${SITE_URL}/privacy-policy`} />
+                  <meta name="robots" content="index, follow" />
+                </Helmet>
+                <PrivacyPolicy />
+              </>
+            }
+          />
+          <Route path="/license" element={<License />} />
+          <Route
+            path="/support"
+            element={
+              <>
+                <Helmet>
+                  <title>Support – Openroot GDrive Extension | {SITE_NAME}</title>
+                  <meta name="description" content="Get support for the Openroot GDrive Automation Chrome extension. Installation guides, FAQs and troubleshooting." />
+                  <link rel="canonical" href={`${SITE_URL}/support`} />
+                </Helmet>
+                <OpenrootGDriveSupport />
+              </>
+            }
+          />
+
+          {/* ── ENTITY PAGE ──────────────────────────────────── */}
+          <Route path="/openroot-systems" element={<OpenrootSystems />} />
+
+          {/* ── PROTECTED TOOLS ──────────────────────────────── */}
+          <Route
+            path="/newsletter"
+            element={
+              <RequireAuth>
+                <Helmet>
+                  <title>Government Job Updates & Resources Portal – {SITE_NAME}</title>
+                  <meta name="description" content="Access curated government job updates, PSU recruitment, state and central government jobs, competitive exam resources and student tools – by Openroot Systems." />
+                  <link rel="canonical" href={`${SITE_URL}/newsletter`} />
+                  <meta name="robots" content="noindex" />
+                </Helmet>
+                <NewsLetter />
+              </RequireAuth>
+            }
+          />
+          <Route
+            path="/coevas-terminal"
+            element={
+              <RequireAuth>
+                <Helmet>
+                  <title>Coevas Terminal – Download Videos from YouTube, Instagram & More | {SITE_NAME}</title>
+                  <meta name="description" content="Download videos and audio from YouTube, Instagram, Facebook and Threads with Coevas Terminal by Openroot Systems." />
+                  <link rel="canonical" href={`${SITE_URL}/coevas-terminal`} />
+                  <meta name="robots" content="noindex" />
+                </Helmet>
+                <CoeasTerminal />
+              </RequireAuth>
+            }
+          />
+          <Route
+            path="/makaut-grade-pro"
+            element={
+              <RequireAuth>
+                <Helmet>
+                  <title>MAKAUT GPA to Percentage Calculator – Free Tool | {SITE_NAME}</title>
+                  <meta name="description" content="Free SGPA, CGPA, DGPA and YGPA to percentage calculator for MAKAUT (Maulana Abul Kalam Azad University of Technology) students in West Bengal." />
+                  <link rel="canonical" href={`${SITE_URL}/makaut-grade-pro`} />
+                  <meta name="robots" content="noindex" />
+                </Helmet>
+                <Makaut />
+              </RequireAuth>
+            }
+          />
+          <Route
+            path="/travel-expense-manager"
+            element={
+              <RequireAuth>
+                <Helmet>
+                  <title>Travel Expense Manager – Split Group Trip Costs Easily | {SITE_NAME}</title>
+                  <meta name="description" content="Free group travel expense splitter by Openroot Systems. Track spending, calculate who owes whom and simplify trip budgeting." />
+                  <link rel="canonical" href={`${SITE_URL}/travel-expense-manager`} />
+                  <meta name="robots" content="noindex" />
+                </Helmet>
+                <TravelExpenseManager />
+              </RequireAuth>
+            }
+          />
+          <Route
+            path="/openroot-classes"
+            element={
+              <RequireAuth>
+                <Helmet>
+                  <title>Openroot Classes – Learn Prompt Engineering, Finance & Career Skills</title>
+                  <meta name="description" content="Join Openroot Classes to learn prompt engineering, financial literacy and career development with practical, real-world training by Openroot Systems." />
+                  <link rel="canonical" href={`${SITE_URL}/openroot-classes`} />
+                  <meta name="robots" content="noindex" />
+                </Helmet>
+                <OCLayout />
+              </RequireAuth>
+            }
+          />
+          <Route
+            path="/gdrive-web-extension"
+            element={
+              <RequireAuth>
+                <Helmet>
+                  <title>Openroot GDrive Automation – Chrome Extension Guide | {SITE_NAME}</title>
+                  <meta name="description" content="Learn how to install and use the Openroot GDrive Automation Chrome extension for bulk Google Drive file renaming and productivity automation." />
+                  <link rel="canonical" href={`${SITE_URL}/gdrive-web-extension`} />
+                  <meta name="robots" content="noindex" />
+                </Helmet>
+                <GDrive />
+              </RequireAuth>
+            }
+          />
 
           {/* 404 */}
           <Route path="*" element={<NotFound />} />

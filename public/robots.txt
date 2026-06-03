@@ -1,4 +1,18 @@
+# ═══════════════════════════════════════════════════════════════
+# Openroot Systems
+# Official Website: https://openroot.in
+# MSME Registration: UDYAM-WB-14-0263034
+# ═══════════════════════════════════════════════════════════════
+
+# Allow all major search engines and AI crawlers
 User-agent: *
 Allow: /
 
+# Private / Non-public areas
+Disallow: /admin
+Disallow: /adminlogin
+Disallow: /userlogin
+Disallow: /api/
+
+# Sitemap
 Sitemap: https://openroot.in/sitemap.xml
