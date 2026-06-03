@@ -35,7 +35,7 @@ const AdminLoginModal = lazy(() => import("./components/AdminLogin"));
 const SoftwareHub = lazy(() => import("./pages/SoftwareHub"));
 const SoftwarePage = lazy(() => import("./pages/SoftwarePage"));
 const SoftwareSolutions = lazy(() => import("./pages/SoftwareSolutions"));
-const CertificateModal = lazy(() => import("./components/CertificateModal"));
+const CertificateVerification = lazy(() => import("./components/CertificateVerification"));
 const PrivacyPolicy = lazy(() => import("./pages/Legal/privacy-policy"));
 const Terms = lazy(() => import("./pages/Legal/terms"));
 const License = lazy(() => import("./pages/Legal/SoftwareLicense-coevas"));
@@ -267,7 +267,7 @@ function AppContent() {
                     ]
                   })}</script>
                 </Helmet>
-                <CertificateModal isOpen={true} onClose={() => {}} />
+                <CertificateVerification />
               </HeaderShell>
             }
           />

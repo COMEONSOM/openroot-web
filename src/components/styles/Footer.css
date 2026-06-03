@@ -164,6 +164,19 @@
   opacity: 0.9;
 }
 
+.cert-badge {
+  display: inline-flex;
+  align-items: center;
+
+  padding: 0.45rem 0.9rem;
+
+  color: #16a34a;
+
+  font-size: 0.8rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+}
+
 /* =============================================================================
    FOOTER LINKS
 ============================================================================= */
@@ -237,58 +250,6 @@
 
 .footer-links a:hover::after {
   width: 100%;
-}
-
-/* =============================================================================
-   VERIFY BUTTON
-============================================================================= */
-
-.footer-links .verify-btn {
-  margin-top: 0.45rem;
-}
-
-.verify-btn {
-  width: fit-content;
-
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-
-  min-height: 44px;
-
-  padding:
-    0
-    1rem;
-
-  border-radius: 10px;
-
-  border:
-    1px solid rgba(88, 101, 242, 0.14);
-
-  background:
-    linear-gradient(
-      90deg,
-      rgb(203, 254, 135),
-      #7cff84
-    );
-
-  color: #393939;
-
-  font-size: 0.82rem;
-  font-weight: 700;
-
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-
-  cursor: pointer;
-
-  transition:
-    opacity 0.2s ease,
-    filter 0.2s ease;
-}
-
-.verify-btn:hover {
-  color: #000000;
 }
 
 /* =============================================================================
@@ -501,7 +462,6 @@
 
 @media (prefers-reduced-motion: reduce) {
   .footer-links a,
-  .verify-btn,
   .footer-icon-btn {
     transition: none !important;
   }
