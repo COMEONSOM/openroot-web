@@ -5,7 +5,7 @@ import { useTheme } from "../../context/ThemeContext";
 import type { ThemeMode } from "../../context/ThemeContext";
 import "./ThemeToggle.css";
 
-const ALLOWED_PATHS = ["/", "/software"] as const;
+const ALLOWED_PATHS = ["/", "/softwares"] as const;
 
 type Position =
   | "bottom-right"

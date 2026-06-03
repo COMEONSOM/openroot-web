@@ -51,7 +51,7 @@ export const OFFER_CARDS: OfferCard[] = [
     title:      "Learn Skills That Actually Help",
     accentVar:  "var(--ot-accent-warm, #f59e0b)",
     image:     "/assets/openroot-classes.avif",
-    link: "/software/openroot-classes",
+    link: "/softwares/openroot-classes",
 
     intro: (
       <>

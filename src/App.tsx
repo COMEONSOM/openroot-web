@@ -35,6 +35,7 @@ const AdminLoginModal = lazy(() => import("./components/AdminLogin"));
 const SoftwareHub = lazy(() => import("./pages/SoftwareHub"));
 const SoftwarePage = lazy(() => import("./pages/SoftwarePage"));
 const SoftwareSolutions = lazy(() => import("./pages/SoftwareSolutions"));
+const FounderPortfolio = lazy(() => import("./pages/FounderPortfolio"));
 const CertificateVerification = lazy(() => import("./components/CertificateVerification"));
 const PrivacyPolicy = lazy(() => import("./pages/Legal/privacy-policy"));
 const Terms = lazy(() => import("./pages/Legal/terms"));
@@ -112,7 +113,7 @@ const PageLoader = memo(() => (
       opacity: 0.4,
     }}
   >
-    Loading…
+    Initializing…
   </div>
 ));
 PageLoader.displayName = "PageLoader";
@@ -274,29 +275,29 @@ function AppContent() {
 
           {/* ── SOFTWARE HUB ─────────────────────────────────── */}
           <Route
-            path="/software"
+            path="/softwares"
             element={
               <HeaderShell>
                 <Helmet>
                   <title>All Products & Free Tools – {SITE_NAME} Software Hub</title>
                   <meta name="description" content="Browse all free tools and products by Openroot Systems: NIOR AI, MAKAUT Grade Calculator, Travel Expense Manager, Openroot Classes, GDrive Automation, Job Updates portal and more." />
-                  <link rel="canonical" href={`${SITE_URL}/software`} />
+                  <link rel="canonical" href={`${SITE_URL}/softwares`} />
                   <meta name="robots" content="index, follow" />
                   <meta property="og:title" content="Openroot Systems Software Hub – All Products & Free Tools" />
-                  <meta property="og:url" content={`${SITE_URL}/software`} />
+                  <meta property="og:url" content={`${SITE_URL}/softwares`} />
                   <script type="application/ld+json">{JSON.stringify({
                     "@context": "https://schema.org",
                     "@type": "BreadcrumbList",
                     "itemListElement": [
                       { "@type": "ListItem", "position": 1, "name": "Home", "item": SITE_URL },
-                      { "@type": "ListItem", "position": 2, "name": "Software Hub", "item": `${SITE_URL}/software` }
+                      { "@type": "ListItem", "position": 2, "name": "Software Hub", "item": `${SITE_URL}/softwares` }
                     ]
                   })}</script>
                   <script type="application/ld+json">{JSON.stringify({
                     "@context": "https://schema.org",
                     "@type": "CollectionPage",
                     "name": "Openroot Systems – All Products & Free Tools",
-                    "url": `${SITE_URL}/software`,
+                    "url": `${SITE_URL}/softwares`,
                     "description": "Complete catalog of software products and free tools by Openroot Systems.",
                     "publisher": { "@id": ORG_ID }
                   })}</script>
@@ -308,7 +309,7 @@ function AppContent() {
 
           {/* ── INDIVIDUAL SOFTWARE PAGES ────────────────────── */}
           <Route
-            path="/software/:slug"
+            path="/softwares/:slug"
             element={
               <HeaderShell>
                 <SoftwarePage />
@@ -363,42 +364,42 @@ function AppContent() {
             }
           />
 
-          {/* ── FOUNDER ──────────────────────────────────────── */}
           <Route
             path="/founder"
             element={
               <>
                 <Helmet>
                   <title>Somnath Banerjee – Founder of Openroot Systems</title>
-                  <meta name="description" content="Learn about Somnath Banerjee, founder and lead developer of Openroot Systems – a Government of India registered MSME building AI tools, software solutions and educational platforms." />
+
+                  <meta
+                    name="description"
+                    content="Learn about Somnath Banerjee, founder and lead developer of Openroot Systems – a Government of India registered MSME building AI tools, software solutions and educational platforms."
+                  />
+
                   <link rel="canonical" href={`${SITE_URL}/founder`} />
                   <meta name="robots" content="index, follow" />
-                  <script type="application/ld+json">{JSON.stringify({
-                    "@context": "https://schema.org",
-                    "@type": "ProfilePage",
-                    "name": "Somnath Banerjee – Founder of Openroot Systems",
-                    "url": `${SITE_URL}/founder`,
-                    "mainEntity": {
-                      "@type": "Person",
-                      "name": "Somnath Banerjee",
-                      "jobTitle": "Founder & Lead Developer",
-                      "worksFor": { "@id": ORG_ID },
-                      "url": `${SITE_URL}/founder`,
-                      "sameAs": [
-                        "https://github.com/COMEONSOM",
-                        "https://www.linkedin.com/in/comeonsom/",
-                        "https://x.com/comeonsom_"
-                      ]
-                    }
-                  })}</script>
+                  <script type="application/ld+json">
+                    {JSON.stringify({
+                      "@context": "https://schema.org",
+                      "@type": "ProfilePage",
+                      name: "Somnath Banerjee – Founder of Openroot Systems",
+                      url: `${SITE_URL}/founder`,
+                      mainEntity: {
+                        "@type": "Person",
+                        name: "Somnath Banerjee",
+                        jobTitle: "Founder & Lead Developer",
+                        worksFor: { "@id": ORG_ID },
+                        url: `${SITE_URL}/founder`,
+                        sameAs: [
+                          "https://github.com/COMEONSOM",
+                          "https://www.linkedin.com/in/comeonsom/",
+                          "https://x.com/comeonsom_",
+                        ],
+                      },
+                    })}
+                  </script>
                 </Helmet>
-                <iframe
-                  src="/founder.html"
-                  title="Somnath Banerjee – Founder of Openroot Systems"
-                  sandbox="allow-scripts allow-popups allow-popups-to-escape-sandbox"
-                  referrerPolicy="no-referrer"
-                  style={{ width: "100%", height: "100vh", border: "none" }}
-                />
+                <FounderPortfolio />
               </>
             }
           />

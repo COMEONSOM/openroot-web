@@ -39,7 +39,7 @@ const SITEMAP_LINKS = [
   },
   {
     label: "Released Softwares",
-    href: "/software",
+    href: "/softwares",
   },
   {
     label: "Watch Content",

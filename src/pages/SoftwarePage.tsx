@@ -173,7 +173,7 @@ export default function SoftwarePage() {
     return (
       <div className="sp-not-found">
         <p>Software not found.</p>
-        <Link to="/software" className="sp-back-link">← Back to Software Hub</Link>
+        <Link to="/softwares" className="sp-back-link">← Back to Software Hub</Link>
       </div>
     );
   }
@@ -187,7 +187,7 @@ export default function SoftwarePage() {
   const formatText = (text: string) =>
     text.split("\n\n").map((p, i) => <p key={i} className="sp-para">{p}</p>);
 
-  const pageUrl  = `https://openroot.in/software/${tool.slug}`;
+  const pageUrl  = `https://openroot.in/softwares/${tool.slug}`;
   const videoSrc = tool.video;
   const hasVideo = Boolean(videoSrc);
   const keywords = TOOL_KEYWORDS[tool.slug] ?? DEFAULT_KEYWORDS(tool.name, tool.description);
@@ -238,7 +238,7 @@ export default function SoftwarePage() {
     "@type": "BreadcrumbList",
     itemListElement: [
       { "@type": "ListItem", position: 1, name: "Home",         item: "https://openroot.in" },
-      { "@type": "ListItem", position: 2, name: "Software Hub", item: "https://openroot.in/software" },
+      { "@type": "ListItem", position: 2, name: "Software Hub", item: "https://openroot.in/softwares" },
       { "@type": "ListItem", position: 3, name: tool.name,      item: pageUrl },
     ],
   };
@@ -288,14 +288,14 @@ export default function SoftwarePage() {
   };
 
   const exploreLinks = [
-    { href: "/software/openroot-classes",       label: "Openroot Classes" },
-    { href: "/software/nior-ai",                label: "NIOR AI" },
-    { href: "/software/travel-expense-manager", label: "Travel Expense Manager" },
+    { href: "/softwares/openroot-classes",       label: "Openroot Classes" },
+    { href: "/softwares/nior-ai",                label: "NIOR AI" },
+    { href: "/softwares/travel-expense-manager", label: "Travel Expense Manager" },
     { href: "/certificate-verification",        label: "Certificate Verification" },
-    { href: "/software/newsletter",             label: "NewsLetter" },
-    { href: "/software/makaut-grade-pro",       label: "Makaut Grade Calculator" },
-    { href: "/software/coevas-terminal",        label: "Coevas Terminal" },
-    { href: "/software/gdrive-web-extension",   label: "GDrive Automation" },
+    { href: "/softwares/newsletter",             label: "NewsLetter" },
+    { href: "/softwares/makaut-grade-pro",       label: "Makaut Grade Calculator" },
+    { href: "/softwares/coevas-terminal",        label: "Coevas Terminal" },
+    { href: "/softwares/gdrive-web-extension",   label: "GDrive Automation" },
   ];
 
   return (
@@ -332,7 +332,7 @@ export default function SoftwarePage() {
           </li>
           <li aria-hidden="true">›</li>
           <li itemProp="itemListElement" itemScope itemType="https://schema.org/ListItem">
-            <a href="/software" itemProp="item"><span itemProp="name">Software Hub</span></a>
+            <a href="/softwares" itemProp="item"><span itemProp="name">Software Hub</span></a>
             <meta itemProp="position" content="2" />
           </li>
           <li aria-hidden="true">›</li>

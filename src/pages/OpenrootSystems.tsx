@@ -14,42 +14,42 @@ const PRODUCTS = [
   {
     name: "Openroot Classes",
     desc: "Online learning platform for prompt engineering, finance literacy and career development.",
-    url: "/openroot-classes",
+    url: "/softwares/openroot-classes",
     external: false,
     category: "Training Platform",
   },
   {
     name: "MAKAUT Grade Calculator",
     desc: "Free SGPA, CGPA, DGPA and YGPA to percentage calculator for MAKAUT students.",
-    url: "/software/makaut-grade-pro",
+    url: "/softwares/makaut-grade-pro",
     external: false,
     category: "Student Utility",
   },
   {
     name: "Travel Expense Manager",
     desc: "Split and track group travel expenses. Calculate balances automatically during trips.",
-    url: "/software/travel-expense-manager",
+    url: "/softwares/travel-expense-manager",
     external: false,
     category: "Expense Management",
   },
   {
     name: "Coevas Terminal",
     desc: "Download videos and audio from YouTube, Instagram, Facebook and Threads.",
-    url: "/software/coevas-terminal",
+    url: "/softwares/coevas-terminal",
     external: false,
     category: "Media Utility",
   },
   {
     name: "Openroot GDrive Automation",
     desc: "Chrome extension for bulk Google Drive file renaming and productivity automation.",
-    url: "/software/gdrive-web-extension",
+    url: "/softwares/gdrive-web-extension",
     external: false,
     category: "Chrome Extension",
   },
   {
     name: "NewsLetter",
     desc: "Curated government job updates, PSU recruitments and career resources for India.",
-    url: "/software/newsletter",
+    url: "/softwares/newsletter",
     external: false,
     category: "Job Portal",
   },
@@ -654,8 +654,8 @@ export default function OpenrootSystems() {
               }}
             >
               All products are organized under the official software hub:{" "}
-              <Link to="/software" style={{ fontWeight: 800 }}>
-                openroot.in/software
+              <Link to="/softwares" style={{ fontWeight: 800 }}>
+                openroot.in/softwares
               </Link>
             </p>
           </section>
@@ -900,7 +900,7 @@ export default function OpenrootSystems() {
                 Homepage
               </Link>
               <Link
-                to="/software"
+                to="/softwares"
                 style={{
                   display: "inline-flex",
                   alignItems: "center",

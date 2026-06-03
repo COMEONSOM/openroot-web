@@ -49,6 +49,19 @@
   position: relative;
   z-index: 1;
 }
+/* Dark mode only */
+[data-theme="dark"] .cert-input-row button:hover {
+  background: var(--ot-cta-hover-bg);
+  color: #000;
+}
+
+/* Auto dark mode (when no manual theme is set) */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme]) .cert-input-row button:hover {
+    background: var(--ot-cta-hover-bg);
+    color: #000;
+  }
+}
 
 .cert-header {
   display: grid;
@@ -173,6 +186,7 @@
 }
 
 .cert-input-row button:hover {
+
   opacity: 0.96;
 }
 
@@ -184,7 +198,9 @@
   cursor: not-allowed;
   opacity: 0.72;
 }
-
+[data-theme="dark"] .cert-input-row button:disabled:hover {
+  color: var(--ot-cta-text);
+}
 .cert-helper {
   margin: -0.2rem 0 0;
   color: var(--ot-text-faint);
