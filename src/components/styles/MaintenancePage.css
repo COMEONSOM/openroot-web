@@ -1,0 +1,152 @@
+.maintenance-page {
+  position: relative;
+  min-height: 100vh;
+  overflow: hidden;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background:
+    radial-gradient(
+      circle at top,
+      rgba(255, 255, 255, 0.08),
+      transparent 40%
+    ),
+    linear-gradient(
+      135deg,
+      #000000 0%,
+      #0a0a0a 30%,
+      #111111 60%,
+      #1b1b1b 100%
+    );
+
+  color: #ffffff;
+  text-align: center;
+  padding: 24px;
+}
+
+.maintenance-overlay {
+  position: absolute;
+  inset: 0;
+
+  background:
+    repeating-linear-gradient(
+      90deg,
+      rgba(255, 255, 255, 0.015),
+      rgba(255, 255, 255, 0.015) 2px,
+      transparent 2px,
+      transparent 30px
+    );
+
+  pointer-events: none;
+}
+
+.maintenance-content {
+  position: relative;
+  z-index: 2;
+  max-width: 700px;
+}
+
+.loader {
+  width: 90px;
+  height: 90px;
+
+  margin: 0 auto 32px;
+
+  border-radius: 50%;
+
+  border: 4px solid rgba(255, 255, 255, 0.12);
+
+  border-top: 4px solid #ffffff;
+
+  animation: spin 1s linear infinite;
+
+  box-shadow:
+    0 0 25px rgba(255, 255, 255, 0.15),
+    0 0 50px rgba(255, 255, 255, 0.08);
+}
+
+.maintenance-content h1 {
+  font-size: clamp(2rem, 5vw, 3.6rem);
+
+  font-weight: 700;
+
+  letter-spacing: 0.5px;
+
+  margin: 0;
+}
+
+.divider {
+  width: 220px;
+  height: 1px;
+
+  margin: 22px auto;
+
+  background: linear-gradient(
+    to right,
+    transparent,
+    rgba(255, 255, 255, 0.7),
+    transparent
+  );
+}
+
+.maintenance-content p {
+  font-size: 1.15rem;
+
+  line-height: 1.8;
+
+  color: rgba(255, 255, 255, 0.85);
+
+  margin-bottom: 25px;
+}
+
+.status-text {
+  display: inline-block;
+
+  font-size: 0.95rem;
+
+  letter-spacing: 2px;
+
+  text-transform: uppercase;
+
+  color: rgba(255, 255, 255, 0.7);
+
+  animation: pulse 1.8s ease-in-out infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 0.35;
+  }
+
+  50% {
+    opacity: 1;
+  }
+}
+
+@media (max-width: 768px) {
+  .loader {
+    width: 70px;
+    height: 70px;
+  }
+
+  .maintenance-content p {
+    font-size: 1rem;
+  }
+
+  .status-text {
+    font-size: 0.8rem;
+  }
+}

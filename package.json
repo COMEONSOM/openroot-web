@@ -6,8 +6,12 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "compress": "node compress-images.js",
+    "compress": "node scripts/compress-images.js",
     "lint": "eslint .",
+    "maintenance:on": "node scripts/maintenance-on.js",
+    "maintenance:off": "node scripts/maintenance-off.js",
+    "deploy:maintenance": "npm run maintenance:on && npm run build && firebase deploy",
+    "deploy:live": "npm run maintenance:off && npm run build && firebase deploy",
     "preview": "vite preview",
     "test": "vitest"
   },
