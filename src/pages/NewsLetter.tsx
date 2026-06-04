@@ -117,7 +117,7 @@ const JOB_CARDS: CardData[] = [
   { id: 'job-15', url: 'https://www.cdac.in/index.aspx?id=current_jobs',                     imgSrc: img('production-images/cdac_t3owh1'),        imgAlt: 'CDAC',              jobType: 'psu'     },
   { id: 'job-16', url: 'https://csc.gov.in/careers',                        imgSrc: img('production-images/csc_ncnfb1'),                          imgAlt: 'CSC',               jobType: 'central' },
   { id: 'job-17', url: 'https://www.meity.gov.in/offerings/vacancies?page=1',                imgSrc: img('production-images/meity_u8srdj'),       imgAlt: 'MEITY',             jobType: 'central' },
-  { id: 'job-18', url: 'https://wbprms.in/',                imgSrc: img('production-images/wbprms'),       imgAlt: 'WBPRMS',             jobType: 'central' },
+  { id: 'job-18', url: 'https://wbprms.in/',                imgSrc: img('production-images/wbprms_tpbn7u'),       imgAlt: 'WBPRMS',             jobType: 'central' },
 ];
 
 
