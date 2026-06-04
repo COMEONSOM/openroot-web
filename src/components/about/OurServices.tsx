@@ -80,7 +80,7 @@ function ServiceCard({
     if (card.tag === "Software Solutions") {
       navigate("/software-solutions");
     } else {
-      navigate("/software/openroot-classes");
+      navigate("/softwares/openroot-classes");
     }
 
     window.scrollTo({

@@ -645,7 +645,7 @@
 /* ── STAR BUTTON ───────────────────────────────────────────── */
 .newsletter .xj-star-btn {
   position: absolute;
-  top: -1px; right: 9px;
+  top: 0px; right: 9px;
   width: 24px; height: 24px;
   display: flex;
   align-items: center;
@@ -669,7 +669,6 @@
 }
 
 .newsletter .xj-star-btn:hover {
-  transform: scale(1.2) rotate(15deg);
   background: rgba(255,200,0,0.2);
   border-color: gold;
   color: gold;

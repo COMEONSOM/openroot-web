@@ -24,7 +24,7 @@
   </url>
 
   <url>
-    <loc>https://openroot.in/software</loc>
+    <loc>https://openroot.in/softwares</loc>
     <lastmod>2026-06-02</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
@@ -32,53 +32,53 @@
 
   <!-- ═══════════════════════════════════════════════════════════
        TIER 2 — Software Hub Individual Pages (Priority 0.85)
-       Uses /software/:slug route for SEO landing pages
+       Uses /softwares/:slug route for SEO landing pages
   ═══════════════════════════════════════════════════════════ -->
 
   <url>
-    <loc>https://openroot.in/software/nior-ai</loc>
+    <loc>https://openroot.in/softwares/nior-ai</loc>
     <lastmod>2026-06-02</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.85</priority>
   </url>
 
   <url>
-    <loc>https://openroot.in/software/openroot-classes</loc>
+    <loc>https://openroot.in/softwares/openroot-classes</loc>
     <lastmod>2026-06-02</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.85</priority>
   </url>
 
   <url>
-    <loc>https://openroot.in/software/makaut-grade-pro</loc>
+    <loc>https://openroot.in/softwares/makaut-grade-pro</loc>
     <lastmod>2026-06-02</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.85</priority>
   </url>
 
   <url>
-    <loc>https://openroot.in/software/travel-expense-manager</loc>
+    <loc>https://openroot.in/softwares/travel-expense-manager</loc>
     <lastmod>2026-06-02</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.85</priority>
   </url>
 
   <url>
-    <loc>https://openroot.in/software/coevas-terminal</loc>
+    <loc>https://openroot.in/softwares/coevas-terminal</loc>
     <lastmod>2026-06-02</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
 
   <url>
-    <loc>https://openroot.in/software/newsletter</loc>
+    <loc>https://openroot.in/softwares/newsletter</loc>
     <lastmod>2026-06-02</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.85</priority>
   </url>
 
   <url>
-    <loc>https://openroot.in/software/gdrive-web-extension</loc>
+    <loc>https://openroot.in/softwares/gdrive-web-extension</loc>
     <lastmod>2026-06-02</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>

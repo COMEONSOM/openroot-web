@@ -65,7 +65,7 @@ const GOVT_CARDS: CardData[] = [
   { id: 'govt-4', url: 'https://passbook.epfindia.gov.in/MemberPassBook/login', imgSrc: img('assets-rh/PFpassbook_gjxnhk'), imgAlt: 'PFpassbook' },
   { id: 'govt-5', url: 'https://portal.esic.gov.in/EmployeePortal/login.aspx', imgSrc: img('assets-rh/esic_jd3ynx'), imgAlt: 'ESIC' },
   { id: 'govt-6', url: 'https://food.wb.gov.in/', imgSrc: img('production-images/wb-ration-services_w56oi1'), imgAlt: 'WB Ration Services' },
-  { id: 'govt-7', url: 'https://socialsecurity.wb.gov.in/login', imgSrc: img('production-images/annapurna-portal_jtvfxa'), imgAlt: 'Annapurna Portal' },
+  { id: 'govt-7', url: 'https://socialregistry.wb.gov.in/', imgSrc: img('production-images/annapurna-portal_jtvfxa'), imgAlt: 'Annapurna Portal' },
   { id: 'govt-8', url: 'https://wb.gov.in/', imgSrc: img('production-images/wbgov_ncoxlb'), imgAlt: 'West Bengal Government' },
 ];
 
@@ -117,6 +117,7 @@ const JOB_CARDS: CardData[] = [
   { id: 'job-15', url: 'https://www.cdac.in/index.aspx?id=current_jobs',                     imgSrc: img('production-images/cdac_t3owh1'),        imgAlt: 'CDAC',              jobType: 'psu'     },
   { id: 'job-16', url: 'https://csc.gov.in/careers',                        imgSrc: img('production-images/csc_ncnfb1'),                          imgAlt: 'CSC',               jobType: 'central' },
   { id: 'job-17', url: 'https://www.meity.gov.in/offerings/vacancies?page=1',                imgSrc: img('production-images/meity_u8srdj'),       imgAlt: 'MEITY',             jobType: 'central' },
+  { id: 'job-18', url: 'https://wbprms.in/',                imgSrc: img('production-images/wbprms_tpbn7u'),       imgAlt: 'WBPRMS',             jobType: 'central' },
 ];
 
 

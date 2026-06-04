@@ -195,15 +195,15 @@ const iconMap: Record<string, React.ReactNode> = {
 // ─────────────────────────────────────────────────────────────
 
 const SITELINK_PAGES = [
-  { name: "NIOR AI", url: "https://openroot.in/software/nior-ai" },
-  { name: "Newsletter", url: "https://openroot.in/software/newsletter" },
-  { name: "MAKAUT Grade Calculator", url: "https://openroot.in/software/makaut-grade-pro" },
-  { name: "Travel Expense Manager", url: "https://openroot.in/software/travel-expense-manager" },
-  { name: "Openroot Classes", url: "https://openroot.in/software/openroot-classes" },
-  { name: "Coevas Terminal", url: "https://openroot.in/software/coevas-terminal" },
-  { name: "GDrive Automation", url: "https://openroot.in/software/gdrive-web-extension" },
+  { name: "NIOR AI", url: "https://openroot.in/softwares/nior-ai" },
+  { name: "Newsletter", url: "https://openroot.in/softwares/newsletter" },
+  { name: "MAKAUT Grade Calculator", url: "https://openroot.in/softwares/makaut-grade-pro" },
+  { name: "Travel Expense Manager", url: "https://openroot.in/softwares/travel-expense-manager" },
+  { name: "Openroot Classes", url: "https://openroot.in/softwares/openroot-classes" },
+  { name: "Coevas Terminal", url: "https://openroot.in/softwares/coevas-terminal" },
+  { name: "GDrive Automation", url: "https://openroot.in/softwares/gdrive-web-extension" },
   { name: "Certificate Verification", url: "https://openroot.in/certificate-verification" },
-  { name: "Software Hub", url: "https://openroot.in/software" },
+  { name: "Software Hub", url: "https://openroot.in/softwares" },
 ] as const;
 
 const siteNavSchema = {
@@ -218,7 +218,7 @@ const siteNavSchema = {
     target: {
       "@type": "EntryPoint",
       urlTemplate:
-        "https://openroot.in/software?q={search_term_string}",
+        "https://openroot.in/softwares?q={search_term_string}",
     },
 
     "query-input": "required name=search_term_string",
@@ -319,7 +319,7 @@ export default function Navbar() {
         return;
       }
 
-      navigate(`/software/${slug}`);
+      navigate(`/softwares/${slug}`);
     },
     [navigate]
   );

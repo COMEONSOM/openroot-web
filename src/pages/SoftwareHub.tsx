@@ -4,7 +4,7 @@ import { useState, useCallback } from "react";
 import { softwareList } from "../data/softwareList";
 import "../components/styles/software-hub.css";
 
-const PAGE_URL = "https://openroot.in/software";
+const PAGE_URL = "https://openroot.in/softwares";
 
 // ── JSON-LD Schemas ──────────────────────────────────────────────────────────
 const itemListSchema = {
@@ -18,7 +18,7 @@ const itemListSchema = {
     "@type": "ListItem",
     "position": i + 1,
     "name": tool.name,
-    "url": `https://openroot.in/software/${tool.slug}`,
+    "url": `https://openroot.in/softwares/${tool.slug}`,
     "description": tool.description,
   })),
 };
@@ -198,7 +198,7 @@ function SoftwareCard({ tool, featured = false, index }: CardProps) {
     >
 
       <Link
-        to={`/software/${tool.slug}`}
+        to={`/softwares/${tool.slug}`}
         className="sh-card-link"
         aria-label={`${tool.name} – free tool by Openroot Systems`}
         itemProp="url"
