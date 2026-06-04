@@ -1131,7 +1131,7 @@ function ContactSection() {
   };
   const socials = [
     { href: "https://openroot.in", label: "🌐", title: "Website" },
-    { href: "https://openroot.in/software/openroot-classes", label: "📚", title: "Classes" },
+    { href: "https://openroot.in/softwares/openroot-classes", label: "📚", title: "Classes" },
     { href: "https://wa.me/7866049865", label: "💬", title: "WhatsApp" },
   ];
 
@@ -1216,7 +1216,7 @@ function Footer() {
         <div style={{ display: "flex", gap: "2rem", flexWrap: "wrap" }}>
           {[
             ["OPENROOT", "https://openroot.in"],
-            ["OPENROOT CLASSES", "https://openroot.in/software/openroot-classes"],
+            ["OPENROOT CLASSES", "https://openroot.in/softwares/openroot-classes"],
           ].map(([t, h]) => (
             <a
               key={t}
