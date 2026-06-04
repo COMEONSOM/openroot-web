@@ -65,7 +65,7 @@ const GOVT_CARDS: CardData[] = [
   { id: 'govt-4', url: 'https://passbook.epfindia.gov.in/MemberPassBook/login', imgSrc: img('assets-rh/PFpassbook_gjxnhk'), imgAlt: 'PFpassbook' },
   { id: 'govt-5', url: 'https://portal.esic.gov.in/EmployeePortal/login.aspx', imgSrc: img('assets-rh/esic_jd3ynx'), imgAlt: 'ESIC' },
   { id: 'govt-6', url: 'https://food.wb.gov.in/', imgSrc: img('production-images/wb-ration-services_w56oi1'), imgAlt: 'WB Ration Services' },
-  { id: 'govt-7', url: 'https://socialsecurity.wb.gov.in/login', imgSrc: img('production-images/annapurna-portal_jtvfxa'), imgAlt: 'Annapurna Portal' },
+  { id: 'govt-7', url: 'https://socialregistry.wb.gov.in/', imgSrc: img('production-images/annapurna-portal_jtvfxa'), imgAlt: 'Annapurna Portal' },
   { id: 'govt-8', url: 'https://wb.gov.in/', imgSrc: img('production-images/wbgov_ncoxlb'), imgAlt: 'West Bengal Government' },
 ];
 
