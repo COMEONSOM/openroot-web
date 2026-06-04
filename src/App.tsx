@@ -1,3 +1,5 @@
+import { SITE_CONFIG } from "./config/siteConfig";
+import MaintenancePage from "./pages/MaintenancePage";
 import { Helmet } from "react-helmet-async";
 import React, {
   Suspense,
@@ -547,6 +549,17 @@ function AppContent() {
 }
 
 export default function App() {
+  const isDevelopment =
+    window.location.hostname === "localhost" ||
+    window.location.hostname === "127.0.0.1";
+
+  if (
+    SITE_CONFIG.maintenance &&
+    !isDevelopment
+  ) {
+    return <MaintenancePage />;
+  }
+
   return (
     <BrowserRouter>
       <AppContent />
