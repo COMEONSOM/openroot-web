@@ -558,3 +558,52 @@
     transition: none !important;
   }
 }
+
+.software-btn {
+  position: relative;
+}
+
+.software-btn--has-badge {
+  overflow: visible;
+}
+
+.software-badge {
+  position: absolute;
+  top: -1px;
+  right: 10px;
+  z-index: 5;
+
+  font-size: 12px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+
+  background: linear-gradient(
+    90deg,
+    #ff0000,
+    #ff9900,
+    #ffee00,
+    #00ff00,
+    #00ffff,
+    #0066ff,
+    #cc00ff,
+    #ff0000
+  );
+
+  background-size: 400% 100%;
+
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+
+  animation: rainbowMove 2s linear infinite;
+}
+@keyframes rainbowMove {
+  0% {
+    background-position: 0% 50%;
+  }
+
+  100% {
+    background-position: 400% 50%;
+  }
+}

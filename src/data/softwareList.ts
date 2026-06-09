@@ -15,7 +15,8 @@ export const softwareList: Software[] = [
     description: "A curated collection of important websites, tools and job updates for students and learners.",
     seoTitle: "Govt. Websites & Job Updates for Students and Job Seekers | Openroot Systems",
     seoDescription: "Find latest job updates, student resources, useful websites and productivity tools in one organized platform by Openroot.",
-    category: "Resource Platform"
+    category: "Resource Platform",
+    badgeText: "JOB NOTICE"
   },
 
   {
@@ -27,7 +28,8 @@ export const softwareList: Software[] = [
     description: "Online learning platform providing training in prompt engineering, financial literacy and productivity skills.",
     seoTitle: "Openroot Classes – Learn AI, Finance & Productivity Skills",
     seoDescription: "Join Openroot Classes to learn prompt engineering, financial literacy and real-world productivity skills with practical training.",
-    category: "Education Platform"
+    category: "Education Platform",
+    badgeText: "ADMISSION OPEN"
   },
 
   {
@@ -39,7 +41,7 @@ export const softwareList: Software[] = [
     description: "AI powered productivity assistant that helps with financial insights, calculations and decision support.",
     seoTitle: "NIOR AI – Financial AI Assistant & Smart Calculator",
     seoDescription: "Use NIOR AI for financial calculations, investment insights and smart decision-making with AI-powered tools by Openroot.",
-    category: "AI Tool"
+    category: "AI Tool",
   },
 
   {
@@ -51,7 +53,7 @@ export const softwareList: Software[] = [
     description: "Track group travel expenses and automatically calculate who owes whom during trips.",
     seoTitle: "Travel Expense Manager | Split Trip Expenses Easily",
     seoDescription: "Manage and split group travel expenses easily. Track spending, calculate balances and simplify trip budgeting with Openroot Travel Expense Manager.",
-    category: "Finance Utility"
+    category: "Finance Utility",
   },
 
   {
@@ -63,7 +65,7 @@ export const softwareList: Software[] = [
     description: "Download video/audio/posts instantly from multiple platforms including YouTube, Instagram, Facebook, Threads.",
     seoTitle: "Coevas Terminal – Download Videos & Audio Easily",
     seoDescription: "Download videos and audio from multiple platforms using Coevas Terminal, a lightweight desktop tool by Openroot.",
-    category: "Media Utility"
+    category: "Media Utility",
   },
 
   {
@@ -75,7 +77,7 @@ export const softwareList: Software[] = [
     description: "Grade and Percentage Calculator for MAKAUT students to easily calculate their GPA and percentage based on their marks.",
     seoTitle: "MAKAUT GPA to Percentage Calculator | Openroot Tool",
     seoDescription: "Convert GPA to percentage easily with Openroot MAKAUT calculator. Supports SGPA, CGPA, DGPA with accurate results.",
-    category: "Education Platform"
+    category: "Education Platform",
   },
 
   {
@@ -89,7 +91,7 @@ export const softwareList: Software[] = [
   seoTitle: "Openroot GDrive Automation | Chrome Extension Guide",
   seoDescription:
     "Learn how to install, pin, and use the Openroot GDrive Automation Chrome extension with a simple guided interface.",
-  category: "Automation Utility"
+  category: "Automation Utility",
 }
 
 ];

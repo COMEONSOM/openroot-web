@@ -46,6 +46,7 @@ const ITI_CARDS: CardData[] = [
   { id: 'iti-2', url: 'https://www.skillindiadigital.gov.in/home', imgSrc: img('assets-rh/skillindia_ubhpv1'), imgAlt: 'Skill India' },
   { id: 'iti-3', url: 'https://webscte.co.in/', imgSrc: img('assets-rh/diploma_hgwjew'), imgAlt: 'WEBSCTE' },
   { id: 'iti-4', url: 'https://minemountain.in/website/mining_e_library/', imgSrc: img('assets-rh/mining_ufhv7s'), imgAlt: 'Mining books' },
+  { id: 'iti-5', url: 'https://bharatskills.gov.in/Home/CTS', imgSrc: img('production-images/cts_uwhhfl'), imgAlt: 'CTS' },
 ];
 
 
@@ -55,11 +56,12 @@ const UGPG_CARDS: CardData[] = [
   { id: 'ugpg-3', url: 'https://www.nism.ac.in/', imgSrc: img('assets-rh/nism_okw994'), imgAlt: 'NISM' },
   { id: 'ugpg-4', url: 'https://admissionju.jadavpuruniversity.in/fengadmission/', imgSrc: img('assets-rh/ju_r2vgcv'), imgAlt: 'Jadavpur University' },
   { id: 'ugpg-5', url: 'https://makautwb.ac.in/', imgSrc: img('production-images/makaut_pg_upvyyk'), imgAlt: 'MAKAUT-PG' },
+  { id: 'ugpg-6', url: 'https://www.caluniv.ac.in/admission/admission.html', imgSrc: img('production-images/cuadmission_prrddk'), imgAlt: 'CU' },
 ];
 
 
 const GOVT_CARDS: CardData[] = [
-  { id: 'govt-1', url: 'https://uidai.gov.in/', imgSrc: img('assets-rh/uidai_xwbq1i'), imgAlt: 'UIDAI' },
+  { id: 'govt-1', url: 'https://myaadhaarbeta.uidai.gov.in/', imgSrc: img('assets-rh/uidai_xwbq1i'), imgAlt: 'UIDAI' },
   { id: 'govt-2', url: 'https://voters.eci.gov.in/', imgSrc: img('assets-rh/voters_zvsfda'), imgAlt: 'Voter Registration' },
   { id: 'govt-3', url: 'https://unifiedportal-mem.epfindia.gov.in/', imgSrc: img('assets-rh/unifiedportal_rmfgqt'), imgAlt: 'Unified Portal' },
   { id: 'govt-4', url: 'https://passbook.epfindia.gov.in/MemberPassBook/login', imgSrc: img('assets-rh/PFpassbook_gjxnhk'), imgAlt: 'PFpassbook' },
