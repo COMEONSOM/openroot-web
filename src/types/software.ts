@@ -8,6 +8,7 @@ export interface Software {
   seoTitle?: string;
   seoDescription?: string;
   video?: string;
+  badgeText?: string;
 }
 
 export interface SoftwareContent {

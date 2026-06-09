@@ -257,11 +257,13 @@ function getInitialWidth(): number {
 const SoftwareButton = memo(function SoftwareButton({
   slug,
   name,
+  badgeText,
   onClick,
   onMouseMove,
 }: {
   slug: string;
   name: string;
+  badgeText?: string;
   onClick: () => void;
   onMouseMove: (
     e: React.MouseEvent<HTMLButtonElement>
@@ -271,23 +273,26 @@ const SoftwareButton = memo(function SoftwareButton({
 
   return (
     <button
-      className="software-btn ot-focus-brand ot-active-scale"
+      className={`software-btn ot-focus-brand ot-active-scale ${
+        badgeText ? "software-btn--has-badge" : ""
+      }`}
       role="listitem"
       onClick={onClick}
       onMouseMove={onMouseMove}
       aria-label={`Open ${name}`}
       type="button"
     >
-      <div
-        className="software-icon"
-        aria-hidden="true"
-      >
+      {badgeText ? (
+        <span className="software-badge">
+          {badgeText}
+        </span>
+      ) : null}
+
+      <div className="software-icon" aria-hidden="true">
         {iconMap[slug]}
       </div>
 
-      <span className="software-name">
-        {name}
-      </span>
+      <span className="software-name">{name}</span>
     </button>
   );
 });
@@ -418,12 +423,9 @@ export default function Navbar() {
                 key={app.slug}
                 slug={app.slug}
                 name={app.name}
-                onClick={() =>
-                  goTo(app.slug)
-                }
-                onMouseMove={
-                  handleMouseMove
-                }
+                badgeText={app.badgeText}
+                onClick={() => goTo(app.slug)}
+                onMouseMove={handleMouseMove}
               />
             ))}
           </div>
