@@ -58,7 +58,7 @@ const PRODUCTS = [
 const SOCIAL_LINKS = [
   { label: "GitHub", url: "https://github.com/COMEONSOM" },
   { label: "LinkedIn", url: "https://www.linkedin.com/in/comeonsom/" },
-  { label: "X (Twitter)", url: "https://x.com/comeonsomx" },
+  { label: "X", url: "https://x.com/comeonsomx" },
   { label: "Facebook", url: "https://www.facebook.com/OpenrootSystems" },
   { label: "YouTube", url: "https://www.youtube.com/@openrootsystems" },
 ];
