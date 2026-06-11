@@ -1,7 +1,7 @@
 /* ==========================================================================
    ADMIN LOGIN — OPENROOT
    Dark-mode adaptive glass system for app.css ot-* architecture
-   VERSION: 2026.11
+   VERSION: 2026.12
    ========================================================================== */
 
 .admin-overlay {
@@ -35,18 +35,39 @@
   --al-danger-soft: rgba(197, 34, 31, 0.08);
   --al-danger-border: rgba(197, 34, 31, 0.18);
 
-  /* adaptive glass helpers */
-  --al-card-fill: var(--al-glass);
-  --al-card-tint-top: rgba(255, 255, 255, 0.10);
-  --al-card-tint-bottom: rgba(255, 255, 255, 0.03);
-  --al-card-highlight-1: rgba(255, 255, 255, 0.18);
-  --al-card-highlight-2: rgba(255, 255, 255, 0.05);
-  --al-card-highlight-3: rgba(255, 255, 255, 0.10);
-  --al-soft-fill: color-mix(in srgb, var(--al-surface-alt) 86%, var(--al-bg) 14%);
-  --al-input-focus-fill: color-mix(in srgb, var(--al-glass) 88%, var(--al-bg) 12%);
+  /* ── overlay atmosphere (light mode defaults) ── */
+  --al-overlay-scrim: #ede8e0;
+  --al-overlay-vignette: rgba(160, 120, 70, 0.10);
+  --al-overlay-bloom: rgba(255, 252, 248, 0.82);
+
+  /* ── adaptive glass helpers (light mode defaults) ── */
+  --al-card-fill: rgba(255, 255, 255, 0.72);
+  --al-card-tint-top: rgba(255, 255, 255, 0.90);
+  --al-card-tint-bottom: rgba(255, 255, 255, 0.40);
+  --al-card-highlight-1: rgba(255, 255, 255, 0.98);
+  --al-card-highlight-2: rgba(255, 255, 255, 0.55);
+  --al-card-highlight-3: rgba(255, 255, 255, 0.80);
+  --al-soft-fill: rgba(255, 255, 255, 0.58);
+  --al-input-focus-fill: rgba(255, 255, 255, 0.94);
+
+  /* ── warm amber shadow stack (light mode) ── */
+  --al-card-shadow:
+    0 0 0 1px var(--al-border-glow),
+    inset 0 1px 0 rgba(255, 255, 255, 0.95),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.04),
+    0 2px 4px   rgba(140, 110, 70, 0.08),
+    0 8px 24px  rgba(120, 95,  55, 0.12),
+    0 28px 56px rgba(100, 75,  40, 0.14),
+    0 60px 100px rgba(80,  60,  30, 0.10);
 }
 
 [data-theme="dark"] .admin-overlay {
+  /* ── overlay atmosphere (dark) ── */
+  --al-overlay-scrim: rgba(0, 0, 0, 0.62);
+  --al-overlay-vignette: rgba(0, 0, 0, 0.35);
+  --al-overlay-bloom: rgba(255, 255, 255, 0.07);
+
+  /* ── adaptive glass helpers (dark) ── */
   --al-card-fill: var(--ot-glass-bg);
   --al-card-tint-top: rgba(255, 255, 255, 0.04);
   --al-card-tint-bottom: rgba(255, 255, 255, 0.01);
@@ -55,10 +76,26 @@
   --al-card-highlight-3: rgba(255, 255, 255, 0.05);
   --al-soft-fill: color-mix(in srgb, var(--al-surface-alt) 88%, var(--al-bg) 12%);
   --al-input-focus-fill: color-mix(in srgb, var(--al-glass) 92%, var(--al-bg) 8%);
+
+  /* ── pure black shadow stack (dark) ── */
+  --al-card-shadow:
+    0 0 0 1px var(--al-border-glow),
+    inset 0 1px 0 rgba(255, 255, 255, 0.14),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.10),
+    0 2px 4px   rgba(0, 0, 0, 0.06),
+    0 8px 24px  rgba(0, 0, 0, 0.14),
+    0 28px 56px rgba(0, 0, 0, 0.20),
+    0 60px 100px rgba(0, 0, 0, 0.16);
 }
 
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme]) .admin-overlay {
+    /* ── overlay atmosphere (dark) ── */
+    --al-overlay-scrim: rgba(0, 0, 0, 0.62);
+    --al-overlay-vignette: rgba(0, 0, 0, 0.35);
+    --al-overlay-bloom: rgba(255, 255, 255, 0.07);
+
+    /* ── adaptive glass helpers (dark) ── */
     --al-card-fill: var(--ot-glass-bg);
     --al-card-tint-top: rgba(255, 255, 255, 0.04);
     --al-card-tint-bottom: rgba(255, 255, 255, 0.01);
@@ -67,6 +104,16 @@
     --al-card-highlight-3: rgba(255, 255, 255, 0.05);
     --al-soft-fill: color-mix(in srgb, var(--al-surface-alt) 88%, var(--al-bg) 12%);
     --al-input-focus-fill: color-mix(in srgb, var(--al-glass) 92%, var(--al-bg) 8%);
+
+    /* ── pure black shadow stack (dark) ── */
+    --al-card-shadow:
+      0 0 0 1px var(--al-border-glow),
+      inset 0 1px 0 rgba(255, 255, 255, 0.14),
+      inset 0 -1px 0 rgba(0, 0, 0, 0.10),
+      0 2px 4px   rgba(0, 0, 0, 0.06),
+      0 8px 24px  rgba(0, 0, 0, 0.14),
+      0 28px 56px rgba(0, 0, 0, 0.20),
+      0 60px 100px rgba(0, 0, 0, 0.16);
   }
 }
 
@@ -98,9 +145,9 @@
   font-family: var(--al-font);
   background:
     url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.92' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.045'/%3E%3C/svg%3E"),
-    radial-gradient(ellipse 70% 60% at 50% 42%, rgba(255,255,255,0.07) 0%, transparent 100%),
-    radial-gradient(ellipse 100% 100% at 50% 50%, transparent 40%, rgba(0,0,0,0.35) 100%),
-    rgba(0, 0, 0, 0.62);
+    radial-gradient(ellipse 65% 55% at 50% 42%, var(--al-overlay-bloom) 0%, transparent 100%),
+    radial-gradient(ellipse 100% 100% at 50% 50%, transparent 45%, var(--al-overlay-vignette) 100%),
+    var(--al-overlay-scrim);
   backdrop-filter: blur(10px) saturate(0.75);
   -webkit-backdrop-filter: blur(10px) saturate(0.75);
   animation: al-overlay-in 0.22s ease both;
@@ -120,14 +167,7 @@
   border: 1px solid var(--al-border-hard);
   backdrop-filter: blur(var(--al-blur)) saturate(1.35);
   -webkit-backdrop-filter: blur(var(--al-blur)) saturate(1.35);
-  box-shadow:
-    0 0 0 1px var(--al-border-glow),
-    inset 0 1px 0 rgba(255, 255, 255, 0.14),
-    inset 0 -1px 0 rgba(0, 0, 0, 0.10),
-    0 2px 4px rgba(0, 0, 0, 0.06),
-    0 8px 24px rgba(0, 0, 0, 0.14),
-    0 28px 56px rgba(0, 0, 0, 0.20),
-    0 60px 100px rgba(0, 0, 0, 0.16);
+  box-shadow: var(--al-card-shadow);
   animation: al-card-in 0.36s cubic-bezier(.21, 1.02, .73, 1) both;
 }
 
@@ -679,7 +719,7 @@
     padding: 0;
     background:
       url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.92' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E"),
-      rgba(0, 0, 0, 0.58);
+      var(--al-overlay-scrim);
   }
 
   .admin-card {
@@ -743,18 +783,17 @@
     width: 108px;
     height: 108px;
   }
-
 }
 
 @keyframes al-gradient-shift {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
+  0%   { background-position: 0% 50%; }
+  50%  { background-position: 100% 50%; }
   100% { background-position: 0% 50%; }
 }
 
 @keyframes al-overlay-in {
   from { opacity: 0; }
-  to { opacity: 1; }
+  to   { opacity: 1; }
 }
 
 @keyframes al-card-in {
@@ -772,15 +811,15 @@
 
 @keyframes al-sheet-in {
   from { transform: translateY(100%); opacity: 0.6; }
-  to { transform: translateY(0); opacity: 1; }
+  to   { transform: translateY(0);    opacity: 1;   }
 }
 
 @keyframes al-shake {
-  0%, 100% { transform: translateX(0); }
-  18% { transform: translateX(-5px); }
-  36% { transform: translateX(5px); }
-  54% { transform: translateX(-3px); }
-  72% { transform: translateX(3px); }
+  0%,  100% { transform: translateX(0);  }
+  18%        { transform: translateX(-5px); }
+  36%        { transform: translateX(5px);  }
+  54%        { transform: translateX(-3px); }
+  72%        { transform: translateX(3px);  }
 }
 
 @media (prefers-reduced-motion: reduce) {

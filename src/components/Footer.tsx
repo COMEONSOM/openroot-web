@@ -5,7 +5,16 @@ import { Link } from "react-router-dom";
 
 const FaqModal = lazy(() => import("../components/FaqModal"));
 
-// ─── Data ─────────────────────────────────────────────────────────────────────
+// ─── Admin session keys ───────────────────────────────────────
+const ADMIN_SESSION_KEY = "openrootAdmin";
+const ADMIN_SESSION_SYNC_EVENT = "openroot-admin-session-sync";
+
+// ─── Student database URL ─────────────────────────────────────
+const STUDENT_DATABASE_URL =
+  import.meta.env.VITE_STUDENT_DATABASE_URL ??
+  "https://comeonsom.github.io/openroot-student-database/";
+
+// ─── Data ─────────────────────────────────────────────────────
 
 const TRUST_BADGES = [
   {
@@ -55,12 +64,38 @@ const SITEMAP_LINKS = [
   },
 ];
 
-// ─── Component ────────────────────────────────────────────────────────────────
+// ─── Types ────────────────────────────────────────────────────
+
+type AdminSession = {
+  email?: string;
+  role?: string;
+  verified?: boolean;
+  username?: string;
+};
+
+// ─── Helpers ──────────────────────────────────────────────────
+
+function readIsAdminSession(): boolean {
+  if (typeof window === "undefined") return false;
+
+  try {
+    const raw = sessionStorage.getItem(ADMIN_SESSION_KEY);
+    if (!raw) return false;
+
+    const parsed = JSON.parse(raw) as AdminSession;
+
+    return parsed?.role === "admin" && parsed?.verified === true;
+  } catch {
+    return false;
+  }
+}
+
+// ─── Component ────────────────────────────────────────────────
 
 export default function Footer() {
   const footerRef = useRef<HTMLElement | null>(null);
-
   const [openFaq, setOpenFaq] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
 
   const { resolved } = useTheme();
 
@@ -68,6 +103,22 @@ export default function Footer() {
     resolved === "dark"
       ? "/assets/openroot-white-nobg.avif"
       : "/assets/openroot-black-nobg.png";
+
+  useEffect(() => {
+    const syncAdminState = () => setIsAdmin(readIsAdminSession());
+
+    syncAdminState();
+
+    const handleSync = () => syncAdminState();
+
+    window.addEventListener(ADMIN_SESSION_SYNC_EVENT, handleSync);
+    window.addEventListener("storage", handleSync);
+
+    return () => {
+      window.removeEventListener(ADMIN_SESSION_SYNC_EVENT, handleSync);
+      window.removeEventListener("storage", handleSync);
+    };
+  }, []);
 
   useEffect(() => {
     const el = footerRef.current;
@@ -119,6 +170,15 @@ export default function Footer() {
                   {label}
                 </a>
               ))}
+
+              {isAdmin && (
+                <a
+                  href={STUDENT_DATABASE_URL}
+                  title="Open Student Database System"
+                >
+                  Student Database
+                </a>
+              )}
 
               <a
                 href="#"

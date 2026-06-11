@@ -1,25 +1,23 @@
 import {
-  useState,
+  Suspense,
+  lazy,
+  memo,
+  useCallback,
   useEffect,
   useRef,
-  useCallback,
-  memo,
-  lazy,
-  Suspense,
+  useState,
 } from "react";
+import type { KeyboardEvent as ReactKeyboardEvent } from "react";
+import "./styles/AdminLogin.css";
+import gsap from "gsap";
 
 const Lottie = lazy(() => import("lottie-react"));
-import "./styles/AdminLogin.css";
-
-import gsap from "gsap";
 
 // ── IMPORTANT: do NOT import Firebase auth here. ──────────────
 // Admin login intentionally avoids signInWithEmailAndPassword so
-// it never writes to the shared Firebase auth instance. If it
-// did, onAuthStateChanged in LoginModal would fire and render the
-// admin's Firebase account as a regular-user profile — the exact
-// bug seen in the screenshot. Credentials are verified against
-// env vars only; no Firebase auth state is mutated.
+// it never writes to the shared Firebase auth instance.
+// Credentials are verified against env vars only; no Firebase auth
+// state is mutated.
 // ─────────────────────────────────────────────────────────────
 
 interface AdminData {
@@ -35,44 +33,76 @@ interface AdminLoginProps {
   onLogout?: () => void;
 }
 
-type Step = "initial" | "verifying" | "success" | "error" | "profile" | "confirmLogout";
+type Step =
+  | "initial"
+  | "verifying"
+  | "success"
+  | "error"
+  | "profile"
+  | "confirmLogout";
 
 const ADMIN_SESSION_KEY = "openrootAdmin";
 const ADMIN_SESSION_SYNC_EVENT = "openroot-admin-session-sync";
+const ADMIN_LOCAL_STORAGE_KEY = "adminLoggedIn";
 
 // ── Allowed email list (comma-separated in VITE_ADMIN_ALLOWED_EMAILS)
 const ADMIN_ALLOWED_EMAILS = (() => {
   const raw = import.meta.env.VITE_ADMIN_ALLOWED_EMAILS as string | undefined;
   const fallback = ["admin@openroot.in"];
   if (!raw) return fallback;
-  const parsed = raw.split(",").map((e) => e.trim().toLowerCase()).filter(Boolean);
+
+  const parsed = raw
+    .split(",")
+    .map((e) => e.trim().toLowerCase())
+    .filter(Boolean);
+
   return parsed.length ? parsed : fallback;
 })();
 
-const ADMIN_PASSWORD = import.meta.env.VITE_ADMIN_PASSWORD as string | undefined;
+const ADMIN_PASSWORD = import.meta.env.VITE_ADMIN_PASSWORD as
+  | string
+  | undefined;
 
 // ── Session helpers ──────────────────────────────────────────
+const isValidAdminSession = (value: unknown): value is AdminData => {
+  if (!value || typeof value !== "object") return false;
+
+  const candidate = value as Partial<AdminData>;
+
+  return (
+    typeof candidate.email === "string" &&
+    typeof candidate.role === "string" &&
+    typeof candidate.verified === "boolean" &&
+    typeof candidate.username === "string" &&
+    candidate.role === "admin" &&
+    candidate.verified === true
+  );
+};
+
 const readAdminSession = (): AdminData | null => {
   if (typeof window === "undefined") return null;
+
   try {
     const raw = sessionStorage.getItem(ADMIN_SESSION_KEY);
     if (!raw) return null;
-    const parsed = JSON.parse(raw) as AdminData;
-    return {
-      email: parsed.email,
-      role: parsed.role,
-      verified: parsed.verified,
-      username: parsed.username,
-    };
+
+    const parsed: unknown = JSON.parse(raw);
+    if (!isValidAdminSession(parsed)) {
+      return null;
+    }
+
+    return parsed;
   } catch {
     return null;
   }
 };
 
 const clearAdminSession = () => {
+  if (typeof window === "undefined") return;
+
   try {
     sessionStorage.removeItem(ADMIN_SESSION_KEY);
-    localStorage.removeItem("adminLoggedIn");
+    localStorage.removeItem(ADMIN_LOCAL_STORAGE_KEY);
   } catch {
     // silent
   }
@@ -145,7 +175,11 @@ const ShieldIcon = memo(() => (
 ShieldIcon.displayName = "ShieldIcon";
 
 // ── Component ─────────────────────────────────────────────────
-export default memo(function AdminLogin({ onClose, onLogin, onLogout }: AdminLoginProps) {
+export default memo(function AdminLogin({
+  onClose,
+  onLogin,
+  onLogout,
+}: AdminLoginProps) {
   const [step, setStep] = useState<Step>("initial");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -166,19 +200,49 @@ export default memo(function AdminLogin({ onClose, onLogin, onLogout }: AdminLog
     }
   }, []);
 
-  // Restore session on mount
-  useEffect(() => {
-    mountedRef.current = true;
+  const resetToInitial = useCallback(() => {
+    clearSuccessTimer();
+    setStep("initial");
+    setEmail("");
+    setPassword("");
+    setErrorMessage("");
+    setLoading(false);
+  }, [clearSuccessTimer]);
+
+  const syncSessionState = useCallback(() => {
     const saved = readAdminSession();
+
     if (saved) {
       setAdminData(saved);
       setStep("profile");
+      setErrorMessage("");
+      setLoading(false);
+      return;
     }
+
+    setAdminData(null);
+    resetToInitial();
+  }, [resetToInitial]);
+
+  // Restore session on mount and keep component in sync if changed elsewhere.
+  useEffect(() => {
+    mountedRef.current = true;
+    syncSessionState();
+
+    const handleSync = () => {
+      syncSessionState();
+    };
+
+    window.addEventListener(ADMIN_SESSION_SYNC_EVENT, handleSync);
+    window.addEventListener("storage", handleSync);
+
     return () => {
       mountedRef.current = false;
       clearSuccessTimer();
+      window.removeEventListener(ADMIN_SESSION_SYNC_EVENT, handleSync);
+      window.removeEventListener("storage", handleSync);
     };
-  }, [clearSuccessTimer]);
+  }, [clearSuccessTimer, syncSessionState]);
 
   useEffect(() => {
     void Promise.all([
@@ -211,11 +275,13 @@ export default memo(function AdminLogin({ onClose, onLogin, onLogout }: AdminLog
       clearSuccessTimer();
       return;
     }
+
     clearSuccessTimer();
     successTimerRef.current = setTimeout(() => {
       if (!mountedRef.current) return;
       setStep("profile");
     }, 1800);
+
     return clearSuccessTimer;
   }, [step, clearSuccessTimer]);
 
@@ -246,8 +312,11 @@ export default memo(function AdminLogin({ onClose, onLogin, onLogout }: AdminLog
         : false;
 
       if (!emailAllowed || !passwordMatches) {
+        clearAdminSession();
+        setAdminData(null);
         setErrorMessage("Invalid credentials. Access denied.");
         setStep("error");
+        emitAdminSessionSync();
         return;
       }
 
@@ -259,7 +328,10 @@ export default memo(function AdminLogin({ onClose, onLogin, onLogout }: AdminLog
       };
 
       sessionStorage.setItem(ADMIN_SESSION_KEY, JSON.stringify(admin));
-      localStorage.setItem("adminLoggedIn", "true");
+
+      // Kept only for compatibility with any older code paths.
+      // Footer now relies on sessionStorage only.
+      localStorage.setItem(ADMIN_LOCAL_STORAGE_KEY, "true");
 
       setAdminData(admin);
       onLogin?.(admin);
@@ -267,30 +339,35 @@ export default memo(function AdminLogin({ onClose, onLogin, onLogout }: AdminLog
       setStep("success");
     } catch {
       if (mountedRef.current) {
+        clearAdminSession();
+        setAdminData(null);
         setErrorMessage("Login failed. Please try again.");
         setStep("error");
+        emitAdminSessionSync();
       }
     } finally {
       if (mountedRef.current) setLoading(false);
     }
-  }, [email, password, onLogin]);
+  }, [clearAdminSession, email, password, onLogin]);
 
   // ── Logout: clear session only — no Firebase signOut ───────
-  // Calling signOut(auth) here would terminate any active regular-
-  // user Firebase session, which is a side-effect we must avoid.
   const handleLogout = useCallback(() => {
     clearAdminSession();
+
     setAdminData(null);
     setEmail("");
     setPassword("");
+    setErrorMessage("");
+    setLoading(false);
     setStep("initial");
+
     onLogout?.();
-    onClose?.();
     emitAdminSessionSync();
+    onClose?.();
   }, [onClose, onLogout]);
 
   const handleKeyDown = useCallback(
-    (e: React.KeyboardEvent) => {
+    (e: ReactKeyboardEvent<HTMLDivElement>) => {
       if (e.key === "Enter" && step === "initial" && !loading) {
         void handleLogin();
       }
@@ -309,7 +386,12 @@ export default memo(function AdminLogin({ onClose, onLogin, onLogout }: AdminLog
         onKeyDown={handleKeyDown}
       >
         {step !== "success" && (
-          <button className="admin-close" onClick={onClose} aria-label="Close modal">
+          <button
+            type="button"
+            className="admin-close"
+            onClick={onClose}
+            aria-label="Close modal"
+          >
             ✕
           </button>
         )}
@@ -322,7 +404,8 @@ export default memo(function AdminLogin({ onClose, onLogin, onLogout }: AdminLog
                 Admin Portal
               </h2>
               <p className="admin-subtitle">
-                Authorised personnel only. Enter your email and password to proceed.
+                Authorised personnel only. Enter your email and password to
+                proceed.
               </p>
             </div>
 
@@ -371,6 +454,7 @@ export default memo(function AdminLogin({ onClose, onLogin, onLogout }: AdminLog
             )}
 
             <button
+              type="button"
               className="admin-submit"
               onClick={() => void handleLogin()}
               disabled={loading}
@@ -395,10 +479,7 @@ export default memo(function AdminLogin({ onClose, onLogin, onLogout }: AdminLog
             <div className="admin-state-lottie">
               {successAnimation && (
                 <Suspense fallback={null}>
-                  <Lottie
-                    animationData={successAnimation}
-                    loop={false}
-                  />
+                  <Lottie animationData={successAnimation} loop={false} />
                 </Suspense>
               )}
             </div>
@@ -413,10 +494,7 @@ export default memo(function AdminLogin({ onClose, onLogin, onLogout }: AdminLog
             <div className="admin-state-lottie">
               {failedAnimation && (
                 <Suspense fallback={null}>
-                  <Lottie
-                    animationData={failedAnimation}
-                    loop={false}
-                  />
+                  <Lottie animationData={failedAnimation} loop={false} />
                 </Suspense>
               )}
             </div>
@@ -424,6 +502,7 @@ export default memo(function AdminLogin({ onClose, onLogin, onLogout }: AdminLog
             <p className="admin-state-msg">{errorMessage}</p>
             <div className="admin-state-actions">
               <button
+                type="button"
                 className="admin-state-btn admin-state-btn--primary"
                 onClick={() => setStep("initial")}
               >
@@ -453,14 +532,21 @@ export default memo(function AdminLogin({ onClose, onLogin, onLogout }: AdminLog
               </div>
               <div className="admin-profile-row">
                 <span className="admin-profile-row-label">Status</span>
-                <span className="admin-profile-row-value" style={{ color: "var(--ot-brand)" }}>
+                <span
+                  className="admin-profile-row-value"
+                  style={{ color: "var(--ot-brand)" }}
+                >
                   Active
                 </span>
               </div>
             </div>
 
             <div className="admin-profile-actions">
-              <button className="admin-logout-btn" onClick={() => setStep("confirmLogout")}>
+              <button
+                type="button"
+                className="admin-logout-btn"
+                onClick={() => setStep("confirmLogout")}
+              >
                 <LogoutIcon />
                 Sign Out
               </button>
@@ -477,13 +563,18 @@ export default memo(function AdminLogin({ onClose, onLogin, onLogout }: AdminLog
             </p>
             <div className="admin-state-actions">
               <button
+                type="button"
                 className="admin-state-btn admin-state-btn--primary"
                 onClick={handleLogout}
               >
                 <LogoutIcon />
                 Yes, Sign Out
               </button>
-              <button className="admin-state-btn" onClick={() => setStep("profile")}>
+              <button
+                type="button"
+                className="admin-state-btn"
+                onClick={() => setStep("profile")}
+              >
                 <RetryIcon />
                 Cancel
               </button>
