@@ -89,10 +89,8 @@
 
   display: grid;
 
-  grid-template-columns:
-    1.4fr
-    1fr
-    1fr;
+  /* two columns: sitemap wider, reachout narrower */
+  grid-template-columns: 1.4fr 1fr;
 
   gap: clamp(1.5rem, 3vw, 2.5rem);
 
@@ -164,6 +162,19 @@
   opacity: 0.9;
 }
 
+/* =============================================================================
+   REACH OUT — LOGO ALIGNMENT SPACER
+   Pushes the Reach Out label to start at the same vertical position
+   as the Sitemap label (below the logo block on the left column).
+   Height = logo rendered height (180px wide, 160×37 intrinsic → ~41px) + margin-bottom.
+============================================================================= */
+
+.footer-reachout-spacer {
+  display: block;
+  flex-shrink: 0;
+  height: calc(41px + 1.4rem);
+}
+
 .cert-badge {
   display: inline-flex;
   align-items: center;
@@ -178,7 +189,7 @@
 }
 
 /* =============================================================================
-   FOOTER LINKS
+   FOOTER LINKS — shared by both sitemap and reach out columns
 ============================================================================= */
 
 .footer-links {
@@ -214,7 +225,7 @@
     transform 0.22s ease;
 }
 
-/* underline effect */
+/* underline effect — sitemap only */
 
 .footer-links a::after {
   content: "";
@@ -240,11 +251,8 @@
     width 0.22s ease;
 }
 
-/* hover */
-
 .footer-links a:hover {
   color: var(--color-text);
-
   transform: translateX(3px);
 }
 
@@ -253,7 +261,43 @@
 }
 
 /* =============================================================================
-   CONTACT / FOLLOW
+   REACH OUT LINKS — arrow animation, no underline
+============================================================================= */
+
+/* suppress underline inherited from .footer-links a */
+.footer-links .footer-reachout-link::after {
+  display: none;
+}
+
+/* suppress translateX — arrow provides the motion cue */
+.footer-links .footer-reachout-link:hover {
+  transform: none;
+}
+
+.footer-reachout-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.footer-reachout-arrow {
+  display: inline-block;
+  font-size: 0.78em;
+  line-height: 1;
+  opacity: 0.38;
+  transform: translate(0, 0) scale(1);
+  transition:
+    opacity 0.22s ease,
+    transform 0.28s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.footer-reachout-link:hover .footer-reachout-arrow {
+  opacity: 1;
+  transform: translate(3px, -3px) scale(1.18);
+}
+
+/* =============================================================================
+   CONTACT / FOLLOW (legacy, kept for safety)
 ============================================================================= */
 
 .footer-card {
@@ -281,7 +325,7 @@
 }
 
 /* =============================================================================
-   ICON BUTTONS
+   ICON BUTTONS (legacy)
 ============================================================================= */
 
 .footer-icon-btn {
@@ -352,7 +396,6 @@
 
   gap: clamp(1.5rem, 4vw, 2.5rem);
 
-  /* GLOBAL SPACING */
   padding-inline: var(--ot-page-inline);
 }
 
@@ -385,7 +428,6 @@
 
   padding-top: 1.3rem;
 
-  /* GLOBAL SPACING */
   padding-inline: var(--ot-page-inline);
 }
 
@@ -399,36 +441,34 @@
 }
 
 /* =============================================================================
-   RESPONSIVE
+   RESPONSIVE — tablet (≤899px): keep 2 columns, narrower
 ============================================================================= */
 
 @media (max-width: 899px) {
   .footer-grid {
-    grid-template-columns:
-      1fr
-      1fr;
-
-    grid-template-areas:
-      "sitemap sitemap"
-      "contact follow";
-  }
-
-  .footer-sitemap {
-    grid-area: sitemap;
-  }
-
-  .footer-card:nth-of-type(1) {
-    grid-area: contact;
-  }
-
-  .footer-card:nth-of-type(2) {
-    grid-area: follow;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.8rem;
   }
 }
 
-/* keep 2 columns on normal mobile */
+/* =============================================================================
+   RESPONSIVE — mobile (≤640px): single column, hide spacer
+============================================================================= */
 
-@media (max-width: 480px) {
+/* AFTER */
+@media (max-width: 640px) {
+  .footer-grid {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+
+  .footer-reachout-spacer {
+    display: none;
+  }
+}
+
+/* links go single column only on very small devices */
+@media (max-width: 360px) {
   .footer-links {
     grid-template-columns: 1fr;
   }
@@ -439,10 +479,6 @@
 ============================================================================= */
 
 @media (max-width: 767px) {
-  .footer-grid {
-    gap: 1.8rem;
-  }
-
   .footer-logo-img {
     width: 155px;
   }
@@ -462,7 +498,8 @@
 
 @media (prefers-reduced-motion: reduce) {
   .footer-links a,
-  .footer-icon-btn {
+  .footer-icon-btn,
+  .footer-reachout-arrow {
     transition: none !important;
   }
 }

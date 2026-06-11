@@ -64,6 +64,43 @@ const SITEMAP_LINKS = [
   },
 ];
 
+const REACHOUT_LINKS = [
+  {
+    label: "WhatsApp",
+    href: "https://wa.me/917866049865",
+    rel: "noopener noreferrer" as const,
+    target: "_blank" as const,
+  },
+  {
+    label: "Email",
+    href: "mailto:connect.openroot@gmail.com",
+  },
+  {
+    label: "GitHub",
+    href: "https://github.com/COMEONSOM",
+    rel: "noopener noreferrer" as const,
+    target: "_blank" as const,
+  },
+  {
+    label: "LinkedIn",
+    href: "https://in.linkedin.com/in/comeonsom",
+    rel: "noopener noreferrer" as const,
+    target: "_blank" as const,
+  },
+  {
+    label: "X",
+    href: "https://x.com/comeonsomx",
+    rel: "noopener noreferrer" as const,
+    target: "_blank" as const,
+  },
+  {
+    label: "Facebook",
+    href: "https://www.facebook.com/OpenrootSystems",
+    rel: "noopener noreferrer" as const,
+    target: "_blank" as const,
+  },
+];
+
 // ─── Types ────────────────────────────────────────────────────
 
 type AdminSession = {
@@ -199,111 +236,28 @@ export default function Footer() {
             </div>
           </nav>
 
-          {/* CONTACT */}
-          <div className="footer-card">
-            <span className="footer-label">Contact</span>
-            <div className="footer-icon-row">
-              <a
-                href="https://wa.me/917866049865"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="footer-icon-btn"
-                aria-label="WhatsApp"
-              >
-                <img
-                  src="/assets/whatsapp.svg"
-                  alt=""
-                  aria-hidden="true"
-                  width={24}
-                  height={24}
-                />
-              </a>
+          {/* REACH OUT */}
+          <nav className="footer-sitemap footer-reachout" aria-label="Reach out">
+            <span className="footer-reachout-spacer" aria-hidden="true" />
+            <span className="footer-label">Find Me Online</span>
 
-              <a
-                href="mailto:connect.openroot@gmail.com"
-                className="footer-icon-btn"
-                aria-label="Email"
-              >
-                <img
-                  src="/assets/gmail.svg"
-                  alt=""
-                  aria-hidden="true"
-                  width={24}
-                  height={24}
-                />
-              </a>
+            <div className="footer-links">
+              {REACHOUT_LINKS.map(({ label, href, rel, target }) => (
+                <a
+                  key={label}
+                  href={href}
+                  rel={rel}
+                  target={target}
+                  className="footer-reachout-link"
+                >
+                  {label}
+                  <span className="footer-reachout-arrow" aria-hidden="true">
+                    ↗
+                  </span>
+                </a>
+              ))}
             </div>
-          </div>
-
-          {/* FOLLOW */}
-          <div className="footer-card">
-            <span className="footer-label">Follow</span>
-            <div className="footer-icon-row">
-              <a
-                href="https://github.com/COMEONSOM"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="footer-icon-btn"
-                aria-label="GitHub"
-              >
-                <img
-                  src="/assets/github.svg"
-                  alt=""
-                  aria-hidden="true"
-                  width={24}
-                  height={24}
-                />
-              </a>
-
-              <a
-                href="https://in.linkedin.com/in/comeonsom"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="footer-icon-btn"
-                aria-label="LinkedIn"
-              >
-                <img
-                  src="/assets/linkedin.svg"
-                  alt=""
-                  aria-hidden="true"
-                  width={24}
-                  height={24}
-                />
-              </a>
-
-              <a
-                href="https://x.com/comeonsomx"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="footer-icon-btn"
-                aria-label="X (Twitter)"
-              >
-                <img
-                  src="/assets/x.svg"
-                  alt=""
-                  aria-hidden="true"
-                  width={24}
-                  height={24}
-                />
-              </a>
-
-              <a
-                href="https://www.facebook.com/OpenrootSystems"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="footer-icon-btn"
-                aria-label="Facebook"
-              >
-                <img
-                  src="/assets/facebook.svg"
-                  alt=""
-                  aria-hidden="true"
-                  width={24}
-                  height={24}
-                />
-              </a>
-            </div>
-          </div>
+          </nav>
         </div>
       </div>
 
