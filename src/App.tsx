@@ -24,7 +24,7 @@ import BackToTop from "./context/BackToTop";
 import ScrollToTop from "./context/ScrollToTop";
 
 import Header from "./components/Header";
-import Navbar from "./components/Navbar";
+import Navbar from "./components/2Navbar";
 import AboutCompany from "./components/about/AboutCompany";
 import Footer from "./components/Footer";
 

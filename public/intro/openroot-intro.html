@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Openroot Systems — Intro</title>
+<style>
+  :root { box-sizing: border-box; padding-top: env(safe-area-inset-top, 0px); padding-bottom: env(safe-area-inset-bottom, 0px); }
+  html, body { margin: 0; height: 100%; background: #000000; overflow: hidden; }
+  canvas { display: block; width: 100%; height: 100%; }
+</style>
+</head>
+<body>
+<canvas id="c" aria-label="Openroot Systems intro animation: a precise geometric system builds from a single point and returns to it."></canvas>
+<script>
+/* ============================================================
+   OPENROOT SYSTEMS — THE DIGITAL ROOT SYSTEM
+   12 s seamless loop. Colors: #000000 / #FFFFFF / #4169E1 only.
+   No alpha, no gradients, no glow. All motion derives from one
+   periodic state u(t) which is 0 at t=0 and t=12 (identical frames).
+   Space: pause · ←/→: step 0.25s while paused
+   ============================================================ */
+const K = '#000000', W = '#FFFFFF', B = '#4169E1';
+const LOOP = 12;
+
+const cv = document.getElementById('c');
+const ctx = cv.getContext('2d');
+let vw = 0, vh = 0, dpr = 1;
+function resize() {
+  dpr = Math.min(window.devicePixelRatio || 1, 3);
+  vw = window.innerWidth; vh = window.innerHeight;
+  cv.width = Math.round(vw * dpr); cv.height = Math.round(vh * dpr);
+}
+window.addEventListener('resize', resize); resize();
+
+const clamp = (x, a = 0, b = 1) => Math.min(b, Math.max(a, x));
+const prog = (u, a, d) => clamp((u - a) / d);
+const eio = x => x < .5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2;
+const lerp = (a, b, x) => a + (b - a) * x;
+
+/* Build envelope: 0 → 1 → 0, equal at both ends of the loop */
+function U(t) {
+  if (t < 1.5) return 0;
+  if (t < 7.5) return (t - 1.5) / 6;
+  if (t < 9.5) return 1;
+  return 1 - (t - 9.5) / 2.5;
+}
+
+/* ---------- Geometry: an H-tree "root system" on a 10-unit grid ---------- */
+const LV = [
+  { a: 0,   d: .16, w: 3,   st: 0   },
+  { a: .10, d: .16, w: 2.5, st: .04 },
+  { a: .28, d: .18, w: 2,   st: .06 },
+  { a: .42, d: .18, w: 1.5, st: .08 }
+];
+const segs = [], paths = [], mods = [];
+function mk(l, x1, y1, x2, y2) {
+  const s = { l, x1, y1, x2, y2, len: Math.hypot(x2 - x1, y2 - y1) };
+  const dm = Math.hypot((x1 + x2) / 2, (y1 + y2) / 2);
+  s.a = LV[l].a + LV[l].st * clamp(dm / 300);
+  segs.push(s); return s;
+}
+for (const sx of [-1, 1]) {
+  const s1 = mk(0, 0, 0, 160 * sx, 0);
+  for (const sy of [-1, 1]) {
+    const s2 = mk(1, 160 * sx, 0, 160 * sx, 130 * sy);
+    for (const d2 of [-1, 1]) {
+      const x2 = 160 * sx + 70 * d2;
+      const s3 = mk(2, 160 * sx, 130 * sy, x2, 130 * sy);
+      for (const d3 of [-1, 1]) {
+        const ey = 130 * sy + 60 * d3;
+        const s4 = mk(3, x2, 130 * sy, x2, ey);
+        const i = paths.length;
+        paths.push({
+          i, segs: [s1, s2, s3, s4],
+          pts: [[0, 0], [160 * sx, 0], [160 * sx, 130 * sy], [x2, 130 * sy], [x2, ey]],
+          L: 160 + 130 + 70 + 60
+        });
+        const dist = Math.hypot(x2, ey);
+        mods.push({
+          i, x: x2, y: ey, p: i % 8,
+          a: .56 + .08 * clamp(dist / 300),
+          ia: .68 + .08 * clamp(dist / 300),
+          arr: []
+        });
+      }
+    }
+  }
+}
+const segP = (s, u) => eio(prog(u, s.a, LV[s.l].d));
+const dl = (p, u) => p.segs.reduce((n, s) => n + s.len * segP(s, u), 0);
+
+/* ---------- Signal packets (controlled information flow) ---------- */
+const packets = [];
+paths.forEach((p, i) => {
+  [2.4, 4.2, 6.0].forEach(t0 => {
+    const o = (i % 4) * .06;
+    packets.push({ pts: p.pts, L: p.L, t0: t0 + o, dur: 1.5, dir: 1, len: 26, path: p });
+    mods[i].arr.push(t0 + o + 1.5);
+  });
+  packets.push({ pts: p.pts, L: p.L, t0: 9.6 + (i % 4) * .08, dur: 1.7, dir: -1, len: 26, path: p });
+});
+/* Lattice sync packets */
+let latticeE = 0;
+for (const sy of [-1, 1]) for (const sx of [-1, 1]) {
+  packets.push({ pts: [[0, 70 * sy], [230 * sx, 70 * sy]],  L: 230, t0: 7.2, dur: 1.3, dir: 1, len: 24, D: () => 230 * latticeE });
+  packets.push({ pts: [[0, 190 * sy], [230 * sx, 190 * sy]], L: 230, t0: 7.5, dur: 1.3, dir: 1, len: 24, D: () => 230 * latticeE });
+}
+function packetRange(p, t) {
+  const x = (t - p.t0) / p.dur;
+  if (x <= 0 || x >= 1) return null;
+  const head = x * (p.L + p.len);
+  const a = Math.max(head - p.len, 0), b = Math.min(head, p.L);
+  if (b <= a) return null;
+  return p.dir > 0 ? [a, b] : [p.L - b, p.L - a];
+}
+
+/* ---------- Drawing helpers ---------- */
+let hair = 1;
+function sq(x, y, s, col) { if (s <= 0) return; ctx.fillStyle = col; ctx.fillRect(x - s / 2, y - s / 2, s, s); }
+function ptsLen(pts) { let n = 0; for (let i = 0; i < pts.length - 1; i++) n += Math.hypot(pts[i + 1][0] - pts[i][0], pts[i + 1][1] - pts[i][1]); return n; }
+function strokeRange(pts, d0, d1) {
+  if (d1 <= d0) return;
+  ctx.beginPath();
+  let acc = 0, started = false;
+  for (let i = 0; i < pts.length - 1; i++) {
+    const [x1, y1] = pts[i], [x2, y2] = pts[i + 1];
+    const L = Math.hypot(x2 - x1, y2 - y1);
+    const s = Math.max(d0, acc), e = Math.min(d1, acc + L);
+    if (e > s) {
+      const ax = x1 + (x2 - x1) * (s - acc) / L, ay = y1 + (y2 - y1) * (s - acc) / L;
+      const bx = x1 + (x2 - x1) * (e - acc) / L, by = y1 + (y2 - y1) * (e - acc) / L;
+      if (!started) { ctx.moveTo(ax, ay); started = true; } else ctx.lineTo(ax, ay);
+      ctx.lineTo(bx, by);
+    }
+    acc += L;
+  }
+  ctx.stroke();
+}
+
+/* ---------- Domain modules: geometry only, no icons, no text ---------- */
+const PAT = [
+  /* 0 · technology: layered stack */
+  (q, a) => {
+    const L = [34, 24, 30], Y = [-11, -2, 7];
+    for (let k = 0; k < 3; k++) {
+      const qk = clamp(q * 1.5 - k * .25);
+      ctx.fillStyle = (k === 1 && a) ? B : W;
+      ctx.fillRect(-17, Y[k], L[k] * qk, 4);
+    }
+  },
+  /* 1 · AI: lattice of nodes, one focal node */
+  (q, a) => {
+    const xs = [-13, 0, 13], ys = [-10, 0, 10];
+    const ql = clamp((q - .3) / .7);
+    if (ql > 0) {
+      ctx.strokeStyle = W; ctx.lineWidth = hair; ctx.beginPath();
+      for (const y of ys) { ctx.moveTo(-13, y); ctx.lineTo(-13 + 26 * ql, y); }
+      for (const x of xs) { ctx.moveTo(x, -10); ctx.lineTo(x, -10 + 20 * ql); }
+      ctx.stroke();
+    }
+    let n = 0;
+    for (const y of ys) for (const x of xs) {
+      sq(x, y, clamp(q * 1.6 - n * .07) * 4.5, (n === 4 && a) ? B : W); n++;
+    }
+  },
+  /* 2 · automation: stepped flow */
+  (q, a) => {
+    const pts = [[-18, 12], [-6, 12], [-6, 2], [6, 2], [6, -8], [18, -8]];
+    ctx.strokeStyle = W; ctx.lineWidth = 2;
+    strokeRange(pts, 0, ptsLen(pts) * q);
+    if (q > .95) sq(18, -8, 5, a ? B : W);
+  },
+  /* 3 · education: ascending bars */
+  (q, a) => {
+    const H = [8, 14, 20, 28];
+    for (let k = 0; k < 4; k++) {
+      const qk = clamp(q * 1.5 - k * .2);
+      ctx.fillStyle = (k === 3 && a) ? B : W;
+      ctx.fillRect(-18 + k * 10, 14 - H[k] * qk, 6, H[k] * qk);
+    }
+  },
+  /* 4 · finance: rising path on a baseline */
+  (q, a) => {
+    const pts = [[-18, 10], [-8, 2], [0, 6], [8, -6], [18, -12]];
+    const L = ptsLen(pts);
+    ctx.strokeStyle = W; ctx.lineWidth = hair;
+    strokeRange([[-18, 14], [-18 + 36 * q, 14]], 0, 36);
+    ctx.lineWidth = 1.5; strokeRange(pts, 0, L * q);
+    let acc = 0;
+    for (let i = 0; i < pts.length; i++) {
+      if (i > 0) acc += Math.hypot(pts[i][0] - pts[i - 1][0], pts[i][1] - pts[i - 1][1]);
+      if (q * L >= acc - .01 && q > 0) sq(pts[i][0], pts[i][1], 3.5, (i === pts.length - 1 && a) ? B : W);
+    }
+  },
+  /* 5 · productivity: modular blocks */
+  (q, a) => {
+    const P = [[-15, -13], [1, -13], [-15, 3], [1, 3]];
+    P.forEach(([x, y], k) => {
+      const s = clamp(q * 1.5 - k * .2); if (s <= 0) return;
+      ctx.save(); ctx.translate(x + 7, y + 7); ctx.scale(s, s);
+      if (k < 2) { ctx.strokeStyle = W; ctx.lineWidth = 1.5 / s; ctx.strokeRect(-6.25, -6.25, 12.5, 12.5); }
+      else { ctx.fillStyle = (k === 3 && a) ? B : W; ctx.fillRect(-7, -7, 14, 14); }
+      ctx.restore();
+    });
+  },
+  /* 6 · business: nested structure */
+  (q, a) => {
+    ctx.save(); ctx.scale(q, q);
+    ctx.strokeStyle = W; ctx.lineWidth = hair / Math.max(q, .2);
+    ctx.strokeRect(-18, -14, 36, 28); ctx.strokeRect(-12, -9, 24, 18);
+    ctx.fillStyle = a ? B : W; ctx.fillRect(-5, -4, 10, 8);
+    ctx.restore();
+  },
+  /* 7 · systems: panel split */
+  (q, a) => {
+    ctx.strokeStyle = W; ctx.lineWidth = 1.5;
+    ctx.save(); ctx.scale(1, q);
+    ctx.strokeRect(-18, -14, 16, 28); ctx.strokeRect(2, -14, 16, 12); ctx.strokeRect(2, 2, 16, 12);
+    ctx.restore();
+    sq(10, 8 * q, 6 * q, a ? B : W);
+  }
+];
+
+function drawModule(m, u, t, par) {
+  const q1 = eio(prog(u, m.a, .14));
+  if (q1 <= 0) return;
+  const q2 = eio(prog(u, m.ia, .2));
+  const act = (t >= 8.3 && t < 8.9) || m.arr.some(a => t >= a && t < a + .7);
+  const w = 48, h = 40, P = 2 * (w + h);
+  ctx.save();
+  ctx.translate(m.x + par, m.y);
+  const qs = clamp((q1 - .4) / .6);
+  if (qs > 0) {
+    ctx.fillStyle = K; ctx.fillRect(-w / 2 + 6, -h / 2 + 5, w, h);
+    ctx.strokeStyle = W; ctx.lineWidth = hair; ctx.setLineDash([P * qs, P]);
+    ctx.strokeRect(-w / 2 + 6, -h / 2 + 5, w, h); ctx.setLineDash([]);
+  }
+  ctx.fillStyle = K; ctx.fillRect(-w / 2, -h / 2, w, h);
+  ctx.strokeStyle = W; ctx.lineWidth = 1.5; ctx.setLineDash([P * q1, P]);
+  ctx.strokeRect(-w / 2, -h / 2, w, h); ctx.setLineDash([]);
+  if (q2 > 0) PAT[m.p](q2, act);
+  ctx.restore();
+}
+
+/* ---------- Frame ---------- */
+function draw(t) {
+  const u = U(t);
+  ctx.setTransform(1, 0, 0, 1, 0, 0);
+  ctx.fillStyle = K; ctx.fillRect(0, 0, cv.width, cv.height);
+
+  /* Central safe area: ~760 × 900 design units; system sits above the logo zone */
+  const k = Math.min(vw / 760, vh / 900);
+  const cam = 1 + 0.03 * (0.5 - 0.5 * Math.cos(2 * Math.PI * t / LOOP));
+  const ph = Math.sin(2 * Math.PI * t / LOOP);
+  hair = Math.max(1, 1.25 / (k * cam));
+
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  ctx.translate(vw / 2, vh / 2); ctx.scale(k, k); ctx.translate(0, -100);
+  ctx.scale(cam, cam);
+  ctx.lineJoin = 'miter'; ctx.lineCap = 'butt';
+
+  /* far layer: grid dots + lattice */
+  ctx.save(); ctx.translate(-ph * 4, 0);
+  const R = lerp(0, 430, eio(prog(u, .25, .5)));
+  if (R > 0) {
+    for (let x = -360; x <= 360; x += 60) for (let y = -300; y <= 300; y += 60) {
+      if (x === 0 && y === 0) continue;
+      if (Math.hypot(x, y) < R) sq(x, y, 1.8, W);
+    }
+  }
+  latticeE = eio(prog(u, .6, .2));
+  if (latticeE > 0) {
+    ctx.strokeStyle = W; ctx.lineWidth = hair; ctx.setLineDash([3, 5]);
+    ctx.beginPath();
+    for (const y of [-190, -70, 70, 190]) { ctx.moveTo(-230 * latticeE, y); ctx.lineTo(230 * latticeE, y); }
+    for (const x of [-230, -90, 90, 230]) { ctx.moveTo(x, -70 * latticeE); ctx.lineTo(x, 70 * latticeE); }
+    ctx.stroke(); ctx.setLineDash([]);
+    if (latticeE > .98) for (const x of [-230, -90, 90, 230]) sq(x, 0, 4, W);
+  }
+  ctx.restore();
+
+  /* frame brackets: grow from the foundation, blue in motion, white at rest */
+  const bq = prog(u, .08, .08);
+  if (bq > 0) {
+    const e = eio(prog(u, .78, .2));
+    const hw = lerp(16, 320, e), hh = lerp(16, 280, e);
+    const arm = lerp(8, 44, e) * bq;
+    ctx.strokeStyle = (e > .005 && e < .995) ? B : W;
+    ctx.lineWidth = 2.5;
+    for (const sx of [-1, 1]) for (const sy of [-1, 1]) {
+      const cx = hw * sx, cy = hh * sy;
+      ctx.beginPath();
+      ctx.moveTo(cx - arm * sx, cy); ctx.lineTo(cx, cy); ctx.lineTo(cx, cy - arm * sy);
+      ctx.stroke();
+    }
+  }
+
+  /* structure: H-tree segments */
+  ctx.strokeStyle = W;
+  for (const s of segs) {
+    const p = segP(s, u);
+    if (p <= 0) continue;
+    ctx.lineWidth = LV[s.l].w;
+    ctx.beginPath(); ctx.moveTo(s.x1, s.y1);
+    ctx.lineTo(lerp(s.x1, s.x2, p), lerp(s.y1, s.y2, p));
+    ctx.stroke();
+  }
+  /* junction nodes */
+  const NS = [8, 6, 5];
+  for (const s of segs) {
+    if (s.l > 2) continue;
+    const p = segP(s, u);
+    const sz = NS[s.l] * clamp((p - .85) / .15);
+    sq(s.x2, s.y2, sz, (s.l === 0 && p >= 1) ? B : W);
+  }
+
+  /* signals */
+  ctx.strokeStyle = B; ctx.lineWidth = 3;
+  for (const p of packets) {
+    const r = packetRange(p, t); if (!r) continue;
+    const D = p.path ? dl(p.path, u) : p.D();
+    const a = r[0], b = Math.min(r[1], D);
+    if (b > a) strokeRange(p.pts, a, b);
+  }
+
+  /* modules (near layer, parallax) */
+  for (const m of mods) drawModule(m, u, t, ph * 5);
+
+  /* foundation: axis + point */
+  ctx.strokeStyle = W; ctx.lineWidth = hair;
+  ctx.beginPath(); ctx.moveTo(-24, 0); ctx.lineTo(24, 0); ctx.stroke();
+  const size = 8 + 4 * eio(prog(u, .78, .2));
+  const blue = u >= .9 || (t >= 11.2 && t < 11.75);
+  sq(0, 0, size, blue ? B : W);
+}
+
+/* ---------- Clock ---------- */
+let paused = false, tNow = 0, last = performance.now();
+function frame(now) {
+  if (!paused) tNow = (tNow + (now - last) / 1000) % LOOP;
+  last = now;
+  draw(tNow);
+  requestAnimationFrame(frame);
+}
+requestAnimationFrame(frame);
+window.addEventListener('keydown', e => {
+  if (e.code === 'Space') { paused = !paused; e.preventDefault(); }
+  else if (paused && e.code === 'ArrowRight') tNow = (tNow + .25) % LOOP;
+  else if (paused && e.code === 'ArrowLeft') tNow = (tNow - .25 + LOOP) % LOOP;
+});
+</script>
+</body>
+</html>

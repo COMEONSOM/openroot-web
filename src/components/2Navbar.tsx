@@ -29,6 +29,7 @@ const ALLOWED_SLUGS = new Set([
   "coevas-terminal",
   "makaut-grade-pro",
   "gdrive-web-extension",
+  "software-as-a-service",
 ]);
 
 function isSafeInternalSlug(slug: string): boolean {
@@ -178,6 +179,28 @@ const Icons = {
       <path d="M12 11.5a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zm0-3l.6 1.4 1.5.3-1.1 1.1.3 1.5-1.3-.7-1.3.7.3-1.5-1.1-1.1 1.5-.3.6-1.4z" />
     </svg>
   ),
+
+  softwareAsAService: (
+  <svg
+    viewBox="0 0 24 24"
+    width="20"
+    height="20"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth={1.8}
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    aria-hidden="true"
+    focusable="false"
+  >
+    <rect x="3" y="3" width="7" height="7" rx="2" />
+    <rect x="14" y="3" width="7" height="7" rx="2" />
+    <rect x="3" y="14" width="7" height="7" rx="2" />
+    <path d="M17.5 14v7" />
+    <path d="M14 17.5h7" />
+  </svg>
+),
+
 };
 
 const iconMap: Record<string, React.ReactNode> = {
@@ -188,6 +211,7 @@ const iconMap: Record<string, React.ReactNode> = {
   "coevas-terminal": Icons.Coevas,
   "makaut-grade-pro": Icons.makaut,
   "gdrive-web-extension": Icons.gdrive,
+  "software-as-a-service": Icons.softwareAsAService,
 };
 
 // ─────────────────────────────────────────────────────────────
@@ -200,6 +224,7 @@ const SITELINK_PAGES = [
   { name: "MAKAUT Grade Calculator", url: "https://openroot.in/softwares/makaut-grade-pro" },
   { name: "Travel Expense Manager", url: "https://openroot.in/softwares/travel-expense-manager" },
   { name: "Openroot Classes", url: "https://openroot.in/softwares/openroot-classes" },
+  { name: "Software as a Service", url: "https://openroot.in/software-solutions" },
   { name: "Coevas Terminal", url: "https://openroot.in/softwares/coevas-terminal" },
   { name: "GDrive Automation", url: "https://openroot.in/softwares/gdrive-web-extension" },
   { name: "Certificate Verification", url: "https://openroot.in/certificate-verification" },
@@ -224,6 +249,9 @@ const siteNavSchema = {
     "query-input": "required name=search_term_string",
   },
 } as const;
+
+const SOFTWARE_AS_A_SERVICE_SLUG = "software-as-a-service" as const;
+const SOFTWARE_AS_A_SERVICE_PATH = "/software-solutions" as const;
 
 const siteNavigationSchema = {
   "@context": "https://schema.org",
@@ -312,7 +340,12 @@ export default function Navbar() {
   const isCompactMode =
     viewportWidth > 0 && viewportWidth < 1400;
 
-  const visibleSoftwares = softwareList;
+  // SaaS is a special navigation entry, not a softwareList record.
+  // Filtering it here also prevents duplicates if it was accidentally added
+  // to softwareList while maintaining the requested visual position below.
+  const visibleSoftwares = softwareList.filter(
+    (app) => app.slug !== SOFTWARE_AS_A_SERVICE_SLUG
+  );
 
   const goTo = useCallback(
     (slug: string) => {
@@ -328,6 +361,10 @@ export default function Navbar() {
     },
     [navigate]
   );
+
+  const goToSoftwareAsAService = useCallback(() => {
+    navigate(SOFTWARE_AS_A_SERVICE_PATH);
+  }, [navigate]);
 
   const handleMouseMove = useCallback(
     (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -419,14 +456,24 @@ export default function Navbar() {
             role="list"
           >
             {visibleSoftwares.map((app) => (
-              <SoftwareButton
-                key={app.slug}
-                slug={app.slug}
-                name={app.name}
-                badgeText={app.badgeText}
-                onClick={() => goTo(app.slug)}
-                onMouseMove={handleMouseMove}
-              />
+              <React.Fragment key={app.slug}>
+                <SoftwareButton
+                  slug={app.slug}
+                  name={app.name}
+                  badgeText={app.badgeText}
+                  onClick={() => goTo(app.slug)}
+                  onMouseMove={handleMouseMove}
+                />
+
+                {app.slug === "openroot-classes" && (
+                  <SoftwareButton
+                    slug={SOFTWARE_AS_A_SERVICE_SLUG}
+                    name="Software as a Service"
+                    onClick={goToSoftwareAsAService}
+                    onMouseMove={handleMouseMove}
+                  />
+                )}
+              </React.Fragment>
             ))}
           </div>
         </div>
