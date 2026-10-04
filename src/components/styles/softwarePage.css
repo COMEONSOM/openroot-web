@@ -163,10 +163,35 @@ justify-content: center;
 width: 28px;
 height: 28px;
 border-radius: 50%;
-background: var(--ot-brand);
-color: #000;
+background: var(--ot-bg);
+color: var(--ot-text);
+border: 1px solid color-mix(in oklch, var(--ot-text) 18%, transparent);
 flex-shrink: 0;
-transition: transform var(--t-spring-fast);
+position: relative;
+z-index: 1;
+transition:
+  transform var(--t-spring-fast),
+  background var(--t-spring-fast),
+  color var(--t-spring-fast),
+  border-color var(--t-spring-fast);
+}
+
+.sp-launch-btn-icon svg {
+display: block;
+width: 15px;
+height: 15px;
+color: currentColor;
+stroke: currentColor;
+fill: none;
+}
+
+.sp-launch-btn-icon svg *,
+.sp-launch-btn-icon svg path,
+.sp-launch-btn-icon svg polyline,
+.sp-launch-btn-icon svg line,
+.sp-launch-btn-icon svg polygon,
+.sp-launch-btn-icon svg circle {
+stroke: currentColor;
 }
 
 .sp-launch-btn::before {
@@ -516,6 +541,12 @@ box-shadow: inset 0 1px 0 color-mix(in oklch, var(--ot-brand) 18%, var(--ot-bord
 .sp-explore {
 padding-top: clamp(1.5rem, 3vw, 2rem);
 border-top: 1px solid var(--ot-border);
+}
+
+/* Remove only the separate generic divider immediately before Explore More.
+   The Explore More section border above is intentionally preserved. */
+.sp-root .divider:has(+ .sp-explore) {
+display: none;
 }
 
 .sp-explore-title {

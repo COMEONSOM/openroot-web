@@ -1,18 +1,106 @@
 /* ============================================================
-   SOFTWARE HUB — STRUCTURAL ARCHITECTURE
-   Philosophy: Surface elevation over shadows. Border contrast
-   over glow. Typography hierarchy over decoration.
-   Every pixel earns its place.
+   SOFTWARE HUB
+   Same design language as the footer and certificate pages:
+   textured square-grid background, square framed cells, flat surfaces.
+   Adds a pixel / voxel accent system: a pixel "hotbar" row and a small
+   pixel block on every card, in colours that read in both themes.
+
+   Strips and borders follow the theme text colour
+   (white in dark mode, black in light mode).
+   Flat only: no shadows, glows, blur, scaling or sliding.
+   Class names are unchanged, so the existing TSX needs no edits.
    ============================================================ */
 
-/* ── ROOT ─────────────────────────────────────────────────── */
+@import url("https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@500;600;700&display=swap");
+
+/* ── ROOT + TOKENS ────────────────────────────────────────── */
 
 .sh-root {
+  /* theme-following tokens, with fallbacks to the older --ot-* names */
+  --sh-text: var(--color-text, var(--ot-text));
+  --sh-muted: var(--color-text-muted, var(--ot-text-muted));
+  --sh-faint: var(--ot-text-faint, var(--color-text-muted));
+  --sh-bg: var(--ot-section-bg, var(--ot-bg));
+  --sh-line: var(--sh-text);
+  --sh-line-soft: var(--sh-text);
+  --sh-hover: rgba(128, 128, 140, 0.14);
+
+  /* pixel palette: mid-tone colours that hold up on black and on white */
+  --px-1: #5bbd4b; /* grass */
+  --px-2: #3fc9d0; /* diamond */
+  --px-3: #ffc72c; /* gold */
+  --px-4: #ff6b4a; /* redstone */
+  --px-5: #4169e1; /* lapis */
+
+  --sh-pixel-font: "Pixelify Sans", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  --sh-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+
+  position: relative;
+  isolation: isolate;
+
   padding-inline: clamp(1rem, 5vw, 2.5rem);
   padding-bottom: clamp(2.5rem, 6vw, 4.5rem);
-  background: var(--ot-bg);
-  color: var(--ot-text);
   min-height: 100vh;
+
+  background-color: var(--sh-bg);
+  color: var(--sh-text);
+}
+
+@supports (color: color-mix(in srgb, red, blue)) {
+  .sh-root {
+    --sh-line: color-mix(in srgb, var(--sh-text) 55%, transparent);
+    --sh-line-soft: color-mix(in srgb, var(--sh-text) 22%, transparent);
+    --sh-hover: color-mix(in srgb, var(--sh-text) 8%, transparent);
+  }
+}
+
+/* texture: fine square grid across the page */
+.sh-root::before {
+  content: "";
+
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+
+  pointer-events: none;
+
+  background-image:
+    linear-gradient(to bottom, var(--sh-text) 1px, transparent 1px),
+    linear-gradient(to right, var(--sh-text) 1px, transparent 1px);
+  background-size: 26px 26px;
+
+  opacity: 0.09;
+}
+
+/* ── PIXEL HOTBAR  (shared row of coloured blocks) ────────── */
+
+.sh-header::before,
+.sh-section--cta::before {
+  content: "";
+
+  display: block;
+  align-self: stretch;
+
+  height: 12px;
+  margin-bottom: clamp(1.4rem, 3vw, 2rem);
+
+  background-image: linear-gradient(
+    90deg,
+    var(--px-1) 0 12px,
+    transparent 12px 16px,
+    var(--px-2) 16px 28px,
+    transparent 28px 32px,
+    var(--px-3) 32px 44px,
+    transparent 44px 48px,
+    var(--px-4) 48px 60px,
+    transparent 60px 64px,
+    var(--px-5) 64px 76px,
+    transparent 76px 80px
+  );
+  background-size: 80px 12px;
+  background-repeat: round no-repeat;
+
+  image-rendering: pixelated;
 }
 
 /* ── BREADCRUMB ───────────────────────────────────────────── */
@@ -24,65 +112,75 @@
 .sh-breadcrumb-list {
   display: flex;
   align-items: center;
-  gap: 0.35rem;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+
   list-style: none;
   padding: 0;
   margin: 0;
-  font-size: 0.72rem;
+
+  font-family: var(--sh-mono);
+  font-size: 0.74rem;
   font-weight: 500;
-  letter-spacing: 0.01em;
-  color: var(--ot-text-faint);
+
+  color: var(--sh-faint);
 }
 
 .sh-breadcrumb-list a {
-  color: var(--ot-text-faint);
+  color: var(--sh-faint);
   text-decoration: none;
-  transition: color var(--ot-transition-fast);
+
+  transition: color 0.2s ease;
 }
 
 .sh-breadcrumb-list a:hover {
-  color: var(--ot-text-muted);
+  color: var(--sh-text);
+}
+
+.sh-breadcrumb-list a:focus-visible {
+  outline: 2px solid var(--sh-text);
+  outline-offset: 3px;
 }
 
 .sh-breadcrumb-sep {
-  opacity: 0.4;
+  opacity: 0.5;
   user-select: none;
 }
 
 /* ── HEADER ───────────────────────────────────────────────── */
 
 .sh-header {
-  max-width: 640px;
+  max-width: 680px;
   margin-inline: auto;
   text-align: center;
   padding-bottom: clamp(2.5rem, 5vw, 4rem);
 
-  /* Structural bottom rule — one horizontal divider separates
-     the header from content. No decorative elements needed. */
-  border-bottom: 1px solid var(--ot-border);
+  border-bottom: 1px solid var(--sh-line-soft);
 }
 
 .sh-title {
-  font-size: clamp(1.75rem, 4.5vw, 2.75rem);
-  font-weight: 800;
-  letter-spacing: -0.04em;
-  line-height: 1.1;
-  color: var(--ot-text);
   margin-top: 0.5rem;
   margin-bottom: 0;
+
+  font-family: var(--sh-pixel-font);
+  font-size: clamp(1.9rem, 4.8vw, 3rem);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  line-height: 1.1;
+  color: var(--sh-text);
   text-wrap: balance;
 }
 
-/* Only the brand token gets color — the rest stays neutral */
 .sh-title-break { display: block; }
 
 .sh-subtitle {
-  margin-top: 0.875rem;
-  font-size: clamp(0.85rem, 1.4vw, 0.95rem);
-  color: var(--ot-text-muted);
-  line-height: 1.75;
-  max-width: 52ch;
+  max-width: 54ch;
+  margin-top: 1rem;
   margin-inline: auto;
+
+  font-size: clamp(0.9rem, 1.4vw, 1rem);
+  color: var(--sh-muted);
+  line-height: 1.75;
 }
 
 /* ── SECTIONS ─────────────────────────────────────────────── */
@@ -91,16 +189,19 @@
   margin-top: clamp(2.5rem, 5.5vw, 4rem);
 }
 
-/* CTA section: centered column */
 .sh-section--cta {
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 1.25rem;
 
-  /* Structural top rule — mirrors header bottom rule */
-  border-top: 1px solid var(--ot-border);
+  border-top: 1px solid var(--sh-line-soft);
   padding-top: clamp(2.5rem, 5.5vw, 4rem);
+}
+
+/* the hotbar sits above the CTA, so tighten the flex gap around it */
+.sh-section--cta::before {
+  margin-bottom: 0.5rem;
 }
 
 /* ── SECTION HEADER ───────────────────────────────────────── */
@@ -114,77 +215,147 @@
 }
 
 .sh-section-title {
-  font-size: clamp(1.05rem, 2vw, 1.35rem);
-  font-weight: 800;
-  letter-spacing: -0.03em;
-  color: var(--ot-text);
   margin: 0;
+
+  font-family: var(--sh-pixel-font);
+  font-size: clamp(1.2rem, 2.2vw, 1.5rem);
+  font-weight: 600;
+  letter-spacing: 0;
   line-height: 1.2;
+  color: var(--sh-text);
 }
 
-/* ── GRID ─────────────────────────────────────────────────── */
+/* ── GRID  (separate cards with breathing room) ──────────── */
 
-.sh-grid {
+.sh-root .sh-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-  gap: 6px;                  
-  background: #00000000;  /* border color fills the 1px gap */
-  border-radius: var(--ot-radius-lg);
-  overflow: hidden;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: clamp(0.85rem, 1.8vw, 1.25rem);
+
+  /* clear any frame or rounding left over from earlier styles */
+  border: 0;
+  border-radius: 0;
+  overflow: visible;
+  background: transparent;
 }
 
-.sh-grid--featured {
-  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+.sh-root .sh-grid--featured {
+  grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+  gap: clamp(1rem, 2vw, 1.5rem);
 }
 
 /* ── CARD ─────────────────────────────────────────────────── */
 
-.sh-card {
+.sh-root .sh-card {
   position: relative;
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
-  padding: clamp(1rem, 2vw, 1.35rem);
-  background: var(--ot-bg);      /* fills its grid cell over the 1px gap */
+  gap: 0.55rem;
 
-  /* Entrance — translate only, no scale flash */
-  opacity: 0;
-  transform: translateY(10px);
-  animation: sh-card-in 0.32s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-  animation-delay: var(--sh-delay, 0ms);
+  min-height: 160px;
+  padding: clamp(1.15rem, 2vw, 1.5rem);
 
-  /* State transitions — only the properties that change */
+  /* full square frame on every side */
+  border: 1px solid var(--sh-line);
+  border-radius: 0;
+
+  /* solid surface so the texture never runs under the text */
+  background-color: var(--sh-bg);
+  background-image: none;
+
   transition:
-    background var(--ot-transition-fast);
+    background-color 0.2s ease,
+    border-color 0.2s ease;
 }
 
-@keyframes sh-card-in {
-  to { opacity: 1; transform: translateY(0); }
+/* each card cycles through the pixel palette */
+.sh-root .sh-card:nth-child(5n + 1) { --px: var(--px-1); }
+.sh-root .sh-card:nth-child(5n + 2) { --px: var(--px-2); }
+.sh-root .sh-card:nth-child(5n + 3) { --px: var(--px-3); }
+.sh-root .sh-card:nth-child(5n + 4) { --px: var(--px-4); }
+.sh-root .sh-card:nth-child(5n + 5) { --px: var(--px-5); }
+
+/* no decorative overlay on the card itself */
+.sh-root .sh-card::after {
+  content: none;
 }
 
-/* Featured cards get a subtler surface tint — from tokens, not hardcoded */
-.sh-card--featured {
-  background: color-mix(in srgb, var(--ot-brand-soft) 40%, var(--ot-bg));
+/* pixel block: a 4 x 4 checker of the card colour and a shade of it.
+   Every layout property is set so no other stylesheet can stretch it. */
+.sh-root .sh-card::before {
+  content: "";
+
+  display: block;
+  position: static;
+  inset: auto;
+  flex: 0 0 28px;
+  align-self: flex-start;
+
+  width: 28px;
+  height: 28px;
+  margin: 0 0 0.45rem;
+
+  box-sizing: border-box;
+  border: 2px solid var(--sh-text);
+  border-radius: 0;
+
+  opacity: 1;
+  transform: none;
+  filter: none;
+  animation: none;
+
+  --px-b: transparent;
+  background-color: var(--px, var(--px-1));
+  background-image: conic-gradient(
+    var(--px, var(--px-1)) 25%,
+    var(--px-b) 0 50%,
+    var(--px, var(--px-1)) 0 75%,
+    var(--px-b) 0
+  );
+  background-size: 12px 12px;
+  background-position: 0 0;
+
+  image-rendering: pixelated;
+  pointer-events: none;
+}
+
+@supports (color: color-mix(in srgb, red, blue)) {
+  .sh-root .sh-card::before {
+    --px-b: color-mix(in srgb, var(--px, var(--px-1)) 55%, var(--sh-bg));
+  }
+}
+
+/* featured / popular cards: the colour wraps the whole frame, not just the top */
+.sh-root .sh-card--featured {
+  min-height: 180px;
+  padding: clamp(1.3rem, 2.4vw, 1.75rem);
+
+  border: 2px solid var(--px, var(--px-1));
+  border-radius: 0;
 }
 
 @media (hover: hover) and (pointer: fine) {
-  .sh-card:hover {
-    background: var(--ot-surface-alt);
+  .sh-root .sh-card:hover {
+    border-color: var(--px, var(--px-1));
+    background-image: linear-gradient(var(--sh-hover), var(--sh-hover));
   }
 
-  /* Brighten the link text on card hover, not just link hover */
-  .sh-card:hover .sh-card-name {
-    color: var(--ot-brand);
+  /* the pixel block flips its checker, in one hard step */
+  .sh-root .sh-card:hover::before {
+    background-position: 6px 0;
   }
 
-  .sh-card:hover .sh-card-arrow {
+  .sh-root .sh-card:hover .sh-card-name {
+    color: var(--sh-text);
+  }
+
+  .sh-root .sh-card:hover .sh-card-arrow {
     opacity: 1;
-    transform: translate(1px, -1px);
   }
 }
 
-.sh-card:active {
-  background: var(--ot-bg-dim);
+.sh-root .sh-card:active {
+  background-image: linear-gradient(var(--sh-hover), var(--sh-hover));
 }
 
 /* ── CARD: LINK + NAME ────────────────────────────────────── */
@@ -192,51 +363,48 @@
 .sh-card-link {
   display: flex;
   align-items: center;
-  gap: 0.35rem;
+  gap: 0.4rem;
+
   text-decoration: none;
-  /* Link is a block within the card — focus ring scoped to it */
 }
 
 .sh-card-link:focus-visible {
-  outline: 2px solid var(--ot-brand);
-  outline-offset: 2px;
-  border-radius: var(--ot-radius-sm);
+  outline: 2px solid var(--sh-text);
+  outline-offset: 3px;
 }
 
 .sh-card-name {
-  font-size: clamp(0.88rem, 1.5vw, 1rem);
+  font-size: clamp(0.95rem, 1.6vw, 1.05rem);
   font-weight: 700;
-  color: var(--ot-text);
+  color: var(--sh-text);
   letter-spacing: -0.015em;
   line-height: 1.3;
-  transition: color var(--ot-transition-fast);
+
+  transition: color 0.2s ease;
 }
 
-/* Featured card name — one size up, same weight system */
 .sh-card--featured .sh-card-name {
-  font-size: clamp(0.95rem, 1.65vw, 1.1rem);
-  color: var(--ot-brand);
+  font-size: clamp(1rem, 1.7vw, 1.12rem);
 }
 
-/* Directional arrow — structural affordance */
 .sh-card-arrow {
   flex-shrink: 0;
-  color: var(--ot-text-faint);
-  opacity: 0;
-  transition:
-    opacity var(--ot-transition-fast),
-    transform var(--ot-transition-fast),
-    color var(--ot-transition-fast);
+
+  color: var(--sh-muted);
+  opacity: 0.55;
+
+  transition: opacity 0.2s ease;
 }
 
 /* ── CARD: DESCRIPTION ────────────────────────────────────── */
 
 .sh-card-desc {
-  font-size: clamp(0.75rem, 1.1vw, 0.825rem);
-  color: var(--ot-text-muted);
-  line-height: 1.65;
   max-width: 48ch;
   margin: 0;
+
+  font-size: clamp(0.8rem, 1.15vw, 0.875rem);
+  color: var(--sh-muted);
+  line-height: 1.65;
 }
 
 /* ── CTA BUTTON ───────────────────────────────────────────── */
@@ -244,66 +412,67 @@
 .sh-cta-btn {
   display: inline-flex;
   align-items: center;
-  gap: 0.5rem;
-  padding: 0.75rem 1.65rem;
-  border-radius: var(--ot-radius-lg);
-  background: var(--ot-cta-bg);
-  color: var(--ot-cta-text);
-  font-family: var(--ot-font);
-  font-weight: 700;
-  font-size: 0.875rem;
-  letter-spacing: 0.01em;
-  text-decoration: none;
-  border: 1px solid transparent;
-  transition:
-    background var(--ot-transition),
-    transform 0.16s ease;
-}
+  gap: 0.6rem;
 
-.sh-cta-btn svg {
-  transition: transform var(--ot-transition-fast);
+  min-height: 52px;
+  padding: 0.8rem 1.7rem;
+
+  border: 1px solid var(--sh-text);
+  border-radius: 0;
+
+  background: var(--sh-text);
+  color: var(--sh-bg);
+
+  font-family: var(--ot-font, inherit);
+  font-weight: 700;
+  font-size: 0.92rem;
+  text-decoration: none;
+
+  -webkit-tap-highlight-color: transparent;
+
+  transition: opacity 0.2s ease;
 }
 
 @media (hover: hover) and (pointer: fine) {
   .sh-cta-btn:hover {
-    background: var(--ot-cta-hover-bg);
-    transform: translateY(-2px);
+    opacity: 0.88;
   }
+}
 
-  .sh-cta-btn:hover svg {
-    transform: translate(2px, -2px);
-  }
+.sh-cta-btn:active {
+  opacity: 0.8;
+}
+
+.sh-cta-btn:focus-visible {
+  outline: 2px solid var(--sh-text);
+  outline-offset: 3px;
 }
 
 /* ── RESPONSIVE ───────────────────────────────────────────── */
 
 @media (max-width: 640px) {
-  .sh-grid {
-    grid-template-columns: 1fr;
-  }
-
+  .sh-grid,
   .sh-grid--featured {
     grid-template-columns: 1fr;
   }
 
+  .sh-root .sh-card,
+  .sh-root .sh-card--featured {
+    min-height: 0;
+  }
+
   .sh-title-break { display: inline; }
-  .sh-title       { font-size: clamp(1.5rem, 6vw, 1.9rem); }
+  .sh-title       { font-size: clamp(1.6rem, 7vw, 2rem); }
 }
 
 /* ── REDUCED MOTION ───────────────────────────────────────── */
 
 @media (prefers-reduced-motion: reduce) {
-  .sh-card {
-    animation: none !important;
-    opacity: 1 !important;
-    transform: none !important;
-  }
-
   .sh-card,
   .sh-card-name,
   .sh-card-arrow,
   .sh-cta-btn,
-  .sh-cta-btn svg {
+  .sh-breadcrumb-list a {
     transition: none !important;
   }
 }

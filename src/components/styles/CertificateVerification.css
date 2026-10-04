@@ -1,17 +1,62 @@
 /* ==========================================================================
    CertificateVerification.css
-   Openroot Systems — dedicated certificate verification page
-   Clean, modern, architecture-first styling
+   Openroot Systems: certificate verification page
+
+   Same design language as the footer:
+   textured square-grid background, square-cornered framed cells,
+   plain-text labels, flat surfaces (no gradients, shadows, glows or scaling).
+   Strips, borders and the primary button follow the theme text colour:
+   white in dark mode, black in light mode.
+
+   Class names are unchanged, so the existing TSX needs no edits.
+   ========================================================================== */
+
+/* ==========================================================================
+   PAGE + TOKENS
    ========================================================================== */
 
 .cert-page {
+  /* theme-following tokens, with fallbacks to the older --ot-* names */
+  --cv-text: var(--color-text, var(--ot-text));
+  --cv-muted: var(--color-text-muted, var(--ot-text-muted));
+  --cv-faint: var(--ot-text-faint, var(--color-text-muted));
+  --cv-bg: var(--ot-section-bg, var(--ot-bg));
+  --cv-line: var(--cv-text);
+  --cv-hover: rgba(128, 128, 140, 0.14);
+
+  position: relative;
+  isolation: isolate;
+
   min-height: 100vh;
   padding: clamp(5rem, 8vw, 7rem) var(--ot-page-inline) 4rem;
-  background:
-    radial-gradient(circle at top left, rgba(63, 55, 201, 0.08), transparent 28%),
-    radial-gradient(circle at bottom right, rgba(67, 97, 238, 0.06), transparent 26%),
-    var(--ot-bg);
-  color: var(--ot-text);
+
+  background-color: var(--cv-bg);
+  color: var(--cv-text);
+}
+
+@supports (color: color-mix(in srgb, red, blue)) {
+  .cert-page {
+    --cv-line: color-mix(in srgb, var(--cv-text) 55%, transparent);
+    --cv-hover: color-mix(in srgb, var(--cv-text) 8%, transparent);
+  }
+}
+
+/* texture: fine square grid across the page */
+.cert-page::before {
+  content: "";
+
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+
+  pointer-events: none;
+
+  background-image:
+    linear-gradient(to bottom, var(--cv-text) 1px, transparent 1px),
+    linear-gradient(to right, var(--cv-text) 1px, transparent 1px);
+  background-size: 26px 26px;
+
+  opacity: 0.09;
 }
 
 .cert-shell {
@@ -20,48 +65,32 @@
   margin: 0 auto;
 }
 
+/* ==========================================================================
+   CARD  (one framed surface above the texture)
+   ========================================================================== */
+
 .cert-card {
-  position: relative;
   display: flex;
   flex-direction: column;
-  gap: 1.25rem;
+  gap: 1.5rem;
+
   padding: clamp(1.25rem, 2.8vw, 2rem);
-  border: 1px solid var(--ot-border-hard);
-  border-radius: var(--ot-radius-xl);
-  background: var(--ot-surface);
-  backdrop-filter: blur(var(--ot-blur));
-  -webkit-backdrop-filter: blur(var(--ot-blur));
+
+  border: 1px solid var(--cv-line);
+  border-top: 2px solid var(--cv-text);
+  border-radius: 0;
+
+  background-color: var(--cv-bg);
 }
 
+/* the old decorative overlay is not used any more */
 .cert-card::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  pointer-events: none;
-  background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.05) 0%, transparent 22%),
-    radial-gradient(circle at top left, rgba(63, 55, 201, 0.08), transparent 32%);
-  opacity: 0.8;
+  content: none;
 }
 
-.cert-card > * {
-  position: relative;
-  z-index: 1;
-}
-/* Dark mode only */
-[data-theme="dark"] .cert-input-row button:hover {
-  background: var(--ot-cta-hover-bg);
-  color: #000;
-}
-
-/* Auto dark mode (when no manual theme is set) */
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme]) .cert-input-row button:hover {
-    background: var(--ot-cta-hover-bg);
-    color: #000;
-  }
-}
+/* ==========================================================================
+   HEADER
+   ========================================================================== */
 
 .cert-header {
   display: grid;
@@ -70,50 +99,50 @@
   align-items: start;
 }
 
+/* plain text label, no dash */
 .cert-kicker {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.55rem;
+  display: block;
+
   margin: 0 0 0.65rem;
-  font-size: 0.68rem;
-  font-weight: 800;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--ot-text-faint);
+
+  color: var(--cv-muted);
+  font-size: 0.95rem;
+  font-weight: 600;
+  line-height: 1.4;
 }
 
 .cert-kicker::before {
-  content: "";
-  display: inline-block;
-  width: 18px;
-  height: 1.5px;
-  border-radius: 999px;
-  background: var(--ot-brand);
+  content: none;
 }
 
 .cert-title {
   margin: 0;
   max-width: 14ch;
-  font-size: clamp(2rem, 4vw, 3.6rem);
-  font-weight: 900;
-  line-height: 0.98;
-  letter-spacing: -0.07em;
+
+  color: var(--cv-text);
+  font-size: clamp(2rem, 4vw, 3.4rem);
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -0.05em;
 }
 
 .cert-subtitle {
   max-width: 62ch;
   margin: 0.9rem 0 0;
-  color: var(--ot-text-muted);
+
+  color: var(--cv-muted);
   font-size: clamp(0.98rem, 1.3vw, 1.04rem);
   line-height: 1.8;
 }
 
 .cert-subtitle code {
-  padding: 0.14rem 0.42rem;
-  border-radius: 999px;
-  border: 1px solid var(--ot-border);
-  background: var(--ot-bg);
-  color: var(--ot-text);
+  padding: 0.12rem 0.45rem;
+
+  border: 1px solid var(--cv-line);
+  border-radius: 0;
+
+  background: transparent;
+  color: var(--cv-text);
   font-size: 0.9em;
 }
 
@@ -122,22 +151,27 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
+
   padding: 0.55rem 0.85rem;
-  border: 1px solid var(--ot-border-hard);
-  border-radius: 999px;
-  background: var(--ot-bg);
-  color: var(--ot-text);
-  font-size: 0.76rem;
-  font-weight: 800;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
+
+  border: 1px solid var(--cv-line);
+  border-radius: 0;
+
+  background: transparent;
+  color: var(--cv-text);
+  font-size: 0.85rem;
+  font-weight: 600;
   white-space: nowrap;
 }
+
+/* ==========================================================================
+   INPUT ROW
+   ========================================================================== */
 
 .cert-input-row {
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;
-  gap: 0.85rem;
+  gap: 0.75rem;
   align-items: stretch;
 }
 
@@ -145,157 +179,195 @@
   width: 100%;
   min-width: 0;
   padding: 0.95rem 1rem;
-  border: 1px solid var(--ot-border);
-  border-radius: var(--ot-radius-lg);
-  background: var(--ot-bg);
-  color: var(--ot-text);
+
+  border: 1px solid var(--cv-line);
+  border-radius: 0;
+
+  background-color: var(--cv-bg);
+  color: var(--cv-text);
   font-size: 0.98rem;
   line-height: 1.4;
+
   outline: none;
-  transition: border-color 180ms ease, background-color 180ms ease;
+
+  transition: border-color 0.2s ease;
 }
 
 .cert-input-row input::placeholder {
-  color: var(--ot-text-faint);
+  color: var(--cv-faint);
 }
 
 .cert-input-row input:focus {
-  border-color: var(--ot-brand);
+  border-color: var(--cv-text);
 }
 
 .cert-input-row input:focus-visible {
-  outline: 2px solid rgba(63, 55, 201, 0.18);
+  outline: 2px solid var(--cv-text);
   outline-offset: 2px;
 }
 
+/* primary button: solid text colour on page colour (white on dark, black on light) */
 .cert-input-row button {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 0.95rem 1.1rem;
-  border: 1px solid var(--ot-border-hard);
-  border-radius: var(--ot-radius-lg);
-  background: linear-gradient(135deg, var(--ot-brand) 0%, var(--ot-brand-2) 100%);
-  color: #fff;
-  font-size: 0.94rem;
-  font-weight: 800;
-  letter-spacing: 0.01em;
-  cursor: pointer;
-  transition: transform 160ms ease, opacity 160ms ease, border-color 160ms ease;
+
+  padding: 0.95rem 1.4rem;
+
+  border: 1px solid var(--cv-text);
+  border-radius: 0;
+
+  background: var(--cv-text);
+  color: var(--cv-bg);
+  font-size: 0.95rem;
+  font-weight: 700;
   white-space: nowrap;
+
+  cursor: pointer;
+
+  -webkit-tap-highlight-color: transparent;
+
+  transition: opacity 0.2s ease;
 }
 
-.cert-input-row button:hover {
-
-  opacity: 0.96;
+@media (hover: hover) {
+  .cert-input-row button:hover {
+    opacity: 0.88;
+  }
 }
 
 .cert-input-row button:active {
-  transform: translateY(1px);
+  opacity: 0.8;
+}
+
+.cert-input-row button:focus-visible {
+  outline: 2px solid var(--cv-text);
+  outline-offset: 3px;
 }
 
 .cert-input-row button:disabled {
   cursor: not-allowed;
-  opacity: 0.72;
+  opacity: 0.55;
 }
-[data-theme="dark"] .cert-input-row button:disabled:hover {
-  color: var(--ot-cta-text);
-}
+
+/* ==========================================================================
+   HELPER + STATE
+   ========================================================================== */
+
 .cert-helper {
-  margin: -0.2rem 0 0;
-  color: var(--ot-text-faint);
+  margin: -0.4rem 0 0;
+
+  color: var(--cv-faint);
   font-size: 0.88rem;
   line-height: 1.7;
 }
 
 .cert-helper strong {
-  color: var(--ot-text);
-  font-weight: 800;
+  color: var(--cv-text);
+  font-weight: 700;
 }
 
 .cert-state {
   display: grid;
   gap: 0.35rem;
-  padding: 1rem 1.05rem;
-  border: 1px solid var(--ot-border);
-  border-radius: var(--ot-radius-lg);
-  background: var(--ot-bg);
+
+  padding: 1rem 1.1rem;
+
+  border: 1px solid var(--cv-line);
+  border-radius: 0;
+
+  background-color: var(--cv-bg);
 }
 
 .cert-state-heading {
   margin: 0;
-  font-size: 0.98rem;
-  font-weight: 800;
-  letter-spacing: -0.02em;
-  color: var(--ot-text);
+
+  color: var(--cv-text);
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
 }
 
 .cert-state-msg {
   margin: 0;
-  color: var(--ot-text-muted);
+
+  color: var(--cv-muted);
   font-size: 0.92rem;
   line-height: 1.65;
 }
 
+/* ==========================================================================
+   RESULT  (a grid of squares framed by strips, like the footer links)
+   ========================================================================== */
+
 .cert-result-card {
-  position: relative;
-  overflow: hidden;
   display: grid;
   gap: 1rem;
-  padding: 1.05rem 1.1rem;
-  border: 1px solid var(--ot-brand-border);
-  border-radius: var(--ot-radius-lg);
-  background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.02) 0%, rgba(255, 255, 255, 0.01) 100%),
-    var(--ot-bg);
+
+  padding: 0;
+
+  border: 0;
+  border-radius: 0;
+
+  background: transparent;
 }
 
 .cert-result-card::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  background:
-    radial-gradient(circle at top right, rgba(67, 97, 238, 0.08), transparent 28%),
-    radial-gradient(circle at bottom left, rgba(63, 55, 201, 0.05), transparent 30%);
-}
-
-.cert-result-card > * {
-  position: relative;
-  z-index: 1;
+  content: none;
 }
 
 .cert-result-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 0.75rem 1rem;
+
+  border-top: 1px solid var(--cv-line);
+  border-left: 1px solid var(--cv-line);
 }
 
 .cert-result-grid p {
   margin: 0;
-  padding: 0.9rem 1rem;
-  border: 1px solid var(--ot-border);
-  border-radius: var(--ot-radius-md);
-  background: var(--ot-bg);
-  color: var(--ot-text);
+  padding: 1rem 1.1rem;
+
+  border-right: 1px solid var(--cv-line);
+  border-bottom: 1px solid var(--cv-line);
+  border-radius: 0;
+
+  background-color: var(--cv-bg);
+  color: var(--cv-text);
   font-size: 0.94rem;
   line-height: 1.65;
 }
 
-.cert-result-grid b {
-  font-weight: 800;
+/* an odd last cell spans the row so the frame stays closed */
+.cert-result-grid > *:last-child:nth-child(odd) {
+  grid-column: span 2;
 }
+
+.cert-result-grid b {
+  color: var(--cv-muted);
+  font-weight: 600;
+}
+
+/* ==========================================================================
+   ERROR  (keeps a semantic red, flat and square)
+   ========================================================================== */
 
 .cert-error {
   margin: 0;
-  padding: 0.95rem 1rem;
-  border: 1px solid rgba(220, 38, 38, 0.22);
-  border-radius: var(--ot-radius-md);
-  background: rgba(220, 38, 38, 0.06);
-  color: #b91c1c;
+  padding: 0.95rem 1.1rem;
+
+  border: 1px solid rgba(220, 38, 38, 0.5);
+  border-radius: 0;
+
+  background-color: var(--cv-bg);
+  color: #dc2626;
   font-size: 0.94rem;
-  font-weight: 700;
+  font-weight: 600;
 }
+
+/* ==========================================================================
+   RESPONSIVE
+   ========================================================================== */
 
 @media (max-width: 720px) {
   .cert-header {
@@ -317,6 +389,10 @@
   .cert-result-grid {
     grid-template-columns: 1fr;
   }
+
+  .cert-result-grid > *:last-child:nth-child(odd) {
+    grid-column: auto;
+  }
 }
 
 @media (max-width: 420px) {
@@ -330,5 +406,16 @@
 
   .cert-title {
     max-width: 10ch;
+  }
+}
+
+/* ==========================================================================
+   REDUCED MOTION
+   ========================================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  .cert-input-row input,
+  .cert-input-row button {
+    transition: none !important;
   }
 }

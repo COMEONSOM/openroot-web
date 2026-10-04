@@ -1,1447 +1,950 @@
-import React, { useEffect, useRef, useState } from "react";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-import Lenis from "@studio-freight/lenis";
-import * as THREE from "three";
+import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 
-gsap.registerPlugin(ScrollTrigger);
+/* ============================================================
+   DATA  (edit copy here, the layout renders from these arrays)
+   ============================================================ */
 
-type TimelineItem = {
-  date: string;
+type Tone = "yellow" | "coral" | "mint" | "blue" | "ink";
+
+type Entry = {
+  year: string;
+  span: string;
+  tone: Tone;
   title: string;
-  desc: string;
+  org: string;
+  text: string;
+  tag: string;
 };
 
-type SkillItem = {
-  icon: string;
-  title: string;
-  desc: string;
+const PROFILE = {
+  name: "Somnath Banerjee",
+  firstName: "Somnath",
+  lastName: "Banerjee",
+  location: "Kolkata, West Bengal, India",
+  linkedin: "https://www.linkedin.com/in/comeonsom",
+  website: "https://openroot.in",
+  portrait: "/assets/founder-openroot.avif",
 };
 
-type VisibleHookResult<T extends HTMLElement> = readonly [React.RefObject<T | null>, boolean];
+const NAV_LINKS: Array<{ id: string; label: string }> = [
+  { id: "journey", label: "Journey" },
+  { id: "build", label: "Build" },
+  { id: "edge", label: "The edge" },
+  { id: "contact", label: "Contact" },
+];
 
-type PreloaderProps = {
-  progress: number;
-  exiting: boolean;
-};
+const DOMAINS: Array<{ tone: Tone; label: string }> = [
+  { tone: "yellow", label: "Education & empowerment" },
+  { tone: "coral", label: "Industrial management" },
+  { tone: "mint", label: "Technology & analytics" },
+  { tone: "blue", label: "Finance & strategy" },
+];
 
-type NavProps = {
-  open: boolean;
-  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
-};
-
-type TLCardProps = {
-  item: TimelineItem;
-  index: number;
-};
-
-type SkillCardProps = {
-  s: SkillItem;
-  i: number;
-};
-
-const TIMELINE: TimelineItem[] = [
+const EDUCATION: Entry[] = [
   {
-    date: "Foundation",
-    title: "Diploma in Survey Engineering",
-    desc: "Achieved 84th percentile as Department Topper after completing 12th Science. Built the foundation for technical excellence.",
+    year: "2026",
+    span: "Jul to 2028",
+    tone: "blue",
+    title: "MBA, Finance & Operations",
+    org: "University of Calcutta",
+    text: "Pursuing postgraduate management education with a focus on finance, operations and business strategy.",
+    tag: "In progress",
   },
   {
-    date: "During Diploma",
-    title: "Campus Ambassador at Bhumi",
-    desc: "Led child-education and empowerment campaigns, developing leadership and social impact skills.",
+    year: "2023",
+    span: "to 2026",
+    tone: "mint",
+    title: "B.Tech, Computer Science",
+    org: "MAKAUT, West Bengal (formerly WBUT)",
+    text: "Completed an engineering degree in computer science, moving the profile from field measurement into software and technology.",
+    tag: "Completed",
   },
   {
-    date: "During Diploma",
-    title: "Internship at Flipkart",
-    desc: "Completed Supply Chain Management internship, optimising logistics workflows at scale across warehousing operations.",
-  },
-  {
-    date: "Post Diploma",
-    title: "Instructor at ITI College",
-    desc: "Worked as Survey Department Instructor under Government PPP Model, sharing knowledge with future professionals.",
-  },
-  {
-    date: "Graduation",
-    title: "B.Tech in Computer Science",
-    desc: "Specialised in software development and AI systems. Deep experience in data structures, web technologies, and database management.",
-  },
-  {
-    date: "Work Life",
-    title: "CMPDI — Coal India Subsidiary",
-    desc: "Geomatics Division, CMPDI HQ Ranchi. Applied precision survey expertise in a national-scale infrastructure context.",
-  },
-  {
-    date: "5+ Years",
-    title: "Equity Market Expertise",
-    desc: "Built practical experience in equity markets and mutual funds, developing deep financial market insights and investment strategy.",
+    year: "2020",
+    span: "to 2023",
+    tone: "yellow",
+    title: "Technical Diploma, Surveying Engineering",
+    org: "WBSCT&VE&SD",
+    text: "Completed technical training in surveying engineering with a grade of 8.9, building the foundation in precision and fieldwork.",
+    tag: "Grade 8.9",
   },
 ];
 
-const SKILLS: SkillItem[] = [
+const EXPERIENCE: Entry[] = [
   {
-    icon: "🚀",
-    title: "Tech Leadership",
-    desc: "Building and scaling tech startups with a focus on innovation, user experience, and sustainable growth strategies.",
+    year: "2026",
+    span: "Mar to present",
+    tone: "mint",
+    title: "Founder",
+    org: "Openroot Systems · Kolkata",
+    text: "Heads the company end to end. Delivers custom build softwares to automate processes, upskilling students and professionals with latest technologies for a better educated and empowered workforce.",
+    tag: "Early-Stage Venture",
   },
   {
-    icon: "⚡",
-    title: "Financial Strategy",
-    desc: "5+ years of equity market experience, providing insights into investment strategies, portfolio construction, and market analysis.",
+    year: "2025",
+    span: "Mar to Feb 2026",
+    tone: "coral",
+    title: "Geomatics Division",
+    org: "CMPDI, Coal India Limited · Ranchi",
+    text: "Worked in the Geomatics Division of a Coal India subsidiary, applying surveying and geomatics expertise in a large industrial environment.",
+    tag: "On-site Training",
   },
   {
-    icon: "🎓",
-    title: "Education & Mentoring",
-    desc: "Passionate about financial literacy and entrepreneurial education to empower the next generation of builders.",
+    year: "2024",
+    span: "Aug to Dec",
+    tone: "yellow",
+    title: "Instructor, Survey Department",
+    org: "Govt. ITI · Tehatta-II, West Bengal",
+    text: "Provided structured technical instruction and practical guidance to students in the Survey Department, supporting their academic learning and development of industry-relevant skills.",
+    tag: "Full-time",
   },
   {
-    icon: "💻",
-    title: "Software Development",
-    desc: "Modern software development with expertise in AI systems, web technologies, and scalable cloud architectures.",
-  },
-  {
-    icon: "🗺️",
-    title: "Geomatics & Survey",
-    desc: "Professional training in survey engineering and geomatics from CMPDI, combining technical precision with innovation.",
-  },
-  {
-    icon: "🌱",
-    title: "Sustainability Focus",
-    desc: "Committed to building solutions that are not only profitable but also environmentally and socially responsible.",
+    year: "2022",
+    span: "Jul to Aug",
+    tone: "coral",
+    title: "Intern, Supply Chain Operation",
+    org: "Flipkart · Haringhata, West Bengal",
+    text: "Managed workflow and manpower deployment. Developed team management skills and a working knowledge of professional ethics.",
+    tag: "Internship",
   },
 ];
+
+const ACHIEVEMENTS: Entry[] = [
+  {
+    year: "2026",
+    span: "Mar",
+    tone: "mint",
+    title: "Google Analytics Certified",
+    org: "Skillshop · Credential ID 176684373 · valid through Mar 2027",
+    text: "Holds a current professional certification, establishing analytics as a verified competency.",
+    tag: "Certification",
+  },
+];
+
+const GROUPS: Array<{ title: string; entries: Entry[] }> = [
+  { title: "Educational qualification", entries: EDUCATION },
+  { title: "Professional experience", entries: EXPERIENCE },
+  { title: "Achievements", entries: ACHIEVEMENTS },
+];
+
+const SERVICES = [
+  { title: "System automation", text: "Improve efficiency with intelligent system automation solutions." },
+  { title: "Upskilling with new technologies", text: "Learn beyond traditional syllabuses with innovative teaching that prepares you for tomorrow’s opportunities." },
+];
+
+const WORK: Array<{ tone: Tone; title: string; text: string; tag: string }> = [
+  {
+    tone: "ink",
+    title: "Google drive automation system",
+    text: "A system for automating file naming inside Google Drive.",
+    tag: "Web extension",
+  },
+  {
+    tone: "mint",
+    title: "Mehek",
+    text: "An offline voice AI assistant that runs as a companion.",
+    tag: "AI",
+  },
+  {
+    tone: "yellow",
+    title: "Travel expense manager",
+    text: "Practical, situation-based React software to manage, distribute and track all travelling expenses, with a patented architecture.",
+    tag: "Web appilication",
+  },
+];
+
+const EDGE: Array<{ tone: Tone; title: string; text: string }> = [
+  { tone: "mint", title: "Technology", text: "B.Tech in Computer Science and a company that ships web products." },
+  { tone: "mint", title: "Analytics", text: "Google Analytics Certified, so decisions start from data." },
+  { tone: "mint", title: "AI", text: "Part of how I build, from voice assistants to smarter products." },
+  { tone: "coral", title: "Operations", text: "Workflow and manpower experience, now studied formally." },
+  { tone: "blue", title: "Finance", text: "MBA specialisation in Finance & Operations." },
+  { tone: "blue", title: "Strategy", text: "Where the other five meet, and where I'm heading." },
+];
+
+/* ============================================================
+   STYLES  (scoped under .fp)
+   ============================================================ */
 
 const CSS = `
-  @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Syne:wght@400;500;600;700;800&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Inter:wght@400;500;600&display=swap');
 
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  html { scroll-behavior: smooth; }
-  .lenis.lenis-smooth { scroll-behavior: auto !important; }
-  ::-webkit-scrollbar { width: 3px; }
-  ::-webkit-scrollbar-track { background: #0a0a0f; }
-  ::-webkit-scrollbar-thumb { background: linear-gradient(#6366f1, #a855f7); border-radius: 3px; }
+  @property --h { syntax: "<number>"; inherits: false; initial-value: 1; }
 
-  @keyframes marqueeAnim { from { transform: translateX(0); } to { transform: translateX(-50%); } }
-  @keyframes pulseScroll { 0%,100% { opacity:1; transform:scaleY(1); } 50% { opacity:0.15; transform:scaleY(0.45); } }
-  @keyframes preExit { from { transform:translateY(0); } to { transform:translateY(-100%); } }
-  @keyframes floatOrb1 { 0%,100%{transform:translate(0,0);} 33%{transform:translate(45px,-28px);} 66%{transform:translate(-22px,18px);} }
-  @keyframes floatOrb2 { 0%,100%{transform:translate(0,0);} 33%{transform:translate(-35px,22px);} 66%{transform:translate(28px,-16px);} }
-  @keyframes shimmer { 0%{background-position:200% center;} 100%{background-position:-200% center;} }
-
-  .sb { font-family: 'Space Grotesk', sans-serif; }
-  .sy { font-family: 'Syne', sans-serif; }
-
-  .about-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: clamp(2rem, 5vw, 5rem);
-    align-items: flex-start;
-    max-width: 1400px;
-    margin: 0 auto;
-  }
-  .skills-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 1.5rem;
-    max-width: 1400px;
-    margin: 0 auto;
-  }
-  .stat-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 2rem;
-    margin-top: 3rem;
-    padding-top: 3rem;
-    border-top: 1px solid rgba(255,255,255,0.07);
-  }
-  .hero-cta {
-    display: flex;
-    gap: 1rem;
-    justify-content: center;
-    flex-wrap: wrap;
-  }
-  .desktop-links { display: flex; gap: 3rem; list-style: none; }
-  .ham-btn { display: none; }
-
-  .tl-item {
+  .fp {
+    all: initial;
+    display: block;
     position: relative;
-    width: 50%;
-    padding: 2rem 0;
-  }
-  .tl-left { padding-right: 4rem; text-align: right; left: 0; }
-  .tl-right { padding-left: 4rem; text-align: left; left: 50%; }
-  .dot-left { right: -9px; left: auto !important; }
-  .dot-right { left: -9px; }
-  .tl-center-line { left: 50%; }
+    width: 100%;
+    max-width: none;
+    min-width: 0;
+    min-height: 100vh;
+    overflow-x: clip;
+    isolation: isolate;
+    --yellow: #FFC72C;
+    --coral: #FF6B4A;
+    --mint: #35D3A1;
+    --blue: #4169E1;
+    --ink: #0F1218;
 
-  .footer-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 1.5rem;
+    --bg: #F2F4F8;
+    --fg: #0F1218;
+    --fg-2: rgba(15,18,24,.72);
+    --fg-3: rgba(15,18,24,.52);
+    --card: #FFFFFF;
+    --line: rgba(15,18,24,.12);
+    --nav: rgba(242,244,248,.92);
+    --max: 1200px;
+    --ease: cubic-bezier(.16, 1, .3, 1);
+    background: var(--bg);
+    color: var(--fg);
+    font-family: "Inter", system-ui, sans-serif;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
   }
 
-  @media (max-width: 1023px) {
-    .desktop-links { display: none; }
-    .ham-btn { display: flex; }
+  
+  .fp *, .fp *::before, .fp *::after {
+    box-sizing: border-box;
   }
-  @media (max-width: 768px) {
-    .about-grid { grid-template-columns: 1fr; }
-    .skills-grid { grid-template-columns: 1fr; }
-    .hero-cta { flex-direction: column; align-items: center; }
-    .tl-item { width: 100% !important; left: 0 !important; padding: 1.5rem 1rem 1.5rem 52px !important; text-align: left !important; }
-    .dot-left, .dot-right { left: 7px !important; right: auto !important; }
-    .tl-center-line { left: 17px !important; }
-    .stat-grid { grid-template-columns: 1fr 1fr; }
+
+  .fp :where(p, h1, h2, h3, ul, ol, li, article, button, a) {
+    margin: 0;
   }
-  @media (max-width: 480px) {
-    .stat-grid { grid-template-columns: 1fr; }
-    .footer-row { flex-direction: column; text-align: center; }
+
+  .fp :where(p, li) {
+    max-width: none;
   }
-  @media (max-width: 1023px) {
-    body { cursor: auto !important; }
-    canvas[data-cursor] { display: none; }
+  .fp a { color: inherit; text-decoration: none; }
+  .fp button { font: inherit; color: inherit; background: none; border: 0; cursor: pointer; }
+  .fp ul, .fp ol { list-style: none; }
+  .fp :focus-visible { outline: 3px solid var(--blue); outline-offset: 3px; }
+  .fp h1, .fp h2, .fp h3 { font-family: "Bricolage Grotesque", sans-serif; letter-spacing: -.03em; line-height: 1.02; }
+
+  .fp .wrap {
+    width: min(var(--max), calc(100% - 2.5rem));
+    max-width: var(--max);
+    min-width: 0;
+    margin-inline: auto;
+  }
+  .fp section { padding: clamp(3.5rem, 8vw, 6.5rem) 0; scroll-margin-top: 5.5rem; }
+
+  .fp .c-yellow { background: var(--yellow); color: var(--ink); }
+  .fp .c-coral  { background: var(--coral);  color: var(--ink); }
+  .fp .c-mint   { background: var(--mint);   color: var(--ink); }
+  .fp .c-blue   { background: var(--blue);   color: #fff; }
+  .fp .c-ink    { background: var(--ink);    color: #fff; }
+
+  /* NAV */
+  .fp .nav { position: sticky; top: 0; z-index: 50; background: var(--nav); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); border-bottom: 1px solid var(--line); }
+  .fp .nav-row { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: .8rem 0; }
+  .fp .brand { font-family: "Bricolage Grotesque", sans-serif; font-weight: 800; font-size: 1.4rem; letter-spacing: -.04em; display: flex; align-items: center; gap: .55rem; }
+  .fp .brand i { width: 14px; height: 14px; background: var(--blue); display: inline-block; border-radius: 3px; }
+  .fp .nav-links { display: flex; gap: 1.6rem; font-size: .92rem; font-weight: 500; color: var(--fg-2); }
+  .fp .nav-links a { padding: .3rem 0; border-bottom: 2px solid transparent; }
+  .fp .nav-links a:hover { color: var(--fg); border-bottom-color: var(--fg); }
+  .fp .nav-links a.active { color: var(--fg); border-bottom-color: var(--fg); }
+  .fp .nav-scroll { display: none; }
+  .fp .progress { position: absolute; left: 0; right: 0; bottom: -1px; height: 3px; background: var(--blue); transform-origin: left center; transform: scaleX(var(--p, 0)); }
+
+  .fp .btn { display: inline-flex; align-items: center; justify-content: center; min-height: 48px; padding: .75rem 1.4rem; border-radius: 12px; font-weight: 600; font-size: .95rem; border: 2px solid transparent; text-align: center; transition: transform .25s var(--ease), opacity .2s ease; }
+  .fp .btn-blue { background: var(--blue); color: #fff; }
+  .fp .btn-ink { background: var(--ink); color: #fff; }
+  .fp .btn-line { border-color: var(--fg); color: var(--fg); background: transparent; }
+  .fp .btn-white { background: #fff; color: var(--ink); }
+  .fp .btn:hover { opacity: .9; }
+  .fp .btn:active { transform: scale(.97); }
+  @media (hover: hover) { .fp .btn:hover { transform: scale(1.03); } }
+  .fp .nav .btn { min-height: 40px; padding: .45rem 1.1rem; }
+
+  /* HERO */
+  .fp .hero { padding-top: clamp(2.5rem, 6vw, 5rem); }
+  .fp .hero-grid { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, .8fr); gap: clamp(2rem, 5vw, 4.5rem); align-items: center; }
+  .fp h1 { font-weight: 800; font-size: clamp(3rem, 12.5vw, 7.2rem); line-height: .92; letter-spacing: -.055em; }
+  .fp h1 span { display: block; }
+  .fp .role { margin-top: 1.4rem; font-family: "Bricolage Grotesque", sans-serif; font-weight: 700; font-size: clamp(1.35rem, 2.6vw, 2rem); letter-spacing: -.03em; }
+  .fp .role b { background: var(--blue); color: #fff; padding: .05em .4em; border-radius: 8px; font-weight: 700; white-space: nowrap; }
+  .fp .bio { margin-top: 1.1rem; max-width: 36rem; color: var(--fg-2); font-size: clamp(1.02rem, 1.5vw, 1.15rem); }
+  .fp .hero-cta { display: flex; flex-wrap: wrap; gap: .7rem; margin-top: 1.8rem; }
+
+  .fp .photo-stack { position: relative; width: min(100%, 430px); justify-self: end; padding: 0 0 1.4rem 1.4rem; }
+  .fp .photo-stack::before { content: ""; position: absolute; left: 0; bottom: 0; width: 78%; height: 78%; background: var(--yellow); border-radius: 28px; }
+  .fp .photo { position: relative; aspect-ratio: 4 / 5; border-radius: 28px; background: var(--blue); display: grid; place-items: center; overflow: hidden; }
+  .fp .photo span { font-family: "Bricolage Grotesque", sans-serif; font-weight: 800; font-size: clamp(5rem, 16vw, 8rem); color: rgba(255,255,255,.9); letter-spacing: -.06em; }
+  .fp .photo img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; }
+
+  .fp .now { margin-top: clamp(2.5rem, 5vw, 4rem); display: grid; grid-template-columns: 1.1fr 1fr; gap: .8rem; }
+  .fp .now-card { border-radius: 24px; padding: clamp(1.4rem, 3vw, 2.2rem); display: flex; flex-direction: column; justify-content: space-between; gap: 2rem; min-height: 190px; }
+  .fp .now-card small { font-size: .85rem; font-weight: 600; opacity: .8; }
+  .fp .now-card h2 { margin-top: .5rem; font-size: clamp(1.7rem, 3.4vw, 2.8rem); }
+  .fp .now-card p { margin-top: .5rem; opacity: .85; }
+
+  .fp .legend { margin-top: 1.4rem; display: flex; flex-wrap: wrap; gap: .5rem; align-items: center; font-size: .85rem; color: var(--fg-2); }
+  .fp .legend b { font-weight: 600; color: var(--fg); margin-right: .4rem; }
+  .fp .pill { display: inline-flex; align-items: center; padding: .35rem .8rem; border-radius: 999px; font-weight: 500; }
+
+  /* SECTION HEAD */
+  .fp .head { display: grid; grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr); gap: 2rem; align-items: end; margin-bottom: clamp(2rem, 5vw, 3.5rem); }
+  .fp .head h2 { font-size: clamp(2.2rem, 5.4vw, 4.4rem); font-weight: 800; }
+  .fp .head p { color: var(--fg-2); max-width: 32rem; justify-self: end; }
+
+  /* TIMELINE */
+  .fp .group + .group { margin-top: clamp(2.8rem, 6vw, 4.5rem); }
+  .fp .sub { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: .4rem 1rem; margin-bottom: 1.1rem; padding-bottom: .9rem; border-bottom: 2px solid var(--fg); font-size: clamp(1.4rem, 2.6vw, 2rem); }
+  .fp .sub span { font-family: "Inter", sans-serif; font-size: .85rem; font-weight: 500; letter-spacing: 0; color: var(--fg-3); }
+  .fp .tl {
+    width: 100%;
+    min-width: 0;
+    display: grid;
+    gap: .8rem;
+  }
+  .fp .tl-row {
+    width: 100%;
+    min-width: 0;
+    display: grid;
+    grid-template-columns: 150px minmax(0, 1fr);
+    gap: 1.4rem;
+    align-items: stretch;
+  }
+  .fp .tl-date { padding-top: 1.5rem; }
+  .fp .tl-date strong { display: block; font-family: "Bricolage Grotesque", sans-serif; font-size: 1.6rem; letter-spacing: -.03em; line-height: 1; }
+  .fp .tl-date span { display: block; margin-top: .35rem; color: var(--fg-3); font-size: .82rem; }
+  .fp .tl-card {
+    width: 100%;
+    min-width: 0;
+    border-radius: 22px;
+    padding: 1.5rem 1.7rem;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 1rem 2rem;
+    align-items: start;
+  }
+  .fp .tl-card h3 { font-size: clamp(1.3rem, 2.2vw, 1.8rem); }
+  .fp .tl-card .org { margin-top: .35rem; font-weight: 500; opacity: .85; }
+  .fp .tl-card p { margin-top: .7rem; opacity: .85; max-width: 38rem; font-size: .96rem; }
+  .fp .tag { display: inline-block; padding: .3rem .7rem; border-radius: 999px; background: var(--ink); color: #fff; font-size: .75rem; font-weight: 600; white-space: nowrap; }
+  .fp .c-ink .tag { background: #fff; color: var(--ink); }
+
+  /* BUILD */
+  .fp .build {
+    width: 100%;
+    min-width: 0;
+    display: grid;
+    grid-template-columns: minmax(0, 1.15fr) minmax(0, .85fr);
+    gap: .8rem;
+  }
+
+  .fp .build > * {
+    min-width: 0;
+  }
+  .fp .big { border-radius: 28px; padding: clamp(1.8rem, 4vw, 3rem); display: flex; flex-direction: column; justify-content: space-between; gap: 2.5rem; }
+  .fp .big h3 { font-size: clamp(2rem, 4.2vw, 3.6rem); }
+  .fp .big p { margin-top: 1rem; max-width: 32rem; opacity: .9; font-size: 1.05rem; }
+  .fp .svc { display: grid; gap: .8rem; }
+  .fp .svc-item { border-radius: 22px; padding: 1.5rem 1.7rem; background: var(--card); border: 1px solid var(--line); }
+  .fp .svc-item h3 { font-size: 1.35rem; }
+  .fp .svc-item p { margin-top: .4rem; color: var(--fg-2); font-size: .95rem; }
+  .fp .svc-item:nth-child(1) { border-top: 6px solid var(--blue); }
+  .fp .svc-item:nth-child(2) { border-top: 6px solid var(--mint); }
+  .fp .svc-item:nth-child(3) { border-top: 6px solid var(--yellow); }
+  .fp .work {
+    width: 100%;
+    min-width: 0;
+    margin-top: .8rem;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: .8rem;
+  }
+
+  .fp .work-card {
+    min-width: 0;
+  }
+  .fp .work-card { border-radius: 22px; padding: 1.6rem; min-height: 230px; display: flex; flex-direction: column; justify-content: space-between; gap: 1.5rem; }
+  .fp .work-card h3 { font-size: 1.5rem; }
+  .fp .work-card p { margin-top: .5rem; opacity: .85; font-size: .94rem; }
+  .fp .work-card .tag-wrap { display: block; }
+
+  /* EDGE */
+  .fp .edge { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .8rem; }
+  .fp .edge-tile { border-radius: 22px; padding: 1.5rem; min-height: 190px; display: flex; flex-direction: column; justify-content: space-between; gap: 1.2rem; }
+  .fp .edge-tile h3 { font-size: 1.6rem; }
+  .fp .edge-tile p { font-size: .94rem; opacity: .88; }
+  .fp .edge-base { margin-top: .8rem; border-radius: 22px; padding: 1.3rem 1.7rem; display: flex; flex-wrap: wrap; gap: .4rem 1.5rem; align-items: center; justify-content: space-between; }
+  .fp .edge-base b { font-family: "Bricolage Grotesque", sans-serif; font-size: 1.3rem; letter-spacing: -.02em; }
+
+  /* CONTACT */
+  .fp .contact { border-radius: 32px; padding: clamp(2rem, 6vw, 4.5rem); display: grid; grid-template-columns: minmax(0, 1.3fr) minmax(0, .7fr); gap: 2.5rem; align-items: end; }
+  .fp .contact h2 { font-size: clamp(2.4rem, 6.6vw, 5.6rem); font-weight: 800; letter-spacing: -.05em; line-height: .95; }
+  .fp .contact p { margin-top: 1.2rem; max-width: 30rem; opacity: .9; }
+  .fp .contact-actions { display: grid; gap: .7rem; }
+
+  .fp footer { padding: 1.8rem 0 2.6rem; border-top: 1px solid var(--line); color: var(--fg-3); font-size: .85rem; }
+  .fp .foot { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 1rem; }
+
+  /* RESPONSIVE */
+  @media (max-width: 980px) {
+    .fp .hero-grid, .fp .build, .fp .contact, .fp .head { grid-template-columns: 1fr; }
+    .fp .head p { justify-self: start; }
+    .fp .photo-stack { justify-self: start; width: min(100%, 360px); }
+    .fp .edge { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .fp .work { grid-template-columns: 1fr; }
+    .fp .work-card { min-height: 0; }
+  }
+  @media (max-width: 760px) {
+    .fp .nav-links { display: none; }
+    .fp .nav-scroll { display: flex; gap: .4rem; overflow-x: auto; padding: 0 0 .7rem; scrollbar-width: none; }
+    .fp .nav-scroll::-webkit-scrollbar { display: none; }
+    .fp .nav-scroll a { flex: 0 0 auto; padding: .4rem .9rem; border-radius: 999px; border: 1px solid var(--line); background: var(--card); font-size: .85rem; font-weight: 500; }
+    .fp .nav-scroll a.active { background: var(--fg); color: var(--bg); border-color: var(--fg); }
+    .fp .now { grid-template-columns: 1fr; }
+    .fp .tl-row { grid-template-columns: 1fr; gap: .5rem; }
+    .fp .tl-date { padding-top: .6rem; display: flex; align-items: baseline; gap: .8rem; }
+    .fp .tl-date span { margin-top: 0; }
+    .fp .tl-card { grid-template-columns: 1fr; padding: 1.3rem; }
+  }
+  @media (max-width: 520px) {
+    .fp .wrap { width: calc(100% - 2rem); }
+    .fp .edge { grid-template-columns: 1fr; }
+    .fp .edge-tile { min-height: 0; }
+    .fp .hero-cta .btn { width: 100%; }
+    .fp .photo-stack { padding: 0 0 1rem 1rem; }
+  }
+
+  /* MOTION: scroll-linked zoom in / zoom out */
+  .fp.motion [data-zoom] {
+    transform: scale(calc(var(--s, 1) * var(--h, 1)));
+    transform-origin: 50% 50%;
+    transition: --h .35s var(--ease);
+    will-change: transform, opacity;
+  }
+  .fp.motion .hero-grid > div:first-child,
+  .fp.motion .head,
+  .fp.motion .sub { transform-origin: 0% 50%; }
+
+  @media (hover: hover) {
+    .fp.motion .tl-row:hover, .fp.motion .work-card:hover, .fp.motion .svc-item:hover { --h: 1.015; }
+    .fp.motion .edge-tile:hover, .fp.motion .now-card:hover { --h: 1.025; }
+  }
+
+  @keyframes fp-zin { from { opacity: 0; transform: scale(.9) translateY(16px); } to { opacity: 1; transform: none; } }
+  @keyframes fp-photo { from { opacity: 0; transform: scale(.88); } to { opacity: 1; transform: none; } }
+  .fp.motion h1 span, .fp.motion .role, .fp.motion .bio, .fp.motion .hero-cta { animation: fp-zin .95s var(--ease) both; transform-origin: 0% 50%; }
+  .fp.motion h1 span:nth-child(2) { animation-delay: .1s; }
+  .fp.motion .role { animation-delay: .22s; }
+  .fp.motion .bio { animation-delay: .32s; }
+  .fp.motion .hero-cta { animation-delay: .42s; }
+  .fp.motion .photo { animation: fp-photo 1.2s var(--ease) .15s both; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .fp .progress { display: none; }
   }
 `;
 
-function useVisible<T extends HTMLElement = HTMLDivElement>(threshold = 0.12): VisibleHookResult<T> {
-  const ref = useRef<T>(null);
-  const [vis, setVis] = useState(false);
+/* ============================================================
+   HOOKS
+   ============================================================ */
+
+const clamp = (v: number, a: number, b: number): number => Math.min(b, Math.max(a, v));
+
+function useReducedMotion(): boolean {
+  const [reduced, setReduced] = useState<boolean>(
+    () => typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches
+  );
 
   useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
+    const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const onChange = () => setReduced(mq.matches);
+    mq.addEventListener("change", onChange);
+    return () => mq.removeEventListener("change", onChange);
+  }, []);
 
-    const obs = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setVis(true);
-          obs.unobserve(el);
-        }
+  return reduced;
+}
+
+/** Scroll-linked zoom: items scale up and fade in toward the viewport centre, and ease out as they leave. */
+function useScrollZoom(
+  rootRef: React.RefObject<HTMLDivElement | null>,
+  barRef: React.RefObject<HTMLDivElement | null>,
+  enabled: boolean
+): void {
+  useEffect(() => {
+    const root = rootRef.current;
+    if (!root || !enabled) return undefined;
+
+    const items = Array.from(root.querySelectorAll<HTMLElement>("[data-zoom]"));
+    const visible = new Set<HTMLElement>();
+    let raf = 0;
+    let ticking = false;
+
+    const update = () => {
+      ticking = false;
+      const vh = window.innerHeight;
+
+      visible.forEach((el) => {
+        const r = el.getBoundingClientRect();
+        const d = (r.top + r.height / 2 - vh / 2) / (vh / 2 + r.height / 2);
+        const t = clamp(Math.abs(d), 0, 1);
+        const e = t * t; // flat near the middle, eases toward the edges
+        el.style.setProperty("--s", (1 - 0.08 * e).toFixed(4));
+        el.style.opacity = (1 - 0.7 * e).toFixed(3);
+      });
+
+      const bar = barRef.current;
+      if (bar) {
+        const max = document.documentElement.scrollHeight - vh;
+        bar.style.setProperty("--p", max > 0 ? clamp(window.scrollY / max, 0, 1).toFixed(4) : "0");
+      }
+    };
+
+    const request = () => {
+      if (ticking) return;
+      ticking = true;
+      raf = requestAnimationFrame(update);
+    };
+
+    const io = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          const el = entry.target as HTMLElement;
+          if (entry.isIntersecting) visible.add(el);
+          else visible.delete(el);
+        });
+        request();
       },
-      { threshold }
+      { rootMargin: "10% 0px" }
     );
 
-    obs.observe(el);
-    return () => obs.disconnect();
-  }, [threshold]);
-
-  return [ref, vis] as const;
-}
-
-function ParticleCanvas() {
-  const ref = useRef<HTMLCanvasElement | null>(null);
-
-  useEffect(() => {
-    const canvas = ref.current;
-    if (!canvas) return;
-
-    const ctx = canvas.getContext("2d");
-    if (!ctx) return;
-
-    let raf = 0;
-    let mx = window.innerWidth / 2;
-    let my = window.innerHeight / 2;
-    const mobile = window.innerWidth < 768;
-
-    const resize = () => {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-    };
-
-    resize();
-
-    const count = mobile ? 55 : 140;
-    const pts = Array.from({ length: count }, () => ({
-      x: Math.random() * window.innerWidth,
-      y: Math.random() * window.innerHeight,
-      vx: (Math.random() - 0.5) * 0.38,
-      vy: (Math.random() - 0.5) * 0.38,
-      r: Math.random() * 1.6 + 0.4,
-      op: Math.random() * 0.55 + 0.15,
-      c: Math.random() > 0.55 ? "99,102,241" : "139,92,246",
-    }));
-
-    const onMove = (e: MouseEvent) => {
-      mx = e.clientX;
-      my = e.clientY;
-    };
-
-    window.addEventListener("mousemove", onMove, { passive: true });
-
-    const draw = () => {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-      pts.forEach((p, i) => {
-        if (!mobile) {
-          const dx = mx - p.x;
-          const dy = my - p.y;
-          const d = Math.hypot(dx, dy);
-          if (d < 130) {
-            p.vx += dx * 0.000028;
-            p.vy += dy * 0.000028;
-          }
-        }
-
-        p.vx *= 0.99;
-        p.vy *= 0.99;
-        p.x += p.vx;
-        p.y += p.vy;
-
-        if (p.x < 0) p.x = canvas.width;
-        if (p.x > canvas.width) p.x = 0;
-        if (p.y < 0) p.y = canvas.height;
-        if (p.y > canvas.height) p.y = 0;
-
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(${p.c},${p.op})`;
-        ctx.fill();
-
-        if (!mobile) {
-          for (let j = i + 1; j < pts.length; j += 1) {
-            const q = pts[j];
-            const d = Math.hypot(p.x - q.x, p.y - q.y);
-            if (d < 95) {
-              ctx.beginPath();
-              ctx.moveTo(p.x, p.y);
-              ctx.lineTo(q.x, q.y);
-              ctx.strokeStyle = `rgba(99,102,241,${0.11 * (1 - d / 95)})`;
-              ctx.lineWidth = 0.4;
-              ctx.stroke();
-            }
-          }
-        }
-      });
-
-      raf = requestAnimationFrame(draw);
-    };
-
-    draw();
-    window.addEventListener("resize", resize);
+    items.forEach((el) => io.observe(el));
+    window.addEventListener("scroll", request, { passive: true });
+    window.addEventListener("resize", request);
+    request();
 
     return () => {
       cancelAnimationFrame(raf);
-      window.removeEventListener("mousemove", onMove);
-      window.removeEventListener("resize", resize);
-    };
-  }, []);
-
-  return <canvas ref={ref} data-cursor style={{ position: "fixed", inset: 0, zIndex: 0, pointerEvents: "none" }} />;
-}
-
-function CustomCursor() {
-  const ring = useRef<HTMLDivElement | null>(null);
-  const dot = useRef<HTMLDivElement | null>(null);
-  const raw = useRef({ x: 0, y: 0 });
-  const smooth = useRef({ x: 0, y: 0 });
-  const hov = useRef(false);
-
-  useEffect(() => {
-    if (window.innerWidth < 1024) return;
-
-    document.body.style.cursor = "none";
-
-    const onMove = (e: MouseEvent) => {
-      raw.current = { x: e.clientX, y: e.clientY };
-    };
-
-    const on = () => {
-      hov.current = true;
-    };
-
-    const off = () => {
-      hov.current = false;
-    };
-
-    window.addEventListener("mousemove", onMove, { passive: true });
-
-    const addListeners = () => {
-      document.querySelectorAll<HTMLElement>("a,button,[data-h]").forEach((el) => {
-        el.addEventListener("mouseenter", on);
-        el.addEventListener("mouseleave", off);
+      io.disconnect();
+      window.removeEventListener("scroll", request);
+      window.removeEventListener("resize", request);
+      items.forEach((el) => {
+        el.style.removeProperty("--s");
+        el.style.removeProperty("opacity");
       });
     };
-
-    addListeners();
-
-    let raf = 0;
-    const tick = () => {
-      smooth.current.x += (raw.current.x - smooth.current.x) * 0.13;
-      smooth.current.y += (raw.current.y - smooth.current.y) * 0.13;
-
-      if (ring.current) {
-        const size = hov.current ? 58 : 20;
-        ring.current.style.transform = `translate(${raw.current.x - size / 2}px,${raw.current.y - size / 2}px)`;
-        ring.current.style.width = `${size}px`;
-        ring.current.style.height = `${size}px`;
-        ring.current.style.background = hov.current ? "rgba(99,102,241,0.12)" : "transparent";
-      }
-      if (dot.current) {
-        dot.current.style.transform = `translate(${smooth.current.x - 3}px,${smooth.current.y - 3}px)`;
-      }
-
-      raf = requestAnimationFrame(tick);
-    };
-
-    tick();
-
-    return () => {
-      cancelAnimationFrame(raf);
-      window.removeEventListener("mousemove", onMove);
-      document.body.style.cursor = "";
-    };
-  }, []);
-
-  return (
-    <>
-      <div
-        ref={ring}
-        style={{
-          position: "fixed",
-          top: 0,
-          left: 0,
-          border: "1.5px solid #6366f1",
-          borderRadius: "50%",
-          pointerEvents: "none",
-          zIndex: 9999,
-          transition: "width 0.28s, height 0.28s, background 0.28s",
-          mixBlendMode: "difference",
-        }}
-      />
-      <div
-        ref={dot}
-        style={{
-          position: "fixed",
-          top: 0,
-          left: 0,
-          width: 6,
-          height: 6,
-          background: "#a855f7",
-          borderRadius: "50%",
-          pointerEvents: "none",
-          zIndex: 10000,
-        }}
-      />
-    </>
-  );
+  }, [rootRef, barRef, enabled]);
 }
 
-function Preloader({ progress, exiting }: PreloaderProps) {
+function useActiveSection(
+  ids: string[],
+  rootRef?: React.RefObject<HTMLElement | null>
+): string {
+  const [active, setActive] = useState("");
+  const key = ids.join("|");
+
+  useEffect(() => {
+    const scope = rootRef?.current;
+    const targets = key
+      .split("|")
+      .map((id) => scope?.querySelector<HTMLElement>(`#${id}`) ?? document.getElementById(id))
+      .filter((el): el is HTMLElement => el !== null);
+
+    const io = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) setActive(entry.target.id);
+        });
+      },
+      { rootMargin: "-45% 0px -50% 0px" }
+    );
+
+    targets.forEach((el) => io.observe(el));
+    return () => io.disconnect();
+  }, [key, rootRef]);
+
+  return active;
+}
+
+/* ============================================================
+   SMALL COMPONENTS
+   ============================================================ */
+
+const reducedNow = (): boolean => window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+function scrollToId(id: string, scope?: ParentNode): void {
+  if (id === "top") {
+    window.scrollTo({ top: 0, behavior: reducedNow() ? "auto" : "smooth" });
+    return;
+  }
+
+  const el = scope?.querySelector<HTMLElement>(`#${id}`) ?? document.getElementById(id);
+  if (!el) return;
+
+  el.scrollIntoView({
+    behavior: reducedNow() ? "auto" : "smooth",
+    block: "start",
+  });
+}
+
+function AnchorLink({
+  id,
+  className,
+  children,
+  current,
+}: {
+  id: string;
+  className?: string;
+  children: React.ReactNode;
+  current?: boolean;
+}) {
   return (
-    <div
-      style={{
-        position: "fixed",
-        inset: 0,
-        background: "#0a0a0f",
-        zIndex: 10001,
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        justifyContent: "center",
-        animation: exiting ? "preExit 1s cubic-bezier(0.76,0,0.24,1) forwards" : "none",
+    <a
+      href={`#${id}`}
+      className={className}
+      aria-current={current ? "true" : undefined}
+      onClick={(e) => {
+        e.preventDefault();
+        scrollToId(id, e.currentTarget.getRootNode() as ParentNode);
       }}
     >
-      <div
-        className="sy"
-        style={{
-          fontSize: "clamp(4.5rem,14vw,9rem)",
-          fontWeight: 800,
-          letterSpacing: "-0.04em",
-          background: "linear-gradient(270deg,#6366f1,#8b5cf6,#a855f7,#6366f1)",
-          backgroundSize: "400% auto",
-          WebkitBackgroundClip: "text",
-          WebkitTextFillColor: "transparent",
-          backgroundClip: "text",
-          animation: "shimmer 3s linear infinite",
-        }}
-      >
-        SB
-      </div>
-      <div
-        style={{
-          width: "min(260px,70vw)",
-          height: "1.5px",
-          background: "rgba(255,255,255,0.06)",
-          marginTop: "2.5rem",
-          borderRadius: 2,
-          overflow: "hidden",
-        }}
-      >
-        <div
-          style={{
-            height: "100%",
-            width: `${progress}%`,
-            background: "linear-gradient(90deg,#6366f1,#a855f7)",
-            borderRadius: 2,
-            transition: "width 0.1s linear",
-          }}
-        />
-      </div>
-      <div
-        className="sb"
-        style={{ marginTop: "1.2rem", fontSize: "0.95rem", color: "rgba(255,255,255,0.3)", fontVariantNumeric: "tabular-nums", letterSpacing: "0.08em" }}
-      >
-        {Math.floor(progress)}%
-      </div>
-    </div>
+      {children}
+    </a>
   );
 }
 
-function Nav({ open, setOpen }: NavProps) {
-  const [scrolled, setScrolled] = useState(false);
-
-  useEffect(() => {
-    const fn = () => setScrolled(window.scrollY > 55);
-    window.addEventListener("scroll", fn, { passive: true });
-    return () => window.removeEventListener("scroll", fn);
-  }, []);
-
-  const go = (id: string) => {
-    document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
-    setOpen(false);
-  };
-
-  const links = ["about", "journey", "skills", "contact"];
-
+function TimelineRow({ entry }: { entry: Entry }) {
   return (
-    <>
-      <nav
-        className="sb"
-        style={{
-          position: "fixed",
-          top: 0,
-          left: 0,
-          width: "100%",
-          zIndex: 100,
-          padding: `${scrolled ? "0.85rem" : "1.4rem"} clamp(1.5rem,4vw,3rem)`,
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          background: scrolled ? "rgba(10,10,15,0.93)" : "transparent",
-          backdropFilter: scrolled ? "blur(22px)" : "none",
-          borderBottom: scrolled ? "1px solid rgba(255,255,255,0.04)" : "none",
-          transition: "all 0.4s ease",
-        }}
-      >
-        <a href="#hero" className="sy" data-h style={{ fontSize: "1.55rem", fontWeight: 800, color: "white", textDecoration: "none", letterSpacing: "-0.03em" }}>
-          SB.
-        </a>
-        <ul className="desktop-links">
-          {links.map((l) => (
-            <li key={l}>
-              <button
-                onClick={() => go(l)}
-                data-h
-                style={{
-                  background: "none",
-                  border: "none",
-                  color: "rgba(255,255,255,0.55)",
-                  fontSize: "0.78rem",
-                  letterSpacing: "0.14em",
-                  textTransform: "uppercase",
-                  cursor: "pointer",
-                  fontFamily: "inherit",
-                  padding: "0.4rem 0",
-                  transition: "color 0.3s",
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.color = "white";
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.color = "rgba(255,255,255,0.55)";
-                }}
-              >
-                {l}
-              </button>
-            </li>
-          ))}
-        </ul>
-        <button
-          className="ham-btn"
-          onClick={() => setOpen((v) => !v)}
-          data-h
-          style={{
-            background: "none",
-            border: "none",
-            cursor: "pointer",
-            flexDirection: "column",
-            gap: 5,
-            padding: 8,
-          }}
-        >
-          {[0, 1, 2].map((i) => (
-            <span
-              key={i}
-              style={{
-                display: "block",
-                width: 22,
-                height: 2,
-                background: "white",
-                borderRadius: 1,
-                transition: "all 0.3s ease",
-                transform: open
-                  ? i === 0
-                    ? "rotate(45deg) translate(5px,5px)"
-                    : i === 1
-                      ? "scaleX(0)"
-                      : "rotate(-45deg) translate(5px,-5px)"
-                  : "none",
-                opacity: open && i === 1 ? 0 : 1,
-              }}
-            />
-          ))}
-        </button>
-      </nav>
-
-      <div
-        style={{
-          position: "fixed",
-          inset: 0,
-          background: "rgba(10,10,15,0.97)",
-          backdropFilter: "blur(24px)",
-          zIndex: 99,
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          opacity: open ? 1 : 0,
-          visibility: open ? "visible" : "hidden",
-          transition: "opacity 0.4s ease, visibility 0.4s ease",
-          pointerEvents: open ? "auto" : "none",
-        }}
-      >
-        <ul style={{ listStyle: "none", textAlign: "center", display: "flex", flexDirection: "column", gap: "2.5rem" }}>
-          {links.map((l, i) => (
-            <li key={l}>
-              <button
-                onClick={() => go(l)}
-                data-h
-                style={{
-                  background: "none",
-                  border: "none",
-                  cursor: "pointer",
-                  fontFamily: "'Syne', sans-serif",
-                  fontSize: "clamp(2.2rem,8vw,3.5rem)",
-                  fontWeight: 700,
-                  color: "white",
-                  textTransform: "uppercase",
-                  opacity: open ? 1 : 0,
-                  transform: open ? "translateY(0)" : "translateY(28px)",
-                  transition: `opacity 0.45s ease ${i * 0.08}s, transform 0.45s cubic-bezier(0.175,0.885,0.32,1.275) ${i * 0.08}s`,
-                }}
-              >
-                {l}
-              </button>
-            </li>
-          ))}
-        </ul>
+    <li className="tl-row" data-zoom>
+      <div className="tl-date">
+        <strong>{entry.year}</strong>
+        <span>{entry.span}</span>
       </div>
-    </>
-  );
-}
-
-function Hero() {
-  const [inView, setInView] = useState(false);
-
-  useEffect(() => {
-    const t = window.setTimeout(() => setInView(true), 1350);
-    return () => window.clearTimeout(t);
-  }, []);
-
-  const grad: React.CSSProperties = {
-    background: "linear-gradient(135deg,#6366f1,#8b5cf6,#a855f7)",
-    WebkitBackgroundClip: "text",
-    WebkitTextFillColor: "transparent",
-    backgroundClip: "text",
-  };
-
-  const reveal = (delay: number): React.CSSProperties => ({
-    opacity: inView ? 1 : 0,
-    transform: inView ? "translateY(0)" : "translateY(18px)",
-    transition: `opacity 0.85s ease ${delay}s, transform 0.85s ease ${delay}s`,
-  });
-
-  return (
-    <section id="hero" style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", position: "relative", padding: "0 5vw", overflow: "hidden" }}>
-      <div
-        style={{
-          position: "absolute",
-          width: "clamp(400px,60vw,750px)",
-          height: "clamp(400px,60vw,750px)",
-          borderRadius: "50%",
-          background: "radial-gradient(circle,rgba(99,102,241,0.18) 0%,transparent 68%)",
-          top: "-30%",
-          left: "-15%",
-          pointerEvents: "none",
-          animation: "floatOrb1 9s ease-in-out infinite",
-        }}
-      />
-      <div
-        style={{
-          position: "absolute",
-          width: "clamp(300px,45vw,580px)",
-          height: "clamp(300px,45vw,580px)",
-          borderRadius: "50%",
-          background: "radial-gradient(circle,rgba(168,85,247,0.13) 0%,transparent 68%)",
-          bottom: "-20%",
-          right: "-10%",
-          pointerEvents: "none",
-          animation: "floatOrb2 12s ease-in-out infinite",
-        }}
-      />
-
-      <div className="sb" style={{ textAlign: "center", maxWidth: 1100, position: "relative", zIndex: 1 }}>
-        <p style={{ fontSize: "clamp(0.58rem,1.5vw,0.82rem)", letterSpacing: "0.4em", textTransform: "uppercase", color: "rgba(255,255,255,0.32)", marginBottom: "2rem", ...reveal(0.2) }}>
-          Founder &nbsp;•&nbsp; Educator &nbsp;•&nbsp; Innovator
-        </p>
-
-        <h1 className="sy" style={{ fontSize: "clamp(3.5rem,10.5vw,9rem)", fontWeight: 800, lineHeight: 0.86, marginBottom: "2.2rem", letterSpacing: "-0.035em" }}>
-          {["Somnath", "Banerjee"].map((word, idx) => (
-            <span key={word} style={{ display: "block", overflow: "hidden" }}>
-              <span
-                style={{
-                  display: "inline-block",
-                  ...(idx === 1 ? grad : { color: "white" }),
-                  transform: inView ? "translateY(0)" : "translateY(110%)",
-                  transition: `transform 1.05s cubic-bezier(0.16,1,0.3,1) ${0.38 + idx * 0.14}s`,
-                }}
-              >
-                {word}
-              </span>
-            </span>
-          ))}
-        </h1>
-
-        <p style={{ fontSize: "clamp(0.88rem,2vw,1.12rem)", color: "rgba(255,255,255,0.42)", maxWidth: 560, margin: "0 auto 3rem", lineHeight: 1.95, ...reveal(0.82) }}>
-          Tech-startup founder and market strategist revolutionizing micro-industries through cutting-edge technology and inclusive financial education.
-        </p>
-
-        <div className="hero-cta" style={reveal(1.05)}>
-          <a
-            href="https://wa.me/7866049865"
-            data-h
-            style={{
-              padding: "1.05rem 2.8rem",
-              background: "linear-gradient(135deg,#6366f1,#8b5cf6)",
-              color: "white",
-              borderRadius: 50,
-              textDecoration: "none",
-              fontSize: "0.78rem",
-              letterSpacing: "0.14em",
-              textTransform: "uppercase",
-              fontFamily: "inherit",
-              boxShadow: "0 6px 26px rgba(99,102,241,0.38)",
-              transition: "transform 0.3s, box-shadow 0.3s",
-              display: "inline-block",
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.transform = "translateY(-4px)";
-              e.currentTarget.style.boxShadow = "0 14px 36px rgba(99,102,241,0.52)";
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.transform = "";
-              e.currentTarget.style.boxShadow = "0 6px 26px rgba(99,102,241,0.38)";
-            }}
-          >
-            Connect Now
-          </a>
-          <button
-            onClick={() => document.getElementById("journey")?.scrollIntoView({ behavior: "smooth" })}
-            data-h
-            style={{
-              padding: "1.05rem 2.8rem",
-              background: "transparent",
-              border: "1px solid rgba(255,255,255,0.18)",
-              color: "rgba(255,255,255,0.88)",
-              borderRadius: 50,
-              fontSize: "0.78rem",
-              letterSpacing: "0.14em",
-              textTransform: "uppercase",
-              fontFamily: "inherit",
-              cursor: "pointer",
-              transition: "all 0.3s",
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.borderColor = "rgba(99,102,241,0.7)";
-              e.currentTarget.style.background = "rgba(99,102,241,0.09)";
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.borderColor = "rgba(255,255,255,0.18)";
-              e.currentTarget.style.background = "transparent";
-            }}
-          >
-            Explore Journey
-          </button>
+      <article className={`tl-card c-${entry.tone}`}>
+        <div>
+          <h3>{entry.title}</h3>
+          <div className="org">{entry.org}</div>
+          <p>{entry.text}</p>
         </div>
-      </div>
-    </section>
+        <span className="tag">{entry.tag}</span>
+      </article>
+    </li>
   );
 }
 
-function MarqueeStrip() {
-  const items = ["OPENROOT SYSTEMS", "·", "TECH INNOVATION", "·", "FINANCIAL LITERACY", "·", "SUSTAINABILITY", "·"];
+function SectionHead({ id, title, text }: { id: string; title: string; text: string }) {
   return (
-    <div style={{ overflow: "hidden", padding: "2.5rem 0", borderTop: "1px solid rgba(255,255,255,0.04)", borderBottom: "1px solid rgba(255,255,255,0.04)", position: "relative", zIndex: 1 }}>
-      <div style={{ display: "flex", animation: "marqueeAnim 30s linear infinite", width: "max-content" }}>
-        {[0, 1].map((n) => (
-          <div key={n} style={{ display: "flex", gap: "4rem", paddingRight: "4rem", alignItems: "center" }}>
-            {items.map((item, i) => (
-              <span
-                key={i}
-                className="sy"
-                style={{ fontSize: "clamp(0.9rem,3vw,2.1rem)", fontWeight: 700, color: "rgba(255,255,255,0.06)", whiteSpace: "nowrap", transition: "color 0.35s", cursor: "default" }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.color = "#8b5cf6";
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.color = "rgba(255,255,255,0.06)";
-                }}
-              >
-                {item}
-              </span>
-            ))}
-          </div>
-        ))}
-      </div>
+    <div className="head" data-zoom>
+      <h2 id={id}>{title}</h2>
+      <p>{text}</p>
     </div>
   );
 }
 
-function About() {
-  const [ref, vis] = useVisible<HTMLDivElement>();
-  const grad: React.CSSProperties = {
-    background: "linear-gradient(135deg,#6366f1,#a855f7)",
-    WebkitBackgroundClip: "text",
-    WebkitTextFillColor: "transparent",
-    backgroundClip: "text",
-  };
-  const stats = [
-    { n: "5+", l: "Years Experience" },
-    { n: "2", l: "Ventures Founded" },
-    { n: "84%", l: "Percentile Score" },
-  ];
+/* ============================================================
+   PAGE
+   ============================================================ */
+
+function FounderPortfolioContent(): React.JSX.Element {
+  const reduced = useReducedMotion();
+  const motion = !reduced;
+
+  const rootRef = useRef<HTMLDivElement | null>(null);
+  const barRef = useRef<HTMLDivElement | null>(null);
+  const stripRef = useRef<HTMLElement | null>(null);
+
+  const [imgFailed, setImgFailed] = useState(false);
+
+  useScrollZoom(rootRef, barRef, motion);
+  const active = useActiveSection(NAV_LINKS.map((l) => l.id), rootRef);
+
+  // keep the active pill visible in the mobile nav strip
+  useEffect(() => {
+    const strip = stripRef.current;
+    if (!strip || !active) return;
+    const link = strip.querySelector<HTMLElement>(`a[href="#${active}"]`);
+    if (!link) return;
+    strip.scrollTo({
+      left: link.offsetLeft - strip.clientWidth / 2 + link.clientWidth / 2,
+      behavior: reducedNow() ? "auto" : "smooth",
+    });
+  }, [active]);
 
   return (
-    <section id="about" style={{ padding: "15vh 5vw 10vh", position: "relative", zIndex: 1 }}>
-      <div className="about-grid" ref={ref}>
-        <div style={{ opacity: vis ? 1 : 0, transform: vis ? "none" : "translateX(-45px)", transition: "opacity 0.95s ease, transform 0.95s cubic-bezier(0.23,1,0.32,1)" }}>
-          <div style={{ position: "relative", borderRadius: 24, overflow: "hidden", aspectRatio: "4/5", background: "linear-gradient(145deg,rgba(99,102,241,0.12),rgba(139,92,246,0.07),rgba(168,85,247,0.04))", border: "1px solid rgba(99,102,241,0.18)" }}>
-            <div style={{ position: "absolute", inset: 0, backgroundImage: "linear-gradient(rgba(99,102,241,0.055) 1px,transparent 1px),linear-gradient(90deg,rgba(99,102,241,0.055) 1px,transparent 1px)", backgroundSize: "44px 44px" }} />
-            <div className="sy" style={{ position: "absolute", inset: 0, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: "1.4rem" }}>
-              <div
-                style={{
-                  position: "relative",
-                  borderRadius: 24,
-                  overflow: "hidden",
-                  aspectRatio: "4/5",
-                  border: "1px solid rgba(99,102,241,0.18)",
-                  boxShadow: "0 30px 80px rgba(0,0,0,0.35)",
-                }}
-              >
-                <img
-                  src="/assets/founder-openroot.avif"
-                  alt="Somnath Banerjee"
-                  style={{
-                    width: "100%",
-                    height: "100%",
-                    objectFit: "cover",
-                    display: "block",
-                  }}
-                />
+    <div ref={rootRef} className={`fp ${motion ? "motion" : ""}`}>
+      <style>{CSS}</style>
 
-                {/* Dark Overlay */}
-                <div
-                  style={{
-                    position: "absolute",
-                    inset: 0,
-                    background:
-                      "linear-gradient(to top, rgba(10,10,15,0.92) 0%, rgba(10,10,15,0.45) 35%, transparent 70%)",
-                  }}
-                />
+      {/* NAV */}
+      <header className="nav">
+        <div ref={barRef} className="progress" aria-hidden="true" />
+        <div className="wrap">
+          <div className="nav-row">
+            <AnchorLink id="top" className="brand">
+              <i />
+              {PROFILE.name}
+            </AnchorLink>
 
-                {/* Name Section */}
-                <div
-                  style={{
-                    position: "absolute",
-                    left: 0,
-                    right: 0,
-                    bottom: "2rem",
-                    textAlign: "center",
-                    padding: "0 1.5rem",
-                    zIndex: 2,
-                  }}
-                >
-                  <div
-                    className="sy"
-                    style={{
-                      fontSize: "clamp(1.2rem,2vw,1.8rem)",
-                      fontWeight: 700,
-                      color: "#fff",
-                    }}
+            <nav className="nav-links" aria-label="Primary">
+              {NAV_LINKS.map((l) => (
+                <AnchorLink key={l.id} id={l.id} className={active === l.id ? "active" : ""} current={active === l.id}>
+                  {l.label}
+                </AnchorLink>
+              ))}
+            </nav>
+
+            <a
+              className="btn btn-blue"
+              href={PROFILE.linkedin}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Connect
+            </a>
+          </div>
+
+          <nav ref={stripRef} className="nav-scroll" aria-label="Sections">
+            {NAV_LINKS.map((l) => (
+              <AnchorLink key={l.id} id={l.id} className={active === l.id ? "active" : ""} current={active === l.id}>
+                {l.label}
+              </AnchorLink>
+            ))}
+          </nav>
+        </div>
+      </header>
+
+      <main id="top">
+        {/* HERO */}
+        <section className="hero" aria-label="Introduction">
+          <div className="wrap">
+            <div className="hero-grid">
+              <div data-zoom>
+                <h1 aria-label={PROFILE.name}>
+                  <span>{PROFILE.firstName}</span>
+                  <span>{PROFILE.lastName}</span>
+                </h1>
+                <p className="role">
+                  Founder, <b>Openroot Systems</b>
+                </p>
+                <p className="bio">
+                  I believe in building with purpose, turning ideas into things people can truly use. Through Openroot Systems, I’m creating, learning, and exploring better ways of doing things. Alongside this, I’m pursuing an MBA in Finance & Operations at the University of Calcutta. I’m still learning and building, but I believe meaningful work speaks for itself.
+
+                </p>
+                <div className="hero-cta">
+                  <a
+                    className="btn btn-blue"
+                    href={PROFILE.linkedin}
+                    target="_blank"
+                    rel="noopener noreferrer"
                   >
-                    Somnath Banerjee
-                  </div>
+                    Start a conversation
+                  </a>
+                  <AnchorLink id="journey" className="btn btn-line">
+                    See the journey
+                  </AnchorLink>
+                </div>
+              </div>
 
-                  <div
-                    className="sb"
-                    style={{
-                      fontSize: "0.75rem",
-                      color: "#8b5cf6",
-                      letterSpacing: "0.22em",
-                      textTransform: "uppercase",
-                      marginTop: "0.5rem",
-                    }}
-                  >
-                    Founder · Openroot Systems
-                  </div>
-
-                  <div
-                    style={{
-                      display: "flex",
-                      flexWrap: "wrap",
-                      gap: "0.5rem",
-                      justifyContent: "center",
-                      marginTop: "1rem",
-                    }}
-                  >
-                  </div>
+              <div className="photo-stack" data-zoom>
+                <div className="photo">
+                  {imgFailed ? (
+                    <span aria-hidden="true">SB</span>
+                  ) : (
+                    <img
+                      src={PROFILE.portrait}
+                      alt={`Portrait of ${PROFILE.name}`}
+                      loading="eager"
+                      onError={() => setImgFailed(true)}
+                    />
+                  )}
                 </div>
               </div>
             </div>
-            <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to bottom,transparent 60%,rgba(10,10,15,0.4))", pointerEvents: "none" }} />
-          </div>
-        </div>
 
-        <div className="sb" style={{ opacity: vis ? 1 : 0, transform: vis ? "none" : "translateX(45px)", transition: "opacity 0.95s ease 0.18s, transform 0.95s cubic-bezier(0.23,1,0.32,1) 0.18s" }}>
-          <span style={{ fontSize: "0.7rem", letterSpacing: "0.32em", textTransform: "uppercase", color: "#6366f1", display: "block", marginBottom: "1rem" }}>About Me</span>
-          <h2 className="sy" style={{ fontSize: "clamp(1.9rem,4vw,3.4rem)", fontWeight: 700, lineHeight: 1.1, marginBottom: "2rem" }}>
-            Building the Future,<br />
-            One Innovation<br />
-            <span style={grad}>at a Time</span>
-          </h2>
-          {[
-            "I am a tech-startup founder and educator committed to revolutionizing micro-industries through cutting-edge technology. My vision is to enhance productivity, sustainability, and scalability while empowering the next generation through inclusive financial literacy and entrepreneurial education.",
-            "With a background in Survey Engineering, Computer Science, and over 5 years of equity market experience, I bring a unique blend of technical expertise and financial acumen to everything I build.",
-          ].map((text, i) => (
-            <p key={i} style={{ fontSize: "clamp(0.88rem,1.5vw,1.03rem)", color: "rgba(255,255,255,0.52)", lineHeight: 1.95, marginBottom: "1.5rem" }}>
-              {text}
-            </p>
-          ))}
-          <div className="stat-grid">
-            {stats.map(({ n, l }) => (
-              <div key={l} style={{ textAlign: "center" }}>
-                <div className="sy" style={{ fontSize: "clamp(2rem,4vw,2.6rem)", fontWeight: 800, ...grad }}>
-                  {n}
+            <div className="now">
+              <div className="now-card c-ink" data-zoom>
+                <div>
+                  <small>From March 2025</small>
+                  <h2>Founder, Openroot Systems</h2>
+                  <p>Fast Integrated Software Support and a Prompt Engineering Learning Platform, from Kolkata.</p>
                 </div>
-                <div style={{ fontSize: "0.66rem", letterSpacing: "0.16em", textTransform: "uppercase", color: "rgba(255,255,255,0.32)", marginTop: "0.5rem" }}>{l}</div>
+              </div>
+              <div className="now-card c-blue" data-zoom>
+                <div>
+                  <small>From July 2026</small>
+                  <h2>MBA, Finance &amp; Operations</h2>
+                  <p>University of Calcutta, Batch (2026-2028).</p>
+                </div>
+              </div>
+            </div>
+
+            <div className="legend" data-zoom aria-label="Working domains">
+              <b>Working domains</b>
+              {DOMAINS.map((d) => (
+                <span key={d.label} className={`pill c-${d.tone}`}>
+                  {d.label}
+                </span>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* JOURNEY */}
+        <section id="journey" aria-labelledby="journey-h">
+          <div className="wrap">
+            <SectionHead
+              id="journey-h"
+              title="From precision to product."
+              text="A formal record of education, experience and achievements."
+            />
+
+            {GROUPS.map((group) => (
+              <div className="group" key={group.title}>
+                <h3 className="sub" data-zoom>
+                  {group.title}
+                  <span>Most recent first</span>
+                </h3>
+                <ol className="tl">
+                  {group.entries.map((entry) => (
+                    <TimelineRow key={`${entry.year}-${entry.title}`} entry={entry} />
+                  ))}
+                </ol>
               </div>
             ))}
           </div>
+        </section>
+
+        {/* BUILD */}
+        <section id="build" aria-labelledby="build-h">
+          <div className="wrap">
+            <SectionHead
+              id="build-h"
+              title="What I build."
+              text="Practical technology for businesses that need to be seen and to work properly online."
+            />
+
+            <div className="build">
+              <div className="big c-blue" data-zoom>
+                <div>
+                  <h3>Openroot Systems</h3>
+                  <p>
+                    A Government of India registered MSME I founded in March 2026. It delivers frontend web
+                    development, SEO and digital product services.
+                  </p>
+                </div>
+                <div>
+                  <a className="btn btn-white" href={PROFILE.website} target="_blank" rel="noreferrer">
+                    Visit openroot.in
+                  </a>
+                </div>
+              </div>
+
+              <div className="svc">
+                {SERVICES.map((s) => (
+                  <div className="svc-item" data-zoom key={s.title}>
+                    <h3>{s.title}</h3>
+                    <p>{s.text}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div className="work">
+              {WORK.map((w) => (
+                <article className={`work-card c-${w.tone}`} data-zoom key={w.title}>
+                  <div>
+                    <h3>{w.title}</h3>
+                    <p>{w.text}</p>
+                  </div>
+                  <span className="tag-wrap">
+                    <span className="tag">{w.tag}</span>
+                  </span>
+                </article>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* EDGE */}
+        <section id="edge" aria-labelledby="edge-h">
+          <div className="wrap">
+            <SectionHead
+              id="edge-h"
+              title="The edge is the combination."
+              text="A broader perspective creates a stronger way to understand problems, make decisions, and build what matters."
+            />
+
+            <div className="edge">
+              {EDGE.map((e) => (
+                <div className={`edge-tile c-${e.tone}`} data-zoom key={e.title}>
+                  <h3>{e.title}</h3>
+                  <p>{e.text}</p>
+                </div>
+              ))}
+            </div>
+
+            <div className="edge-base c-yellow" data-zoom>
+              <b>Foundation: a strong character</b>
+              <span>Empowering child and women education, and digitalizing small businesses with technology.</span>
+            </div>
+          </div>
+        </section>
+
+        {/* CONTACT */}
+        <section id="contact" aria-labelledby="contact-h">
+          <div className="wrap">
+            <div className="contact c-blue" data-zoom>
+              <div>
+                <h2 id="contact-h">{"Let's build something impactful together."}</h2>
+                <p>Open to product collaboration and professional opportunities, on-site, hybrid or remote.</p>
+              </div>
+              <div className="contact-actions">
+                <a className="btn btn-white" href={PROFILE.linkedin} target="_blank" rel="noreferrer">
+                  Connect on LinkedIn
+                </a>
+                <a className="btn btn-ink" href={PROFILE.website} target="_blank" rel="noreferrer">
+                  Visit Openroot Systems
+                </a>
+              </div>
+            </div>
+          </div>
+        </section>
+      </main>
+
+      <footer>
+        <div className="wrap foot">
+          <span>© 2026 {PROFILE.name} · Openroot Systems</span>
+          <span>{PROFILE.location}</span>
         </div>
-      </div>
-    </section>
-  );
-}
-
-function TLCard({ item, index }: TLCardProps) {
-  const [ref, vis] = useVisible<HTMLDivElement>();
-  const isLeft = index % 2 === 0;
-
-  return (
-    <div
-      ref={ref}
-      className={`tl-item ${isLeft ? "tl-left" : "tl-right"}`}
-      style={{
-        opacity: vis ? 1 : 0,
-        transform: vis ? "none" : "translateY(38px)",
-        transition: `opacity 0.7s ease ${index * 0.07}s, transform 0.7s cubic-bezier(0.23,1,0.32,1) ${index * 0.07}s`,
-      }}
-    >
-      <div
-        className={isLeft ? "dot-left" : "dot-right"}
-        style={{
-          position: "absolute",
-          width: 15,
-          height: 15,
-          background: "#0a0a0f",
-          border: "2.5px solid #6366f1",
-          borderRadius: "50%",
-          top: "2.9rem",
-          boxShadow: "0 0 12px rgba(99,102,241,0.8), 0 0 24px rgba(99,102,241,0.3)",
-        }}
-      />
-      <div
-        className="sb"
-        style={{
-          background: "rgba(255,255,255,0.018)",
-          border: "1px solid rgba(255,255,255,0.055)",
-          borderRadius: 20,
-          padding: "1.8rem 2rem",
-          backdropFilter: "blur(12px)",
-          transition: "transform 0.32s ease, border-color 0.32s ease, box-shadow 0.32s ease",
-        }}
-        onMouseEnter={(e) => {
-          e.currentTarget.style.transform = "translateY(-7px)";
-          e.currentTarget.style.borderColor = "rgba(99,102,241,0.42)";
-          e.currentTarget.style.boxShadow = "0 24px 48px rgba(0,0,0,0.28), inset 0 0 0 1px rgba(99,102,241,0.08)";
-        }}
-        onMouseLeave={(e) => {
-          e.currentTarget.style.transform = "";
-          e.currentTarget.style.borderColor = "rgba(255,255,255,0.055)";
-          e.currentTarget.style.boxShadow = "";
-        }}
-      >
-        <div style={{ fontSize: "0.66rem", letterSpacing: "0.22em", textTransform: "uppercase", color: "#7c7cf8", marginBottom: "0.65rem" }}>{item.date}</div>
-        <h3 className="sy" style={{ fontSize: "clamp(1rem,2vw,1.28rem)", fontWeight: 600, marginBottom: "0.85rem", lineHeight: 1.3 }}>
-          {item.title}
-        </h3>
-        <p style={{ color: "rgba(255,255,255,0.46)", lineHeight: 1.85, fontSize: "0.88rem" }}>{item.desc}</p>
-      </div>
+      </footer>
     </div>
   );
 }
 
-function JourneySection() {
-  const [hRef, hVis] = useVisible<HTMLDivElement>();
-  return (
-    <section id="journey" style={{ padding: "10vh 5vw", position: "relative", zIndex: 1 }}>
-      <div style={{ textAlign: "center", marginBottom: "5rem" }} ref={hRef}>
-        <span className="sb" style={{ fontSize: "0.7rem", letterSpacing: "0.32em", textTransform: "uppercase", color: "#6366f1", display: "block", marginBottom: "1rem", opacity: hVis ? 1 : 0, transition: "opacity 0.8s" }}>
-          My Path
-        </span>
-        <h2 className="sy" style={{ fontSize: "clamp(2rem,5vw,4rem)", fontWeight: 700, opacity: hVis ? 1 : 0, transform: hVis ? "none" : "translateY(20px)", transition: "opacity 0.8s 0.1s, transform 0.8s 0.1s" }}>
-          Journey So Far
-        </h2>
-      </div>
-      <div style={{ position: "relative", maxWidth: 1200, margin: "0 auto" }}>
-        <div className="tl-center-line" style={{ position: "absolute", top: 0, bottom: 0, width: 2, background: "linear-gradient(to bottom,#6366f1,#a855f7,rgba(168,85,247,0.1))", transform: "translateX(-50%)" }} />
-        {TIMELINE.map((item, i) => (
-          <TLCard key={i} item={item} index={i} />
-        ))}
-      </div>
-    </section>
-  );
-}
+export default function FounderPortfolio(): React.JSX.Element {
+  const hostRef = useRef<HTMLDivElement | null>(null);
+  const [shadowRoot, setShadowRoot] = useState<ShadowRoot | null>(null);
 
-function VisionSection() {
-  const [ref, vis] = useVisible<HTMLDivElement>();
-  const grad: React.CSSProperties = {
-    background: "linear-gradient(135deg,#6366f1,#a855f7)",
-    WebkitBackgroundClip: "text",
-    WebkitTextFillColor: "transparent",
-    backgroundClip: "text",
-  };
+  useLayoutEffect(() => {
+    const host = hostRef.current;
+    if (!host) return undefined;
 
-  return (
-    <section style={{ padding: "16vh 5vw", position: "relative", zIndex: 1, textAlign: "center", overflow: "hidden" }}>
-      <div
-        className="sy"
-        style={{
-          position: "absolute",
-          top: "50%",
-          left: "50%",
-          transform: "translate(-50%,-50%)",
-          fontSize: "clamp(5rem,22vw,15rem)",
-          fontWeight: 800,
-          color: "rgba(255,255,255,0.013)",
-          whiteSpace: "nowrap",
-          pointerEvents: "none",
-          letterSpacing: "-0.05em",
-          userSelect: "none",
-        }}
-      >
-        VISION
-      </div>
-      <div ref={ref} style={{ maxWidth: 920, margin: "0 auto", position: "relative", zIndex: 2, opacity: vis ? 1 : 0, transform: vis ? "none" : "translateY(40px)", transition: "opacity 1s ease, transform 1s cubic-bezier(0.23,1,0.32,1)" }}>
-        <span className="sb" style={{ fontSize: "0.7rem", letterSpacing: "0.32em", textTransform: "uppercase", color: "#6366f1", display: "block", marginBottom: "2.2rem" }}>
-          My Mission
-        </span>
-        <div style={{ width: 50, height: 2, background: "linear-gradient(90deg,#6366f1,#a855f7)", margin: "0 auto 2.5rem", borderRadius: 2 }} />
-        <blockquote className="sy" style={{ fontSize: "clamp(1rem,2.8vw,1.88rem)", fontWeight: 500, lineHeight: 1.78, color: "rgba(255,255,255,0.72)", margin: 0, padding: 0 }}>
-          "To <span style={grad}>revolutionize micro-industries</span> by leveraging cutting-edge technology that enhances productivity, sustainability, and scalability — while <span style={grad}>empowering the next generation</span> through inclusive financial literacy, entrepreneurial education, and equitable access to growth opportunities."
-        </blockquote>
-      </div>
-    </section>
-  );
-}
-
-function SkillCard({ s, i }: SkillCardProps) {
-  const [ref, vis] = useVisible<HTMLDivElement>();
-  const [hov, setHov] = useState(false);
-
-  return (
-    <div
-      ref={ref}
-      data-h
-      onMouseEnter={() => setHov(true)}
-      onMouseLeave={() => setHov(false)}
-      style={{
-        background: hov ? "rgba(99,102,241,0.07)" : "rgba(255,255,255,0.016)",
-        border: `1px solid ${hov ? "rgba(99,102,241,0.45)" : "rgba(255,255,255,0.055)"}`,
-        borderRadius: 24,
-        padding: "2.5rem 2rem",
-        position: "relative",
-        overflow: "hidden",
-        opacity: vis ? 1 : 0,
-        transform: vis ? hov ? "translateY(-11px)" : "translateY(0)" : "translateY(44px) scale(0.97)",
-        transition: `opacity 0.7s ease ${i * 0.07}s, transform 0.48s cubic-bezier(0.23,1,0.32,1), background 0.38s, border-color 0.38s, box-shadow 0.38s`,
-        boxShadow: hov ? "0 24px 50px rgba(0,0,0,0.22), inset 0 0 0 1px rgba(99,102,241,0.1)" : "none",
-        cursor: "default",
-      }}
-    >
-      <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: 2, background: "linear-gradient(90deg,#6366f1,#a855f7)", borderRadius: "24px 24px 0 0", opacity: hov ? 1 : 0, transition: "opacity 0.38s" }} />
-      <div style={{ fontSize: "2.2rem", marginBottom: "1.5rem" }}>{s.icon}</div>
-      <h3 className="sy" style={{ fontSize: "1.22rem", fontWeight: 600, marginBottom: "0.9rem" }}>
-        {s.title}
-      </h3>
-      <p className="sb" style={{ color: "rgba(255,255,255,0.5)", lineHeight: 1.88, fontSize: "0.9rem" }}>{s.desc}</p>
-    </div>
-  );
-}
-
-function SkillsSection() {
-  const [hRef, hVis] = useVisible<HTMLDivElement>();
-  return (
-    <section id="skills" style={{ padding: "10vh 5vw", position: "relative", zIndex: 1 }}>
-      <div style={{ textAlign: "center", marginBottom: "5rem" }} ref={hRef}>
-        <span className="sb" style={{ fontSize: "0.7rem", letterSpacing: "0.32em", textTransform: "uppercase", color: "#6366f1", display: "block", marginBottom: "1rem", opacity: hVis ? 1 : 0, transition: "opacity 0.8s" }}>
-          Expertise
-        </span>
-        <h2 className="sy" style={{ fontSize: "clamp(2rem,5vw,4rem)", fontWeight: 700, opacity: hVis ? 1 : 0, transform: hVis ? "none" : "translateY(20px)", transition: "opacity 0.8s 0.1s, transform 0.8s 0.1s" }}>
-          Skills & Capabilities
-        </h2>
-      </div>
-      <div className="skills-grid">
-        {SKILLS.map((s, i) => (
-          <SkillCard key={i} s={s} i={i} />
-        ))}
-      </div>
-    </section>
-  );
-}
-
-function ContactSection() {
-  const [ref, vis] = useVisible<HTMLDivElement>();
-  const grad: React.CSSProperties = {
-    background: "linear-gradient(135deg,#6366f1,#a855f7)",
-    WebkitBackgroundClip: "text",
-    WebkitTextFillColor: "transparent",
-    backgroundClip: "text",
-  };
-  const socials = [
-    { href: "https://openroot.in", label: "🌐", title: "Website" },
-    { href: "https://openroot.in/softwares/openroot-classes", label: "📚", title: "Classes" },
-    { href: "https://wa.me/7866049865", label: "💬", title: "WhatsApp" },
-  ];
-
-  return (
-    <section id="contact" style={{ padding: "15vh 5vw", position: "relative", zIndex: 1, textAlign: "center" }}>
-      <div style={{ position: "absolute", width: "60vw", height: "60vw", maxWidth: 700, maxHeight: 700, borderRadius: "50%", background: "radial-gradient(circle,rgba(99,102,241,0.09) 0%,transparent 65%)", top: "50%", left: "50%", transform: "translate(-50%,-50%)", pointerEvents: "none" }} />
-      <div ref={ref} style={{ maxWidth: 800, margin: "0 auto", position: "relative", zIndex: 2, opacity: vis ? 1 : 0, transform: vis ? "none" : "translateY(40px)", transition: "opacity 0.95s, transform 0.95s cubic-bezier(0.23,1,0.32,1)" }}>
-        <span className="sb" style={{ fontSize: "0.7rem", letterSpacing: "0.32em", textTransform: "uppercase", color: "#6366f1", display: "block", marginBottom: "1.5rem" }}>
-          Get In Touch
-        </span>
-        <h2 className="sy" style={{ fontSize: "clamp(2.4rem,7.5vw,5.2rem)", fontWeight: 800, lineHeight: 1.04, marginBottom: "2rem" }}>
-          Let's Build Something<br />Impactful <span style={grad}>Together</span>
-        </h2>
-        <p className="sb" style={{ fontSize: "clamp(0.88rem,2vw,1.1rem)", color: "rgba(255,255,255,0.42)", marginBottom: "3rem" }}>
-          Ready to collaborate?{" "}
-          <a
-            href="https://wa.me/7866049865"
-            data-h
-            style={{ color: "#8b5cf6", textDecoration: "none", borderBottom: "1px solid rgba(139,92,246,0.38)", paddingBottom: 2, transition: "border-color 0.3s, color 0.3s" }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.color = "#a855f7";
-              e.currentTarget.style.borderColor = "rgba(168,85,247,0.7)";
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.color = "#8b5cf6";
-              e.currentTarget.style.borderColor = "rgba(139,92,246,0.38)";
-            }}
-          >
-            Connect on WhatsApp
-          </a>
-        </p>
-        <div style={{ display: "flex", justifyContent: "center", gap: "1.5rem", flexWrap: "wrap" }}>
-          {socials.map(({ href, label, title }) => (
-            <a
-              key={title}
-              href={href}
-              target="_blank"
-              rel="noopener noreferrer"
-              title={title}
-              data-h
-              style={{
-                width: 58,
-                height: 58,
-                border: "1px solid rgba(255,255,255,0.1)",
-                borderRadius: "50%",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                textDecoration: "none",
-                fontSize: "1.35rem",
-                transition: "all 0.32s",
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.background = "linear-gradient(135deg,#6366f1,#8b5cf6)";
-                e.currentTarget.style.borderColor = "transparent";
-                e.currentTarget.style.transform = "translateY(-7px) scale(1.05)";
-                e.currentTarget.style.boxShadow = "0 14px 32px rgba(99,102,241,0.42)";
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.background = "transparent";
-                e.currentTarget.style.borderColor = "rgba(255,255,255,0.1)";
-                e.currentTarget.style.transform = "";
-                e.currentTarget.style.boxShadow = "";
-              }}
-            >
-              {label}
-            </a>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-}
-
-function Footer() {
-  return (
-    <footer style={{ padding: "2.5rem clamp(1.5rem,5vw,3rem)", borderTop: "1px solid rgba(255,255,255,0.04)", position: "relative", zIndex: 1 }}>
-      <div className="footer-row sb">
-        <p style={{ color: "rgba(255,255,255,0.26)", fontSize: "0.8rem", lineHeight: 1.6 }}>
-          © 2026 Somnath Banerjee — Openroot Systems. All rights reserved.
-        </p>
-        <div style={{ display: "flex", gap: "2rem", flexWrap: "wrap" }}>
-          {[
-            ["OPENROOT", "https://openroot.in"],
-            ["OPENROOT CLASSES", "https://openroot.in/softwares/openroot-classes"],
-          ].map(([t, h]) => (
-            <a
-              key={t}
-              href={h}
-              target="_blank"
-              rel="noreferrer"
-              data-h
-              style={{ color: "rgba(255,255,255,0.26)", textDecoration: "none", fontSize: "0.74rem", letterSpacing: "0.1em", transition: "color 0.3s" }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.color = "#6366f1";
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.color = "rgba(255,255,255,0.26)";
-              }}
-            >
-              {t}
-            </a>
-          ))}
-        </div>
-      </div>
-    </footer>
-  );
-}
-
-export default function Portfolio(): React.JSX.Element {
-  const [progress, setProgress] = useState(0);
-  const [exiting, setExiting] = useState(false);
-  const [loaded, setLoaded] = useState(false);
-  const [menuOpen, setMenuOpen] = useState(false);
-  const [backToTop, setBackToTop] = useState(false);
-  const lenisRef = useRef<Lenis | null>(null);
-
-  useEffect(() => {
-    const iv = window.setInterval(() => {
-      setProgress((p) => {
-        const next = Math.min(100, p + Math.random() * 13);
-        if (next >= 100) {
-          window.clearInterval(iv);
-          window.setTimeout(() => {
-            setExiting(true);
-            window.setTimeout(() => setLoaded(true), 920);
-          }, 280);
-          return 100;
-        }
-        return next;
-      });
-    }, 55);
-
-    return () => window.clearInterval(iv);
-  }, []);
-
-  useEffect(() => {
-    const fn = () => setBackToTop(window.scrollY > 500);
-    window.addEventListener("scroll", fn, { passive: true });
-    return () => window.removeEventListener("scroll", fn);
-  }, []);
-
-  useEffect(() => {
-    if (window.innerWidth >= 1024) {
-      const lenis = new Lenis({
-        duration: 1.2,
-        easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-      });
-      lenisRef.current = lenis;
-
-      const raf = (time: number) => {
-        lenis.raf(time);
-        requestAnimationFrame(raf);
-      };
-      requestAnimationFrame(raf);
-
-      lenis.on("scroll", ScrollTrigger.update);
-      gsap.ticker.add((time) => {
-        lenis.raf(time * 1000);
-      });
-      gsap.ticker.lagSmoothing(0);
-
-      return () => {
-        lenis.destroy();
-        lenisRef.current = null;
-      };
-    }
+    const root = host.shadowRoot ?? host.attachShadow({ mode: "open" });
+    setShadowRoot(root);
 
     return undefined;
   }, []);
 
-  useEffect(() => {
-    if (loaded) {
-      gsap.to(".hero-title .line span", { y: 0, duration: 1.2, stagger: 0.1, ease: "power4.out", delay: 0.2 });
-
-      gsap.utils.toArray<HTMLElement>(".reveal").forEach((elem) => {
-        gsap.fromTo(elem, { opacity: 0, y: 50 }, {
-          opacity: 1,
-          y: 0,
-          duration: 1,
-          ease: "power3.out",
-          scrollTrigger: { trigger: elem, start: "top 85%", toggleActions: "play none none reverse" },
-        });
-      });
-
-      gsap.utils.toArray<HTMLElement>(".timeline-item").forEach((item) => {
-        gsap.fromTo(item, { opacity: 0, y: 50 }, {
-          opacity: 1,
-          y: 0,
-          duration: 0.8,
-          ease: "power3.out",
-          scrollTrigger: { trigger: item, start: "top 85%", toggleActions: "play none none reverse" },
-        });
-      });
-
-      gsap.fromTo(".skill-card", { opacity: 0, y: 60, scale: 0.95 }, {
-        opacity: 1,
-        y: 0,
-        scale: 1,
-        duration: 0.8,
-        stagger: 0.1,
-        ease: "power3.out",
-        scrollTrigger: { trigger: ".skills-grid", start: "top 80%" },
-      });
-
-      gsap.utils.toArray<HTMLElement>(".stat-number").forEach((counter) => {
-        const target = Number.parseInt(counter.dataset.count ?? "0", 10);
-        if (!Number.isNaN(target)) {
-          gsap.fromTo(counter, { innerHTML: 0 }, {
-            innerHTML: target,
-            duration: 2,
-            ease: "power2.out",
-            snap: { innerHTML: 1 },
-            scrollTrigger: { trigger: counter, start: "top 80%" },
-            onUpdate: () => {
-              counter.textContent = `${Math.floor(Number(counter.innerHTML))}${counter.dataset.suffix ?? ""}`;
-            },
-          });
-        }
-      });
-
-      gsap.to(".glow-orb-1", { y: -200, scrollTrigger: { trigger: ".hero", start: "top top", end: "bottom top", scrub: 1 } });
-      gsap.to(".glow-orb-2", { y: 200, scrollTrigger: { trigger: ".hero", start: "top top", end: "bottom top", scrub: 1 } });
-
-      ScrollTrigger.create({
-        start: "top -500px",
-        onEnter: () => setBackToTop(true),
-        onLeaveBack: () => setBackToTop(false),
-      });
-    }
-  }, [loaded]);
-
-  useEffect(() => {
-    if (!loaded || window.innerWidth < 1024) return undefined;
-
-    const buttons = Array.from(document.querySelectorAll<HTMLElement>(".magnetic-btn"));
-    const handlers = buttons.map((btn) => {
-      const onMove = (e: MouseEvent) => {
-        const rect = btn.getBoundingClientRect();
-        const x = e.clientX - rect.left - rect.width / 2;
-        const y = e.clientY - rect.top - rect.height / 2;
-        const child = btn.querySelector<HTMLElement>("span");
-        if (child) {
-          gsap.to(child, { x: x * 0.3, y: y * 0.3, duration: 0.3, ease: "power2.out" });
-        }
-      };
-
-      const onLeave = () => {
-        const child = btn.querySelector<HTMLElement>("span");
-        if (child) {
-          gsap.to(child, { x: 0, y: 0, duration: 0.5, ease: "elastic.out(1, 0.3)" });
-        }
-      };
-
-      btn.addEventListener("mousemove", onMove);
-      btn.addEventListener("mouseleave", onLeave);
-      return { btn, onMove, onLeave };
-    });
-
-    return () => {
-      handlers.forEach(({ btn, onMove, onLeave }) => {
-        btn.removeEventListener("mousemove", onMove);
-        btn.removeEventListener("mouseleave", onLeave);
-      });
-    };
-  }, [loaded]);
-
   return (
-    <div style={{ background: "#0a0a0f", color: "white", overflowX: "hidden", minHeight: "100vh" }}>
-      <style>{CSS}</style>
-      {!loaded && <Preloader progress={progress} exiting={exiting} />}
-      <ParticleCanvas />
-      <CustomCursor />
-      <Nav open={menuOpen} setOpen={setMenuOpen} />
-      <main>
-        <Hero />
-        <MarqueeStrip />
-        <About />
-        <JourneySection />
-        <VisionSection />
-        <SkillsSection />
-        <ContactSection />
-        <Footer />
-      </main>
-
-      <button
-        data-h
-        onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-        style={{
-          position: "fixed",
-          bottom: "2rem",
-          right: "2rem",
-          width: 48,
-          height: 48,
-          background: "linear-gradient(135deg,#6366f1,#8b5cf6)",
-          color: "white",
-          border: "none",
-          borderRadius: "50%",
-          fontSize: "1.2rem",
-          cursor: "pointer",
-          zIndex: 99,
-          opacity: backToTop ? 1 : 0,
-          visibility: backToTop ? "visible" : "hidden",
-          transform: backToTop ? "translateY(0) scale(1)" : "translateY(20px) scale(0.9)",
-          transition: "all 0.35s ease",
-          boxShadow: "0 6px 22px rgba(99,102,241,0.48)",
-        }}
-      >
-        ↑
-      </button>
+    <div
+      ref={hostRef}
+      data-founder-profile-host
+      style={{
+        display: "block",
+        width: "100%",
+        maxWidth: "none",
+        minWidth: 0,
+        margin: 0,
+        padding: 0,
+      }}
+    >
+      {shadowRoot ? createPortal(<FounderPortfolioContent />, shadowRoot) : null}
     </div>
   );
 }

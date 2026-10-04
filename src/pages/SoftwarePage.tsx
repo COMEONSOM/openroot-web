@@ -383,16 +383,8 @@ export default function SoftwarePage() {
       )}
 
       <div className="sp-body">
-        {/* Overview */}
-        <section className="sp-section" aria-labelledby="section-overview">
-          <p className="ot-kicker ot-kicker--brand sp-section-label">Overview</p>
-          <h2 id="section-overview" className="sp-section-title">What is {tool.name}?</h2>
-          <div className="sp-overview">{formatText(content.overview)}</div>
-        </section>
-
         {content.features.length > 0 && (
           <section className="sp-section" aria-labelledby="section-features">
-            <p className="ot-kicker ot-kicker--brand sp-section-label">Capabilities</p>
             <h2 id="section-features" className="sp-section-title">Key Features of {tool.name}</h2>
             <div className="sp-features-grid">
               {content.features.map((f, i) => (
@@ -411,16 +403,14 @@ export default function SoftwarePage() {
 
         {content.purpose && (
           <section className="sp-section" aria-labelledby="section-purpose">
-            <p className="ot-kicker ot-kicker--brand sp-section-label">Purpose</p>
-            <h2 id="section-purpose" className="sp-section-title">Why {tool.name} exists</h2>
+            <h2 id="section-purpose" className="sp-section-title">Why {tool.name} exists?</h2>
             <div className="sp-purpose">{formatText(content.purpose)}</div>
           </section>
         )}
 
         {/* FAQ */}
         <section className="sp-section" aria-labelledby="section-faq">
-          <p className="ot-kicker ot-kicker--brand sp-section-label">FAQ</p>
-          <h2 id="section-faq" className="sp-section-title">Common Questions about {tool.name}</h2>
+          <h2 id="section-faq" className="sp-section-title">{tool.name} FAQs</h2>
           <div className="sp-faq-list" itemScope itemType="https://schema.org/FAQPage">
             {faqs.map((item, index) => (
               <div
