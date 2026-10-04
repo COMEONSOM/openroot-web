@@ -1,0 +1,650 @@
+/* ==========================================================================
+   OpenrootSystems.css
+   Official company information page
+
+   Same minimal base design as the footer and certificate pages:
+   textured square-grid background, square framed cells, plain-text labels,
+   flat surfaces (no gradients, shadows, glows, scaling or sliding).
+   Strips and borders follow the theme text colour:
+   white in dark mode, black in light mode.
+   ========================================================================== */
+
+/* ==========================================================================
+   PAGE + TOKENS
+   ========================================================================== */
+
+.os-page {
+  --os-text: var(--color-text, var(--ot-text));
+  --os-muted: var(--color-text-muted, var(--ot-text-muted));
+  --os-faint: var(--ot-text-faint, var(--color-text-muted));
+  --os-bg: var(--ot-section-bg, var(--ot-bg));
+  --os-line: var(--os-text);
+  --os-line-soft: var(--os-text);
+  --os-hover: rgba(128, 128, 140, 0.14);
+
+  position: relative;
+  isolation: isolate;
+
+  min-height: 100vh;
+  padding: clamp(5rem, 9vw, 7rem) var(--ot-page-inline) 5rem;
+
+  background-color: var(--os-bg);
+  color: var(--os-text);
+
+  -webkit-font-smoothing: antialiased;
+}
+
+@supports (color: color-mix(in srgb, red, blue)) {
+  .os-page {
+    --os-line: color-mix(in srgb, var(--os-text) 55%, transparent);
+    --os-line-soft: color-mix(in srgb, var(--os-text) 22%, transparent);
+    --os-hover: color-mix(in srgb, var(--os-text) 8%, transparent);
+  }
+}
+
+/* texture: fine square grid across the page */
+.os-page::before {
+  content: "";
+
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+
+  pointer-events: none;
+
+  background-image:
+    linear-gradient(to bottom, var(--os-text) 1px, transparent 1px),
+    linear-gradient(to right, var(--os-text) 1px, transparent 1px);
+  background-size: 26px 26px;
+
+  opacity: 0.09;
+}
+
+.os-page a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.os-shell {
+  max-width: var(--ot-max-w, 1200px);
+  margin: 0 auto;
+
+  display: grid;
+  gap: 1.25rem;
+}
+
+/* ==========================================================================
+   CARD  (one framed surface above the texture)
+   ========================================================================== */
+
+.os-card {
+  padding: clamp(1.25rem, 2.8vw, 2rem);
+
+  border: 1px solid var(--os-line);
+  border-radius: 0;
+
+  background-color: var(--os-bg);
+}
+
+.os-card--top {
+  border-top: 2px solid var(--os-text);
+}
+
+.os-top {
+  display: grid;
+  grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
+  gap: 1.25rem;
+  align-items: start;
+}
+
+/* ==========================================================================
+   TYPE
+   ========================================================================== */
+
+.os-h1 {
+  margin: 0;
+  max-width: 14ch;
+
+  font-size: clamp(2.2rem, 5.4vw, 4rem);
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -0.045em;
+  color: var(--os-text);
+  text-wrap: balance;
+}
+
+.os-h2 {
+  margin: 0;
+
+  font-size: clamp(1.2rem, 2vw, 1.45rem);
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  color: var(--os-text);
+}
+
+.os-text {
+  margin: 0.75rem 0 0;
+  max-width: 72ch;
+
+  color: var(--os-muted);
+  font-size: 0.98rem;
+  line-height: 1.8;
+}
+
+.os-lead {
+  margin: 1.1rem 0 0;
+  max-width: 66ch;
+
+  color: var(--os-muted);
+  font-size: clamp(1rem, 1.4vw, 1.08rem);
+  line-height: 1.8;
+}
+
+.os-link {
+  color: var(--os-text);
+  font-weight: 600;
+
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+}
+
+.os-page a:focus-visible {
+  outline: 2px solid var(--os-text);
+  outline-offset: 3px;
+}
+
+/* ==========================================================================
+   HERO
+   ========================================================================== */
+
+.os-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+
+  margin: 1.25rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.os-chip {
+  padding: 0.35rem 0.75rem;
+
+  border: 1px solid var(--os-line);
+  border-radius: 0;
+
+  color: var(--os-muted);
+  font-size: 0.85rem;
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+/* facts: a grid of squares framed by strips */
+.os-facts {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+
+  margin-top: 1.5rem;
+
+  border-top: 1px solid var(--os-line);
+  border-left: 1px solid var(--os-line);
+}
+
+.os-fact {
+  padding: 1rem 1.1rem;
+
+  border-right: 1px solid var(--os-line);
+  border-bottom: 1px solid var(--os-line);
+
+  background-color: var(--os-bg);
+}
+
+.os-label {
+  display: block;
+
+  margin-bottom: 0.3rem;
+
+  color: var(--os-muted);
+  font-size: 0.82rem;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+.os-value {
+  display: block;
+
+  font-size: 1rem;
+  font-weight: 600;
+  line-height: 1.45;
+  overflow-wrap: anywhere;
+}
+
+/* ==========================================================================
+   SNAPSHOT
+   ========================================================================== */
+
+.os-snapshot-name {
+  margin: 0.3rem 0 0;
+
+  font-size: 1.5rem;
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+}
+
+.os-rows {
+  margin: 1.25rem 0 0;
+  padding: 0;
+
+  border-top: 1px solid var(--os-line-soft);
+}
+
+.os-row {
+  display: grid;
+  grid-template-columns: 108px minmax(0, 1fr);
+  gap: 0.85rem;
+
+  padding: 0.85rem 0;
+
+  border-bottom: 1px solid var(--os-line-soft);
+}
+
+.os-row dt {
+  color: var(--os-muted);
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.os-row dd {
+  margin: 0;
+
+  font-size: 0.94rem;
+  font-weight: 600;
+  line-height: 1.6;
+  overflow-wrap: anywhere;
+}
+
+.os-note {
+  margin: 1.25rem 0 0;
+
+  color: var(--os-muted);
+  font-size: 0.92rem;
+  line-height: 1.75;
+}
+
+/* ==========================================================================
+   REGISTRATION TABLE
+   ========================================================================== */
+
+.os-table {
+  width: 100%;
+  margin-top: 1.25rem;
+
+  border-collapse: collapse;
+  border: 1px solid var(--os-line);
+}
+
+.os-table td {
+  padding: 0.95rem 1.1rem;
+
+  border-bottom: 1px solid var(--os-line-soft);
+
+  vertical-align: top;
+  font-size: 0.95rem;
+  line-height: 1.7;
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+
+.os-table tr:last-child td {
+  border-bottom: 0;
+}
+
+.os-table td:first-child {
+  width: 34%;
+
+  border-right: 1px solid var(--os-line-soft);
+
+  color: var(--os-muted);
+  font-size: 0.88rem;
+  font-weight: 600;
+}
+
+/* ==========================================================================
+   ABOUT
+   ========================================================================== */
+
+.os-prose {
+  display: grid;
+  gap: 0.85rem;
+
+  margin-top: 0.85rem;
+  max-width: none;
+
+  color: var(--os-muted);
+  line-height: 1.85;
+}
+
+.os-prose p {
+  margin: 0;
+}
+
+/* ==========================================================================
+   LINK CELLS  (products and social share one framed grid and one hover)
+   ========================================================================== */
+
+.os-cells {
+  display: grid;
+  gap: 0;
+
+  margin-top: 1.25rem;
+
+  border-top: 1px solid var(--os-line);
+  border-left: 1px solid var(--os-line);
+}
+
+.os-cells--products {
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+}
+
+.os-cells--social {
+  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+}
+
+.os-cell {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+
+  min-width: 0;
+  height: 100%;
+  padding: 1.1rem 1.2rem;
+
+  border-right: 1px solid var(--os-line);
+  border-bottom: 1px solid var(--os-line);
+
+  /* solid surface so the texture never runs under the text */
+  background-color: var(--os-bg);
+
+  color: var(--os-text);
+  text-decoration: none;
+
+  -webkit-tap-highlight-color: transparent;
+
+  transition: background-color 0.2s ease;
+}
+
+.os-cell--row {
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+
+  min-height: 58px;
+
+  font-weight: 600;
+}
+
+.os-product {
+  display: flex;
+  min-width: 0;
+}
+
+.os-product > .os-cell {
+  flex: 1 1 auto;
+}
+
+.os-product-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.os-product-name {
+  margin: 0;
+
+  font-size: 1rem;
+  font-weight: 700;
+  line-height: 1.35;
+}
+
+.os-tag {
+  align-self: flex-start;
+
+  padding: 0.1rem 0.5rem;
+
+  border: 1px solid var(--os-line);
+
+  color: var(--os-muted);
+  font-size: 0.75rem;
+  font-weight: 600;
+  line-height: 1.5;
+}
+
+.os-product-desc {
+  margin: 0;
+
+  color: var(--os-muted);
+  font-size: 0.9rem;
+  line-height: 1.7;
+}
+
+.os-arrow {
+  flex: 0 0 auto;
+
+  font-size: 0.9em;
+  line-height: 1.35;
+
+  opacity: 0.55;
+
+  transition: opacity 0.2s ease;
+}
+
+@media (hover: hover) {
+  .os-cell:hover {
+    background-image: linear-gradient(var(--os-hover), var(--os-hover));
+  }
+
+  .os-cell:hover .os-arrow {
+    opacity: 1;
+  }
+}
+
+.os-cell:active {
+  background-image: linear-gradient(var(--os-hover), var(--os-hover));
+}
+
+.os-more {
+  margin: 1.25rem 0 0;
+
+  color: var(--os-muted);
+  font-size: 0.95rem;
+}
+
+/* ==========================================================================
+   SERVICES
+   ========================================================================== */
+
+.os-services {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+
+  margin-top: 1.25rem;
+
+  border-top: 1px solid var(--os-line);
+  border-left: 1px solid var(--os-line);
+}
+
+.os-services > *:last-child:nth-child(odd) {
+  grid-column: span 2;
+}
+
+.os-service {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+
+  padding: 1rem 1.1rem;
+
+  border-right: 1px solid var(--os-line);
+  border-bottom: 1px solid var(--os-line);
+
+  background-color: var(--os-bg);
+
+  line-height: 1.65;
+}
+
+.os-service-mark {
+  flex: 0 0 auto;
+
+  width: 8px;
+  height: 8px;
+  margin-top: 0.55rem;
+
+  background: var(--os-text);
+}
+
+/* ==========================================================================
+   NOTICE  (framed cell with a solid strip on the left)
+   ========================================================================== */
+
+.os-notice {
+  border-left: 4px solid var(--os-text);
+}
+
+/* ==========================================================================
+   FOOTER NAV
+   ========================================================================== */
+
+.os-strong {
+  margin: 0;
+
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+.os-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+
+  margin-top: 1rem;
+}
+
+.os-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  min-height: 48px;
+  padding: 0.75rem 1.25rem;
+
+  border: 1px solid var(--os-line);
+  border-radius: 0;
+
+  background-color: var(--os-bg);
+  color: var(--os-text);
+  font-size: 0.95rem;
+  font-weight: 600;
+
+  -webkit-tap-highlight-color: transparent;
+
+  transition: background-color 0.2s ease;
+}
+
+@media (hover: hover) {
+  .os-btn:hover {
+    background-image: linear-gradient(var(--os-hover), var(--os-hover));
+  }
+}
+
+.os-btn:active {
+  background-image: linear-gradient(var(--os-hover), var(--os-hover));
+}
+
+/* ==========================================================================
+   RESPONSIVE
+   ========================================================================== */
+
+@media (max-width: 1100px) {
+  .os-top {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 720px) {
+  .os-services {
+    grid-template-columns: 1fr;
+  }
+
+  .os-services > *:last-child:nth-child(odd) {
+    grid-column: auto;
+  }
+
+  /* registration table stacks: label above value */
+  .os-table,
+  .os-table tbody,
+  .os-table tr,
+  .os-table td {
+    display: block;
+    width: 100%;
+  }
+
+  .os-table tr {
+    border-bottom: 1px solid var(--os-line-soft);
+  }
+
+  .os-table tr:last-child {
+    border-bottom: 0;
+  }
+
+  .os-table td {
+    border: 0 !important;
+  }
+
+  .os-table td:first-child {
+    padding-bottom: 0.1rem;
+    width: 100%;
+  }
+
+  .os-table td:last-child {
+    padding-top: 0.1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .os-facts {
+    grid-template-columns: 1fr;
+  }
+
+  .os-row {
+    grid-template-columns: 1fr;
+    gap: 0.2rem;
+  }
+
+  .os-nav .os-btn {
+    width: 100%;
+  }
+}
+
+/* ==========================================================================
+   REDUCED MOTION
+   ========================================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  .os-cell,
+  .os-btn,
+  .os-arrow {
+    transition: none !important;
+  }
+}
+
+.os-page .os-prose,
+.os-page .os-prose p {
+  max-width: none;
+  width: 100%;
+}

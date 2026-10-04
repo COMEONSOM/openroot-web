@@ -443,7 +443,7 @@ export default function Navbar() {
         <div className="navbar-content">
           <div className="software-header">
             <h2 className="navbar-title">
-              Released Softwares
+              Quick Access
             </h2>
           </div>
 

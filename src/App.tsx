@@ -25,7 +25,7 @@ import ScrollToTop from "./context/ScrollToTop";
 
 import Header from "./components/Header";
 import Navbar from "./components/2Navbar";
-import AboutCompany from "./components/about/AboutCompany";
+import About from "./components/About";
 import Footer from "./components/Footer";
 
 import "./App.css";
@@ -244,7 +244,7 @@ function AppContent() {
                     ]
                   })}</script>
                 </Helmet>
-                <AboutCompany />
+                <About />
               </HomeShell>
             }
           />

@@ -1,0 +1,732 @@
+/* ============================================================
+   OPENROOT ABOUT
+   Same base design as the rest of the site: textured square-grid
+   background, square framed cells, plain-text labels, flat colour.
+   This page adds a multi-colour palette of flat blocks. No gradients,
+   shadows, glows, lifting or scaling.
+
+   Fully namespaced under .openroot-about. It does not touch
+   html, body, the root element or any global UI.
+   Strips and borders follow the theme text colour:
+   white in dark mode, black in light mode.
+   ============================================================ */
+
+@import url("https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&display=swap");
+
+/* ── ROOT + TOKENS ────────────────────────────────────────── */
+
+.openroot-about {
+  /* theme-following tokens, with safe fallbacks */
+  --oa-text: var(--color-text, var(--ot-text, #101319));
+  --oa-muted: var(--color-text-muted, var(--ot-text-muted, rgba(16, 19, 25, 0.68)));
+  --oa-bg: var(--ot-section-bg, var(--ot-bg, #f2f4f8));
+  --oa-line: var(--oa-text);
+  --oa-line-soft: var(--oa-text);
+
+  /* palette: flat mid-tone colours that hold up on black and on white */
+  --oa-blue: #4169e1;
+  --oa-mint: #35d3a1;
+  --oa-yellow: #ffc72c;
+  --oa-coral: #ff6b4a;
+  --oa-violet: #7a63f5;
+  --oa-ink: #101319;
+  --oa-white: #ffffff;
+
+  --oa-max: var(--ot-max-w, 1240px);
+  --oa-display: "Bricolage Grotesque", var(--ot-font, system-ui), sans-serif;
+
+  position: relative;
+  isolation: isolate;
+
+  width: 100%;
+  min-height: 100%;
+  margin: 0;
+  padding: 0;
+  overflow: clip;
+
+  /* bold border separating this page from whatever sits above it */
+  border-top: 2px solid var(--oa-text);
+
+  background-color: var(--oa-bg);
+  color: var(--oa-text);
+
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+}
+
+@supports (color: color-mix(in srgb, red, blue)) {
+  .openroot-about {
+    --oa-line: color-mix(in srgb, var(--oa-text) 55%, transparent);
+    --oa-line-soft: color-mix(in srgb, var(--oa-text) 22%, transparent);
+  }
+}
+
+/* texture: fine square grid across the whole page */
+.openroot-about::before {
+  content: "";
+
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+
+  pointer-events: none;
+
+  background-image:
+    linear-gradient(to bottom, var(--oa-text) 1px, transparent 1px),
+    linear-gradient(to right, var(--oa-text) 1px, transparent 1px);
+  background-size: 26px 26px;
+
+  opacity: 0.09;
+}
+
+.openroot-about *,
+.openroot-about *::before,
+.openroot-about *::after {
+  box-sizing: border-box;
+}
+
+.openroot-about a:not(.openroot-about__button) {
+  color: inherit;
+  text-decoration: none;
+}
+
+.openroot-about__button {
+  text-decoration: none;
+}
+
+.openroot-about a:focus-visible {
+  outline: 2px solid var(--oa-text);
+  outline-offset: 3px;
+}
+
+/* :where() keeps this reset at zero specificity, so class margins always win */
+.openroot-about :where(h1, h2, h3, h4, p, ul) {
+  margin: 0;
+  padding: 0;
+}
+
+.openroot-about ul {
+  list-style: none;
+}
+
+.openroot-about__container {
+  width: min(var(--oa-max), calc(100% - 2 * var(--ot-page-inline, 1.5rem)));
+  margin-inline: auto;
+}
+
+/* ── TYPE ─────────────────────────────────────────────────── */
+
+.openroot-about__label {
+  display: block;
+
+  color: var(--oa-muted);
+  font-size: 0.92rem;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+.openroot-about__label--on-color {
+  color: inherit;
+  opacity: 0.8;
+}
+
+.openroot-about__h1,
+.openroot-about__h2,
+.openroot-about__h3,
+.openroot-about__h4 {
+  font-family: var(--oa-display);
+  letter-spacing: -0.04em;
+}
+
+.openroot-about__h1 {
+  max-width: 11ch;
+  margin-top: 1rem;
+
+  font-size: clamp(2.8rem, 7.2vw, 6rem);
+  font-weight: 800;
+  line-height: 0.98;
+  letter-spacing: -0.05em;
+}
+
+.openroot-about__h1 span {
+  display: block;
+}
+
+.openroot-about__h2 {
+  font-size: clamp(1.9rem, 4.2vw, 3.4rem);
+  font-weight: 700;
+  line-height: 1.04;
+  text-wrap: balance;
+}
+
+.openroot-about__h3 {
+  font-size: clamp(1.6rem, 3.2vw, 2.7rem);
+  font-weight: 700;
+  line-height: 1.04;
+  text-wrap: balance;
+}
+
+.openroot-about__h4 {
+  font-size: 1.15rem;
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+}
+
+.openroot-about__lead {
+  max-width: 46rem;
+  margin-top: 2.5rem;
+
+  color: var(--oa-muted);
+  font-size: clamp(1rem, 1.6vw, 1.15rem);
+  line-height: 1.85;
+}
+
+.openroot-about__lead strong {
+  color: var(--oa-text);
+  font-weight: 600;
+}
+
+.openroot-about__text {
+  color: var(--oa-muted);
+  font-size: 1rem;
+  line-height: 1.8;
+}
+
+.openroot-about__body {
+  color: var(--oa-muted);
+  font-size: 0.94rem;
+  line-height: 1.7;
+}
+
+/* ── CHIPS (flat colour tags) ─────────────────────────────── */
+
+.openroot-about__chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+
+  margin-top: 1.5rem;
+}
+
+.openroot-about__chip {
+  display: inline-flex;
+  align-items: center;
+
+  min-height: 34px;
+  padding: 0.3rem 0.85rem;
+
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.openroot-about__chip--blue { background: var(--oa-blue); color: var(--oa-white); }
+.openroot-about__chip--mint { background: var(--oa-mint); color: var(--oa-ink); }
+.openroot-about__chip--yellow { background: var(--oa-yellow); color: var(--oa-ink); }
+.openroot-about__chip--coral { background: var(--oa-coral); color: var(--oa-ink); }
+.openroot-about__chip--violet { background: var(--oa-violet); color: var(--oa-white); }
+
+/* ── HERO ─────────────────────────────────────────────────── */
+
+.openroot-about__hero {
+  padding: clamp(3rem, 6vw, 5rem) 0;
+}
+
+.openroot-about__hero-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+  gap: clamp(2rem, 5vw, 4.5rem);
+  align-items: center;
+}
+
+.openroot-about__hero-side {
+  display: grid;
+  gap: 0.6rem;
+}
+
+.openroot-about__idea {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: 1rem;
+
+  min-height: 280px;
+  padding: clamp(1.5rem, 3.5vw, 2.5rem);
+
+  background: var(--oa-blue);
+  color: var(--oa-white);
+}
+
+.openroot-about__idea p {
+  max-width: 16ch;
+
+  font-family: var(--oa-display);
+  font-size: clamp(1.8rem, 3.4vw, 3rem);
+  font-weight: 700;
+  line-height: 1.02;
+  letter-spacing: -0.04em;
+}
+
+.openroot-about__steps {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.6rem;
+}
+
+.openroot-about__step {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 1.5rem;
+
+  min-height: 118px;
+  padding: 1rem;
+}
+
+.openroot-about__step strong {
+  font-family: var(--oa-display);
+  font-size: 1.3rem;
+  font-weight: 700;
+}
+
+.openroot-about__step span {
+  font-size: 0.85rem;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+.openroot-about__step--ink { background: var(--oa-ink); color: var(--oa-white); }
+.openroot-about__step--yellow { background: var(--oa-yellow); color: var(--oa-ink); }
+.openroot-about__step--mint { background: var(--oa-mint); color: var(--oa-ink); }
+
+/* ── SECTIONS ─────────────────────────────────────────────── */
+
+.openroot-about__section {
+  padding: clamp(3rem, 6vw, 5rem) 0;
+
+  border-top: 1px solid var(--oa-line-soft);
+
+  scroll-margin-top: 5rem;
+}
+
+/* heading on the left, supporting text fills the rest of the width */
+.openroot-about__head {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 1rem clamp(1.5rem, 4vw, 3rem);
+  align-items: end;
+
+  margin-bottom: clamp(1.75rem, 4vw, 3rem);
+}
+
+/* ── COLOUR BLOCKS ────────────────────────────────────────── */
+
+.openroot-about__feature,
+.openroot-about__lesson-lead,
+.openroot-about__motive-copy {
+  padding: clamp(1.6rem, 4vw, 3rem);
+}
+
+.openroot-about__feature p,
+.openroot-about__lesson-lead p,
+.openroot-about__motive-copy p {
+  font-size: 1rem;
+  line-height: 1.8;
+}
+
+.openroot-about__feature {
+  background: var(--oa-blue);
+  color: var(--oa-white);
+}
+
+.openroot-about__feature .openroot-about__h3 {
+  max-width: 16ch;
+  margin-top: 0.8rem;
+}
+
+.openroot-about__feature p {
+  max-width: 46rem;
+  margin-top: 1rem;
+
+  color: rgba(255, 255, 255, 0.9);
+}
+
+/* ── FRAMED CELLS ─────────────────────────────────────────── */
+
+.openroot-about__cells {
+  display: grid;
+
+  border-top: 1px solid var(--oa-line);
+  border-left: 1px solid var(--oa-line);
+}
+
+.openroot-about__cells--3 {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+
+  margin-top: 0.6rem;
+}
+
+.openroot-about__cell {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.75rem;
+
+  min-height: 220px;
+  padding: clamp(1.1rem, 2vw, 1.5rem);
+
+  border-right: 1px solid var(--oa-line);
+  border-bottom: 1px solid var(--oa-line);
+
+  /* solid surface so the texture never runs under the text */
+  background-color: var(--oa-bg);
+}
+
+.openroot-about__cell .openroot-about__h4 {
+  margin-top: 1.25rem;
+}
+
+/* small coloured number block */
+.openroot-about__marker {
+  display: inline-grid;
+  place-items: center;
+
+  width: 36px;
+  height: 36px;
+  flex: 0 0 auto;
+
+  font-family: var(--oa-display);
+  font-size: 0.85rem;
+  font-weight: 700;
+
+  color: var(--oa-ink);
+}
+
+.openroot-about__marker--blue { background: var(--oa-blue); color: var(--oa-white); }
+.openroot-about__marker--mint { background: var(--oa-mint); }
+.openroot-about__marker--yellow { background: var(--oa-yellow); }
+.openroot-about__marker--coral { background: var(--oa-coral); }
+.openroot-about__marker--violet { background: var(--oa-violet); color: var(--oa-white); }
+
+/* ── STRIPS (statement rows with a solid colour strip) ────── */
+
+.openroot-about__strip {
+  display: grid;
+  grid-template-columns: 200px minmax(0, 1fr);
+  align-items: stretch;
+
+  margin-top: 0.6rem;
+
+  border: 1px solid var(--oa-line);
+  border-left-width: 6px;
+
+  background-color: var(--oa-bg);
+}
+
+.openroot-about__strip--blue { border-left-color: var(--oa-blue); }
+.openroot-about__strip--mint { border-left-color: var(--oa-mint); }
+
+.openroot-about__strip .openroot-about__label,
+.openroot-about__strip p {
+  padding: 1.15rem 1.4rem;
+
+  font-size: 1.05rem;
+  line-height: 1.7;
+}
+
+.openroot-about__strip .openroot-about__label {
+  border-right: 1px solid var(--oa-line);
+
+  color: var(--oa-text);
+  font-weight: 700;
+}
+
+/* ── TRAINING ─────────────────────────────────────────────── */
+
+.openroot-about__education {
+  display: grid;
+  grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.05fr);
+  gap: 0.6rem;
+}
+
+.openroot-about__lesson-lead {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+
+  min-height: 420px;
+
+  background: var(--oa-violet);
+  color: var(--oa-white);
+}
+
+.openroot-about__lesson-lead .openroot-about__h3 {
+  max-width: 14ch;
+  margin-top: 0.8rem;
+}
+
+.openroot-about__lesson-lead p {
+  max-width: 38rem;
+  margin-top: 1rem;
+
+  color: rgba(255, 255, 255, 0.92);
+}
+
+.openroot-about__courses {
+  display: grid;
+  gap: 0.6rem;
+}
+
+.openroot-about__course {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 1.25rem;
+  align-items: start;
+
+  padding: clamp(1.4rem, 3vw, 2.2rem);
+}
+
+.openroot-about__course--blue { background: var(--oa-blue); color: var(--oa-white); }
+.openroot-about__course--yellow { background: var(--oa-yellow); color: var(--oa-ink); }
+
+.openroot-about__course-n {
+  font-family: var(--oa-display);
+  font-size: 0.95rem;
+  font-weight: 700;
+  opacity: 0.7;
+}
+
+.openroot-about__course .openroot-about__h3 {
+  font-size: clamp(1.5rem, 2.6vw, 2.3rem);
+}
+
+.openroot-about__course p {
+  max-width: 39rem;
+  margin-top: 0.7rem;
+
+  font-size: 0.95rem;
+  line-height: 1.75;
+  opacity: 0.92;
+}
+
+/* ── MOTIVE ───────────────────────────────────────────────── */
+
+.openroot-about__motive {
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+  gap: 0.6rem;
+  align-items: stretch;
+}
+
+.openroot-about__motive-copy {
+  background: var(--oa-coral);
+  color: var(--oa-ink);
+}
+
+.openroot-about__motive-copy .openroot-about__h3 {
+  max-width: 16ch;
+  margin-top: 0.8rem;
+}
+
+.openroot-about__motive-copy p {
+  max-width: 42rem;
+  margin-top: 1rem;
+}
+
+.openroot-about__cells--list {
+  grid-template-columns: 1fr;
+  align-content: stretch;
+  grid-auto-rows: 1fr;
+}
+
+.openroot-about__row {
+  display: grid;
+  grid-template-columns: 36px minmax(0, 1fr);
+  gap: 1rem;
+  align-items: center;
+
+  padding: 1rem 1.2rem;
+
+  border-right: 1px solid var(--oa-line);
+  border-bottom: 1px solid var(--oa-line);
+
+  background-color: var(--oa-bg);
+}
+
+.openroot-about__row strong {
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.openroot-about__closing {
+  display: grid;
+  grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+  gap: 1rem clamp(1.5rem, 4vw, 3rem);
+  align-items: start;
+
+  margin-top: clamp(2rem, 4vw, 3.5rem);
+}
+
+.openroot-about__closing p {
+  font-family: var(--oa-display);
+  font-size: clamp(1.3rem, 2.4vw, 2rem);
+  font-weight: 600;
+  line-height: 1.3;
+  letter-spacing: -0.03em;
+}
+
+.openroot-about__closing .openroot-about__closing-secondary {
+  color: var(--oa-muted);
+  font-family: inherit;
+  font-size: 1rem;
+  font-weight: 400;
+  letter-spacing: 0;
+  line-height: 1.8;
+}
+
+/* ── CTA ──────────────────────────────────────────────────── */
+
+.openroot-about__cta {
+  padding: clamp(3rem, 6vw, 5rem) 0 clamp(4rem, 8vw, 6rem);
+
+  border-top: 1px solid var(--oa-line-soft);
+}
+
+.openroot-about__cta-panel {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 1.5rem clamp(1.5rem, 4vw, 3rem);
+  align-items: end;
+
+  padding: clamp(1.6rem, 4.5vw, 3.5rem);
+
+  border: 1px solid var(--oa-line);
+  border-top: 2px solid var(--oa-text);
+
+  background-color: var(--oa-bg);
+}
+
+.openroot-about__cta-panel .openroot-about__h2 {
+  margin-top: 0.8rem;
+}
+
+.openroot-about__cta-panel .openroot-about__text {
+  max-width: 36rem;
+  margin-top: 1rem;
+}
+
+.openroot-about__cta-actions {
+  display: grid;
+  gap: 0.6rem;
+
+  min-width: 220px;
+}
+
+.openroot-about__button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  min-height: 52px;
+  padding: 0.8rem 1.4rem;
+
+  border: 1px solid transparent;
+  border-radius: 0;
+
+  font-size: 0.95rem;
+  font-weight: 700;
+  white-space: nowrap;
+
+  -webkit-tap-highlight-color: transparent;
+
+  transition: opacity 0.2s ease;
+}
+
+.openroot-about__button--blue {
+  background: var(--oa-blue);
+  color: var(--oa-white);
+}
+
+.openroot-about__button--line {
+  border-color: var(--oa-text);
+  background-color: var(--oa-bg);
+  color: var(--oa-text);
+}
+
+@media (hover: hover) {
+  .openroot-about__button:hover {
+    opacity: 0.88;
+  }
+}
+
+.openroot-about__button:active {
+  opacity: 0.8;
+}
+
+/* ── RESPONSIVE ───────────────────────────────────────────── */
+
+@media (max-width: 980px) {
+  .openroot-about__hero-grid,
+  .openroot-about__education,
+  .openroot-about__motive,
+  .openroot-about__cta-panel,
+  .openroot-about__head,
+  .openroot-about__closing {
+    grid-template-columns: 1fr;
+  }
+
+  .openroot-about__lesson-lead {
+    min-height: 320px;
+  }
+
+  .openroot-about__cells--3 {
+    grid-template-columns: 1fr;
+  }
+
+  .openroot-about__cell {
+    min-height: 0;
+  }
+
+  .openroot-about__cta-actions {
+    max-width: 340px;
+  }
+}
+
+@media (max-width: 640px) {
+  .openroot-about__steps {
+    grid-template-columns: 1fr;
+  }
+
+  .openroot-about__step {
+    min-height: 0;
+    flex-direction: row;
+    align-items: center;
+  }
+
+  .openroot-about__strip {
+    grid-template-columns: 1fr;
+  }
+
+  .openroot-about__strip .openroot-about__label {
+    border-right: 0;
+    border-bottom: 1px solid var(--oa-line);
+  }
+
+  .openroot-about__course {
+    grid-template-columns: 1fr;
+    gap: 0.6rem;
+  }
+
+  .openroot-about__cta-actions {
+    max-width: none;
+    width: 100%;
+  }
+}
+
+/* ── REDUCED MOTION ───────────────────────────────────────── */
+
+@media (prefers-reduced-motion: reduce) {
+  .openroot-about__button {
+    transition: none !important;
+  }
+}

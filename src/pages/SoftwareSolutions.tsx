@@ -1,395 +1,501 @@
-import React, { useEffect, useRef } from "react";
+import React, { Suspense, lazy, useEffect, useState } from "react";
 import "../components/styles/SoftwareSolutions.css";
 
-// ─── ICON HELPERS ────────────────────────────────────────────────────────────
-const Icon = ({ d }: { d: string }) => (
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
-    strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"
-    className="ss-icon" aria-hidden="true">
-    <path d={d} />
-  </svg>
-);
+const Lottie = lazy(() => import("lottie-react"));
 
-// ─── DATA ─────────────────────────────────────────────────────────────────────
+// ─── Contact ──────────────────────────────────────────────────────────────────
+const WHATSAPP_URL =
+  "https://wa.me/917866049865?text=Hi%20There!%20I%20want%20to%20discuss%20a%20project.";
+
+// ─── Data ─────────────────────────────────────────────────────────────────────
+const FACTS = [
+  { label: "Pricing", value: "Fixed quote before work starts" },
+  { label: "Support", value: "Direct, on WhatsApp, call or email" },
+  { label: "After launch", value: "Updates and maintenance included in year one" },
+];
+
 const PAIN_POINTS = [
   {
-    icon: "M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z",
-    title: "You searched online, got overwhelmed",
-    body: "Hundreds of agencies, zero clarity on pricing, zero idea who to trust. Most quote low — then hit you with a ₹30,000 surprise bill six months later.",
+    title: "You searched online and got overwhelmed",
+    body: "There are hundreds of agencies and very little clarity on pricing or who to trust. Many quote low, then add charges months later.",
   },
   {
-    icon: "M12 9v2m0 4h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z",
-    title: "You got burned before",
-    body: "A freelancer delivered a broken website. Or it looked great day one, then crashed. Nobody picked up the phone. You're still paying for a site that doesn't work.",
+    title: "You were burned before",
+    body: "A freelancer delivered a site that broke, or it worked for a week and then crashed, and nobody answered the phone. You are still paying for something that does not work.",
   },
   {
-    icon: "M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4",
-    title: "You think tech is not for you",
-    body: "You run a great offline business. Manufacturing, retail, services — you're good at what you do. But every time you try to go online, it feels like a different language.",
+    title: "Technology feels like a different language",
+    body: "You run a good offline business in manufacturing, retail or services. Going online should not mean learning a new vocabulary.",
   },
 ];
 
 const SERVICES = [
   {
-    icon: "M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6",
     label: "Websites",
-    tag: "Most Popular",
-    desc: "Clean, fast, mobile-first websites built to actually load, rank, and convert — not just look pretty in a screenshot.",
-    details: ["Landing pages", "Business portfolios", "Product catalogues", "Blog & content sites"],
+    desc: "Clean, fast, mobile-first websites that load quickly, rank in search and turn visitors into enquiries.",
+    details: ["Landing pages", "Business portfolios", "Product catalogues", "Blog and content sites"],
   },
   {
-    icon: "M9 3H5a2 2 0 00-2 2v4m6-6h10a2 2 0 012 2v4M9 3v18m0 0h10a2 2 0 002-2V9M9 21H5a2 2 0 01-2-2V9m0 0h18",
-    label: "Web Applications",
-    tag: "High Value",
-    desc: "Dynamic systems that do real work — booking, inventory, dashboards, portals. Not just pages, but tools your business runs on.",
-    details: ["Customer portals", "Booking & scheduling", "Inventory dashboards", "Admin panels"],
+    label: "Web applications",
+    desc: "Systems that do real work: booking, inventory, dashboards and portals. Tools your business can run on.",
+    details: ["Customer portals", "Booking and scheduling", "Inventory dashboards", "Admin panels"],
   },
   {
-    icon: "M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z",
-    label: "Desktop Applications",
-    tag: "Windows",
-    desc: "Offline-first tools for businesses that need software without depending on internet. Billing, POS, data management — all local and fast.",
+    label: "Desktop applications",
+    desc: "Offline-first software for businesses that cannot depend on the internet. Everything runs locally and fast.",
     details: ["Billing software", "POS systems", "Data management tools", "Offline-first tools"],
   },
   {
-    icon: "M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15",
-    label: "Automation Tools",
-    tag: "Save Hours",
-    desc: "Stop doing manually what a script can do in seconds. From data exports to report generation to notification pipelines — we automate the boring.",
-    details: ["Report generation", "Email/WhatsApp alerts", "Data sync & exports", "Scheduled tasks"],
+    label: "Automation tools",
+    desc: "Replace repetitive manual work with scripts that finish in seconds instead of hours.",
+    details: ["Report generation", "Email and WhatsApp alerts", "Data sync and exports", "Scheduled tasks"],
   },
   {
-    icon: "M11 4a2 2 0 114 0v1a1 1 0 001 1h3a1 1 0 011 1v3a1 1 0 01-1 1h-1a2 2 0 100 4h1a1 1 0 011 1v3a1 1 0 01-1 1h-3a1 1 0 01-1-1v-1a2 2 0 10-4 0v1a1 1 0 01-1 1H7a1 1 0 01-1-1v-3a1 1 0 00-1-1H4a2 2 0 110-4h1a1 1 0 001-1V7a1 1 0 011-1h3a1 1 0 001-1V4z",
-    label: "Custom Solutions",
-    tag: "Enterprise",
-    desc: "Complex problems that don't fit a template. Multi-role platforms, integrations, APIs, payment gateways — we've built them all.",
+    label: "Custom solutions",
+    desc: "For problems that do not fit a template: multi-role platforms, integrations, APIs and payment gateways.",
     details: ["Multi-role platforms", "API integrations", "Payment gateways", "Third-party services"],
   },
 ];
 
-const PROCESS_STEPS = [
-  { n: "01", title: "Book a Free Meet", body: "15 minutes on Google Meet. No sales pitch, no pressure. We just listen to what you need." },
-  { n: "02", title: "We Understand Your Business", body: "We ask the right questions — your goals, your customers, your existing tools — so nothing gets missed." },
-  { n: "03", title: "We Give You a Clear Plan", body: "A written scope, a fixed price, a realistic timeline. No surprises. You approve before anything is built." },
-  { n: "04", title: "We Build & You Review", body: "You see progress in real time. Every milestone gets your sign-off. We don't disappear and return three months later." },
-  { n: "05", title: "Launch & Handoff", body: "We launch, we train you to manage it, and we don't vanish. You get our number. You can actually reach us." },
-];
-
 const WHY_US = [
-  { icon: "M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z", title: "No Lock-In Traps", body: "Your domain, your hosting, your code — it belongs to you. We don't hold your business hostage." },
-  { icon: "M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z", title: "Honest Pricing", body: "We tell you the full cost upfront. Maintenance is transparent. No ₹500/month surprise that becomes ₹5,000." },
-  { icon: "M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z", title: "We Actually Pick Up", body: "Real humans, real support. WhatsApp, call, email — we respond. Not a ticket system. Not 72-hour SLA." },
-  { icon: "M13 10V3L4 14h7v7l9-11h-7z", title: "Built for Speed", body: "Optimised load times, mobile-first, SEO-ready from day one. A slow site is a dead site — we know that." },
-  { icon: "M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 4a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4", title: "Maintained Long-Term", body: "We handle updates, security patches, and tech changes so your site works in 2026 just as well as it did on launch day." },
-  { icon: "M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z", title: "We Grow With You", body: "Started with a simple site? As your business scales, we scale with you. No need to start over with a new agency." },
+  {
+    title: "You own everything",
+    body: "Your domain, your hosting and your code belong to you. Nothing is held back if you decide to move on.",
+  },
+  {
+    title: "Pricing you can plan around",
+    body: "The full cost is stated upfront and maintenance is itemised. No small monthly charge that quietly grows.",
+  },
+  {
+    title: "Direct support",
+    body: "You reach the people who built your product on WhatsApp, call or email. There is no ticket queue.",
+  },
+  {
+    title: "Fast by default",
+    body: "Optimised load times, mobile-first layouts and SEO groundwork from the first release.",
+  },
+  {
+    title: "Maintained long term",
+    body: "We handle updates, security patches and technology changes, so the product keeps working as it did on launch day.",
+  },
+  {
+    title: "Room to grow",
+    body: "If a simple site grows into something bigger, we extend it. You do not have to start again with a new agency.",
+  },
 ];
 
-// ─── COMPONENT ────────────────────────────────────────────────────────────────
-const SoftwareSolutions: React.FC = () => {
-  const observerRef = useRef<IntersectionObserver | null>(null);
+const BUILD_PRICES: Array<[string, string]> = [
+  ["Simple website", "₹2,999 – ₹5,000"],
+  ["Business website", "₹5,000 – ₹8,000"],
+  ["Web application", "₹8,000 – ₹15,000+"],
+  ["Desktop app or automation", "Quoted by scope"],
+];
+
+const MAINTENANCE_ITEMS: Array<[string, string]> = [
+  ["Security and software updates", "Included"],
+  ["Minor content changes", "Included"],
+  ["Uptime monitoring", "Included"],
+  ["Complex feature additions", "Quoted separately"],
+];
+
+const COMPARISON: Array<[string, string, string]> = [
+  ["Fixed pricing upfront", "Not usually", "Yes"],
+  ["You own your files and domain", "Not usually", "Yes"],
+  ["Reachable after launch", "Not usually", "Yes"],
+  ["Reasonable maintenance cost", "Not usually", "Yes"],
+  ["Long-term working relationship", "Not usually", "Yes"],
+];
+
+const PROCESS_STEPS = [
+  {
+    n: "01",
+    title: "Book a free call",
+    body: "A 15-minute Google Meet. We listen to what you need, with no sales pitch.",
+  },
+  {
+    n: "02",
+    title: "We learn your business",
+    body: "We ask about your goals, your customers and the tools you already use, so nothing is missed.",
+  },
+  {
+    n: "03",
+    title: "You get a clear plan",
+    body: "A written scope, a fixed price and a realistic timeline. You approve it before anything is built.",
+  },
+  {
+    n: "04",
+    title: "We build, you review",
+    body: "You see progress as it happens and approve each milestone. We stay in touch throughout.",
+  },
+  {
+    n: "05",
+    title: "Launch and handover",
+    body: "We launch, show you how to manage it, and stay reachable afterwards. You get a direct number to call.",
+  },
+];
+
+// ─── Helpers ──────────────────────────────────────────────────────────────────
+function usePrefersReducedMotion(): boolean {
+  const [reduced, setReduced] = useState<boolean>(
+    () =>
+      typeof window !== "undefined" &&
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches
+  );
 
   useEffect(() => {
-    observerRef.current = new IntersectionObserver(
-      (entries) => entries.forEach(e => {
-        if (e.isIntersecting) {
-          e.target.classList.add("ss-visible");
-          observerRef.current?.unobserve(e.target);
-        }
-      }),
-      { threshold: 0.12 }
-    );
-
-    document.querySelectorAll(".ss-reveal").forEach(el =>
-      observerRef.current?.observe(el)
-    );
-
-    return () => observerRef.current?.disconnect();
+    const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const onChange = () => setReduced(mq.matches);
+    mq.addEventListener("change", onChange);
+    return () => mq.removeEventListener("change", onChange);
   }, []);
 
-  const handleWhatsApp = () => {
-    window.open("https://wa.me/917866049865?text=Hi%20There!%20I%20want%20to%20discuss%20a%20project.", "_blank", "noopener,noreferrer");
-  };
- 
+  return reduced;
+}
+
+const WhatsAppIcon = () => (
+  <svg viewBox="0 0 24 24" fill="currentColor" className="ss-wa-icon" aria-hidden="true">
+    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z" />
+    <path d="M12 0C5.373 0 0 5.373 0 12c0 2.127.558 4.121 1.532 5.849L.057 23.886a.5.5 0 00.611.61l6.037-1.476A11.95 11.95 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.818 9.818 0 01-5.025-1.383l-.36-.215-3.733.912.946-3.646-.235-.374A9.818 9.818 0 1112 21.818z" />
+  </svg>
+);
+
+/** Loads a Lottie JSON file from /public and reports loading failures. */
+function useLottieData(url: string): { data: object | null; failed: boolean } {
+  const [data, setData] = useState<object | null>(null);
+  const [failed, setFailed] = useState(false);
+
+  useEffect(() => {
+    const controller = new AbortController();
+
+    fetch(url, { signal: controller.signal })
+      .then((res) => {
+        if (!res.ok) throw new Error(`Animation not found: ${url}`);
+        return res.json();
+      })
+      .then((json: object) => setData(json))
+      .catch((err: unknown) => {
+        if ((err as { name?: string })?.name !== "AbortError") {
+          setFailed(true);
+        }
+      });
+
+    return () => controller.abort();
+  }, [url]);
+
+  return { data, failed };
+}
+
+/** Framed animation cell. Same size and zoom wherever it is used. */
+function LottieFrame({
+  data,
+  reduced,
+}: {
+  data: object | null;
+  reduced: boolean;
+}) {
+  // Use the animation's own width / height so small screens never crop it.
+  const size = data as { w?: number; h?: number } | null;
+  const ratio = size?.w && size?.h ? `${size.w} / ${size.h}` : "1 / 1";
+
+  return (
+    <div
+      className="ss-visual"
+      style={{ "--ss-ratio": ratio } as React.CSSProperties}
+      aria-hidden="true"
+    >
+      {data ? (
+        <Suspense fallback={null}>
+          <Lottie
+            animationData={data}
+            loop={!reduced}
+            autoplay={!reduced}
+            className="ss-lottie"
+            rendererSettings={{ preserveAspectRatio: "xMidYMid slice" }}
+          />
+        </Suspense>
+      ) : null}
+    </div>
+  );
+}
+
+function SectionHead({
+  id,
+  title,
+  text,
+}: {
+  id: string;
+  title: string;
+  text?: string;
+}) {
+  return (
+    <div className="ss-head">
+      <h2 id={id} className="ss-h2">
+        {title}
+      </h2>
+      {text && <p className="ss-text">{text}</p>}
+    </div>
+  );
+}
+
+// ─── Component ────────────────────────────────────────────────────────────────
+const SoftwareSolutions: React.FC = () => {
+  const reduced = usePrefersReducedMotion();
+
+  const hero = useLottieData("/lotties/software.json");
+  const mission = useLottieData("/lotties/mission.json");
+
   return (
     <main className="ss-page">
+      <div className="ss-shell">
+        {/* ── HERO ───────────────────────────────────────────────────────── */}
+        <section className="ss-hero" aria-labelledby="ss-title">
+          <div className={`ss-hero-grid ${hero.failed ? "ss-hero-grid--single" : ""}`}>
+            <div className="ss-hero-copy">
+              <span className="ss-label">Software solutions by Openroot Systems</span>
 
-      {/* ── HERO ──────────────────────────────────────────────────────────── */}
-      <section className="ss-hero">
-        <div className="ss-hero-glow" aria-hidden="true" />
-        <div className="ss-hero-grid" aria-hidden="true" />
-        <div className="ss-container">
-          <h1 className="ss-hero-title ss-reveal">
-            Your Business Deserves<br />
-            <span className="ss-gradient-text">More Than a Broken Website</span>
-          </h1>
-          <p className="ss-hero-sub ss-reveal">
-            We build websites, web apps, desktop tools, and automation systems
-            for small businesses and startups — with zero technical jargon,
-            fixed pricing, and support that actually responds.
-          </p>
-          <div className="ss-hero-ctas ss-reveal">
-            <button className="ss-btn-primary" onClick={handleWhatsApp}>
-              <svg viewBox="0 0 24 24" fill="currentColor" className="ss-wa-icon" aria-hidden="true">
-                <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z" />
-                <path d="M12 0C5.373 0 0 5.373 0 12c0 2.127.558 4.121 1.532 5.849L.057 23.886a.5.5 0 00.611.61l6.037-1.476A11.95 11.95 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.818 9.818 0 01-5.025-1.383l-.36-.215-3.733.912.946-3.646-.235-.374A9.818 9.818 0 1112 21.818z" />
-              </svg>
-              Chat on WhatsApp
-            </button>
-            <a href="#process" className="ss-btn-ghost">See How It Works ↓</a>
+              <h1 id="ss-title" className="ss-h1">
+                Your business deserves more than a broken website.
+              </h1>
+
+              <p className="ss-lead">
+                We build websites, web apps, desktop tools and automation for
+                small businesses and startups. Plain language, fixed pricing,
+                and support that answers.
+              </p>
+
+              <div className="ss-actions">
+                <a
+                  className="ss-btn ss-btn--primary"
+                  href={WHATSAPP_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <WhatsAppIcon />
+                  Chat on WhatsApp
+                </a>
+                <a className="ss-btn ss-btn--ghost" href="#process">
+                  See how it works
+                </a>
+              </div>
+            </div>
+
+            {!hero.failed && <LottieFrame data={hero.data} reduced={reduced} />}
           </div>
 
-          {/* TRUST BAR */}
-          <div className="ss-trust-bar ss-reveal">
-            {["Fixed Pricing", "Real Support", "Long-Term Maintenance"].map(t => (
-              <span key={t} className="ss-trust-chip">
-                <span className="ss-trust-dot" aria-hidden="true" />
-                {t}
-              </span>
+          <div className="ss-facts">
+            {FACTS.map((fact) => (
+              <div key={fact.label} className="ss-fact">
+                <span className="ss-label">{fact.label}</span>
+                <span className="ss-fact-value">{fact.value}</span>
+              </div>
             ))}
           </div>
-        </div>
-      </section>
+        </section>
 
-      {/* ── PAIN POINTS ───────────────────────────────────────────────────── */}
-      <section className="ss-section ss-pain">
-        <div className="ss-container">
-          <div className="ss-section-header ss-reveal">
-            <h2 className="ss-section-title">
-              We Know Exactly<br />
-              <span className="ss-gradient-text">What You've Been Through</span>
-            </h2>
-            <p className="ss-section-sub">
-              Most of our clients came to us after a bad experience. We're not judging — we're here to fix it.
-            </p>
-          </div>
-          <div className="ss-pain-grid">
-            {PAIN_POINTS.map((p, i) => (
-              <article key={i} className="ss-pain-card ss-reveal" style={{ "--delay": `${i * 0.1}s` } as React.CSSProperties}>
-                <div className="ss-pain-icon-wrap">
-                  <Icon d={p.icon} />
-                </div>
-                <h3 className="ss-pain-title">{p.title}</h3>
-                <p className="ss-pain-body">{p.body}</p>
+        {/* ── PROBLEMS ───────────────────────────────────────────────────── */}
+        <section className="ss-section" aria-labelledby="ss-pain">
+          <SectionHead
+            id="ss-pain"
+            title="What usually goes wrong"
+            text="Most of our clients came to us after a bad experience with an earlier vendor. These are the three we hear most."
+          />
+
+          <div className="ss-grid ss-grid--3">
+            {PAIN_POINTS.map((p) => (
+              <article key={p.title} className="ss-cell">
+                <h3 className="ss-h3">{p.title}</h3>
+                <p className="ss-body">{p.body}</p>
               </article>
             ))}
           </div>
-        </div>
-      </section>
+        </section>
 
-      {/* ── WHAT WE BUILD ─────────────────────────────────────────────────── */}
-      <section className="ss-section ss-services">
-        <div className="ss-container">
-          <div className="ss-section-header ss-reveal">
-            <h2 className="ss-section-title">
-              Whatever You Need,<br />
-              <span className="ss-gradient-text">We Build It Right</span>
-            </h2>
-            <p className="ss-section-sub">
-              From a simple business card site to a full-scale web application —
-              we've done it all, and we know how to scope it so you don't overpay.
-            </p>
-          </div>
-          <div className="ss-services-grid">
-            {SERVICES.map((s, i) => (
-              <article key={i} className="ss-service-card ss-reveal" style={{ "--delay": `${i * 0.08}s` } as React.CSSProperties}>
-                <div className="ss-service-top">
-                  <div className="ss-service-icon-wrap">
-                    <Icon d={s.icon} />
-                  </div>
-                </div>
-                <h3 className="ss-service-title">{s.label}</h3>
-                <p className="ss-service-desc">{s.desc}</p>
-                <ul className="ss-service-list">
-                  {s.details.map((d, j) => (
-                    <li key={j}>{d}</li>
+        {/* ── SERVICES ───────────────────────────────────────────────────── */}
+        <section className="ss-section" aria-labelledby="ss-services">
+          <SectionHead
+            id="ss-services"
+            title="What we build"
+            text="From a simple business site to a full web application. We scope each project so you pay for what you need."
+          />
+
+          <div className="ss-grid ss-grid--services">
+            {SERVICES.map((s) => (
+              <article key={s.label} className="ss-cell ss-cell--service">
+                <h3 className="ss-h3">{s.label}</h3>
+                <p className="ss-body">{s.desc}</p>
+                <ul className="ss-lines">
+                  {s.details.map((d) => (
+                    <li key={d}>{d}</li>
                   ))}
                 </ul>
               </article>
             ))}
           </div>
-        </div>
-      </section>
+        </section>
 
-      {/* ── WHY OPENROOT ──────────────────────────────────────────────────── */}
-      <section className="ss-section ss-why">
-        <div className="ss-container">
-          <div className="ss-section-header ss-reveal">
-            <h2 className="ss-section-title">
-              We Don't Just Build.<br />
-              <span className="ss-gradient-text">We Take Responsibility.</span>
-            </h2>
-            <p className="ss-section-sub">
-              Anyone can build a website. Very few will stand behind it a year later.
-              Here's what actually makes us different.
-            </p>
-          </div>
-          <div className="ss-why-grid">
-            {WHY_US.map((w, i) => (
-              <article key={i} className="ss-why-card ss-reveal" style={{ "--delay": `${i * 0.07}s` } as React.CSSProperties}>
-                <div className="ss-why-icon-wrap">
-                  <Icon d={w.icon} />
-                </div>
-                <h3 className="ss-why-title">{w.title}</h3>
-                <p className="ss-why-body">{w.body}</p>
+        {/* ── WHY OPENROOT ───────────────────────────────────────────────── */}
+        <section className="ss-section" aria-labelledby="ss-why">
+          <SectionHead
+            id="ss-why"
+            title="How we work"
+            text="Anyone can build a website. What matters is whether it still works, and whether someone answers, a year later."
+          />
+
+          <div className="ss-grid ss-grid--3">
+            {WHY_US.map((w) => (
+              <article key={w.title} className="ss-cell">
+                <h3 className="ss-h3">{w.title}</h3>
+                <p className="ss-body">{w.body}</p>
               </article>
             ))}
           </div>
-        </div>
-      </section>
+        </section>
 
-      {/* ── PRICING ───────────────────────────────────────────────────────── */}
-      <section className="ss-section ss-pricing">
-        <div className="ss-container">
-          <div className="ss-section-header ss-reveal">
-            <h2 className="ss-section-title">
-              No Hidden Fees.<br />
-              <span className="ss-gradient-text">No Nasty Surprises.</span>
-            </h2>
-            <p className="ss-section-sub">
-              We publish what others hide. Before you speak to us, here's exactly what to expect.
-            </p>
+        {/* ── PRICING ────────────────────────────────────────────────────── */}
+        <section className="ss-section" aria-labelledby="ss-pricing">
+          <SectionHead
+            id="ss-pricing"
+            title="Pricing"
+            text="These are the ranges we work in. Every project gets a fixed written quote before any work begins."
+          />
+
+          <div className="ss-grid ss-grid--2">
+            <article className="ss-cell ss-cell--price">
+              <span className="ss-label">One-time build cost</span>
+              <p className="ss-price">₹2,999 – ₹10,000</p>
+              <p className="ss-body">
+                Scope-based and fixed. You approve the number before we start.
+              </p>
+              <ul className="ss-rows">
+                {BUILD_PRICES.map(([name, value]) => (
+                  <li key={name}>
+                    <span>{name}</span>
+                    <strong>{value}</strong>
+                  </li>
+                ))}
+              </ul>
+            </article>
+
+            <article className="ss-cell ss-cell--price">
+              <span className="ss-label">Annual maintenance</span>
+              <p className="ss-price">
+                ₹3,000 – ₹6,000<span className="ss-price-unit"> / year</span>
+              </p>
+              <p className="ss-body">
+                Starts after the first free year. Covers security updates,
+                server health, minor content changes and uptime monitoring.
+              </p>
+              <ul className="ss-rows">
+                {MAINTENANCE_ITEMS.map(([name, value]) => (
+                  <li key={name}>
+                    <span>{name}</span>
+                    <strong>{value}</strong>
+                  </li>
+                ))}
+              </ul>
+            </article>
           </div>
 
-          <div className="ss-pricing-cards ss-reveal">
-            {/* BUILD COST */}
-            <div className="ss-pricing-card ss-pricing-card--build">
-              <div className="ss-pricing-card-label">One-time Build Cost</div>
-              <div className="ss-pricing-range">₹2,999 – ₹10,000</div>
-              <p className="ss-pricing-note">
-                Scope-based, fixed quote. You approve the number before we write a single line of code.
-              </p>
-              <ul className="ss-pricing-list">
-                <li>Simple website: <strong>₹2,999 – ₹5,000</strong></li>
-                <li>Business website: <strong>₹5,000 – ₹8,000</strong></li>
-                <li>Web application: <strong>₹8,000 – ₹15,000+</strong></li>
-                <li>Desktop app / Automation: <strong>Quoted by scope</strong></li>
-              </ul>
-            </div>
-
-            {/* MAINTENANCE */}
-            <div className="ss-pricing-card ss-pricing-card--maint">
-              <div className="ss-pricing-card-label">Annual Maintenance</div>
-              <div className="ss-pricing-range">₹3,000 – ₹6,000<span className="ss-pricing-per">/yr</span></div>
-              <p className="ss-pricing-note">
-                After your first free year. Covers security updates, server health, minor content changes, and uptime monitoring.
-              </p>
-              <ul className="ss-pricing-list">
-                <li>Security & software updates <strong>Included</strong></li>
-                <li>Minor content changes <strong>Included</strong></li>
-                <li>Uptime monitoring <strong>Included</strong></li>
-                <li>Complex feature additions <strong>Quoted separately</strong></li>
-              </ul>
-            </div>
-          </div>
-
-          {/* COMPARISON */}
-          <div className="ss-compare ss-reveal">
-            <h3 className="ss-compare-title">How We Compare</h3>
-            <div className="ss-compare-table-wrap">
-              <table className="ss-compare-table">
+          <div className="ss-compare">
+            <h3 className="ss-h3">How we compare</h3>
+            <div className="ss-table-wrap">
+              <table className="ss-table">
                 <thead>
                   <tr>
-                    <th>What You Expect</th>
-                    <th className="ss-col-them">Most Agencies</th>
-                    <th className="ss-col-us">We ✓</th>
+                    <th scope="col">What you would expect</th>
+                    <th scope="col">Typical agency</th>
+                    <th scope="col">Openroot</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {[
-                    ["Upfront fixed pricing",<span style={{ color: "#ef4444" }}>✘</span>, <span style={{ color: "#22c55e" }}>✓</span>],
-                    ["Own your files & domain", <span style={{ color: "#ef4444" }}>✘</span>, <span style={{ color: "#22c55e" }}>✓</span>],
-                    ["Reachable after launch", <span style={{ color: "#ef4444" }}>✘</span>, <span style={{ color: "#22c55e" }}>✓</span>],
-                    ["Reasonable maintenance", <span style={{ color: "#ef4444" }}>✘</span>, <span style={{ color: "#22c55e" }}>✓</span>],
-                    ["Long-term relationship", <span style={{ color: "#ef4444" }}>✘</span>, <span style={{ color: "#22c55e" }}>✓</span>],
-                  ].map(([feat, them, us], i) => (
-                    <tr key={i}>
-                      <td>{feat}</td>
-                      <td className="ss-col-them">{them}</td>
-                      <td className="ss-col-us">{us}</td>
+                  {COMPARISON.map(([feature, them, us]) => (
+                    <tr key={feature}>
+                      <td>{feature}</td>
+                      <td className="ss-table-muted">{them}</td>
+                      <td className="ss-table-strong">{us}</td>
                     </tr>
                   ))}
                 </tbody>
               </table>
             </div>
           </div>
-        </div>
-      </section>
+        </section>
 
-      {/* ── PROCESS ───────────────────────────────────────────────────────── */}
-      <section className="ss-section ss-process" id="process">
-        <div className="ss-container">
-          <div className="ss-section-header ss-reveal">
-            <h2 className="ss-section-title">
-              From Idea to Launch,<br />
-              <span className="ss-gradient-text">No Technical Stress</span>
-            </h2>
-            <p className="ss-section-sub">
-              You don't need to know anything about technology. We translate your
-              business goals into software — that's our job.
-            </p>
+        {/* ── PROCESS ────────────────────────────────────────────────────── */}
+        <section className="ss-section" id="process" aria-labelledby="ss-process">
+          <SectionHead
+            id="ss-process"
+            title="From first call to launch"
+            text="You do not need to know anything about technology. Turning your business goals into software is our job."
+          />
+
+          <div className={`ss-process-grid ${mission.failed ? "ss-process-grid--single" : ""}`}>
+            <ol className="ss-steps">
+              {PROCESS_STEPS.map((s) => (
+                <li key={s.n} className="ss-step">
+                  <span className="ss-step-n">{s.n}</span>
+                  <div className="ss-step-body">
+                    <h3 className="ss-h3">{s.title}</h3>
+                    <p className="ss-body">{s.body}</p>
+                  </div>
+                </li>
+              ))}
+            </ol>
+
+            {!mission.failed && (
+              <div className="ss-process-visual">
+                <LottieFrame data={mission.data} reduced={reduced} />
+              </div>
+            )}
           </div>
-          <ol className="ss-process-list">
-            {PROCESS_STEPS.map((s, i) => (
-              <li key={i} className="ss-process-step ss-reveal" style={{ "--delay": `${i * 0.1}s` } as React.CSSProperties}>
-                <div className="ss-process-number">{s.n}</div>
-                <div className="ss-process-content">
-                  <h3 className="ss-process-title">{s.title}</h3>
-                  <p className="ss-process-body">{s.body}</p>
-                </div>
-              </li>
-            ))}
-          </ol>
-        </div>
-      </section>
+        </section>
 
-      {/* ── PHILOSOPHY ────────────────────────────────────────────────────── */}
-      <section className="ss-section ss-philosophy">
-        <div className="ss-container">
-          <div className="ss-philosophy-inner ss-reveal">
-            <div className="ss-philosophy-quote-mark" aria-hidden="true">"</div>
-            <blockquote className="ss-philosophy-quote">
+        {/* ── APPROACH ───────────────────────────────────────────────────── */}
+        <section className="ss-section" aria-labelledby="ss-approach">
+          <div className="ss-split">
+            <h2 id="ss-approach" className="ss-h2">
               We grow when you grow.
-            </blockquote>
-            <p className="ss-philosophy-body">
-              We don't optimise for one-time payments. We optimise for clients who
-              stay with us because we keep earning their trust, with honest work,
-              fair pricing, and software that actually helps their business.
-              <br /><br />
-              Every business we work with, we treat as a longterm partnership.
-              Your win is our case study. Your referral is our best marketing.
-              That's the only model we believe in.
-            </p>
-            <div className="ss-philosophy-sig">— Openroot Foundation</div>
-          </div>
-        </div>
-      </section>
-
-      {/* ── CTA ───────────────────────────────────────────────────────────── */}
-      <section className="ss-section ss-cta">
-        <div className="ss-cta-glow" aria-hidden="true" />
-        <div className="ss-container">
-          <div className="ss-cta-inner ss-reveal">
-            <h2 className="ss-cta-title">
-              Your First Step Costs<br />
-              <span className="ss-gradient-text">Exactly ₹0</span>
             </h2>
-            <p className="ss-cta-sub">
-              Book a free 15 minute Google Meet. No obligation, no pressure.
-              Walk away with clarity on what you need, even if you don't hire us.
-            </p>
-            <div className="ss-cta-actions">
-              <button className="ss-btn-primary ss-btn-xl" onClick={handleWhatsApp}>
-                <svg viewBox="0 0 24 24" fill="currentColor" className="ss-wa-icon" aria-hidden="true">
-                  <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z" />
-                  <path d="M12 0C5.373 0 0 5.373 0 12c0 2.127.558 4.121 1.532 5.849L.057 23.886a.5.5 0 00.611.61l6.037-1.476A11.95 11.95 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.818 9.818 0 01-5.025-1.383l-.36-.215-3.733.912.946-3.646-.235-.374A9.818 9.818 0 1112 21.818z" />
-                </svg>
-                Start on WhatsApp
-              </button>
+
+            <div className="ss-prose">
+              <p>
+                We do not aim for one-time payments. We aim for clients who stay
+                because the work is honest, the pricing is fair and the software
+                actually helps their business.
+              </p>
+              <p>
+                Every client is a long-term relationship. Your results are our
+                case study, and your referral is our best marketing.
+              </p>
             </div>
           </div>
-        </div>
-      </section>
+        </section>
 
+        {/* ── CTA ────────────────────────────────────────────────────────── */}
+        <section className="ss-cta" aria-labelledby="ss-cta-title">
+          <div>
+            <h2 id="ss-cta-title" className="ss-h2">
+              Your first step costs ₹0.
+            </h2>
+            <p className="ss-text">
+              Book a free 15-minute Google Meet. You leave with a clear idea of
+              what you need, whether or not you hire us.
+            </p>
+          </div>
+
+          <div className="ss-cta-actions">
+            <a
+              className="ss-btn ss-btn--primary"
+              href={WHATSAPP_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <WhatsAppIcon />
+              Start on WhatsApp
+            </a>
+          </div>
+        </section>
+      </div>
     </main>
   );
 };

@@ -1,5 +1,4 @@
-import { Suspense, lazy, useEffect, useRef, useState } from "react";
-import { useTheme } from "../context/ThemeContext";
+import { Suspense, lazy, useEffect, useState, type ReactNode } from "react";
 import "./styles/Footer.css";
 import { Link } from "react-router-dom";
 
@@ -13,6 +12,22 @@ const ADMIN_SESSION_SYNC_EVENT = "openroot-admin-session-sync";
 const STUDENT_DATABASE_URL =
   import.meta.env.VITE_STUDENT_DATABASE_URL ??
   "https://comeonsom.github.io/openroot-student-database/";
+
+// ─── Types ────────────────────────────────────────────────────
+
+type AdminSession = {
+  email?: string;
+  role?: string;
+  verified?: boolean;
+  username?: string;
+};
+
+type FooterLink = {
+  label: string;
+  href: string;
+  rel?: string;
+  target?: "_blank";
+};
 
 // ─── Data ─────────────────────────────────────────────────────
 
@@ -37,78 +52,58 @@ const TRUST_BADGES = [
   },
 ];
 
-const SITEMAP_LINKS = [
-  {
-    label: "Terms & Conditions",
-    href: "/terms",
-  },
-  {
-    label: "Founder Details",
-    href: "/founder",
-  },
-  {
-    label: "Released Softwares",
-    href: "/softwares",
-  },
+const SITEMAP_LINKS: FooterLink[] = [
+  { label: "Terms & Conditions", href: "/terms" },
+  { label: "Founder Details", href: "/founder" },
+  { label: "Incorporation Details", href: "/openroot-systems" },
+  { label: "Released Softwares", href: "/softwares" },
   {
     label: "Watch Content",
     href: "https://www.youtube.com/@openrootsystems",
-    rel: "noopener noreferrer" as const,
-    target: "_blank" as const,
+    rel: "noopener noreferrer",
+    target: "_blank",
   },
   {
     label: "Music Production",
     href: "https://www.youtube.com/@somu.youtube",
-    rel: "noopener noreferrer" as const,
-    target: "_blank" as const,
+    rel: "noopener noreferrer",
+    target: "_blank",
   },
 ];
 
-const REACHOUT_LINKS = [
+const REACHOUT_LINKS: FooterLink[] = [
   {
     label: "WhatsApp",
     href: "https://wa.me/917866049865",
-    rel: "noopener noreferrer" as const,
-    target: "_blank" as const,
+    rel: "noopener noreferrer",
+    target: "_blank",
   },
-  {
-    label: "Email",
-    href: "mailto:connect.openroot@gmail.com",
-  },
+  { label: "Email", href: "mailto:connect.openroot@gmail.com" },
   {
     label: "GitHub",
     href: "https://github.com/COMEONSOM",
-    rel: "noopener noreferrer" as const,
-    target: "_blank" as const,
+    rel: "noopener noreferrer",
+    target: "_blank",
   },
   {
     label: "LinkedIn",
     href: "https://in.linkedin.com/in/comeonsom",
-    rel: "noopener noreferrer" as const,
-    target: "_blank" as const,
+    rel: "noopener noreferrer",
+    target: "_blank",
   },
   {
     label: "X",
     href: "https://x.com/comeonsomx",
-    rel: "noopener noreferrer" as const,
-    target: "_blank" as const,
+    rel: "noopener noreferrer",
+    target: "_blank",
   },
   {
     label: "Facebook",
     href: "https://www.facebook.com/OpenrootSystems",
-    rel: "noopener noreferrer" as const,
-    target: "_blank" as const,
+    rel: "noopener noreferrer",
+    target: "_blank",
   },
 ];
-
-// ─── Types ────────────────────────────────────────────────────
-
-type AdminSession = {
-  email?: string;
-  role?: string;
-  verified?: boolean;
-  username?: string;
-};
 
 // ─── Helpers ──────────────────────────────────────────────────
 
@@ -120,141 +115,125 @@ function readIsAdminSession(): boolean {
     if (!raw) return false;
 
     const parsed = JSON.parse(raw) as AdminSession;
-
     return parsed?.role === "admin" && parsed?.verified === true;
   } catch {
     return false;
   }
 }
 
+// ─── Link cells (same markup and hover in both columns) ──────
+
+function Cell({
+  arrow,
+  children,
+}: {
+  arrow: string;
+  children: ReactNode;
+}) {
+  return (
+    <>
+      <span className="or-footer-link-text">{children}</span>
+      <span className="or-footer-link-arrow" aria-hidden="true">
+        {arrow}
+      </span>
+    </>
+  );
+}
+
+function FooterLinkCell({ link }: { link: FooterLink }) {
+  if (link.href.startsWith("/")) {
+    return (
+      <Link to={link.href} className="or-footer-link">
+        <Cell arrow="→">{link.label}</Cell>
+      </Link>
+    );
+  }
+
+  return (
+    <a
+      href={link.href}
+      rel={link.rel}
+      target={link.target}
+      className="or-footer-link"
+    >
+      <Cell arrow="↗">{link.label}</Cell>
+    </a>
+  );
+}
+
 // ─── Component ────────────────────────────────────────────────
 
 export default function Footer() {
-  const footerRef = useRef<HTMLElement | null>(null);
   const [openFaq, setOpenFaq] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
 
-  const { resolved } = useTheme();
-
-  const logoSrc =
-    resolved === "dark"
-      ? "/assets/openroot-white-nobg.avif"
-      : "/assets/openroot-black-nobg.png";
-
+  // Admin session sync
   useEffect(() => {
-    const syncAdminState = () => setIsAdmin(readIsAdminSession());
+    const sync = () => setIsAdmin(readIsAdminSession());
 
-    syncAdminState();
+    sync();
 
-    const handleSync = () => syncAdminState();
-
-    window.addEventListener(ADMIN_SESSION_SYNC_EVENT, handleSync);
-    window.addEventListener("storage", handleSync);
+    window.addEventListener(ADMIN_SESSION_SYNC_EVENT, sync);
+    window.addEventListener("storage", sync);
 
     return () => {
-      window.removeEventListener(ADMIN_SESSION_SYNC_EVENT, handleSync);
-      window.removeEventListener("storage", handleSync);
+      window.removeEventListener(ADMIN_SESSION_SYNC_EVENT, sync);
+      window.removeEventListener("storage", sync);
     };
   }, []);
 
-  useEffect(() => {
-    const el = footerRef.current;
-    if (!el || window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-      return;
-    }
-
-    el.animate(
-      [
-        { opacity: "0", transform: "translateY(18px)" },
-        { opacity: "1", transform: "translateY(0)" },
-      ],
-      {
-        duration: 500,
-        easing: "cubic-bezier(0.16, 1, 0.3, 1)",
-        fill: "both",
-      }
-    );
-  }, []);
-
   return (
-    <footer ref={footerRef} className="footer-root">
-      {/* MAIN GRID */}
-      <div className="footer-main">
-        <div className="footer-grid">
+    <footer className="or-footer-root">
+      {/* MAIN */}
+      <div className="or-footer-main">
+        <div className="or-footer-grid">
           {/* SITEMAP */}
-          <nav className="footer-sitemap" aria-label="Site map">
-            <Link
-              to="/openroot-systems"
-              aria-label="Openroot Systems Official Information"
-              title="Openroot Systems Official Information"
-            >
-              <img
-                src={logoSrc}
-                alt="Openroot Systems"
-                className="footer-logo-img"
-                loading="lazy"
-                decoding="async"
-                width={160}
-                height={37}
-              />
-            </Link>
+          <nav className="or-footer-sitemap" aria-label="Site map">
+            <span className="or-footer-label">Sitemap</span>
 
-            <span className="footer-label">Sitemap</span>
-
-            <div className="footer-links">
-              {SITEMAP_LINKS.map(({ label, href, rel, target }) => (
-                <a key={label} href={href} rel={rel} target={target}>
-                  {label}
-                </a>
+            <div className="or-footer-links">
+              {SITEMAP_LINKS.map((link) => (
+                <FooterLinkCell key={link.label} link={link} />
               ))}
 
               {isAdmin && (
                 <a
                   href={STUDENT_DATABASE_URL}
                   title="Open Student Database System"
+                  className="or-footer-link"
                 >
-                  Student Database
+                  <Cell arrow="↗">Student Database</Cell>
                 </a>
               )}
 
               <a
                 href="#"
+                className="or-footer-link"
                 onClick={(e) => {
                   e.preventDefault();
                   setOpenFaq(true);
                 }}
               >
-                FAQs
+                <Cell arrow="→">FAQs</Cell>
               </a>
 
               <Link
                 to="/certificate-verification"
                 aria-label="Open certificate verification page"
+                className="or-footer-link"
               >
-                Verify Certificate
+                <Cell arrow="→">Verify Certificate</Cell>
               </Link>
             </div>
           </nav>
 
-          {/* REACH OUT */}
-          <nav className="footer-sitemap footer-reachout" aria-label="Reach out">
-            <span className="footer-reachout-spacer" aria-hidden="true" />
-            <span className="footer-label">Find Me Online</span>
+          {/* FIND ME ONLINE */}
+          <nav className="or-footer-reachout" aria-label="Find me online">
+            <span className="or-footer-label">Find Me Online</span>
 
-            <div className="footer-links">
-              {REACHOUT_LINKS.map(({ label, href, rel, target }) => (
-                <a
-                  key={label}
-                  href={href}
-                  rel={rel}
-                  target={target}
-                  className="footer-reachout-link"
-                >
-                  {label}
-                  <span className="footer-reachout-arrow" aria-hidden="true">
-                    ↗
-                  </span>
-                </a>
+            <div className="or-footer-links">
+              {REACHOUT_LINKS.map((link) => (
+                <FooterLinkCell key={link.label} link={link} />
               ))}
             </div>
           </nav>
@@ -262,14 +241,14 @@ export default function Footer() {
       </div>
 
       {/* BASE */}
-      <div className="footer-base">
-        <div className="footer-trust">
+      <div className="or-footer-base">
+        <div className="or-footer-trust">
           {TRUST_BADGES.map(({ src, alt, width, height }) => (
-            <div key={src} className="footer-trust-item">
+            <div key={src} className="or-footer-trust-item">
               <img
                 src={src}
                 alt={alt}
-                className="footer-trust-logo"
+                className="or-footer-trust-logo"
                 draggable={false}
                 loading="lazy"
                 decoding="async"
@@ -280,14 +259,15 @@ export default function Footer() {
           ))}
         </div>
 
-        <div className="footer-license">
-          <span className="footer-license-text">
+        <div className="or-footer-license">
+          <span className="or-footer-license-text">
             © 2026 Openroot Systems. All rights reserved.
           </span>
+          <span className="or-footer-location">Kolkata, West Bengal, India</span>
         </div>
       </div>
 
-      {/* MODALS */}
+      {/* FAQ MODAL */}
       <Suspense fallback={null}>
         {openFaq && (
           <FaqModal isOpen={openFaq} onClose={() => setOpenFaq(false)} />

@@ -1,9 +1,18 @@
 import { Helmet } from "react-helmet-async";
 import { Link } from "react-router-dom";
+import "../components/styles/OpenrootSystems.css";
 
 const SITE_URL = "https://openroot.in";
 
-const PRODUCTS = [
+type Product = {
+  name: string;
+  desc: string;
+  url: string;
+  external: boolean;
+  category: string;
+};
+
+const PRODUCTS: Product[] = [
   {
     name: "NIOR AI",
     desc: "AI-powered financial assistant for calculations, investment insights and smart decision support.",
@@ -104,6 +113,13 @@ const heroChips = [
   "West Bengal, India",
 ];
 
+const heroFacts: Array<[string, string]> = [
+  ["MSME Registered", "Yes"],
+  ["Official Domain", "openroot.in"],
+  ["Founder", "Somnath Banerjee"],
+  ["Region", "West Bengal, India"],
+];
+
 const registrationRows = [
   ["Company Name", "Openroot Systems"],
   ["UDYAM Registration Number", "UDYAM-WB-14-0263034"],
@@ -114,6 +130,48 @@ const registrationRows = [
   ["Official Website", "https://openroot.in"],
   ["Contact Email", "connect.openroot@gmail.com"],
 ] as const;
+
+const EXPLORE_LINKS = [
+  { to: "/", label: "Homepage" },
+  { to: "/softwares", label: "All Products" },
+  { to: "/software-solutions", label: "Software Services" },
+  { to: "/founder", label: "Founder" },
+];
+
+function ProductCell({ product }: { product: Product }) {
+  const body = (
+    <>
+      <span className="os-product-head">
+        <h3 className="os-product-name">{product.name}</h3>
+        <span className="os-arrow" aria-hidden="true">
+          {product.external ? "↗" : "→"}
+        </span>
+      </span>
+      <span className="os-tag">{product.category}</span>
+      <p className="os-product-desc">{product.desc}</p>
+    </>
+  );
+
+  return (
+    <article className="os-product">
+      {product.external ? (
+        <a
+          href={product.url}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="os-cell"
+          aria-label={`${product.name} opens in a new tab`}
+        >
+          {body}
+        </a>
+      ) : (
+        <Link to={product.url} className="os-cell">
+          {body}
+        </Link>
+      )}
+    </article>
+  );
+}
 
 export default function OpenrootSystems() {
   return (
@@ -141,384 +199,141 @@ export default function OpenrootSystems() {
         <script type="application/ld+json">{JSON.stringify(SCHEMA)}</script>
       </Helmet>
 
-      <main
-        style={{
-          minHeight: "100vh",
-          background:
-            "radial-gradient(circle at top left, rgba(63,55,201,0.08), transparent 30%), radial-gradient(circle at bottom right, rgba(67,97,238,0.06), transparent 30%), var(--ot-bg)",
-          color: "var(--ot-text)",
-          padding: "clamp(5rem, 9vw, 7rem) var(--ot-page-inline) 5rem",
-        }}
-      >
-        <div
-          style={{
-            maxWidth: "var(--ot-max-w)",
-            margin: "0 auto",
-            display: "grid",
-            gap: "1.25rem",
-          }}
-        >
-          <div className="grid gap-6 xl:grid-cols-12">
-            <section
-              className="ot-section-card ot-stripe-top xl:col-span-8"
-              style={{
-                padding: "clamp(1.25rem, 2.8vw, 2rem)",
-                borderRadius: "var(--ot-radius-xl)",
-                background: "var(--ot-surface)",
-                border: "1px solid var(--ot-border-hard)",
-              }}
-            >
-
-              <h1
-                className="text-gradient-brand"
-                style={{
-                  fontSize: "clamp(2.2rem, 6vw, 4.6rem)",
-                  fontWeight: 900,
-                  letterSpacing: "-0.07em",
-                  lineHeight: 0.95,
-                  margin: 0,
-                  maxWidth: "12ch",
-                }}
-              >
+      <main className="os-page">
+        <div className="os-shell">
+          {/* HERO + SNAPSHOT */}
+          <div className="os-top">
+            <section className="os-card os-card--top" aria-labelledby="os-title">
+              <h1 id="os-title" className="os-h1">
                 Openroot Systems
               </h1>
 
-              <p
-                style={{
-                  maxWidth: "68ch",
-                  marginTop: "1rem",
-                  fontSize: "clamp(1rem, 1.4vw, 1.08rem)",
-                  lineHeight: 1.85,
-                  color: "var(--ot-text-muted)",
-                }}
-              >
+              <p className="os-lead">
                 A registered MSME under the Government of India, based in West
                 Bengal. We build custom software, AI tools, productivity
                 systems, browser extensions, and practical learning platforms
                 for students, professionals, and small businesses.
               </p>
 
-              <div
-                style={{
-                  display: "flex",
-                  flexWrap: "wrap",
-                  gap: "0.55rem",
-                  marginTop: "1rem",
-                }}
-              >
+              <ul className="os-chips">
                 {heroChips.map((chip) => (
-                  <span
-                    key={chip}
-                    className="badge-pill"
-                    style={{
-                      background: "var(--ot-bg)",
-                      borderColor: "var(--ot-border)",
-                      color: "var(--ot-text-muted)",
-                    }}
-                  >
+                  <li key={chip} className="os-chip">
                     {chip}
-                  </span>
+                  </li>
                 ))}
-              </div>
+              </ul>
 
-              <div
-                style={{
-                  display: "grid",
-                  gridTemplateColumns: "repeat(2, minmax(0, 1fr))",
-                  gap: "0.75rem",
-                  marginTop: "1.25rem",
-                }}
-              >
-                {[
-                  ["MSME Registered", "Yes"],
-                  ["Official Domain", "openroot.in"],
-                  ["Founder", "Somnath Banerjee"],
-                  ["Region", "West Bengal, India"],
-                ].map(([label, value]) => (
-                  <div
-                    key={label}
-                    style={{
-                      border: "1px solid var(--ot-border)",
-                      borderRadius: "var(--ot-radius-lg)",
-                      padding: "0.95rem 1rem",
-                      background: "var(--ot-bg)",
-                    }}
-                  >
-                    <div
-                      style={{
-                        fontSize: "0.68rem",
-                        fontWeight: 800,
-                        letterSpacing: "0.14em",
-                        textTransform: "uppercase",
-                        color: "var(--ot-text-faint)",
-                        marginBottom: "0.35rem",
-                      }}
-                    >
-                      {label}
-                    </div>
-                    <div
-                      style={{
-                        fontSize: "0.98rem",
-                        fontWeight: 700,
-                        lineHeight: 1.45,
-                      }}
-                    >
-                      {value}
-                    </div>
+              <div className="os-facts">
+                {heroFacts.map(([label, value]) => (
+                  <div key={label} className="os-fact">
+                    <span className="os-label">{label}</span>
+                    <span className="os-value">{value}</span>
                   </div>
                 ))}
               </div>
             </section>
 
-            <aside
-              className="xl:col-span-4"
-              style={{
-                border: "1px solid var(--ot-border-hard)",
-                borderRadius: "var(--ot-radius-xl)",
-                background:
-                  "linear-gradient(180deg, var(--ot-bg) 0%, var(--ot-bg-soft) 100%)",
-                padding: "1.25rem",
-                display: "flex",
-                flexDirection: "column",
-                gap: "1rem",
-              }}
-            >
-              <div>
-                <div
-                  style={{
-                    fontSize: "0.68rem",
-                    fontWeight: 800,
-                    letterSpacing: "0.14em",
-                    textTransform: "uppercase",
-                    color: "var(--ot-text-faint)",
-                    marginBottom: "0.45rem",
-                  }}
-                >
-                  Company Snapshot
-                </div>
-                <div
-                  style={{
-                    fontSize: "1.55rem",
-                    fontWeight: 900,
-                    letterSpacing: "-0.05em",
-                    lineHeight: 1.05,
-                  }}
-                >
-                  Openroot Systems
-                </div>
-              </div>
+            <aside className="os-card os-card--top" aria-label="Company snapshot">
+              <span className="os-label">Company Snapshot</span>
+              <p className="os-snapshot-name">Openroot Systems</p>
 
-              <div
-                style={{
-                  display: "grid",
-                  gap: "0.85rem",
-                }}
-              >
-                {[
-                  ["Founder", <Link key="founder" to="/founder">Somnath Banerjee</Link>],
-                  ["Website", <a key="site" href="https://openroot.in">openroot.in</a>],
-                  ["Email", "connect.openroot@gmail.com"],
-                  ["Registry", "UDYAM-WB-14-0263034"],
-                ].map(([key, value]) => (
-                  <div
-                    key={String(key)}
-                    style={{
-                      display: "grid",
-                      gridTemplateColumns: "108px minmax(0, 1fr)",
-                      gap: "0.85rem",
-                      paddingBottom: "0.85rem",
-                      borderBottom: "1px solid var(--ot-border)",
-                    }}
-                  >
-                    <span
-                      style={{
-                        fontSize: "0.72rem",
-                        fontWeight: 800,
-                        letterSpacing: "0.08em",
-                        textTransform: "uppercase",
-                        color: "var(--ot-text-faint)",
-                      }}
-                    >
-                      {key}
-                    </span>
-                    <span
-                      style={{
-                        fontSize: "0.94rem",
-                        lineHeight: 1.65,
-                        fontWeight: 600,
-                      }}
-                    >
-                      {value}
-                    </span>
-                  </div>
-                ))}
-              </div>
+              <dl className="os-rows">
+                <div className="os-row">
+                  <dt>Founder</dt>
+                  <dd>
+                    <Link to="/founder" className="os-link">
+                      Somnath Banerjee
+                    </Link>
+                  </dd>
+                </div>
+                <div className="os-row">
+                  <dt>Website</dt>
+                  <dd>
+                    <a href="https://openroot.in" className="os-link">
+                      openroot.in
+                    </a>
+                  </dd>
+                </div>
+                <div className="os-row">
+                  <dt>Email</dt>
+                  <dd>connect.openroot@gmail.com</dd>
+                </div>
+                <div className="os-row">
+                  <dt>Registry</dt>
+                  <dd>UDYAM-WB-14-0263034</dd>
+                </div>
+              </dl>
 
-              <p
-                style={{
-                  margin: 0,
-                  color: "var(--ot-text-muted)",
-                  lineHeight: 1.75,
-                }}
-              >
+              <p className="os-note">
                 Openroot Systems is the official brand. Any unrelated site
                 using similar names is not affiliated with this entity.
               </p>
             </aside>
           </div>
 
-          <section
-            style={{
-              border: "1px solid var(--ot-border)",
-              borderRadius: "var(--ot-radius-xl)",
-              background: "var(--ot-surface)",
-              padding: "clamp(1.2rem, 2.5vw, 1.6rem)",
-            }}
-            aria-labelledby="registration-heading"
-          >
-            <h2
-              id="registration-heading"
-              className="text-gradient-soft"
-              style={{
-                fontSize: "clamp(1.15rem, 1.8vw, 1.35rem)",
-                fontWeight: 850,
-                letterSpacing: "-0.03em",
-                margin: 0,
-              }}
-            >
+          {/* REGISTRATION */}
+          <section className="os-card" aria-labelledby="registration-heading">
+            <h2 id="registration-heading" className="os-h2">
               Official Registration Details
             </h2>
 
-            <p
-              style={{
-                marginTop: "0.7rem",
-                color: "var(--ot-text-muted)",
-                lineHeight: 1.85,
-                maxWidth: "70ch",
-              }}
-            >
+            <p className="os-text">
               These details anchor the Openroot Systems entity for users,
               search engines, and AI systems.
             </p>
 
-            <div
-              style={{
-                marginTop: "1rem",
-                border: "1px solid var(--ot-border)",
-                borderRadius: "var(--ot-radius-lg)",
-                overflow: "hidden",
-                background: "var(--ot-bg)",
-              }}
-            >
-              <table
-                style={{
-                  width: "100%",
-                  borderCollapse: "collapse",
-                }}
-              >
-                <tbody>
-                  {registrationRows.map(([label, value], index) => (
-                    <tr
-                      key={label}
-                      style={{
-                        borderBottom:
-                          index === registrationRows.length - 1
-                            ? "none"
-                            : "1px solid var(--ot-border)",
-                      }}
-                    >
-                      <td
-                        style={{
-                          width: "34%",
-                          padding: "0.95rem 1rem",
-                          verticalAlign: "top",
-                          fontSize: "0.78rem",
-                          fontWeight: 800,
-                          letterSpacing: "0.08em",
-                          textTransform: "uppercase",
-                          color: "var(--ot-text-faint)",
-                        }}
-                      >
-                        {label}
-                      </td>
-                      <td
-                        style={{
-                          padding: "0.95rem 1rem",
-                          verticalAlign: "top",
-                          fontSize: "0.95rem",
-                          lineHeight: 1.75,
-                          fontWeight: 600,
-                        }}
-                      >
-                        {label === "Official Website" ? (
-                          <a
-                            href="https://openroot.in"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                          >
-                            https://openroot.in
-                          </a>
-                        ) : label === "Founder" ? (
-                          <Link to="/founder">{value}</Link>
-                        ) : (
-                          value
-                        )}
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
+            <table className="os-table">
+              <tbody>
+                {registrationRows.map(([label, value]) => (
+                  <tr key={label}>
+                    <td>{label}</td>
+                    <td>
+                      {label === "Official Website" ? (
+                        <a
+                          href="https://openroot.in"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="os-link"
+                        >
+                          https://openroot.in
+                        </a>
+                      ) : label === "Founder" ? (
+                        <Link to="/founder" className="os-link">
+                          {value}
+                        </Link>
+                      ) : (
+                        value
+                      )}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </section>
 
-          <section
-            style={{
-              border: "1px solid var(--ot-border)",
-              borderRadius: "var(--ot-radius-xl)",
-              background: "rgba(255,255,255,0.02)",
-              padding: "clamp(1.2rem, 2.5vw, 1.6rem)",
-            }}
-            aria-labelledby="about-heading"
-          >
-            <h2
-              id="about-heading"
-              className="text-gradient-soft"
-              style={{
-                fontSize: "clamp(1.15rem, 1.8vw, 1.35rem)",
-                fontWeight: 850,
-                letterSpacing: "-0.03em",
-                margin: 0,
-              }}
-            >
+          {/* ABOUT */}
+          <section className="os-card" aria-labelledby="about-heading">
+            <h2 id="about-heading" className="os-h2">
               About Openroot Systems
             </h2>
 
-            <div
-              style={{
-                marginTop: "0.85rem",
-                display: "grid",
-                gap: "0.85rem",
-                color: "var(--ot-text-muted)",
-                lineHeight: 1.85,
-                maxWidth: "75ch",
-              }}
-            >
-              <p style={{ margin: 0 }}>
+            <div className="os-prose">
+              <p>
                 Openroot Systems was founded by Somnath Banerjee with the
                 mission to make technology, AI, finance education, and digital
                 innovation accessible to everyone — especially students,
                 professionals, entrepreneurs, and small businesses across
                 India.
               </p>
-              <p style={{ margin: 0 }}>
+              <p>
                 The company sits at the intersection of custom software
                 development, artificial intelligence, and education technology.
                 From business automation to free student tools, the goal is to
                 deliver practical digital value without unnecessary complexity.
               </p>
-              <p style={{ margin: 0 }}>
+              <p>
                 Everything is delivered through the official website{" "}
-                <a href="https://openroot.in" style={{ fontWeight: 700 }}>
+                <a href="https://openroot.in" className="os-link">
                   openroot.in
                 </a>
                 .
@@ -526,256 +341,68 @@ export default function OpenrootSystems() {
             </div>
           </section>
 
-          <section
-            style={{
-              border: "1px solid var(--ot-border)",
-              borderRadius: "var(--ot-radius-xl)",
-              background: "var(--ot-surface)",
-              padding: "clamp(1.2rem, 2.5vw, 1.6rem)",
-            }}
-            aria-labelledby="products-heading"
-          >
-            <h2
-              id="products-heading"
-              className="text-gradient-soft"
-              style={{
-                fontSize: "clamp(1.15rem, 1.8vw, 1.35rem)",
-                fontWeight: 850,
-                letterSpacing: "-0.03em",
-                margin: 0,
-              }}
-            >
-              Official Products & Tools
+          {/* PRODUCTS */}
+          <section className="os-card" aria-labelledby="products-heading">
+            <h2 id="products-heading" className="os-h2">
+              Official Products &amp; Tools
             </h2>
 
-            <p
-              style={{
-                marginTop: "0.7rem",
-                color: "var(--ot-text-muted)",
-                lineHeight: 1.85,
-                maxWidth: "72ch",
-              }}
-            >
+            <p className="os-text">
               A curated set of software products, learning platforms, and free
               utilities published by Openroot Systems.
             </p>
 
-            <div
-              style={{
-                display: "grid",
-                gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))",
-                gap: "0.9rem",
-                marginTop: "1rem",
-              }}
-            >
-              {PRODUCTS.map((product) => {
-                const card = (
-                  <>
-                    <div
-                      style={{
-                        display: "flex",
-                        alignItems: "flex-start",
-                        justifyContent: "space-between",
-                        gap: "0.75rem",
-                      }}
-                    >
-                      <h3
-                        style={{
-                          fontSize: "1rem",
-                          fontWeight: 850,
-                          lineHeight: 1.35,
-                          margin: 0,
-                        }}
-                      >
-                        {product.name}
-                      </h3>
-                      <span
-                        className="badge-pill"
-                        style={{
-                          flexShrink: 0,
-                          background: "var(--ot-bg)",
-                          borderColor: "var(--ot-border)",
-                        }}
-                      >
-                        {product.category}
-                      </span>
-                    </div>
-                    <p
-                      style={{
-                        margin: 0,
-                        color: "var(--ot-text-muted)",
-                        fontSize: "0.9rem",
-                        lineHeight: 1.7,
-                      }}
-                    >
-                      {product.desc}
-                    </p>
-                  </>
-                );
-
-                return (
-                  <article
-                    key={product.name}
-                    style={{
-                      border: "1px solid var(--ot-border)",
-                      borderRadius: "var(--ot-radius-lg)",
-                      background: "var(--ot-bg)",
-                      padding: "1rem",
-                      minHeight: "100%",
-                    }}
-                  >
-                    {product.external ? (
-                      <a
-                        href={product.url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        style={{ color: "inherit", display: "block" }}
-                        aria-label={`${product.name} opens in a new tab`}
-                      >
-                        {card}
-                      </a>
-                    ) : (
-                      <Link
-                        to={product.url}
-                        style={{ color: "inherit", display: "block" }}
-                      >
-                        {card}
-                      </Link>
-                    )}
-                  </article>
-                );
-              })}
+            <div className="os-cells os-cells--products">
+              {PRODUCTS.map((product) => (
+                <ProductCell key={product.name} product={product} />
+              ))}
             </div>
 
-            <p
-              style={{
-                marginTop: "1rem",
-                color: "var(--ot-text-muted)",
-              }}
-            >
+            <p className="os-more">
               All products are organized under the official software hub:{" "}
-              <Link to="/softwares" style={{ fontWeight: 800 }}>
+              <Link to="/softwares" className="os-link">
                 openroot.in/softwares
               </Link>
             </p>
           </section>
 
-          <section
-            style={{
-              border: "1px solid var(--ot-border)",
-              borderRadius: "var(--ot-radius-xl)",
-              background: "rgba(255,255,255,0.02)",
-              padding: "clamp(1.2rem, 2.5vw, 1.6rem)",
-            }}
-            aria-labelledby="services-heading"
-          >
-            <h2
-              id="services-heading"
-              className="text-gradient-soft"
-              style={{
-                fontSize: "clamp(1.15rem, 1.8vw, 1.35rem)",
-                fontWeight: 850,
-                letterSpacing: "-0.03em",
-                margin: 0,
-              }}
-            >
+          {/* SERVICES */}
+          <section className="os-card" aria-labelledby="services-heading">
+            <h2 id="services-heading" className="os-h2">
               Software Development Services
             </h2>
 
-            <p
-              style={{
-                marginTop: "0.7rem",
-                color: "var(--ot-text-muted)",
-                lineHeight: 1.85,
-                maxWidth: "72ch",
-              }}
-            >
+            <p className="os-text">
               For businesses and organizations, Openroot Systems offers
               practical software services designed for real-world use.
             </p>
 
-            <div
-              className="mt-5 grid gap-3 md:grid-cols-2"
-              style={{
-                marginTop: "1rem",
-              }}
-            >
+            <div className="os-services">
               {SERVICES.map((service) => (
-                <div
-                  key={service}
-                  style={{
-                    display: "flex",
-                    alignItems: "flex-start",
-                    gap: "0.7rem",
-                    padding: "0.95rem 1rem",
-                    border: "1px solid var(--ot-border)",
-                    borderRadius: "var(--ot-radius-md)",
-                    background: "var(--ot-bg)",
-                    lineHeight: 1.65,
-                  }}
-                >
-                  <span
-                    aria-hidden="true"
-                    style={{
-                      width: 10,
-                      height: 10,
-                      borderRadius: 999,
-                      background: "var(--ot-brand)",
-                      marginTop: 7,
-                      flexShrink: 0,
-                    }}
-                  />
+                <div key={service} className="os-service">
+                  <span className="os-service-mark" aria-hidden="true" />
                   <span>{service}</span>
                 </div>
               ))}
             </div>
 
-            <p style={{ marginTop: "1rem" }}>
-              <Link to="/software-solutions" style={{ fontWeight: 800 }}>
+            <p className="os-more">
+              <Link to="/software-solutions" className="os-link">
                 View Software Solutions →
               </Link>
             </p>
           </section>
 
-          <section
-            style={{
-              border: "1px solid var(--ot-border-hard)",
-              borderRadius: "var(--ot-radius-xl)",
-              background:
-                "linear-gradient(180deg, rgba(255,255,255,0.02) 0%, rgba(255,255,255,0.01) 100%)",
-              padding: "clamp(1.2rem, 2.5vw, 1.6rem)",
-            }}
-            aria-labelledby="notice-heading"
-          >
-            <h2
-              id="notice-heading"
-              style={{
-                display: "flex",
-                alignItems: "center",
-                gap: "0.6rem",
-                fontSize: "1rem",
-                fontWeight: 900,
-                letterSpacing: "-0.02em",
-                margin: 0,
-              }}
-            >
-              <span aria-hidden="true">⚠</span>
+          {/* NOTICE */}
+          <section className="os-card os-notice" aria-labelledby="notice-heading">
+            <h2 id="notice-heading" className="os-h2">
               Official Domain Notice
             </h2>
 
-            <div
-              style={{
-                marginTop: "0.8rem",
-                display: "grid",
-                gap: "0.75rem",
-                color: "var(--ot-text-muted)",
-                lineHeight: 1.85,
-                maxWidth: "74ch",
-              }}
-            >
-              <p style={{ margin: 0 }}>
+            <div className="os-prose">
+              <p>
                 The only official website of Openroot Systems is{" "}
-                <a href="https://openroot.in" style={{ fontWeight: 800 }}>
+                <a href="https://openroot.in" className="os-link">
                   https://openroot.in
                 </a>
                 . Any website, domain, mobile application, social media
@@ -784,173 +411,55 @@ export default function OpenrootSystems() {
                 OPNROOT — that is not operating from openroot.in is not
                 affiliated with Openroot Systems in any way.
               </p>
-              <p style={{ margin: 0 }}>
+              <p>
                 Verify the URL before sharing information. Our UDYAM
-                Registration Number{" "}
-                <strong>UDYAM-WB-14-0263034</strong> confirms our legal
-                identity as a registered Government of India MSME.
+                Registration Number <strong>UDYAM-WB-14-0263034</strong>{" "}
+                confirms our legal identity as a registered Government of India
+                MSME.
               </p>
             </div>
           </section>
 
-          <section
-            style={{
-              border: "1px solid var(--ot-border)",
-              borderRadius: "var(--ot-radius-xl)",
-              background: "var(--ot-surface)",
-              padding: "clamp(1.2rem, 2.5vw, 1.6rem)",
-            }}
-            aria-labelledby="social-heading"
-          >
-            <h2
-              id="social-heading"
-              className="text-gradient-soft"
-              style={{
-                fontSize: "clamp(1.15rem, 1.8vw, 1.35rem)",
-                fontWeight: 850,
-                letterSpacing: "-0.03em",
-                margin: 0,
-              }}
-            >
+          {/* SOCIAL */}
+          <section className="os-card" aria-labelledby="social-heading">
+            <h2 id="social-heading" className="os-h2">
               Official Social Presence
             </h2>
 
-            <p
-              style={{
-                marginTop: "0.7rem",
-                color: "var(--ot-text-muted)",
-                lineHeight: 1.85,
-                maxWidth: "72ch",
-              }}
-            >
+            <p className="os-text">
               These are the official external profiles associated with the
               Openroot Systems brand.
             </p>
 
-            <div
-              style={{
-                display: "grid",
-                gridTemplateColumns: "repeat(auto-fit, minmax(170px, 1fr))",
-                gap: "0.75rem",
-                marginTop: "1rem",
-              }}
-            >
+            <div className="os-cells os-cells--social">
               {SOCIAL_LINKS.map((item) => (
                 <a
                   key={item.label}
                   href={item.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "space-between",
-                    gap: "1rem",
-                    padding: "0.9rem 1rem",
-                    border: "1px solid var(--ot-border)",
-                    borderRadius: "var(--ot-radius-md)",
-                    background: "var(--ot-bg)",
-                    color: "var(--ot-text)",
-                    fontWeight: 700,
-                    textDecoration: "none",
-                  }}
+                  className="os-cell os-cell--row"
                 >
                   <span>{item.label}</span>
-                  <span aria-hidden="true">↗</span>
+                  <span className="os-arrow" aria-hidden="true">
+                    ↗
+                  </span>
                 </a>
               ))}
             </div>
           </section>
 
-          <footer
-            style={{
-              border: "1px solid var(--ot-border)",
-              borderRadius: "var(--ot-radius-xl)",
-              background: "rgba(255,255,255,0.02)",
-              padding: "clamp(1.2rem, 2.5vw, 1.6rem)",
-            }}
-          >
-            <p style={{ margin: 0, fontWeight: 900, letterSpacing: "-0.02em" }}>
-              Explore Openroot Systems
-            </p>
+          {/* EXPLORE */}
+          <footer className="os-card">
+            <p className="os-strong">Explore Openroot Systems</p>
 
-            <div
-              style={{
-                display: "flex",
-                flexWrap: "wrap",
-                gap: "0.75rem",
-                marginTop: "1rem",
-              }}
-            >
-              <Link
-                to="/"
-                style={{
-                  display: "inline-flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  padding: "0.8rem 1rem",
-                  borderRadius: "999px",
-                  border: "1px solid var(--ot-border-hard)",
-                  background: "var(--ot-bg)",
-                  color: "var(--ot-text)",
-                  fontWeight: 700,
-                  textDecoration: "none",
-                }}
-              >
-                Homepage
-              </Link>
-              <Link
-                to="/softwares"
-                style={{
-                  display: "inline-flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  padding: "0.8rem 1rem",
-                  borderRadius: "999px",
-                  border: "1px solid var(--ot-border-hard)",
-                  background: "var(--ot-bg)",
-                  color: "var(--ot-text)",
-                  fontWeight: 700,
-                  textDecoration: "none",
-                }}
-              >
-                All Products
-              </Link>
-              <Link
-                to="/software-solutions"
-                style={{
-                  display: "inline-flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  padding: "0.8rem 1rem",
-                  borderRadius: "999px",
-                  border: "1px solid var(--ot-border-hard)",
-                  background: "var(--ot-bg)",
-                  color: "var(--ot-text)",
-                  fontWeight: 700,
-                  textDecoration: "none",
-                }}
-              >
-                Software Services
-              </Link>
-              <Link
-                to="/founder"
-                style={{
-                  display: "inline-flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  padding: "0.8rem 1rem",
-                  borderRadius: "999px",
-                  border: "1px solid var(--ot-border-hard)",
-                  background: "var(--ot-bg)",
-                  color: "var(--ot-text)",
-                  fontWeight: 700,
-                  textDecoration: "none",
-                }}
-              >
-                Founder
-              </Link>
-            </div>
+            <nav className="os-nav" aria-label="Explore Openroot Systems">
+              {EXPLORE_LINKS.map((link) => (
+                <Link key={link.to} to={link.to} className="os-btn">
+                  {link.label}
+                </Link>
+              ))}
+            </nav>
           </footer>
         </div>
       </main>
