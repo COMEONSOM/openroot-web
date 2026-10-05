@@ -3,15 +3,11 @@
    Same base design as About and GDrive: textured square-grid
    surface, square framed cells, flat colour blocks. No gradients,
    shadows, glows or rounded corners.
-
    Fully namespaced under .openroot-auth. Strips and borders follow
    the theme text colour (white in dark mode, black in light mode).
    ============================================================ */
-
 @import url("https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&display=swap");
-
 /* ── OVERLAY + TOKENS ─────────────────────────────────────── */
-
 .openroot-auth {
   --oa-text: var(--color-text, var(--ot-text, #101319));
   --oa-muted: var(--color-text-muted, var(--ot-text-muted, rgba(16, 19, 25, 0.68)));
@@ -19,35 +15,27 @@
   --oa-line: var(--oa-text);
   --oa-line-soft: var(--oa-text);
   --oa-hover: rgba(128, 128, 140, 0.14);
-
   --oa-blue: #4169e1;
   --oa-mint: #35d3a1;
   --oa-yellow: #ffc72c;
   --oa-coral: #ff6b4a;
   --oa-ink: #101319;
   --oa-white: #ffffff;
-
   --oa-display: "Bricolage Grotesque", var(--ot-font, system-ui), sans-serif;
-
   position: fixed;
   inset: 0;
   z-index: 3000;
-
   display: flex;
   align-items: center;
   justify-content: center;
-
   padding: clamp(0.75rem, 3vw, 1.5rem);
   overflow-y: auto;
-
   /* fully opaque: the page behind must never show through */
   background-color: var(--oa-bg);
   color: var(--oa-text);
-
   line-height: 1.65;
   -webkit-font-smoothing: antialiased;
 }
-
 @supports (color: color-mix(in srgb, red, blue)) {
   .openroot-auth {
     --oa-line: color-mix(in srgb, var(--oa-text) 55%, transparent);
@@ -55,48 +43,37 @@
     --oa-hover: color-mix(in srgb, var(--oa-text) 8%, transparent);
   }
 }
-
 .openroot-auth *,
 .openroot-auth *::before,
 .openroot-auth *::after {
   box-sizing: border-box;
 }
-
 .openroot-auth :where(h2, h3, p, ol, dl, dd, dt) {
   margin: 0;
   padding: 0;
 }
-
 .openroot-auth ol {
   list-style: none;
 }
-
 .openroot-auth button {
   font: inherit;
   border-radius: 0;
 }
-
 .openroot-auth button:focus-visible,
 .openroot-auth a:focus-visible {
   outline: 2px solid var(--oa-text);
   outline-offset: 3px;
 }
-
 /* ── SHELL (the modal card) ───────────────────────────────── */
-
 .openroot-auth__shell {
   position: relative;
   isolation: isolate;
-
   width: min(940px, 100%);
   margin: auto;
-
   border: 1px solid var(--oa-line);
   border-top: 2px solid var(--oa-text);
-
   background-color: var(--oa-bg);
 }
-
 /* texture: fine square grid */
 .openroot-auth__shell::before {
   content: "";
@@ -104,43 +81,68 @@
   inset: 0;
   z-index: -1;
   pointer-events: none;
-
   background-image:
     linear-gradient(to bottom, var(--oa-text) 1px, transparent 1px),
     linear-gradient(to right, var(--oa-text) 1px, transparent 1px);
   background-size: 26px 26px;
   opacity: 0.09;
 }
-
 /* ── TOP BAR ──────────────────────────────────────────────── */
-
 .openroot-auth__bar {
   display: flex;
   align-items: stretch;
   justify-content: space-between;
-
   min-height: 56px;
-
   border-bottom: 1px solid var(--oa-line);
   background-color: var(--oa-bg);
 }
-
+/* Use two original logo assets directly.
+   No filter, inversion, mask or runtime recolouring is applied. */
 .openroot-auth__logo {
   position: relative;
-  display: block;
+  display: grid;
   align-self: center;
   margin-left: clamp(1rem, 3vw, 1.5rem);
   line-height: 0;
 }
-
-/* render the original logo image exactly as provided.
-   No theme-based recolouring or inversion is applied. */
-.openroot-auth__logo img {
+.openroot-auth__logo-img {
+  grid-area: 1 / 1;
   display: block;
   height: 26px;
   width: auto;
+  max-width: 100%;
+  object-fit: contain;
+  object-position: left center;
+  filter: none !important;
+  -webkit-filter: none !important;
+  mix-blend-mode: normal !important;
 }
-
+.openroot-auth__logo-img--light {
+  display: block;
+}
+.openroot-auth__logo-img--dark {
+  display: none;
+}
+html[data-theme="dark"] .openroot-auth__logo-img--light {
+  display: none;
+}
+html[data-theme="dark"] .openroot-auth__logo-img--dark {
+  display: block;
+}
+html[data-theme="light"] .openroot-auth__logo-img--light {
+  display: block;
+}
+html[data-theme="light"] .openroot-auth__logo-img--dark {
+  display: none;
+}
+@media (prefers-color-scheme: dark) {
+  html:not([data-theme]) .openroot-auth__logo-img--light {
+    display: none;
+  }
+  html:not([data-theme]) .openroot-auth__logo-img--dark {
+    display: block;
+  }
+}
 .openroot-auth__close {
   width: 56px;
   border: 0;
@@ -152,38 +154,30 @@
   cursor: pointer;
   -webkit-tap-highlight-color: transparent;
 }
-
 @media (hover: hover) {
   .openroot-auth__close:hover {
     background-color: var(--oa-text);
     color: var(--oa-bg);
   }
 }
-
 /* ── BODY GRID ────────────────────────────────────────────── */
-
 .openroot-auth__body {
   display: grid;
   grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
 }
-
 .openroot-auth__main {
   display: flex;
   flex-direction: column;
   justify-content: center;
-
   min-width: 0;
   min-height: 420px;
   padding: clamp(1.5rem, 4vw, 2.75rem);
 }
-
 .openroot-auth__stack {
   display: grid;
   gap: 1.75rem;
 }
-
 /* ── TYPE ─────────────────────────────────────────────────── */
-
 .openroot-auth__label {
   display: block;
   color: var(--oa-muted);
@@ -191,27 +185,23 @@
   font-weight: 600;
   line-height: 1.4;
 }
-
 .openroot-auth__h2,
 .openroot-auth__h3 {
   font-family: var(--oa-display);
   letter-spacing: -0.04em;
   text-wrap: balance;
 }
-
 .openroot-auth__h2 {
   margin-top: 0.7rem;
   font-size: clamp(1.8rem, 3.6vw, 2.7rem);
   font-weight: 700;
   line-height: 1.05;
 }
-
 .openroot-auth__h3 {
   font-size: clamp(1.35rem, 2.4vw, 1.8rem);
   font-weight: 700;
   line-height: 1.12;
 }
-
 .openroot-auth__text {
   margin-top: 0.8rem;
   max-width: 44ch;
@@ -219,12 +209,10 @@
   font-size: 1rem;
   line-height: 1.75;
 }
-
 .openroot-auth__text strong {
   color: var(--oa-text);
   font-weight: 700;
 }
-
 .openroot-auth__terms {
   padding-top: 1rem;
   border-top: 1px solid var(--oa-line-soft);
@@ -232,43 +220,34 @@
   font-size: 0.85rem;
   line-height: 1.6;
 }
-
 /* ── PROVIDER BUTTONS (framed cells) ──────────────────────── */
-
 .openroot-auth__providers {
   display: grid;
   border-top: 1px solid var(--oa-line);
   border-left: 1px solid var(--oa-line);
 }
-
 .openroot-auth__provider {
   display: grid;
   grid-template-columns: 56px minmax(0, 1fr);
   align-items: stretch;
-
   width: 100%;
   min-height: 56px;
   padding: 0;
-
   border: 0;
   border-right: 1px solid var(--oa-line);
   border-bottom: 1px solid var(--oa-line);
-
   background-color: var(--oa-bg);
   color: var(--oa-text);
   text-align: left;
   cursor: pointer;
-
   -webkit-tap-highlight-color: transparent;
   transition: background-color 0.18s ease;
 }
-
 .openroot-auth__provider-icon {
   display: grid;
   place-items: center;
   border-right: 1px solid var(--oa-line);
 }
-
 .openroot-auth__provider-label {
   display: flex;
   align-items: center;
@@ -276,88 +255,69 @@
   font-size: 0.97rem;
   font-weight: 700;
 }
-
 @media (hover: hover) {
   .openroot-auth__provider:not(:disabled):hover {
     background-image: linear-gradient(var(--oa-hover), var(--oa-hover));
   }
 }
-
 .openroot-auth__provider:not(:disabled):active {
   background-image: linear-gradient(var(--oa-hover), var(--oa-hover));
 }
-
 .openroot-auth__provider:disabled {
   opacity: 0.5;
   cursor: not-allowed;
 }
-
 .openroot-auth__provider[aria-busy="true"] {
   opacity: 1;
   background-color: var(--oa-text);
   color: var(--oa-bg);
 }
-
 .openroot-auth__provider[aria-busy="true"] .openroot-auth__provider-icon {
   background-color: var(--oa-bg);
   color: var(--oa-text);
 }
-
 /* ── BUTTONS ──────────────────────────────────────────────── */
-
 .openroot-auth__button {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 0.6rem;
-
   min-height: 52px;
   padding: 0.8rem 1.4rem;
-
   border: 1px solid transparent;
-
   font-size: 0.95rem;
   font-weight: 700;
   white-space: nowrap;
   cursor: pointer;
-
   -webkit-tap-highlight-color: transparent;
   transition: opacity 0.2s ease;
 }
-
 .openroot-auth__button--ink {
   background: var(--oa-text);
   color: var(--oa-bg);
 }
-
 .openroot-auth__button--coral {
   background: var(--oa-coral);
   color: var(--oa-ink);
 }
-
 .openroot-auth__button--line {
   border-color: var(--oa-text);
   background-color: var(--oa-bg);
   color: var(--oa-text);
 }
-
 .openroot-auth__button:disabled {
   opacity: 0.4;
   cursor: not-allowed;
 }
-
 @media (hover: hover) {
   .openroot-auth__button:not(:disabled):hover {
     opacity: 0.88;
   }
 }
-
 .openroot-auth__button:not(:disabled):active {
   opacity: 0.8;
 }
-
 /* ── STATUS (success / error / confirm) ───────────────────── */
-
 .openroot-auth__status {
   display: flex;
   flex-direction: column;
@@ -365,249 +325,197 @@
   text-align: center;
   gap: 0.2rem;
 }
-
 .openroot-auth__status .openroot-auth__text {
   margin-inline: auto;
 }
-
 .openroot-auth__status .openroot-auth__button,
 .openroot-auth__status .openroot-auth__pair {
   margin-top: 1.25rem;
 }
-
 .openroot-auth__pair {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
   gap: 0.6rem;
 }
-
 .openroot-auth__lottie-frame {
   display: grid;
   place-items: center;
-
   width: clamp(112px, 22vw, 140px);
   height: clamp(112px, 22vw, 140px);
   margin-bottom: 1.25rem;
 }
-
 .openroot-auth__lottie {
   width: 100%;
   height: 100%;
 }
-
 /* ── PROFILE ──────────────────────────────────────────────── */
-
 .openroot-auth__profile {
   display: grid;
   gap: 1.25rem;
 }
-
 .openroot-auth__identity {
   display: flex;
   align-items: center;
   gap: 1.1rem;
   min-width: 0;
 }
-
 .openroot-auth__identity-copy {
   display: grid;
   gap: 0.5rem;
   min-width: 0;
 }
-
 .openroot-auth__identity-copy .openroot-auth__h3 {
   overflow-wrap: anywhere;
 }
-
 .openroot-auth__avatar {
   display: block;
   width: 84px;
   height: 84px;
   flex: 0 0 auto;
   object-fit: cover;
-
   border: 1px solid var(--oa-line);
   background-color: var(--oa-bg);
 }
-
 .openroot-auth__avatar--fallback {
   display: grid;
   place-items: center;
-
   background: var(--oa-blue);
   color: var(--oa-white);
   font-family: var(--oa-display);
   font-size: 2rem;
   font-weight: 800;
 }
-
 .openroot-auth__chip {
   display: inline-flex;
   align-items: center;
   gap: 0.4rem;
   width: fit-content;
-
   min-height: 30px;
   padding: 0.2rem 0.7rem;
-
   background: #35d381;
   color: var(--oa-ink);
   font-size: 0.82rem;
   font-weight: 700;
 }
-
 .openroot-auth__rows {
   border-top: 1px solid var(--oa-line);
   border-left: 1px solid var(--oa-line);
 }
-
 .openroot-auth__row {
   display: grid;
   grid-template-columns: 96px minmax(0, 1fr);
-
   border-right: 1px solid var(--oa-line);
   border-bottom: 1px solid var(--oa-line);
   background-color: var(--oa-bg);
 }
-
 .openroot-auth__row dt,
 .openroot-auth__row dd {
   padding: 0.8rem 1rem;
   font-size: 0.92rem;
 }
-
 .openroot-auth__row dt {
   border-right: 1px solid var(--oa-line);
   color: var(--oa-muted);
   font-weight: 600;
 }
-
 .openroot-auth__row dd {
   min-width: 0;
   overflow-wrap: anywhere;
   font-weight: 600;
 }
-
 .openroot-auth__profile > .openroot-auth__button {
   justify-self: start;
 }
-
 /* ── FLOW PANEL ───────────────────────────────────────────── */
-
 .openroot-auth__flow {
   display: flex;
   flex-direction: column;
   gap: 1.1rem;
-
   min-width: 0;
   padding: clamp(1.5rem, 3vw, 2.25rem);
-
   border-left: 1px solid var(--oa-line);
   background-color: color-mix(in srgb, var(--oa-text) 4%, var(--oa-bg));
 }
-
 .openroot-auth__flow-list {
   display: grid;
   border-top: 1px solid var(--oa-line);
   border-left: 1px solid var(--oa-line);
 }
-
 .openroot-auth__flow-item {
   display: flex;
   align-items: center;
   gap: 0.9rem;
-
   padding: 0.85rem 1rem;
-
   border-right: 1px solid var(--oa-line);
   border-bottom: 1px solid var(--oa-line);
-
   background-color: var(--oa-bg);
   opacity: 0.55;
 }
-
 .openroot-auth__flow-item.is-done,
 .openroot-auth__flow-item.is-active {
   opacity: 1;
 }
-
 .openroot-auth__flow-item.is-active {
   background-color: var(--oa-text);
   color: var(--oa-bg);
 }
-
 .openroot-auth__flow-copy {
   display: grid;
   gap: 0.1rem;
   min-width: 0;
 }
-
 .openroot-auth__flow-copy strong {
   font-size: 0.95rem;
   font-weight: 700;
   line-height: 1.3;
 }
-
 .openroot-auth__flow-copy span {
   font-size: 0.82rem;
   line-height: 1.45;
   opacity: 0.75;
 }
-
 /* coloured number block */
 .openroot-auth__marker {
   display: inline-grid;
   place-items: center;
-
   width: 36px;
   height: 36px;
   flex: 0 0 auto;
-
   color: var(--oa-ink);
   font-family: var(--oa-display);
   font-size: 0.85rem;
   font-weight: 700;
 }
-
 .openroot-auth__marker--blue { background: var(--oa-blue); color: var(--oa-white); }
 .openroot-auth__marker--mint { background: var(--oa-mint); }
 .openroot-auth__marker--yellow { background: var(--oa-yellow); }
 .openroot-auth__marker--coral { background: var(--oa-coral); }
-
 /* ── LOADING ──────────────────────────────────────────────── */
-
 .openroot-auth__loading {
   animation: openroot-auth-pulse 1.6s ease-in-out infinite;
 }
-
 @keyframes openroot-auth-pulse {
   0%, 100% { opacity: 0.45; }
   50% { opacity: 1; }
 }
-
 /* ── RESPONSIVE ───────────────────────────────────────────── */
-
 @media (max-width: 820px) {
   .openroot-auth__body {
     grid-template-columns: 1fr;
   }
-
   .openroot-auth__main {
     min-height: 0;
   }
-
   /* flow panel drops below, as a compact 4-up strip of numbered blocks */
   .openroot-auth__flow {
     border-left: 0;
     border-top: 1px solid var(--oa-line);
     padding: 1rem clamp(1.25rem, 4vw, 1.75rem) 1.25rem;
   }
-
   .openroot-auth__flow-list {
     grid-template-columns: repeat(4, minmax(0, 1fr));
   }
-
   .openroot-auth__flow-item {
     flex-direction: column;
     justify-content: center;
@@ -615,64 +523,51 @@
     padding: 0.75rem 0.3rem;
     text-align: center;
   }
-
   .openroot-auth__flow-copy span {
     display: none;
   }
-
   .openroot-auth__flow-copy strong {
     font-size: 0.78rem;
   }
 }
-
 @media (max-width: 480px) {
   .openroot-auth {
     align-items: flex-end;
     padding: 0;
   }
-
   .openroot-auth__shell {
     width: 100%;
   }
-
   .openroot-auth__identity {
     flex-direction: column;
     align-items: flex-start;
   }
-
   .openroot-auth__row {
     grid-template-columns: 1fr;
   }
-
   .openroot-auth__row dt {
     padding-bottom: 0;
     border-right: 0;
   }
-
   .openroot-auth__button,
   .openroot-auth__pair,
   .openroot-auth__profile > .openroot-auth__button {
     width: 100%;
   }
-
   .openroot-auth__pair .openroot-auth__button {
     flex: 1 1 100%;
   }
 }
-
 /* ── REDUCED MOTION ───────────────────────────────────────── */
-
 @media (prefers-reduced-motion: reduce) {
   .openroot-auth__loading {
     animation: none;
   }
-
   .openroot-auth__provider,
   .openroot-auth__button {
     transition: none !important;
   }
 }
-
 @supports (color: color-mix(in srgb, red, blue)) {
   .openroot-auth {
     background-color: color-mix(in srgb, var(--oa-text) 7%, var(--oa-bg));
