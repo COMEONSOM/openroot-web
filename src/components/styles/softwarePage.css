@@ -44,7 +44,7 @@ position: relative;
 display: flex;
 flex-direction: column;
 align-items: flex-start;
-padding: clamp(2.5rem, 5vw, 4rem) clamp(1.25rem, 8vw, 5rem) clamp(2rem, 4vw, 3rem);
+padding: clamp(1.25rem, 3vw, 2.25rem) clamp(1.25rem, 8vw, 5rem) clamp(2rem, 4vw, 3rem);
 overflow: hidden;
 border-bottom: 1px solid var(--ot-border);
 isolation: isolate;
@@ -97,7 +97,7 @@ z-index: 1;
 display: flex;
 flex-direction: column;
 align-items: flex-start;
-padding-top: clamp(0.5rem, 2vw, 1.5rem);
+padding-top: 2.5rem;
 }
 
 .sp-hero-title {
@@ -776,3 +776,43 @@ transition: none !important;
 transform: none !important;
 animation: none !important;
 } }
+
+/* ── SQUARE CORNERS (aligned with About / GDrive) ─────── */
+
+/* cards and panels */
+.sp-overview,
+.sp-purpose,
+.sp-feature-card,
+.sp-faq-item {
+  border-radius: 0;
+}
+
+/* buttons and links */
+.sp-launch-btn,
+.sp-explore-link {
+  border-radius: 0;
+}
+
+/* small controls and badges */
+.sp-launch-btn-icon,
+.sp-faq-chevron,
+.sp-faq-trigger-left::before,
+.sp-video-toggle {
+  border-radius: 0;
+}
+
+/* accent line on the overview card */
+.sp-overview::before {
+  border-radius: 0;
+}
+
+/* video window */
+.sp-video-frame,
+.sp-video-chrome {
+  border-radius: 0;
+}
+
+/* keep the three window dots round: they read as a browser window */
+.sp-video-dot {
+  border-radius: 50%;
+}

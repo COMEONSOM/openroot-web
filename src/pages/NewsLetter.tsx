@@ -1,8 +1,11 @@
 // ============================================================
 // OPENROOT NewsLetter — NewsLetter.tsx
-// VERSION: 2.0.0 — Full rewrite
+// VERSION: 3.0.0 — redesigned to match the About / modal system.
+// Logic is unchanged: SEO injection, starred cards (per user, per
+// section), job filters, toast, cross-tab UID sync, mobile menu.
+// Changes: cards are now real links (crawlable, keyboard friendly),
+// the logo and the GSAP magnetic hover are gone.
 // ============================================================
-
 
 import React, {
   useEffect,
@@ -11,24 +14,20 @@ import React, {
   useCallback,
   useMemo,
 } from 'react';
-import gsap from 'gsap';
 import '../components/styles/NewsLetter.css';
-
 
 // ─── Constants ───────────────────────────────────────────────
 const MAX_STARS = 5;
 const SAVE_DEBOUNCE_MS = 300;
 const DESKTOP_BREAKPOINT = 900; // px — must match CSS
 
-
-const IMG_CLOUD = "https://res.cloudinary.com/dydh05l1u/image/upload";
+const IMG_CLOUD = 'https://res.cloudinary.com/dydh05l1u/image/upload';
 const img = (publicId: string) => `${IMG_CLOUD}/q_auto,f_auto/${publicId}`;
-
 
 // ─── Types ───────────────────────────────────────────────────
 type JobType = 'central' | 'state' | 'psu';
 type FilterType = 'all' | JobType;
-
+type Accent = 'white' | 'blue' | 'cyan' | 'green' | 'purple' | 'gold' | 'pink';
 
 interface CardData {
   id: string;
@@ -39,6 +38,16 @@ interface CardData {
   jobType?: JobType;
 }
 
+// ─── Navigation (shared by desktop bar and mobile menu) ──────
+const NAV_ITEMS: Array<{ label: string; href: string; accent: Accent; isHome?: boolean }> = [
+  { label: 'Home', href: '#', accent: 'white', isHome: true },
+  { label: 'Jobs', href: '#jobs-section', accent: 'pink' },
+  { label: 'Govt Sites', href: '#govt-websites-section', accent: 'green' },
+  { label: 'UG/PG', href: '#ugpg-section', accent: 'cyan' },
+  { label: 'ITI/Diploma', href: '#iti-section', accent: 'blue' },
+  { label: 'Invest', href: '#invest-section', accent: 'gold' },
+  { label: 'PB Sites', href: '#ai-section', accent: 'purple' },
+];
 
 // ─── Section Data ─────────────────────────────────────────────
 const ITI_CARDS: CardData[] = [
@@ -49,7 +58,6 @@ const ITI_CARDS: CardData[] = [
   { id: 'iti-5', url: 'https://bharatskills.gov.in/Home/CTS', imgSrc: img('production-images/cts_uwhhfl'), imgAlt: 'CTS' },
 ];
 
-
 const UGPG_CARDS: CardData[] = [
   { id: 'ugpg-1', url: 'https://makaut1.ucanapply.com/smartexam/public/student', imgSrc: img('assets-rh/makaut_pnoufn'), imgAlt: 'MAKAUT-UG' },
   { id: 'ugpg-2', url: 'https://svmcm.wb.gov.in/', imgSrc: img('assets-rh/svmcm_wguoxv'), imgAlt: 'SVMCM' },
@@ -58,7 +66,6 @@ const UGPG_CARDS: CardData[] = [
   { id: 'ugpg-5', url: 'https://makautwb.ac.in/', imgSrc: img('production-images/makaut_pg_upvyyk'), imgAlt: 'MAKAUT-PG' },
   { id: 'ugpg-6', url: 'https://www.caluniv.ac.in/admission/admission.html', imgSrc: img('production-images/cuadmission_prrddk'), imgAlt: 'CU' },
 ];
-
 
 const GOVT_CARDS: CardData[] = [
   { id: 'govt-1', url: 'https://myaadhaarbeta.uidai.gov.in/', imgSrc: img('assets-rh/uidai_xwbq1i'), imgAlt: 'UIDAI' },
@@ -71,59 +78,54 @@ const GOVT_CARDS: CardData[] = [
   { id: 'govt-8', url: 'https://wb.gov.in/', imgSrc: img('production-images/wbgov_ncoxlb'), imgAlt: 'West Bengal Government' },
 ];
 
-
 const AI_CARDS: CardData[] = [
-  { id: 'ai-1',  url: 'https://app.flowcv.com/resumes',          imgSrc: img('assets-rh/resume_hw2yh7'),          imgAlt: 'resume' },
-  { id: 'ai-2',  url: 'https://playground.com/',                  imgSrc: img('assets-rh/playground_zco9cz'),      imgAlt: 'Playground' },
-  { id: 'ai-3',  url: 'https://icons8.com/',                      imgSrc: img('assets-rh/icons8_sxvnp8'),          imgAlt: 'icons8' },
-  { id: 'ai-4',  url: 'https://www.widecanvas.ai/',               imgSrc: img('assets-rh/wide_mggcdb'),       imgAlt: 'WideCanvas' },
-  { id: 'ai-5',  url: 'https://squoosh.app/',                     imgSrc: img('assets-rh/squoosh_dwhzif'),         imgAlt: 'squoosh' },
-  { id: 'ai-6', url: 'https://imresizer.com/',                     imgSrc: img('production-images/imresizer_dx4cs9'),      imgAlt: 'Imresizer' },
-  { id: 'ai-7',  url: 'https://animegenius.live3d.io/',           imgSrc: img('assets-rh/anime_eevsei'),           imgAlt: 'Anime Maker' },
-  { id: 'ai-8',  url: 'https://www.oxaam.com/',                   imgSrc: img('assets-rh/oxii_pizjy7'),            imgAlt: 'ox' },
-  { id: 'ai-9',  url: 'https://lottiefiles.com/',                 imgSrc: img('assets-rh/lottie_onkqtq'),          imgAlt: 'lottie' },
-  { id: 'ai-10',  url: 'https://reactbits.dev/',                   imgSrc: img('assets-rh/reactbits_k3mckb'),       imgAlt: 'reactbits' },
-  { id: 'ai-11', url: 'https://gradienty.codes/',                 imgSrc: img('assets-rh/gradienty_lrfznd'),       imgAlt: 'gradienty' },
-  { id: 'ai-12', url: 'https://spline.design/',                   imgSrc: img('assets-rh/spline_kcutlx'),          imgAlt: 'spline' },
-  { id: 'ai-13', url: 'https://www.cloudflare.com/en-in/',        imgSrc: img('assets-rh/cloudflare_bnfm30'),      imgAlt: 'Cloudflare' },
-  { id: 'ai-14', url: 'https://console.cloud.google.com/',        imgSrc: img('assets-rh/google-console_rjtqct'), imgAlt: 'console.cloud.google' },
-  { id: 'ai-15', url: 'https://skillshop.withgoogle.com/',        imgSrc: img('assets-rh/google-skillshop_oqqxw1'), imgAlt: 'skillshop.withgoogle' },
+  { id: 'ai-1', url: 'https://app.flowcv.com/resumes', imgSrc: img('assets-rh/resume_hw2yh7'), imgAlt: 'resume' },
+  { id: 'ai-2', url: 'https://playground.com/', imgSrc: img('assets-rh/playground_zco9cz'), imgAlt: 'Playground' },
+  { id: 'ai-3', url: 'https://icons8.com/', imgSrc: img('assets-rh/icons8_sxvnp8'), imgAlt: 'icons8' },
+  { id: 'ai-4', url: 'https://www.widecanvas.ai/', imgSrc: img('assets-rh/wide_mggcdb'), imgAlt: 'WideCanvas' },
+  { id: 'ai-5', url: 'https://squoosh.app/', imgSrc: img('assets-rh/squoosh_dwhzif'), imgAlt: 'squoosh' },
+  { id: 'ai-6', url: 'https://imresizer.com/', imgSrc: img('production-images/imresizer_dx4cs9'), imgAlt: 'Imresizer' },
+  { id: 'ai-7', url: 'https://animegenius.live3d.io/', imgSrc: img('assets-rh/anime_eevsei'), imgAlt: 'Anime Maker' },
+  { id: 'ai-8', url: 'https://www.oxaam.com/', imgSrc: img('assets-rh/oxii_pizjy7'), imgAlt: 'ox' },
+  { id: 'ai-9', url: 'https://lottiefiles.com/', imgSrc: img('assets-rh/lottie_onkqtq'), imgAlt: 'lottie' },
+  { id: 'ai-10', url: 'https://reactbits.dev/', imgSrc: img('assets-rh/reactbits_k3mckb'), imgAlt: 'reactbits' },
+  { id: 'ai-11', url: 'https://gradienty.codes/', imgSrc: img('assets-rh/gradienty_lrfznd'), imgAlt: 'gradienty' },
+  { id: 'ai-12', url: 'https://spline.design/', imgSrc: img('assets-rh/spline_kcutlx'), imgAlt: 'spline' },
+  { id: 'ai-13', url: 'https://www.cloudflare.com/en-in/', imgSrc: img('assets-rh/cloudflare_bnfm30'), imgAlt: 'Cloudflare' },
+  { id: 'ai-14', url: 'https://console.cloud.google.com/', imgSrc: img('assets-rh/google-console_rjtqct'), imgAlt: 'console.cloud.google' },
+  { id: 'ai-15', url: 'https://skillshop.withgoogle.com/', imgSrc: img('assets-rh/google-skillshop_oqqxw1'), imgAlt: 'skillshop.withgoogle' },
 ];
-
 
 const INVEST_CARDS: CardData[] = [
-  { id: 'inv-1', url: 'https://zerodha.com/brokerage-calculator/',              imgSrc: img('assets-rh/zerodha_xqjzvf'),       imgAlt: 'deductions' },
-  { id: 'inv-2', url: 'https://klasterme.in/upcoming-dividends',                imgSrc: img('assets-rh/dividendstock_wwfkh3'), imgAlt: 'dividends', isLive: true },
-  { id: 'inv-3', url: 'https://zerodha.com/ipo/',                               imgSrc: img('assets-rh/ipo_whvx3z'),           imgAlt: 'ipos',      isLive: true },
-  { id: 'inv-4', url: 'https://www.investorgain.com/report/live-ipo-gmp/331/',  imgSrc: img('assets-rh/gmp_p3eyet'),           imgAlt: 'gmp',       isLive: true },
-  { id: 'inv-5', url: 'https://www.nseindia.com/',                              imgSrc: img('assets-rh/nse_wpjy53'),           imgAlt: 'nse',       isLive: true },
-  { id: 'inv-6', url: 'https://tradingeconomics.com/united-states/stock-market',imgSrc: img('assets-rh/nasdaq_rin9vo'),        imgAlt: 'nasdaq',    isLive: true },
+  { id: 'inv-1', url: 'https://zerodha.com/brokerage-calculator/', imgSrc: img('assets-rh/zerodha_xqjzvf'), imgAlt: 'deductions' },
+  { id: 'inv-2', url: 'https://klasterme.in/upcoming-dividends', imgSrc: img('assets-rh/dividendstock_wwfkh3'), imgAlt: 'dividends', isLive: true },
+  { id: 'inv-3', url: 'https://zerodha.com/ipo/', imgSrc: img('assets-rh/ipo_whvx3z'), imgAlt: 'ipos', isLive: true },
+  { id: 'inv-4', url: 'https://www.investorgain.com/report/live-ipo-gmp/331/', imgSrc: img('assets-rh/gmp_p3eyet'), imgAlt: 'gmp', isLive: true },
+  { id: 'inv-5', url: 'https://www.nseindia.com/', imgSrc: img('assets-rh/nse_wpjy53'), imgAlt: 'nse', isLive: true },
+  { id: 'inv-6', url: 'https://tradingeconomics.com/united-states/stock-market', imgSrc: img('assets-rh/nasdaq_rin9vo'), imgAlt: 'nasdaq', isLive: true },
 ];
-
 
 const JOB_CARDS: CardData[] = [
-  { id: 'job-1', url: 'https://rrbrecruitmentstaging.net/#/auth/landing',                                         imgSrc: img('assets-rh/rrb_nv0pt4'),                                  imgAlt: 'RRB',                        jobType: 'central' },
-  { id: 'job-2', url: 'https://drdo.gov.in/drdo/',                                                                imgSrc: img('assets-rh/DRDO_tny47z'),                                 imgAlt: 'DRDO',                       jobType: 'central' },
-  { id: 'job-3', url: 'https://wbpsc.gov.in',                                                                     imgSrc: img('assets-rh/wbpsc_jx06od.png'),                            imgAlt: 'WBPSC',                      jobType: 'state'   },
-  { id: 'job-4', url: 'https://www.grse.in/career/',                                                              imgSrc: img('assets-rh/grse-logo_cw8xcg'),                            imgAlt: 'GRSE',                       jobType: 'psu'     },
-  { id: 'job-5', url: 'https://careers.bhel.in/index.jsp',                                                        imgSrc: img('assets-rh/bhel_iv3bdc'),                                 imgAlt: 'BHEL',                       jobType: 'psu'     },
-  { id: 'job-6', url: 'https://iocl.com/latest-job-opening',                                                      imgSrc: img('assets-rh/iocllogo_qpttuz'),                             imgAlt: 'IOCL',                       jobType: 'psu'     },
-  { id: 'job-7', url: 'https://madrasfert.co.in/resources/recruitment/',                                          imgSrc: img('assets-rh/madras-fert_nnks9s'),                          imgAlt: 'Madras-Fertilizers-Limited', jobType: 'psu'     },
-  { id: 'job-8', url: 'https://sbi.bank.in/web/careers',                                                          imgSrc: img('production-images/sbi_careers_uxcxi2'),                  imgAlt: 'SBI Careers',                jobType: 'psu'     },
-  { id: 'job-9', url: 'https://cdn.digialm.com/EForms/configuredHtml/1258/97495/Index.html',                      imgSrc: img('production-images/coalindia_reerav'),                    imgAlt: 'Coal India',                 jobType: 'psu'     },
-  { id: 'job-10', url: 'https://careers.meconlimited.co.in/',                                                     imgSrc: img('production-images/mecon_lbpwxq'),                        imgAlt: 'MECON',                      jobType: 'psu'     },
-  { id: 'job-11', url: 'https://www.nbccindia.in/webEnglish/jobs',                                                imgSrc: img('production-images/nbcc_w1ul1g'),                         imgAlt: 'NBCC',                       jobType: 'psu'     },
-  { id: 'job-12', url: 'https://www.ecil.co.in/jobopenings',                                                      imgSrc: img('production-images/ecil_u56e4u'),                         imgAlt: 'ECIL',                       jobType: 'psu'     },
-  { id: 'job-13', url: 'https://mudira.nalcoindia.co.in/rec_portal/default.aspx',                                 imgSrc: img('production-images/nalco_nqcifw'),                        imgAlt: 'Nalco',                      jobType: 'psu'     },
-  { id: 'job-14', url: 'https://www.joinindiannavy.gov.in/en/account/account/state',                              imgSrc: img('production-images/indian-navy_jffv8f'),                  imgAlt: 'Indian Navy',                jobType: 'central' },
-  { id: 'job-15', url: 'https://www.cdac.in/index.aspx?id=current_jobs',                                          imgSrc: img('production-images/cdac_t3owh1'),                         imgAlt: 'CDAC',                       jobType: 'psu'     },
-  { id: 'job-16', url: 'https://csc.gov.in/careers',                                                              imgSrc: img('production-images/csc_ncnfb1'),                          imgAlt: 'CSC',                        jobType: 'central' },
-  { id: 'job-17', url: 'https://www.meity.gov.in/offerings/vacancies?page=1',                                     imgSrc: img('production-images/meity_u8srdj'),                        imgAlt: 'MEITY',                      jobType: 'central' },
-  { id: 'job-18', url: 'https://wbprms.in/',                                                                      imgSrc: img('production-images/wbprms_tpbn7u'),                       imgAlt: 'WBPRMS',                     jobType: 'state'   },
+  { id: 'job-1', url: 'https://rrbrecruitmentstaging.net/#/auth/landing', imgSrc: img('assets-rh/rrb_nv0pt4'), imgAlt: 'RRB', jobType: 'central' },
+  { id: 'job-2', url: 'https://drdo.gov.in/drdo/', imgSrc: img('assets-rh/DRDO_tny47z'), imgAlt: 'DRDO', jobType: 'central' },
+  { id: 'job-3', url: 'https://wbpsc.gov.in', imgSrc: img('assets-rh/wbpsc_jx06od.png'), imgAlt: 'WBPSC', jobType: 'state' },
+  { id: 'job-4', url: 'https://www.grse.in/career/', imgSrc: img('assets-rh/grse-logo_cw8xcg'), imgAlt: 'GRSE', jobType: 'psu' },
+  { id: 'job-5', url: 'https://careers.bhel.in/index.jsp', imgSrc: img('assets-rh/bhel_iv3bdc'), imgAlt: 'BHEL', jobType: 'psu' },
+  { id: 'job-6', url: 'https://iocl.com/latest-job-opening', imgSrc: img('assets-rh/iocllogo_qpttuz'), imgAlt: 'IOCL', jobType: 'psu' },
+  { id: 'job-7', url: 'https://madrasfert.co.in/resources/recruitment/', imgSrc: img('assets-rh/madras-fert_nnks9s'), imgAlt: 'Madras-Fertilizers-Limited', jobType: 'psu' },
+  { id: 'job-8', url: 'https://sbi.bank.in/web/careers', imgSrc: img('production-images/sbi_careers_uxcxi2'), imgAlt: 'SBI Careers', jobType: 'psu' },
+  { id: 'job-9', url: 'https://cdn.digialm.com/EForms/configuredHtml/1258/97495/Index.html', imgSrc: img('production-images/coalindia_reerav'), imgAlt: 'Coal India', jobType: 'psu' },
+  { id: 'job-10', url: 'https://careers.meconlimited.co.in/', imgSrc: img('production-images/mecon_lbpwxq'), imgAlt: 'MECON', jobType: 'psu' },
+  { id: 'job-11', url: 'https://www.nbccindia.in/webEnglish/jobs', imgSrc: img('production-images/nbcc_w1ul1g'), imgAlt: 'NBCC', jobType: 'psu' },
+  { id: 'job-12', url: 'https://www.ecil.co.in/jobopenings', imgSrc: img('production-images/ecil_u56e4u'), imgAlt: 'ECIL', jobType: 'psu' },
+  { id: 'job-13', url: 'https://mudira.nalcoindia.co.in/rec_portal/default.aspx', imgSrc: img('production-images/nalco_nqcifw'), imgAlt: 'Nalco', jobType: 'psu' },
+  { id: 'job-14', url: 'https://www.joinindiannavy.gov.in/en/account/account/state', imgSrc: img('production-images/indian-navy_jffv8f'), imgAlt: 'Indian Navy', jobType: 'central' },
+  { id: 'job-15', url: 'https://www.cdac.in/index.aspx?id=current_jobs', imgSrc: img('production-images/cdac_t3owh1'), imgAlt: 'CDAC', jobType: 'psu' },
+  { id: 'job-16', url: 'https://csc.gov.in/careers', imgSrc: img('production-images/csc_ncnfb1'), imgAlt: 'CSC', jobType: 'central' },
+  { id: 'job-17', url: 'https://www.meity.gov.in/offerings/vacancies?page=1', imgSrc: img('production-images/meity_u8srdj'), imgAlt: 'MEITY', jobType: 'central' },
+  { id: 'job-18', url: 'https://wbprms.in/', imgSrc: img('production-images/wbprms_tpbn7u'), imgAlt: 'WBPRMS', jobType: 'state' },
 ];
 
-
-// ─── SEO ──────────────────────────────────────────────────────
 // ─── SEO helpers ─────────────────────────────────────────────
 // Idempotent: sets a <meta> by name/property, reusing an existing
 // element so Helmet/React-Helmet is NOT required.
@@ -167,68 +169,23 @@ const SEO_DESCRIPTION =
 
 // Primary + long-tail + LSI keyword bank targeting high-traffic Indian job searches
 const SEO_KEYWORDS = [
-  // ── Highest-volume govt job keywords ──────────────────────
-  'government job 2026',
-  'sarkari naukri 2026',
-  'govt job vacancy India',
-  'latest government jobs',
-  'central government jobs',
-  'state government jobs',
-  'PSU jobs 2026',
-  'public sector jobs India',
+  'government job 2026', 'sarkari naukri 2026', 'govt job vacancy India', 'latest government jobs',
+  'central government jobs', 'state government jobs', 'PSU jobs 2026', 'public sector jobs India',
   'sarkari result 2026',
-  // ── Specific org / portal keywords ────────────────────────
-  'RRB recruitment 2026',
-  'DRDO recruitment 2026',
-  'WBPSC jobs West Bengal',
-  'BHEL recruitment 2026',
-  'IOCL recruitment 2026',
-  'GRSE recruitment 2026',
-  'Madras Fertilizers recruitment',
-  // ── Education / admission keywords ────────────────────────
-  'ITI admission 2026',
-  'diploma admission West Bengal',
-  'MAKAUT admission 2026',
-  'Jadavpur University admission',
-  'SVMCM scholarship',
-  'Skill India digital',
-  'NISM certification',
-  // ── Job type + fresher keywords ───────────────────────────
-  'fresher government job 2026',
-  'engineering jobs India 2026',
-  'railway jobs 2026',
-  'defence jobs India',
-  'bank jobs 2026',
-  'SSC jobs 2026',
-  'UPSC 2026',
-  'police jobs India',
-  'teacher recruitment 2026',
-  'jobs for 10th pass 2026',
-  'jobs for 12th pass 2026',
-  'ITI pass government job',
-  'diploma holder government job',
-  // ── Investing / finance keywords ───────────────────────────
-  'upcoming IPO 2026 India',
-  'IPO GMP today',
-  'NSE stock market India',
-  'stock market live India',
-  'zerodha brokerage calculator',
-  'upcoming dividends India',
-  // ── Productivity / tools keywords ─────────────────────────
-  'free resume builder India',
-  'online productivity tools 2026',
-  'AI tools for students India',
-  // ── Geo-targeted keywords ──────────────────────────────────
-  'government jobs West Bengal',
-  'sarkari naukri Kolkata',
-  'WB govt job 2026',
-  'Bengal PSC recruitment',
-  // ── Intent / action keywords ───────────────────────────────
-  'apply government job online 2026',
-  'latest job notification India',
-  'job alert 2026',
-  'government job portal India',
-  'online job portal India',
+  'RRB recruitment 2026', 'DRDO recruitment 2026', 'WBPSC jobs West Bengal', 'BHEL recruitment 2026',
+  'IOCL recruitment 2026', 'GRSE recruitment 2026', 'Madras Fertilizers recruitment',
+  'ITI admission 2026', 'diploma admission West Bengal', 'MAKAUT admission 2026',
+  'Jadavpur University admission', 'SVMCM scholarship', 'Skill India digital', 'NISM certification',
+  'fresher government job 2026', 'engineering jobs India 2026', 'railway jobs 2026',
+  'defence jobs India', 'bank jobs 2026', 'SSC jobs 2026', 'UPSC 2026', 'police jobs India',
+  'teacher recruitment 2026', 'jobs for 10th pass 2026', 'jobs for 12th pass 2026',
+  'ITI pass government job', 'diploma holder government job',
+  'upcoming IPO 2026 India', 'IPO GMP today', 'NSE stock market India', 'stock market live India',
+  'zerodha brokerage calculator', 'upcoming dividends India',
+  'free resume builder India', 'online productivity tools 2026', 'AI tools for students India',
+  'government jobs West Bengal', 'sarkari naukri Kolkata', 'WB govt job 2026', 'Bengal PSC recruitment',
+  'apply government job online 2026', 'latest job notification India', 'job alert 2026',
+  'government job portal India', 'online job portal India',
 ].join(', ');
 
 // Schema.org WebSite + SearchAction (enables Google Sitelinks Search Box)
@@ -279,8 +236,8 @@ const BREADCRUMB_SCHEMA = {
   '@context': 'https://schema.org',
   '@type': 'BreadcrumbList',
   itemListElement: [
-    { '@type': 'ListItem', position: 1, name: 'Home',       item: 'https://openroot.in' },
-    { '@type': 'ListItem', position: 2, name: 'NewsLetter',  item: 'https://openroot.in/newsletter' },
+    { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://openroot.in' },
+    { '@type': 'ListItem', position: 2, name: 'NewsLetter', item: 'https://openroot.in/newsletter' },
   ],
 };
 
@@ -295,44 +252,38 @@ function isStorageAvailable(type: 'localStorage' | 'sessionStorage'): boolean {
   } catch { return false; }
 }
 
-
-const HAS_LOCAL   = isStorageAvailable('localStorage');
+const HAS_LOCAL = isStorageAvailable('localStorage');
 const HAS_SESSION = isStorageAvailable('sessionStorage');
-
 
 function safeGet(key: string): string | null {
   try {
-    if (HAS_LOCAL)   return localStorage.getItem(key);
+    if (HAS_LOCAL) return localStorage.getItem(key);
     if (HAS_SESSION) return sessionStorage.getItem(key);
   } catch {}
   return null;
 }
 
-
 function safeSet(key: string, value: string): void {
   try {
-    if (HAS_LOCAL)   { localStorage.setItem(key, value); return; }
-    if (HAS_SESSION)   sessionStorage.setItem(key, value);
+    if (HAS_LOCAL) { localStorage.setItem(key, value); return; }
+    if (HAS_SESSION) sessionStorage.setItem(key, value);
   } catch {}
 }
-
 
 // ─── UID helpers ──────────────────────────────────────────────
 function resolveUID(): string {
   try {
-    const p       = new URLSearchParams(window.location.search);
+    const p = new URLSearchParams(window.location.search);
     const fromUrl = p.get('uid') ?? p.get('user');
-    const fromMain= safeGet('openrootUserUID');
-    const cached  = safeGet('newsletter_current_uid');
-    const uid     = fromUrl ? decodeURIComponent(fromUrl) : (fromMain ?? cached ?? 'guest_user');
+    const fromMain = safeGet('openrootUserUID');
+    const cached = safeGet('newsletter_current_uid');
+    const uid = fromUrl ? decodeURIComponent(fromUrl) : (fromMain ?? cached ?? 'guest_user');
     if (uid !== cached) safeSet('newsletter_current_uid', uid);
     return uid;
   } catch { return 'guest_user'; }
 }
 
-
 function storageKey(uid: string): string { return `xj_starredCards_${uid}`; }
-
 
 function loadStarred(uid: string): Record<string, string[]> {
   try {
@@ -348,6 +299,16 @@ function loadStarred(uid: string): Record<string, string[]> {
   } catch { return {}; }
 }
 
+// Only plain web links are ever rendered as hrefs.
+function safeHref(url: string): string | undefined {
+  try {
+    const { protocol } = new URL(url);
+    return protocol === 'http:' || protocol === 'https:' ? url : undefined;
+  } catch {
+    console.warn('[NewsLetter] Blocked invalid URL:', url);
+    return undefined;
+  }
+}
 
 // ─── Card ─────────────────────────────────────────────────────
 interface CardProps {
@@ -355,67 +316,48 @@ interface CardProps {
   isStarred: boolean;
   hidden?: boolean;
   onStarClick: (id: string) => void;
-  onCardClick: (url: string) => void;
 }
 
-
-const Card: React.FC<CardProps> = React.memo(({ card, isStarred, hidden, onStarClick, onCardClick }) => {
-  const handleStar = useCallback((e: React.MouseEvent) => {
-    e.stopPropagation();
-    onStarClick(card.id);
-  }, [card.id, onStarClick]);
-
-
-  const handleKeyDown = useCallback((e: React.KeyboardEvent) => {
-    if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onCardClick(card.url); }
-  }, [card.url, onCardClick]);
-
-
-  const isJobCard = Boolean(card.jobType);
-
-
-  const starBtn = (
-    <button
-      className={`xj-star-btn${isStarred ? ' xj-starred' : ''}`}
-      aria-pressed={isStarred}
-      aria-label={isStarred ? 'Unstar card' : 'Star card'}
-      onClick={handleStar}
-    >
-      {isStarred ? '★' : '☆'}
-    </button>
-  );
-
+const Card: React.FC<CardProps> = React.memo(({ card, isStarred, hidden, onStarClick }) => {
+  const handleStar = useCallback(() => onStarClick(card.id), [card.id, onStarClick]);
 
   return (
-    <article
-      className={`xj-card${isJobCard ? ' xj-job-card' : ''}${hidden ? ' xj-hidden' : ''}`}
-      data-url={card.url}
+    <div
+      className={`openroot-news__card${card.jobType ? ' is-job' : ''}${hidden ? ' is-hidden' : ''}`}
       data-type={card.jobType}
-      role="button"
-      tabIndex={hidden ? -1 : 0}
-      aria-hidden={hidden ? true : undefined}
-      onClick={() => !hidden && onCardClick(card.url)}
-      onKeyDown={handleKeyDown}
     >
-      {isJobCard ? (
-        <div className="xj-img-wrapper">
-          {starBtn}
-          <img src={card.imgSrc} alt={card.imgAlt} loading="lazy" decoding="async" />
-        </div>
-      ) : (
-        <>
-          {starBtn}
-          {card.isLive && <p className="xj-live" aria-label="Live data">LIVE</p>}
-          <div className="xj-img-wrapper">
-            <img src={card.imgSrc} alt={card.imgAlt} loading="lazy" decoding="async" />
-          </div>
-        </>
+      {/* the whole card is a real link, so it works with the keyboard and
+          can be crawled; the star sits beside it, not inside it */}
+      <a
+        className="openroot-news__link"
+        href={safeHref(card.url)}
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label={`${card.imgAlt} (opens in a new tab)`}
+      >
+        <img src={card.imgSrc} alt="" loading="lazy" decoding="async" />
+      </a>
+
+      {card.isLive && (
+        <span className="openroot-news__live" aria-label="Live data">
+          <span className="openroot-news__live-dot" aria-hidden="true" />
+          LIVE
+        </span>
       )}
-    </article>
+
+      <button
+        type="button"
+        className={`openroot-news__star${isStarred ? ' is-starred' : ''}`}
+        aria-pressed={isStarred}
+        aria-label={isStarred ? `Unstar ${card.imgAlt}` : `Star ${card.imgAlt}`}
+        onClick={handleStar}
+      >
+        {isStarred ? '★' : '☆'}
+      </button>
+    </div>
   );
 });
 Card.displayName = 'Card';
-
 
 // ─── CardGrid ─────────────────────────────────────────────────
 interface CardGridProps {
@@ -426,31 +368,18 @@ interface CardGridProps {
   onStarClick: (segId: string, cardId: string) => void;
 }
 
-
 const CardGrid: React.FC<CardGridProps> = React.memo(({ segId, cards, starredIds, jobFilter, onStarClick }) => {
   const handleStar = useCallback((id: string) => onStarClick(segId, id), [segId, onStarClick]);
 
-
-  const handleCardClick = useCallback((url: string) => {
-    if (!url) return;
-    try {
-      const { protocol } = new URL(url);
-      if (protocol === 'http:' || protocol === 'https:') {
-        window.open(url, '_blank', 'noopener,noreferrer');
-      }
-    } catch { console.warn('[NewsLetter] Blocked invalid URL:', url); }
-  }, []);
-
-
+  // starred cards first
   const sorted = useMemo(() => {
-    const starred   = cards.filter(c =>  starredIds.has(c.id));
+    const starred = cards.filter(c => starredIds.has(c.id));
     const unstarred = cards.filter(c => !starredIds.has(c.id));
     return [...starred, ...unstarred];
   }, [cards, starredIds]);
 
-
   return (
-    <div className="xj-card-grid" data-segment={segId}>
+    <div className="openroot-news__grid" data-segment={segId}>
       {sorted.map(card => {
         const hidden = jobFilter !== undefined && jobFilter !== 'all' && card.jobType !== jobFilter;
         return (
@@ -460,7 +389,6 @@ const CardGrid: React.FC<CardGridProps> = React.memo(({ segId, cards, starredIds
             isStarred={starredIds.has(card.id)}
             hidden={hidden}
             onStarClick={handleStar}
-            onCardClick={handleCardClick}
           />
         );
       })}
@@ -469,79 +397,88 @@ const CardGrid: React.FC<CardGridProps> = React.memo(({ segId, cards, starredIds
 });
 CardGrid.displayName = 'CardGrid';
 
+// ─── Section ──────────────────────────────────────────────────
+interface SectionProps {
+  id: string;
+  titleId: string;
+  title: string;
+  accent: Accent;
+  count: number;
+  children: React.ReactNode;
+}
+
+const Section: React.FC<SectionProps> = ({ id, titleId, title, accent, count, children }) => (
+  <section className="openroot-news__section" id={id} aria-labelledby={titleId}>
+    <div className="openroot-news__head">
+      <span className={`openroot-news__marker openroot-news__marker--${accent}`} aria-hidden="true">
+        {count}
+      </span>
+      <h2 className="openroot-news__h2" id={titleId}>{title}</h2>
+    </div>
+    {children}
+  </section>
+);
 
 // ─── Toast ────────────────────────────────────────────────────
 const Toast: React.FC<{ message: string }> = React.memo(({ message }) => (
-  <div className="xj-toast" role="alert" aria-live="assertive" aria-atomic="true">
+  <div className="openroot-news__toast" role="status" aria-live="polite" aria-atomic="true">
     {message}
   </div>
 ));
 Toast.displayName = 'Toast';
 
-
 // ─── Main ─────────────────────────────────────────────────────
 const NewsLetter: React.FC = () => {
   const userUID = useRef(resolveUID()).current;
 
-
   const [starredData, setStarredData] = useState<Record<string, string[]>>(() => loadStarred(userUID));
-  const [menuOpen,    setMenuOpen]    = useState(false);
-  const [jobFilter,   setJobFilter]   = useState<FilterType>('all');
-  const [toast,       setToast]       = useState<string | null>(null);
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [jobFilter, setJobFilter] = useState<FilterType>('all');
+  const [toast, setToast] = useState<string | null>(null);
 
-
-  const menuBtnRef      = useRef<HTMLButtonElement>(null);
+  const menuBtnRef = useRef<HTMLButtonElement>(null);
   const menuDropdownRef = useRef<HTMLUListElement>(null);
-  const saveTimerRef    = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const toastTimerRef   = useRef<ReturnType<typeof setTimeout> | null>(null);
-
+  const saveTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const toastTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   // ── SEO injection (runs once on mount) ──────────────────────
   useEffect(() => {
-    // ── <title> ─────────────────────────────────────────────
     document.title = SEO_TITLE;
 
-    // ── Standard meta ───────────────────────────────────────
-    setMeta('name', 'description',        SEO_DESCRIPTION);
-    setMeta('name', 'keywords',           SEO_KEYWORDS);
-    setMeta('name', 'robots',             'index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1');
-    setMeta('name', 'author',             'Openroot Systems');
-    setMeta('name', 'theme-color',        '#0b0040');
-    setMeta('name', 'application-name',   'NewsLetter');
+    setMeta('name', 'description', SEO_DESCRIPTION);
+    setMeta('name', 'keywords', SEO_KEYWORDS);
+    setMeta('name', 'robots', 'index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1');
+    setMeta('name', 'author', 'Openroot Systems');
+    setMeta('name', 'theme-color', '#0b0040');
+    setMeta('name', 'application-name', 'NewsLetter');
 
-    // ── Open Graph (Facebook / WhatsApp / LinkedIn previews) ─
-    setMeta('property', 'og:type',        'website');
-    setMeta('property', 'og:site_name',   'NewsLetter — Openroot Systems');
-    setMeta('property', 'og:title',       SEO_TITLE);
+    setMeta('property', 'og:type', 'website');
+    setMeta('property', 'og:site_name', 'NewsLetter — Openroot Systems');
+    setMeta('property', 'og:title', SEO_TITLE);
     setMeta('property', 'og:description', SEO_DESCRIPTION);
-    setMeta('property', 'og:url',         'https://openroot.in/newsletter');
-    setMeta('property', 'og:image',       'https://openroot.in/assets/company-icon.png');
+    setMeta('property', 'og:url', 'https://openroot.in/newsletter');
+    setMeta('property', 'og:image', 'https://openroot.in/assets/company-icon.png');
     setMeta('property', 'og:image:width', '1200');
-    setMeta('property', 'og:image:height','630');
-    setMeta('property', 'og:locale',      'en_IN');
+    setMeta('property', 'og:image:height', '630');
+    setMeta('property', 'og:locale', 'en_IN');
 
-    // ── Twitter Card ─────────────────────────────────────────
-    setMeta('name', 'twitter:card',        'summary_large_image');
-    setMeta('name', 'twitter:title',       SEO_TITLE);
+    setMeta('name', 'twitter:card', 'summary_large_image');
+    setMeta('name', 'twitter:title', SEO_TITLE);
     setMeta('name', 'twitter:description', SEO_DESCRIPTION);
-    setMeta('name', 'twitter:image',       'https://openroot.in/assets/company-icon.png');
-    setMeta('name', 'twitter:site',        '@OpenrootSystems');
+    setMeta('name', 'twitter:image', 'https://openroot.in/assets/company-icon.png');
+    setMeta('name', 'twitter:site', '@OpenrootSystems');
 
-    // ── Geo meta (India targeting) ───────────────────────────
-    setMeta('name', 'geo.region',          'IN-WB');
-    setMeta('name', 'geo.placename',       'Kolkata, West Bengal, India');
-    setMeta('name', 'geo.position',        '22.5726;88.3639');
-    setMeta('name', 'ICBM',               '22.5726, 88.3639');
+    setMeta('name', 'geo.region', 'IN-WB');
+    setMeta('name', 'geo.placename', 'Kolkata, West Bengal, India');
+    setMeta('name', 'geo.position', '22.5726;88.3639');
+    setMeta('name', 'ICBM', '22.5726, 88.3639');
 
-    // ── Canonical ────────────────────────────────────────────
     setLink('canonical', 'https://openroot.in/newsletter');
 
-    // ── JSON-LD structured data ───────────────────────────────
-    injectJsonLd('xj-schema-website',    WEBSITE_SCHEMA);
-    injectJsonLd('xj-schema-itemlist',   ITEMLIST_SCHEMA);
+    injectJsonLd('xj-schema-website', WEBSITE_SCHEMA);
+    injectJsonLd('xj-schema-itemlist', ITEMLIST_SCHEMA);
     injectJsonLd('xj-schema-breadcrumb', BREADCRUMB_SCHEMA);
   }, []);
-
 
   // ── Starred sets ────────────────────────────────────────────
   const starredSets = useMemo<Record<string, Set<string>>>(() => {
@@ -550,14 +487,12 @@ const NewsLetter: React.FC = () => {
     return map;
   }, [starredData]);
 
-
   const getSet = useCallback(
     (segId: string): Set<string> => starredSets[segId] ?? new Set<string>(),
     [starredSets],
   );
 
-
-  // ── Save (debounced, ref-scoped — no module-level timer) ────
+  // ── Save (debounced, ref-scoped) ────────────────────────────
   const persistStarred = useCallback((data: Record<string, string[]>) => {
     if (saveTimerRef.current) clearTimeout(saveTimerRef.current);
     saveTimerRef.current = setTimeout(() => {
@@ -566,14 +501,12 @@ const NewsLetter: React.FC = () => {
     }, SAVE_DEBOUNCE_MS);
   }, [userUID]);
 
-
   // ── Toast ───────────────────────────────────────────────────
   const showToast = useCallback((msg: string, ms = 2800) => {
     setToast(msg);
     if (toastTimerRef.current) clearTimeout(toastTimerRef.current);
     toastTimerRef.current = setTimeout(() => setToast(null), ms);
   }, []);
-
 
   // ── Star toggle ─────────────────────────────────────────────
   const handleStarClick = useCallback((segId: string, cardId: string) => {
@@ -596,7 +529,6 @@ const NewsLetter: React.FC = () => {
     });
   }, [persistStarred, showToast]);
 
-
   // ── Cross-tab UID sync ──────────────────────────────────────
   useEffect(() => {
     if (!HAS_LOCAL) return;
@@ -610,7 +542,6 @@ const NewsLetter: React.FC = () => {
     return () => window.removeEventListener('storage', handler);
   }, [userUID]);
 
-
   // ── Auto-close menu when viewport hits desktop breakpoint ───
   useEffect(() => {
     const mq = window.matchMedia(`(min-width: ${DESKTOP_BREAKPOINT}px)`);
@@ -619,20 +550,18 @@ const NewsLetter: React.FC = () => {
     return () => mq.removeEventListener('change', handler);
   }, []);
 
-
-  // ── Outside click (pointerdown — no setTimeout hack needed) ─
+  // ── Outside click ───────────────────────────────────────────
   useEffect(() => {
     if (!menuOpen) return;
     const handler = (e: PointerEvent) => {
       const target = e.target as Node;
       if (menuDropdownRef.current?.contains(target)) return;
-      if (menuBtnRef.current?.contains(target))      return;
+      if (menuBtnRef.current?.contains(target)) return;
       setMenuOpen(false);
     };
     document.addEventListener('pointerdown', handler);
     return () => document.removeEventListener('pointerdown', handler);
   }, [menuOpen]);
-
 
   // ── Escape key ──────────────────────────────────────────────
   useEffect(() => {
@@ -646,158 +575,87 @@ const NewsLetter: React.FC = () => {
     return () => document.removeEventListener('keydown', handler);
   }, [menuOpen]);
 
-
-  // ── GSAP magnetic hover (pointer devices only) ──────────────
-  useEffect(() => {
-    const btn = menuBtnRef.current;
-    if (!btn) return;
-    if (window.matchMedia('(hover: none) and (pointer: coarse)').matches) return;
-
-
-    const onMove = (e: MouseEvent) => {
-      const r = btn.getBoundingClientRect();
-      gsap.to(btn, {
-        x: (e.clientX - r.left - r.width  / 2) / 10,
-        y: (e.clientY - r.top  - r.height / 2) / 10,
-        duration: 0.1,
-        ease: 'power1.out',
-        overwrite: 'auto',
-      });
-    };
-    const onLeave = () => {
-      gsap.to(btn, { x: 0, y: 0, duration: 0.4, ease: 'elastic.out(1,0.5)', overwrite: 'auto' });
-    };
-
-
-    btn.addEventListener('mousemove',  onMove);
-    btn.addEventListener('mouseleave', onLeave);
-    return () => {
-      btn.removeEventListener('mousemove',  onMove);
-      btn.removeEventListener('mouseleave', onLeave);
-      gsap.killTweensOf(btn);
-      gsap.set(btn, { clearProps: 'x,y' });
-    };
-  }, []);
-
-
   // ── Cleanup on unmount ──────────────────────────────────────
   useEffect(() => () => {
     if (toastTimerRef.current) clearTimeout(toastTimerRef.current);
-    if (saveTimerRef.current)  clearTimeout(saveTimerRef.current);
+    if (saveTimerRef.current) clearTimeout(saveTimerRef.current);
   }, []);
 
+  const goHome = (e: React.MouseEvent) => {
+    e.preventDefault();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
 
   // ── Render ──────────────────────────────────────────────────
   return (
-    <div className="newsletter">
+    <div className="openroot-news">
       {toast && <Toast message={toast} />}
 
+      <header className="openroot-news__header" role="banner">
+        <a className="openroot-news__brand" href="#" onClick={goHome}>
+          #NewsLetter
+        </a>
 
-      <div className="xj-tech-orb" aria-hidden="true" />
-      <div className="xj-tech-orb" aria-hidden="true" />
-      <div className="xj-tech-orb" aria-hidden="true" />
-
-
-      <header className="xj-site-header" role="banner">
-        <div className="xj-logo-wrapper">
-          <img
-            src="/assets/openroot-white-nobg.png"
-            alt="Openroot NewsLetter"
-            className="xj-site-logo"
-            loading="lazy"
-            decoding="async"
-            width={120}
-            height={40}
-          />
-          <span className="xj-logo-text">#NewsLetter</span>
-        </div>
-
-
-        <nav className="xj-navbar" role="navigation" aria-label="Main Navigation">
-          {/* Desktop — always visible ≥900px via CSS */}
-          <div className="xj-nav-links">
-            <a href="#" onClick={e => { e.preventDefault(); window.scrollTo({ top: 0, behavior: 'smooth' }); }}>Home</a>
-            <a href="#iti-section">ITI/Diploma</a>
-            <a href="#ugpg-section">UG/PG</a>
-            <a href="#govt-websites-section">Govt Sites</a>
-            <a href="#ai-section">PB Sites</a>
-            <a href="#invest-section">Invest</a>
-            <a href="#jobs-section">Jobs</a>
+        <nav className="openroot-news__nav" aria-label="Main Navigation">
+          {/* Desktop links — shown at ≥900px */}
+          <div className="openroot-news__links">
+            {NAV_ITEMS.map(({ label, href, accent, isHome }) => (
+              <a
+                key={label}
+                href={href}
+                className={`openroot-news__navlink openroot-news__navlink--${accent}`}
+                onClick={isHome ? goHome : undefined}
+              >
+                {label}
+              </a>
+            ))}
           </div>
 
-
-          {/* Hamburger — lines animated purely by CSS via .xj-open class */}
+          {/* Hamburger — shown at ≤899px; lines become an X via the .is-open class */}
           <button
             ref={menuBtnRef}
-            className={`xj-menu-toggle${menuOpen ? ' xj-open' : ''}`}
-            style={{ isolation: 'isolate', willChange: 'transform' }}
+            type="button"
+            className={`openroot-news__toggle${menuOpen ? ' is-open' : ''}`}
             aria-haspopup="true"
             aria-expanded={menuOpen}
-            aria-controls="xjMenuDropdown"
+            aria-controls="newsMenu"
             aria-label={menuOpen ? 'Close menu' : 'Open menu'}
             onClick={() => setMenuOpen(prev => !prev)}
           >
-            <span className="xj-menu-line" />
-            <span className="xj-menu-line" />
-            <span className="xj-menu-line" />
+            <span className="openroot-news__line" />
+            <span className="openroot-news__line" />
+            <span className="openroot-news__line" />
           </button>
-
-
-          {/* Dropdown — visibility+opacity (never display:none fights .xj-open) */}
-          <ul
-            id="xjMenuDropdown"
-            ref={menuDropdownRef}
-            className={`xj-menu-dropdown${menuOpen ? ' xj-open' : ''}`}
-            role="menu"
-            aria-hidden={menuOpen ? undefined : true}
-            inert={!menuOpen || undefined}
-          >
-            {[
-              { label: 'Home',       href: '#',                    isHome: true },
-              { label: 'ITI/Diploma',href: '#iti-section' },
-              { label: 'UG/PG',      href: '#ugpg-section' },
-              { label: 'Govt Sites', href: '#govt-websites-section' },
-              { label: 'PB Sites',   href: '#ai-section' },
-              { label: 'Invest',     href: '#invest-section' },
-              { label: 'Jobs',       href: '#jobs-section' },
-            ].map(({ label, href, isHome }) => (
-              <li key={label} role="none">
-                <a
-                  role="menuitem"
-                  href={href}
-                  onClick={e => {
-                    if (isHome) e.preventDefault();
-                    setMenuOpen(false);
-                    if (isHome) window.scrollTo({ top: 0, behavior: 'smooth' });
-                  }}
-                >
-                  {label}
-                </a>
-              </li>
-            ))}
-          </ul>
         </nav>
+
+        <ul
+          id="newsMenu"
+          ref={menuDropdownRef}
+          className={`openroot-news__menu${menuOpen ? ' is-open' : ''}`}
+          aria-hidden={menuOpen ? undefined : true}
+          inert={!menuOpen || undefined}
+        >
+          {NAV_ITEMS.map(({ label, href, accent, isHome }) => (
+            <li key={label}>
+              <a
+                href={href}
+                className={`openroot-news__menulink openroot-news__menulink--${accent}`}
+                onClick={e => {
+                  if (isHome) goHome(e);
+                  setMenuOpen(false);
+                }}
+              >
+                {label}
+              </a>
+            </li>
+          ))}
+        </ul>
       </header>
 
-
-      <main className="xj-container" role="main">
-        {/*
-          Hidden SEO content block — visible to crawlers, invisible to users.
-          Provides keyword-rich semantic HTML that feeds into search indexing
-          without cluttering the UI. Uses sr-only pattern (position:absolute,
-          clip, 1px) so screen readers also benefit from the context.
-        */}
-        <div
-          style={{
-            position: 'absolute',
-            width: '1px',
-            height: '1px',
-            overflow: 'hidden',
-            clip: 'rect(0,0,0,0)',
-            whiteSpace: 'nowrap',
-          }}
-          aria-hidden="true"
-        >
+      <main className="openroot-news__container">
+        {/* Hidden SEO content: visible to crawlers and screen readers' context,
+            invisible to sighted users. */}
+        <div className="openroot-news__sr" aria-hidden="true">
           <h1>NewsLetter — Government Jobs India 2026 | Sarkari Naukri | ITI, UG/PG, PSU Recruitment</h1>
           <p>
             Find the latest government job vacancies in India 2026. Browse Central Government jobs,
@@ -815,66 +673,52 @@ const NewsLetter: React.FC = () => {
           </p>
         </div>
 
-        <section className="xj-section-container" id="iti-section" aria-labelledby="iti-title">
-          <h2 className="xj-section-title" id="iti-title">ITI / DIPLOMA</h2>
-          <CardGrid segId="iti" cards={ITI_CARDS} starredIds={getSet('iti')} onStarClick={handleStarClick} />
-        </section>
-
-
-        <section className="xj-section-container" id="ugpg-section" aria-labelledby="ugpg-title">
-          <h2 className="xj-section-title" id="ugpg-title">UG / PG</h2>
-          <CardGrid segId="ugpg" cards={UGPG_CARDS} starredIds={getSet('ugpg')} onStarClick={handleStarClick} />
-        </section>
-
-
-        <section className="xj-section-container" id="govt-websites-section" aria-labelledby="govt-title">
-          <h2 className="xj-section-title" id="govt-title">GOVT WEBSITES</h2>
-          <CardGrid segId="govt" cards={GOVT_CARDS} starredIds={getSet('govt')} onStarClick={handleStarClick} />
-        </section>
-
-
-        <section className="xj-section-container" id="ai-section" aria-labelledby="ai-title">
-          <h2 className="xj-section-title" id="ai-title">PRODUCTIVITY BOOSTER PLATFORMS</h2>
-          <CardGrid segId="ai" cards={AI_CARDS} starredIds={getSet('ai')} onStarClick={handleStarClick} />
-        </section>
-
-
-        <section className="xj-section-container" id="invest-section" aria-labelledby="invest-title">
-          <h2 className="xj-section-title" id="invest-title">INVESTING RELATED WEBSITES</h2>
-          <CardGrid segId="invest" cards={INVEST_CARDS} starredIds={getSet('invest')} onStarClick={handleStarClick} />
-        </section>
-
-
-        <section className="xj-section-container" id="jobs-section" aria-labelledby="jobs-title">
-          <h2 className="xj-section-title" id="jobs-title">GOVT. JOB UPDATES</h2>
-          <div className="xj-job-filters" role="toolbar" aria-label="Filter Jobs">
+        <Section id="jobs-section" titleId="jobs-title" title="Govt. job updates" accent="pink" count={JOB_CARDS.length}>
+          <div className="openroot-news__filters" role="toolbar" aria-label="Filter jobs">
             {(['all', 'central', 'state', 'psu'] as FilterType[]).map(f => (
               <button
                 key={f}
-                className={`xj-filter-btn${jobFilter === f ? ' xj-active' : ''}`}
+                type="button"
+                className={`openroot-news__filter${jobFilter === f ? ' is-active' : ''}`}
                 data-filter={f}
                 aria-pressed={jobFilter === f}
                 onClick={() => setJobFilter(f)}
               >
-                {f === 'all' ? 'All' : f.charAt(0).toUpperCase() + f.slice(1)}
+                {f === 'all' ? 'All' : f === 'psu' ? 'PSU' : f.charAt(0).toUpperCase() + f.slice(1)}
               </button>
             ))}
           </div>
           <CardGrid segId="jobs" cards={JOB_CARDS} starredIds={getSet('jobs')} jobFilter={jobFilter} onStarClick={handleStarClick} />
-        </section>
+        </Section>
+
+        <Section id="govt-websites-section" titleId="govt-title" title="Govt websites" accent="green" count={GOVT_CARDS.length}>
+          <CardGrid segId="govt" cards={GOVT_CARDS} starredIds={getSet('govt')} onStarClick={handleStarClick} />
+        </Section>
+
+        <Section id="ugpg-section" titleId="ugpg-title" title="UG / PG" accent="cyan" count={UGPG_CARDS.length}>
+          <CardGrid segId="ugpg" cards={UGPG_CARDS} starredIds={getSet('ugpg')} onStarClick={handleStarClick} />
+        </Section>
+
+        <Section id="iti-section" titleId="iti-title" title="ITI / Diploma" accent="blue" count={ITI_CARDS.length}>
+          <CardGrid segId="iti" cards={ITI_CARDS} starredIds={getSet('iti')} onStarClick={handleStarClick} />
+        </Section>
+
+        <Section id="invest-section" titleId="invest-title" title="Investing related websites" accent="gold" count={INVEST_CARDS.length}>
+          <CardGrid segId="invest" cards={INVEST_CARDS} starredIds={getSet('invest')} onStarClick={handleStarClick} />
+        </Section>
+
+        <Section id="ai-section" titleId="ai-title" title="Productivity booster platforms" accent="purple" count={AI_CARDS.length}>
+          <CardGrid segId="ai" cards={AI_CARDS} starredIds={getSet('ai')} onStarClick={handleStarClick} />
+        </Section>
       </main>
 
-
-      <footer className="xj-site-footer" role="contentinfo">
-        <div className="xj-footer-bottom">
-          <p>&copy; 2026 Openroot Systems. All rights reserved.</p>
-          <p>Made with ❤️ for students and job seekers.</p>
-        </div>
-        <div className="xj-version-label" aria-hidden="true">Version 2026.2</div>
+      <footer className="openroot-news__footer" role="contentinfo">
+        <p>&copy; 2026 Openroot Systems. All rights reserved.</p>
+        <p>Made for students and job seekers.</p>
+        <p className="openroot-news__version" aria-hidden="true">Version 2026.2</p>
       </footer>
     </div>
   );
 };
-
 
 export default NewsLetter;

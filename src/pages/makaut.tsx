@@ -43,7 +43,7 @@ const SEO_JSON_LD = {
   applicationCategory: "EducationalApplication",
   operatingSystem: "Web",
   description:
-    "Openroot's MAKAUT GPA and percentage calculator for SGPA, YGPA, DGPA, CGPA, percentage conversion, and semester-wise grade calculation.",
+    "Openroot's MAKAUT GPA and percentage calculator for SGPA, YGPA, DGPA, CGPA to percentage conversion, and semester-wise grade calculation.",
   keywords: SEO_KEYWORDS,
   offers: {
     "@type": "Offer",
@@ -97,6 +97,8 @@ type ResultStatus = "success" | "error" | "";
 interface ResultState {
   text: string;
   status: ResultStatus;
+  /** Optional second line shown under the result (accuracy hints). */
+  note?: string;
 }
 
 interface TillSemData {
@@ -110,8 +112,42 @@ interface SemesterEntry {
   c: string;
 }
 
+interface ToolCardDefinition {
+  id: ToolId;
+  source: "SGPA" | "YGPA" | "DGPA" | "CGPA";
+  relation: "to" | "plus";
+  ariaLabel: string;
+}
+
+const TOOL_CARDS: ToolCardDefinition[] = [
+  {
+    id: "sgpaTool",
+    source: "SGPA",
+    relation: "to",
+    ariaLabel: "SGPA to percentage calculator",
+  },
+  {
+    id: "ygpaTool",
+    source: "YGPA",
+    relation: "plus",
+    ariaLabel: "YGPA plus percentage calculator",
+  },
+  {
+    id: "dgpaTool",
+    source: "DGPA",
+    relation: "plus",
+    ariaLabel: "DGPA plus percentage calculator",
+  },
+  {
+    id: "cgpaTool",
+    source: "CGPA",
+    relation: "to",
+    ariaLabel: "CGPA to percentage calculator",
+  },
+];
+
 // ─── Pure Utility Functions ───────────────────────────────────────────────────
-// All calculation logic is kept as pure functions — no React coupling.
+// All calculation logic is kept as pure functions, with no React coupling.
 // This makes them trivial to unit-test and easy to move to a shared library.
 
 /** Mirrors the original formula exactly: percentage = (gpa - 0.75) * 10 */
@@ -141,6 +177,35 @@ function sanitizeNumericInput(raw: string): string {
     .slice(0, MAX_INPUT_LENGTH);
 }
 
+/** True when the value has at most 2 decimal places, like a printed SGPA or CGPA. */
+function hasTwoDecimalsOrLess(value: number): boolean {
+  return Math.abs(value * 100 - Math.round(value * 100)) < 1e-6;
+}
+
+/**
+ * Convert a GPA the user typed in. A printed GPA is rounded to 2 decimals, so the
+ * true GPA sits within ±0.005 and the percentage within ±0.05. That range is
+ * reported next to the result so the student knows exactly how precise it is.
+ */
+function convertPrintedGPA(value: number, hint = ""): ResultState {
+  const text = `Percentage: ${toPercentage(value)}%`;
+
+  if (!hasTwoDecimalsOrLess(value)) return { text, status: "success" };
+
+  const maxPercentage = (GPA_MAX - 0.75) * 10;
+  const percentage = (value - 0.75) * 10;
+  const low = Math.max(0, percentage - 0.05);
+  const high = Math.min(maxPercentage, percentage + 0.05);
+
+  return {
+    text,
+    status: "success",
+    note:
+      `A printed GPA is rounded to 2 decimals, so the exact percentage is between ` +
+      `${low.toFixed(2)}% and ${high.toFixed(2)}%.${hint ? ` ${hint}` : ""}`,
+  };
+}
+
 // ─── Pure Calculation Functions ───────────────────────────────────────────────
 
 function calcSGPA(sgpa: string): ResultState {
@@ -151,7 +216,7 @@ function calcSGPA(sgpa: string): ResultState {
       status: "error",
     };
   }
-  return { text: `Percentage: ${toPercentage(value)}%`, status: "success" };
+  return convertPrintedGPA(value);
 }
 
 function calcYGPA(
@@ -242,22 +307,55 @@ function calcDGPA(
   };
 }
 
-function calcCGPA(cpStr: string, cStr: string): ResultState {
-  const cp = safeParseFloat(cpStr);
-  const c = safeParseFloat(cStr);
+function calcCGPAToPercentage(
+  cgpaStr: string,
+  cpStr: string,
+  cStr: string,
+): ResultState {
+  const hasCP = cpStr.trim() !== "";
+  const hasC = cStr.trim() !== "";
 
-  if (Number.isNaN(cp) || Number.isNaN(c) || cp <= 0 || c <= 0) {
+  // Exact mode: credit index and total credits, no rounding of the CGPA.
+  if (hasCP || hasC) {
+    const cp = safeParseFloat(cpStr);
+    const c = safeParseFloat(cStr);
+
+    if (!hasCP || !hasC || Number.isNaN(cp) || Number.isNaN(c) || cp <= 0 || c <= 0) {
+      return {
+        text: "Enter both a valid credit index and total credits, or clear them to use the CGPA above.",
+        status: "error",
+      };
+    }
+
+    const exact = cp / c;
+    if (exact > GPA_MAX) {
+      return {
+        text: "Credit index cannot be more than 10 times the total credits.",
+        status: "error",
+      };
+    }
+
     return {
-      text: "Enter valid positive Credit Index and Credits.",
+      text: `CGPA: ${exact.toFixed(4)}, Percentage: ${toPercentage(exact)}%`,
+      status: "success",
+      note: "Calculated from your credit index and total credits, with no rounding of the CGPA.",
+    };
+  }
+
+  // Quick mode: the CGPA exactly as printed on the grade sheet.
+  const cgpa = safeParseFloat(cgpaStr);
+
+  if (Number.isNaN(cgpa) || cgpa <= GPA_MIN || cgpa > GPA_MAX) {
+    return {
+      text: `Please enter a valid CGPA (${GPA_MIN}–${GPA_MAX}).`,
       status: "error",
     };
   }
 
-  const cgpa = cp / c;
-  return {
-    text: `CGPA: ${cgpa.toFixed(2)}, Percentage: ${toPercentage(cgpa)}%`,
-    status: "success",
-  };
+  return convertPrintedGPA(
+    cgpa,
+    "For the exact value, add your credit index and total credits below.",
+  );
 }
 
 function calcTillSem(
@@ -425,27 +523,19 @@ function useTillSemester(): TillSemesterHook {
   };
 }
 
-// ─── Shared Style Tokens ──────────────────────────────────────────────────────
-
-const FIELD_STYLE: React.CSSProperties = { width: "100%", height: 48, borderRadius: 14 };
-const CARD_STYLE: React.CSSProperties = { borderRadius: 22 };
-const SECTION_STYLE: React.CSSProperties = {
-  maxWidth: 1400,
-  margin: "2.5rem auto",
-  padding: "0 1.5rem",
-};
-const TWO_COL_GRID: React.CSSProperties = {
-  display: "grid",
-  gap: "0.9rem",
-  gridTemplateColumns: "repeat(2, minmax(0, 1fr))",
-};
-
 // ─── Reusable Sub-components ──────────────────────────────────────────────────
 
 const ResultDisplay = memo(({ result }: { result: ResultState }) => {
   if (!result.text) return null;
-  const cls = result.status === "success" ? "text-emerald-700" : "text-rose-600";
-  return <div className={`tool-result ${cls}`}>{result.text}</div>;
+  return (
+    <div
+      className={`tool-result tool-result--${result.status}`}
+      role={result.status === "error" ? "alert" : "status"}
+    >
+      <span>{result.text}</span>
+      {result.note && <p className="tool-result-note">{result.note}</p>}
+    </div>
+  );
 });
 ResultDisplay.displayName = "ResultDisplay";
 
@@ -471,21 +561,49 @@ const ToolHeader = memo(({ onBack, title, subtitle }: ToolHeaderProps) => (
 ));
 ToolHeader.displayName = "ToolHeader";
 
-const HiddenSeoContent = memo(() => (
-  <div
+interface ToolCardVisualProps {
+  source: ToolCardDefinition["source"];
+  relation: ToolCardDefinition["relation"];
+}
+
+const ToolCardVisual = memo(({ source, relation }: ToolCardVisualProps) => (
+  <svg
+    className="tool-card-svg"
+    viewBox="0 0 220 220"
     aria-hidden="true"
-    style={{
-      position: "absolute",
-      width: 1,
-      height: 1,
-      padding: 0,
-      margin: -1,
-      overflow: "hidden",
-      clip: "rect(0, 0, 0, 0)",
-      whiteSpace: "nowrap",
-      border: 0,
-    }}
+    focusable="false"
   >
+    <rect className="tool-svg-frame" x="18" y="18" width="184" height="184" />
+    <text className="tool-svg-kicker" x="110" y="49" textAnchor="middle">
+      MAKAUT
+    </text>
+    <text className="tool-svg-primary" x="110" y="98" textAnchor="middle">
+      {source}
+    </text>
+
+    {relation === "to" ? (
+      <g className="tool-svg-arrow">
+        <line x1="72" y1="121" x2="148" y2="121" />
+        <polyline points="139,112 148,121 139,130" />
+      </g>
+    ) : (
+      <text className="tool-svg-plus" x="110" y="131" textAnchor="middle">
+        +
+      </text>
+    )}
+
+    <text className="tool-svg-secondary" x="110" y="161" textAnchor="middle">
+      PERCENTAGE
+    </text>
+    <text className="tool-svg-caption" x="110" y="184" textAnchor="middle">
+      {relation === "to" ? "CONVERSION" : "CALCULATION"}
+    </text>
+  </svg>
+));
+ToolCardVisual.displayName = "ToolCardVisual";
+
+const HiddenSeoContent = memo(() => (
+  <div aria-hidden="true" className="seo-hidden">
     <p>
       MAKAUT GPA calculator, MAKAUT percentage calculator, SGPA to percentage,
       CGPA to percentage, DGPA calculation, YGPA calculation, percentage to grade,
@@ -527,7 +645,8 @@ const Makaut: React.FC = () => {
   const [yg4, setYg4] = useState("");
   const [dgpaResult, setDgpaResult] = useState<ResultState>({ text: "", status: "" });
 
-  // ── CGPA ──
+  // ── CGPA → Percentage ──
+  const [cgpa, setCgpa] = useState("");
   const [cgpaCP, setCgpaCP] = useState("");
   const [cgpaC, setCgpaC] = useState("");
   const [cgpaResult, setCgpaResult] = useState<ResultState>({ text: "", status: "" });
@@ -590,6 +709,16 @@ const Makaut: React.FC = () => {
     };
   }, [mobileMenuOpen]);
 
+  // ─── Close the formula sheet with Escape ────────────────────────────────────
+  useEffect(() => {
+    if (!showCalcModal) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setShowCalcModal(false);
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [showCalcModal]);
+
   // ─── Navigation ─────────────────────────────────────────────────────────────
 
   const openTool = useCallback((toolId: ToolId) => {
@@ -628,20 +757,11 @@ const Makaut: React.FC = () => {
     setDgpaResult(calcDGPA(courseType, yg1, yg2, yg3, yg4));
   }, [courseType, yg1, yg2, yg3, yg4]);
 
-  const handleCalculateCGPA = useCallback(() => {
-    setCgpaResult(calcCGPA(cgpaCP, cgpaC));
-  }, [cgpaCP, cgpaC]);
+  const handleConvertCGPA = useCallback(() => {
+    setCgpaResult(calcCGPAToPercentage(cgpa, cgpaCP, cgpaC));
+  }, [cgpa, cgpaCP, cgpaC]);
 
-  // ─── Tool selector cards ────────────────────────────────────────────────────
-  const TOOL_CARDS: { id: ToolId; img: string; alt: string }[] = useMemo(
-    () => [
-      { id: "sgpaTool", img: "./assets-makaut/sgpa.avif", alt: "SGPA calculator icon" },
-      { id: "ygpaTool", img: "./assets-makaut/ygpa.avif", alt: "YGPA calculator icon" },
-      { id: "dgpaTool", img: "./assets-makaut/dgpa.avif", alt: "DGPA calculator icon" },
-      { id: "cgpaTool", img: "./assets-makaut/cgpa.avif", alt: "CGPA calculator icon" },
-    ],
-    [],
-  );
+  // ─── Tool selector cards are inline SVG, so there are no image requests ──────
 
   // ─── Derived loop params for semester inputs ────────────────────────────────
   const tillSemStartSem =
@@ -651,7 +771,7 @@ const Makaut: React.FC = () => {
     : 0;
 
   return (
-    <div className="makaut" style={{ minHeight: "100vh" }}>
+    <div className="makaut">
       <script type="application/ld+json">{JSON.stringify(SEO_JSON_LD)}</script>
       <script type="application/ld+json">{JSON.stringify(FAQ_JSON_LD)}</script>
 
@@ -675,7 +795,7 @@ const Makaut: React.FC = () => {
 
         <div className="logo-text">
           <h1>
-            SGPA, YGPA, DGPA, CGPA, percentage conversion, and semester-wise grade calculation
+            SGPA, YGPA, DGPA, CGPA to percentage conversion, and semester-wise grade calculation
             for MAKAUT students.
           </h1>
         </div>
@@ -691,7 +811,7 @@ const Makaut: React.FC = () => {
           ☰
         </button>
 
-        <button className="btn btn-primary calc-btn" type="button" onClick={showCalculations}>
+        <button className="btn calc-btn" type="button" onClick={showCalculations}>
           Show Calculations
         </button>
 
@@ -706,15 +826,24 @@ const Makaut: React.FC = () => {
 
       {/* ════════════════════ FORMULA MODAL ════════════════════ */}
       {showCalcModal && (
-        <div className="modal show" aria-modal="true" role="dialog">
-          <button className="btn btn-ghost back-btn" type="button" onClick={hideCalculations}>
-            ⬅ Back
-          </button>
-          <div className="modal-content">
-            <h2>MAKAUT Calculation Formula Sheet</h2>
+        <div
+          className="modal"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="formula-title"
+        >
+          <div className="modal-inner">
+            <div className="modal-topbar">
+              <h2 id="formula-title">MAKAUT calculation formula sheet</h2>
+              <button className="btn back-btn" type="button" onClick={hideCalculations}>
+                ← Back
+              </button>
+            </div>
+
             <img
               src="./assets-makaut/calculation.png"
               alt="MAKAUT grading formula rules"
+              className="modal-image"
             />
           </div>
         </div>
@@ -722,8 +851,8 @@ const Makaut: React.FC = () => {
 
       {/* ════════════════════ DASHBOARD ════════════════════ */}
       {showDashboard && (
-        <section className="dashboard-layout" style={SECTION_STYLE}>
-          {/* Left — tool selector cards */}
+        <section className="dashboard-layout">
+          {/* Left: tool selector cards */}
           <div className="dashboard-left">
             {TOOL_CARDS.map((card) => (
               <button
@@ -731,31 +860,29 @@ const Makaut: React.FC = () => {
                 className="select-card"
                 type="button"
                 onClick={() => openTool(card.id)}
-                aria-label={`Open ${card.alt}`}
+                aria-label={`Open ${card.ariaLabel}`}
               >
-                <img src={card.img} alt={card.alt} />
+                <ToolCardVisual source={card.source} relation={card.relation} />
               </button>
             ))}
           </div>
 
-          {/* Right — till-semester calculator */}
+          {/* Right: till-semester calculator */}
           <div className="dashboard-right">
             <div className="till-sem-card">
-              <h2>Percentage Till Specific Semester</h2>
+              <h2>Percentage till a specific semester</h2>
               <p className="subtitle">
                 Calculated strictly as per official MAKAUT CGPA rules.
                 <br />
                 Credit Index = Sum of Credit Points.
               </p>
 
-              {/* Two dropdowns side by side on larger screens */}
               <div className="semester-grid">
                 <div className="form-group">
-                  <label htmlFor="studentType">Student Type</label>
+                  <label htmlFor="studentType">Student type</label>
                   <select
                     id="studentType"
                     value={tillSem.studentType}
-                    style={FIELD_STYLE}
                     onChange={(e) => tillSem.setStudentType(e.target.value as StudentType)}
                   >
                     <option value="regular">Regular Student</option>
@@ -764,11 +891,10 @@ const Makaut: React.FC = () => {
                 </div>
 
                 <div className="form-group">
-                  <label htmlFor="selectedSemester">Select Semester</label>
+                  <label htmlFor="selectedSemester">Select semester</label>
                   <select
                     id="selectedSemester"
                     value={tillSem.selectedSemester}
-                    style={FIELD_STYLE}
                     onChange={(e) => tillSem.handleSelectSem(e.target.value)}
                   >
                     <option value="">-- Select --</option>
@@ -782,55 +908,61 @@ const Makaut: React.FC = () => {
               </div>
 
               {/* Per-semester credit inputs */}
-              <div className="semester-grid">
-                {Array.from({ length: tillSemCount }, (_, i) => {
-                  const sem = tillSemStartSem + i;
-                  const current = tillSem.semesterValues[String(sem)] ?? {
-                    cp: "",
-                    c: "",
-                  };
-                  return (
-                    <React.Fragment key={sem}>
-                      <div className="form-group">
-                        <label htmlFor={`cp${sem}`}>Sem {sem} Credit Index</label>
-                        <input
-                          id={`cp${sem}`}
-                          type="number"
-                          placeholder="e.g. 180"
-                          min="0"
-                          value={current.cp}
-                          style={FIELD_STYLE}
-                          onChange={(e) => tillSem.updateSemEntry(sem, "cp", e.target.value)}
-                        />
-                      </div>
-                      <div className="form-group">
-                        <label htmlFor={`c${sem}`}>Sem {sem} Total Credits</label>
-                        <input
-                          id={`c${sem}`}
-                          type="number"
-                          placeholder="e.g. 22"
-                          min="0"
-                          value={current.c}
-                          style={FIELD_STYLE}
-                          onChange={(e) => tillSem.updateSemEntry(sem, "c", e.target.value)}
-                        />
-                      </div>
-                    </React.Fragment>
-                  );
-                })}
-              </div>
+              {tillSemCount > 0 && (
+                <div className="semester-grid">
+                  {Array.from({ length: tillSemCount }, (_, i) => {
+                    const sem = tillSemStartSem + i;
+                    const current = tillSem.semesterValues[String(sem)] ?? {
+                      cp: "",
+                      c: "",
+                    };
+                    return (
+                      <React.Fragment key={sem}>
+                        <div className="form-group">
+                          <label htmlFor={`cp${sem}`}>Sem {sem} credit index</label>
+                          <input
+                            id={`cp${sem}`}
+                            type="number"
+                            placeholder="e.g. 180"
+                            min="0"
+                            value={current.cp}
+                            onChange={(e) => tillSem.updateSemEntry(sem, "cp", e.target.value)}
+                          />
+                        </div>
+                        <div className="form-group">
+                          <label htmlFor={`c${sem}`}>Sem {sem} total credits</label>
+                          <input
+                            id={`c${sem}`}
+                            type="number"
+                            placeholder="e.g. 22"
+                            min="0"
+                            value={current.c}
+                            onChange={(e) => tillSem.updateSemEntry(sem, "c", e.target.value)}
+                          />
+                        </div>
+                      </React.Fragment>
+                    );
+                  })}
+                </div>
+              )}
 
               <button className="btn full-btn" type="button" onClick={tillSem.calculate}>
                 Calculate
               </button>
 
-              {!!tillSem.tillSemError && <div className="result-box error">{tillSem.tillSemError}</div>}
+              {!!tillSem.tillSemError && (
+                <div className="result-box error" role="alert">
+                  {tillSem.tillSemError}
+                </div>
+              )}
 
               {!!tillSem.tillSemData && (
-                <div className="result-box success">
-                  CGPA Till Sem {tillSem.tillSemData.semester}: <b>{tillSem.tillSemData.cgpa}</b>
+                <div className="result-box success" role="status">
+                  CGPA till Sem {tillSem.tillSemData.semester}:{" "}
+                  <b>{tillSem.tillSemData.cgpa}</b>
                   <br />
-                  Percentage Till Sem {tillSem.tillSemData.semester}: <b>{tillSem.tillSemData.percentage}%</b>
+                  Percentage till Sem {tillSem.tillSemData.semester}:{" "}
+                  <b>{tillSem.tillSemData.percentage}%</b>
                 </div>
               )}
             </div>
@@ -843,7 +975,7 @@ const Makaut: React.FC = () => {
         <main className="tools-grid">
           {/* ── SGPA ─────────────────────────────────────── */}
           {activeTool === "sgpaTool" && (
-            <section className="tool-card" style={CARD_STYLE}>
+            <section className="tool-card">
               <ToolHeader
                 onBack={backToMenu}
                 title="SGPA → Percentage"
@@ -860,69 +992,64 @@ const Makaut: React.FC = () => {
                     min={GPA_MIN}
                     max={GPA_MAX}
                     value={sgpa}
-                    style={FIELD_STYLE}
                     onChange={(e) => setSgpa(sanitizeNumericInput(e.target.value))}
                     onKeyDown={(e) => e.key === "Enter" && handleConvertSGPA()}
                   />
                 </div>
-                <button className="btn full-btn" type="button" onClick={handleConvertSGPA}>
-                  Convert SGPA
-                </button>
               </div>
+              <button className="btn full-btn" type="button" onClick={handleConvertSGPA}>
+                Convert SGPA
+              </button>
               <ResultDisplay result={sgpaResult} />
             </section>
           )}
 
           {/* ── YGPA ─────────────────────────────────────── */}
           {activeTool === "ygpaTool" && (
-            <section className="tool-card" style={CARD_STYLE}>
+            <section className="tool-card">
               <ToolHeader
                 onBack={backToMenu}
                 title="YGPA + Percentage"
                 subtitle={<>Enter odd &amp; even semester credit details.</>}
               />
-              <div className="tool-body" style={TWO_COL_GRID}>
+              <div className="tool-body tool-body--grid">
                 <div className="form-group">
-                  <label htmlFor="ygpaOddCP">Odd Sem Credit Index</label>
+                  <label htmlFor="ygpaOddCP">Odd sem credit index</label>
                   <input
                     id="ygpaOddCP"
                     type="number"
                     min="0"
                     value={ygpaOddCP}
-                    style={FIELD_STYLE}
                     onChange={(e) => setYgpaOddCP(sanitizeNumericInput(e.target.value))}
                   />
                 </div>
                 <div className="form-group">
-                  <label htmlFor="ygpaOddC">Odd Sem Total Credits</label>
+                  <label htmlFor="ygpaOddC">Odd sem total credits</label>
                   <input
                     id="ygpaOddC"
                     type="number"
                     min="0"
                     value={ygpaOddC}
-                    style={FIELD_STYLE}
                     onChange={(e) => setYgpaOddC(sanitizeNumericInput(e.target.value))}
                   />
                 </div>
                 <div className="form-group">
-                  <label htmlFor="ygpaEvenCP">Even Sem Credit Index</label>
+                  <label htmlFor="ygpaEvenCP">Even sem credit index</label>
                   <input
                     id="ygpaEvenCP"
                     type="number"
                     min="0"
                     value={ygpaEvenCP}
-                    style={FIELD_STYLE}
                     onChange={(e) => setYgpaEvenCP(sanitizeNumericInput(e.target.value))}
                   />
                 </div>
                 <div className="form-group">
-                  <label htmlFor="ygpaEvenC">Even Sem Total Credits</label>
+                  <label htmlFor="ygpaEvenC">Even sem total credits</label>
                   <input
                     id="ygpaEvenC"
                     type="number"
                     min="0"
                     value={ygpaEvenC}
-                    style={FIELD_STYLE}
                     onChange={(e) => setYgpaEvenC(sanitizeNumericInput(e.target.value))}
                   />
                 </div>
@@ -936,19 +1063,18 @@ const Makaut: React.FC = () => {
 
           {/* ── DGPA ─────────────────────────────────────── */}
           {activeTool === "dgpaTool" && (
-            <section className="tool-card" style={CARD_STYLE}>
+            <section className="tool-card">
               <ToolHeader
                 onBack={backToMenu}
                 title="DGPA + Percentage"
                 subtitle="Select course type and yearly GPA."
               />
-              <div className="tool-body" style={TWO_COL_GRID}>
-                <div className="form-group" style={{ gridColumn: "1 / -1" }}>
-                  <label htmlFor="courseType">Course Type</label>
+              <div className="tool-body tool-body--grid">
+                <div className="form-group form-group--full">
+                  <label htmlFor="courseType">Course type</label>
                   <select
                     id="courseType"
                     value={courseType}
-                    style={FIELD_STYLE}
                     onChange={(e) => setCourseType(e.target.value as CourseType)}
                   >
                     <option value="1">1-Year Course</option>
@@ -961,52 +1087,52 @@ const Makaut: React.FC = () => {
 
                 {showYg1 && (
                   <div className="form-group">
-                    <label>YGPA 1</label>
+                    <label htmlFor="yg1">YGPA 1</label>
                     <input
+                      id="yg1"
                       type="number"
                       min={GPA_MIN}
                       max={GPA_MAX}
                       value={yg1}
-                      style={FIELD_STYLE}
                       onChange={(e) => setYg1(sanitizeNumericInput(e.target.value))}
                     />
                   </div>
                 )}
                 {showYg2 && (
                   <div className="form-group">
-                    <label>YGPA 2</label>
+                    <label htmlFor="yg2">YGPA 2</label>
                     <input
+                      id="yg2"
                       type="number"
                       min={GPA_MIN}
                       max={GPA_MAX}
                       value={yg2}
-                      style={FIELD_STYLE}
                       onChange={(e) => setYg2(sanitizeNumericInput(e.target.value))}
                     />
                   </div>
                 )}
                 {showYg3 && (
                   <div className="form-group">
-                    <label>YGPA 3</label>
+                    <label htmlFor="yg3">YGPA 3</label>
                     <input
+                      id="yg3"
                       type="number"
                       min={GPA_MIN}
                       max={GPA_MAX}
                       value={yg3}
-                      style={FIELD_STYLE}
                       onChange={(e) => setYg3(sanitizeNumericInput(e.target.value))}
                     />
                   </div>
                 )}
                 {showYg4 && (
                   <div className="form-group">
-                    <label>YGPA 4</label>
+                    <label htmlFor="yg4">YGPA 4</label>
                     <input
+                      id="yg4"
                       type="number"
                       min={GPA_MIN}
                       max={GPA_MAX}
                       value={yg4}
-                      style={FIELD_STYLE}
                       onChange={(e) => setYg4(sanitizeNumericInput(e.target.value))}
                     />
                   </div>
@@ -1019,40 +1145,65 @@ const Makaut: React.FC = () => {
             </section>
           )}
 
-          {/* ── CGPA ─────────────────────────────────────── */}
+          {/* ── CGPA → Percentage ─────────────────────────── */}
           {activeTool === "cgpaTool" && (
-            <section className="tool-card" style={CARD_STYLE}>
+            <section className="tool-card">
               <ToolHeader
                 onBack={backToMenu}
-                title="CGPA + Percentage"
-                subtitle="Total credit based calculation."
+                title="CGPA → Percentage"
+                subtitle="Enter your final CGPA to convert it directly into percentage."
               />
-              <div className="tool-body" style={TWO_COL_GRID}>
+              <div className="tool-body">
                 <div className="form-group">
-                  <label htmlFor="cgpaCP">Total Credit Index</label>
+                  <label htmlFor="cgpa">Enter CGPA</label>
                   <input
-                    id="cgpaCP"
+                    id="cgpa"
                     type="number"
-                    min="0"
-                    value={cgpaCP}
-                    style={FIELD_STYLE}
-                    onChange={(e) => setCgpaCP(sanitizeNumericInput(e.target.value))}
+                    placeholder="e.g. 7.06"
+                    step="0.01"
+                    min={GPA_MIN}
+                    max={GPA_MAX}
+                    value={cgpa}
+                    onChange={(e) => setCgpa(sanitizeNumericInput(e.target.value))}
+                    onKeyDown={(e) => e.key === "Enter" && handleConvertCGPA()}
                   />
                 </div>
-                <div className="form-group">
-                  <label htmlFor="cgpaC">Total Credits of All Semesters</label>
-                  <input
-                    id="cgpaC"
-                    type="number"
-                    min="0"
-                    value={cgpaC}
-                    style={FIELD_STYLE}
-                    onChange={(e) => setCgpaC(sanitizeNumericInput(e.target.value))}
-                  />
-                </div>
+
+                <details className="exact-box">
+                  <summary>Need the exact percentage? Add credit index and credits</summary>
+                  <p className="exact-help">
+                    A printed CGPA is rounded to 2 decimals, so it can be off by up to
+                    0.05%. Your credit index and total credits give the exact figure.
+                    When both are filled, they are used instead of the CGPA above.
+                  </p>
+                  <div className="exact-grid">
+                    <div className="form-group">
+                      <label htmlFor="cgpaCP">Total credit index</label>
+                      <input
+                        id="cgpaCP"
+                        type="number"
+                        min="0"
+                        placeholder="e.g. 1130"
+                        value={cgpaCP}
+                        onChange={(e) => setCgpaCP(sanitizeNumericInput(e.target.value))}
+                      />
+                    </div>
+                    <div className="form-group">
+                      <label htmlFor="cgpaC">Total credits of all semesters</label>
+                      <input
+                        id="cgpaC"
+                        type="number"
+                        min="0"
+                        placeholder="e.g. 160"
+                        value={cgpaC}
+                        onChange={(e) => setCgpaC(sanitizeNumericInput(e.target.value))}
+                      />
+                    </div>
+                  </div>
+                </details>
               </div>
-              <button className="btn full-btn" type="button" onClick={handleCalculateCGPA}>
-                Calculate CGPA
+              <button className="btn full-btn" type="button" onClick={handleConvertCGPA}>
+                Convert CGPA
               </button>
               <ResultDisplay result={cgpaResult} />
             </section>
@@ -1063,7 +1214,7 @@ const Makaut: React.FC = () => {
       {/* ════════════════════ FOOTER ════════════════════ */}
       <footer className="site-footer">
         <p>© 2026 Openroot Systems. All rights reserved.</p>
-        <p>Made with ❤️ for MAKAUT students.</p>
+        <p>Built for MAKAUT students.</p>
       </footer>
     </div>
   );

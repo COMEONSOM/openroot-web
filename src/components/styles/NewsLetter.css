@@ -1,827 +1,596 @@
 /* ============================================================
-   NewsLetter.css — scoped to .newsletter
-   Matches NewsLetter.tsx v2.0.0
-   Single breakpoint: 900px (≤899 mobile, ≥900 desktop)
+   OPENROOT NEWSLETTER
+   Same base design as About, GDrive and the modals: textured
+   square-grid surface, square framed cells, flat colour blocks.
+   No gradients, shadows, glows, blur or rounded corners.
+
+   Colours are the ones this page already used: deep navy/black
+   background, cyan, purple, pink, green, blue, gold and live red.
+   Namespaced under .openroot-news. Single breakpoint: 900px.
    ============================================================ */
 
+/* ── ROOT + TOKENS ────────────────────────────────────────── */
 
+.openroot-news {
+  /* theme tokens come from the main site's global CSS, so the page is
+     light or dark exactly like the rest of the site */
+  --nl-bg: var(--ot-bg, #010003);
+  --nl-text: var(--ot-text, #ffffff);
+  --nl-on-accent: #ffffff;
+  --nl-card: color-mix(in srgb, var(--nl-text) 7%, var(--nl-bg));
+  --nl-muted: color-mix(in srgb, var(--nl-text) 65%, var(--nl-bg));
+  --nl-line: color-mix(in srgb, var(--nl-text) 55%, transparent);
+  --nl-line-soft: color-mix(in srgb, var(--nl-text) 22%, transparent);
+  --nl-hover: color-mix(in srgb, var(--nl-text) 10%, transparent);
 
-/* ── DESIGN TOKENS ─────────────────────────────────────────── */
-.newsletter {
-  --xj-bg-grad:    linear-gradient(135deg, #200202 0%, #0b0040 40%, #010003 100%);
-  --xj-bg-radial:  radial-gradient(circle at 30% 30%, #e7dd17 0%, #65f349 25%, #366fea 55%, #0c0c04 100%);
+  --nl-cyan: #00f5ff;
+  --nl-purple: #bf00ff;
+  --nl-pink: #ff006e;
+  --nl-green: #00ff88;
+  --nl-blue: #3b82f6;
+  --nl-gold: #ffc800;
+  --nl-red: #ff0040;
+  --nl-ink: #010003;
 
-  --xj-text:       #f0f0f0;
-  --xj-text-muted: #a0a0a0;
-  --xj-white:      #ffffff;
+  --nl-font: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --nl-header: 64px;
 
-  --xj-cyan:       #00f5ff;
-  --xj-purple:     #bf00ff;
-  --xj-pink:       #ff006e;
-  --xj-green:      #00ff88;
-  --xj-blue:       #3b82f6;
-  --xj-accent:     #60a5fa;
-
-  --xj-glass-bg:        rgba(255,255,255,0.03);
-  --xj-glass-border:    rgba(255,255,255,0.08);
-  --xj-glass-highlight: rgba(255,255,255,0.15);
-
-  --xj-card-bg:     rgba(32,32,36,0.14);
-  --xj-card-border: rgba(255,255,255,0.12);
-  --xj-card-radius: 12px;
-  --xj-card-pad:    0.4rem;
-
-  --xj-depth-1: 0 4px 20px rgba(0,0,0,0.3);
-  --xj-depth-2: 0 8px 40px rgba(0,0,0,0.4);
-  --xj-depth-3: 0 20px 60px rgba(0,0,0,0.5);
-
-  --xj-glow-cyan:   0 0 30px rgba(0,245,255,0.5);
-  --xj-glow-purple: 0 0 30px rgba(191,0,255,0.5);
-  --xj-glow-pink:   0 0 30px rgba(255,0,110,0.5);
-
-  --xj-t-fast:   200ms;
-  --xj-t-smooth: 400ms;
-  --xj-t-slow:   800ms;
-
-  --xj-section-gap: 3.5rem;
-  --xj-font: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-}
-
-
-
-/* ── ROOT WRAPPER ──────────────────────────────────────────── */
-.newsletter {
   position: relative;
+  isolation: isolate;
+
   min-height: 100vh;
-  font-family: var(--xj-font);
-  color: var(--xj-white);
-  background: var(--xj-bg-radial), var(--xj-bg-grad);
+
+  background-color: var(--nl-bg);
+  color: var(--nl-text);
+  font-family: var(--nl-font);
+  line-height: 1.65;
   -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  /* overflow-x:hidden removed — kills position:sticky/fixed on header.
-     Add overflow-x:hidden to html,body in your global CSS instead. */
 }
 
-
-/* Grid overlay */
-.newsletter::before {
+/* texture: fine square grid */
+.openroot-news::before {
   content: "";
   position: absolute;
   inset: 0;
+  z-index: -1;
+  pointer-events: none;
+
   background-image:
-    linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
-  background-size: 40px 40px;
-  opacity: 0.12;
-  mix-blend-mode: overlay;
-  pointer-events: none;
-  z-index: 0;
+    linear-gradient(to bottom, var(--nl-text) 1px, transparent 1px),
+    linear-gradient(to right, var(--nl-text) 1px, transparent 1px);
+  background-size: 26px 26px;
+  opacity: 0.07;
 }
 
-
-@media (max-width: 899px) {
-  .newsletter::before { opacity: 0.05; }
+.openroot-news *,
+.openroot-news *::before,
+.openroot-news *::after {
+  box-sizing: border-box;
 }
 
-
-
-/* ── AMBIENT ORBS ──────────────────────────────────────────── */
-.newsletter .xj-tech-orb {
-  position: absolute;
-  width: 150px;
-  height: 150px;
-  border-radius: 50%;
-  filter: blur(64px);
-  opacity: 0.36;
-  pointer-events: none;
-  z-index: 0;
-  will-change: transform, opacity;
+.openroot-news :where(h1, h2, p, ul) {
+  margin: 0;
+  padding: 0;
 }
 
-
-.newsletter .xj-tech-orb:nth-of-type(1) {
-  top: 12%; left: 6%;
-  background: radial-gradient(circle, rgba(102,0,255,0.22), transparent 70%);
-}
-.newsletter .xj-tech-orb:nth-of-type(2) {
-  bottom: 8%; right: 18%;
-  background: radial-gradient(circle, rgba(0,102,255,0.16), transparent 70%);
-}
-.newsletter .xj-tech-orb:nth-of-type(3) {
-  top: 48%; right: 34%;
-  background: radial-gradient(circle, rgba(180,0,255,0.12), transparent 70%);
+.openroot-news ul {
+  list-style: none;
 }
 
-
-@media (max-width: 899px) {
-  .newsletter .xj-tech-orb { display: none; }
+.openroot-news a {
+  color: inherit;
+  text-decoration: none;
 }
 
+.openroot-news button {
+  font: inherit;
+  border-radius: 0;
+}
 
+.openroot-news :focus-visible {
+  outline: 2px solid var(--nl-text);
+  outline-offset: -4px;
+}
 
-/* ── SITE HEADER ───────────────────────────────────────────── */
-/*
-  position:fixed — immune to ancestor overflow:hidden / backdrop-filter
-  stacking contexts. Avoids the WebKit/Blink trap where sticky +
-  backdrop-filter on the same element pins position:fixed children.
+/* ── HEADER ───────────────────────────────────────────────── */
 
-  isolation:auto — intentional. isolation:isolate + backdrop-filter
-  creates a paint layer that traps absolute/fixed children in
-  WebKit/Blink. Keeping isolation:auto lets the dropdown z-index work.
-*/
-.newsletter .xj-site-header {
+.openroot-news__header {
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
   z-index: 1000;
-  isolation: auto;
+
+  display: flex;
+  align-items: stretch;
+  justify-content: space-between;
+
+  height: var(--nl-header);
+
+  border-bottom: 1px solid var(--nl-line);
+  background-color: var(--nl-bg);
+}
+
+.openroot-news__brand {
   display: flex;
   align-items: center;
-  justify-content: flex-start;
-  width: 100%;
-  box-sizing: border-box;
-  height: 72px;
-  padding: 0 2rem;
-  background: rgba(0,0,0,0.83);
-  backdrop-filter: blur(20px) saturate(180%);
-  -webkit-backdrop-filter: blur(20px) saturate(180%);
-  border-bottom: none;
-}
 
+  padding: 0 clamp(1rem, 3vw, 2rem);
 
-/* Animated gradient underline */
-.newsletter .xj-site-header::after {
-  content: "";
-  position: absolute;
-  bottom: 0; left: 0; right: 0;
-  height: 1px;
-  background: linear-gradient(
-    90deg, transparent, var(--xj-cyan), var(--xj-purple), var(--xj-pink), transparent
-  );
-  background-size: 200% 100%;
-  animation: xj-header-glow 4s linear infinite;
-}
-
-
-@keyframes xj-header-glow {
-  0%   { background-position: 200% 0; }
-  100% { background-position: -200% 0; }
-}
-
-
-@media (max-width: 899px) {
-  .newsletter .xj-site-header {
-    height: 62px;
-    padding: 0 1rem;
-  }
-}
-
-
-
-/* ── LOGO ──────────────────────────────────────────────────── */
-.newsletter .xj-logo-wrapper {
-  flex: 0 0 auto;
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  position: relative;
-  z-index: 1;
-}
-
-
-.newsletter .xj-site-logo {
-  width: 120px;
-  height: auto;
-}
-
-
-.newsletter .xj-logo-text {
-  font-size: 1rem;
-  font-weight: 700;
-  letter-spacing: 2px;
+  font-size: 1.05rem;
+  font-weight: 800;
+  letter-spacing: 0.02em;
   white-space: nowrap;
-  background: linear-gradient(135deg, var(--xj-cyan), var(--xj-purple), var(--xj-pink));
-  background-size: 200% 200%;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  animation: xj-text-gradient 5s ease infinite;
 }
 
-
-@keyframes xj-text-gradient {
-  0%, 100% { background-position: 0% 50%; }
-  50%       { background-position: 100% 50%; }
+.openroot-news__nav {
+  display: flex;
+  align-items: stretch;
 }
 
-
-@media (max-width: 480px) {
-  .newsletter .xj-logo-text { display: none; }
-  .newsletter .xj-site-logo { width: 100px; }
+/* desktop links: full-height cells */
+.openroot-news__links {
+  display: none;
+  align-items: stretch;
 }
 
-
-
-/* ── NAVBAR ────────────────────────────────────────────────── */
-/*
-  flex:1 1 auto — grows to fill all space after the logo.
-  justify-content:flex-end — pins all children to the right edge.
-  position:relative — anchors the dropdown (absolute/fixed aware).
-*/
-.newsletter .xj-navbar {
-  flex: 1 1 auto;
+.openroot-news__navlink {
   display: flex;
   align-items: center;
-  justify-content: flex-end;
-  position: relative;
-  z-index: 1;
-}
 
+  padding: 0 1.1rem;
 
+  border-left: 1px solid var(--nl-line-soft);
+  border-bottom: 4px solid transparent;
 
-/* ── DESKTOP NAV LINKS ─────────────────────────────────────── */
-/* Hidden by default — shown at ≥900px */
-.newsletter .xj-nav-links {
-  display: none;
-  align-items: center;
-  gap: 1.4rem;
-}
-
-
-.newsletter .xj-nav-links a {
   font-size: 0.95rem;
-  font-weight: 500;
-  color: var(--xj-white);
-  text-decoration: none;
-  position: relative;
-  transition: color var(--xj-t-fast) ease;
+  font-weight: 600;
+  white-space: nowrap;
 }
 
+.openroot-news__navlink--white:hover { border-bottom-color: var(--nl-text); }
+.openroot-news__navlink--blue:hover { border-bottom-color: var(--nl-blue); }
+.openroot-news__navlink--cyan:hover { border-bottom-color: var(--nl-cyan); }
+.openroot-news__navlink--green:hover { border-bottom-color: var(--nl-green); }
+.openroot-news__navlink--purple:hover { border-bottom-color: var(--nl-purple); }
+.openroot-news__navlink--gold:hover { border-bottom-color: var(--nl-gold); }
+.openroot-news__navlink--pink:hover { border-bottom-color: var(--nl-pink); }
 
-.newsletter .xj-nav-links a::after {
-  content: "";
-  position: absolute;
-  left: 0; bottom: -4px;
-  width: 0; height: 2px;
-  background: var(--xj-cyan);
-  transition: width var(--xj-t-fast) ease;
-}
-
-
-.newsletter .xj-nav-links a:hover        { color: var(--xj-cyan); }
-.newsletter .xj-nav-links a:hover::after  { width: 100%; }
-
-
-.newsletter .xj-nav-links a:focus-visible {
-  outline: 2px solid var(--xj-cyan);
-  outline-offset: 3px;
-  border-radius: 2px;
-}
-
-
-
-/* ── HAMBURGER BUTTON ──────────────────────────────────────── */
-/*
-  overflow:hidden — clips the conic ::before (inset:-50%) to the
-  button's border-radius so it never bleeds into the header.
-  Hidden by default — shown at ≤899px.
-*/
-.newsletter .xj-menu-toggle {
+/* hamburger: a square cell */
+.openroot-news__toggle {
   display: none;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
+  justify-content: center;
   gap: 5px;
-  width: 42px;
-  height: 42px;
+
+  width: var(--nl-header);
   padding: 0;
-  background: var(--xj-glass-bg);
-  border: 1px solid var(--xj-glass-border);
-  border-radius: 12px;
+
+  border: 0;
+  border-left: 1px solid var(--nl-line);
+  background-color: var(--nl-bg);
   cursor: pointer;
-  overflow: hidden;
-  position: relative;
-  transition:
-    box-shadow    var(--xj-t-fast) ease,
-    border-color  var(--xj-t-fast) ease;
+  -webkit-tap-highlight-color: transparent;
 }
 
-
-/* Conic glow — only animates on hover/open to save GPU */
-.newsletter .xj-menu-toggle::before {
-  content: "";
-  position: absolute;
-  inset: -50%;
-  background: conic-gradient(from 0deg, transparent, var(--xj-cyan), transparent 30%);
-  opacity: 0;
-  pointer-events: none;
-  z-index: 0;
-  animation: none;
-  transition: opacity var(--xj-t-fast);
-}
-
-
-.newsletter .xj-menu-toggle:hover::before,
-.newsletter .xj-menu-toggle.xj-open::before {
-  opacity: 1;
-  animation: xj-rotate-border 2s linear infinite;
-}
-
-
-.newsletter .xj-menu-toggle:hover {
-  box-shadow: var(--xj-glow-cyan);
-  border-color: var(--xj-cyan);
-}
-
-
-@keyframes xj-rotate-border {
-  to { transform: rotate(360deg); }
-}
-
-
-
-/* ── HAMBURGER LINES — CSS X animation ────────────────────── */
-.newsletter .xj-menu-line {
+.openroot-news__line {
   display: block;
   width: 20px;
   height: 2px;
-  background: var(--xj-white);
-  border-radius: 2px;
-  transform-origin: center;
-  pointer-events: none;
-  position: relative;
-  z-index: 1;
-  transition:
-    transform  0.25s cubic-bezier(0.4, 0, 0.2, 1),
-    opacity    0.18s ease;
+  background: var(--nl-text);
+  transition: transform 0.2s ease, opacity 0.15s ease;
 }
 
+.openroot-news__toggle.is-open .openroot-news__line:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+.openroot-news__toggle.is-open .openroot-news__line:nth-child(2) { opacity: 0; }
+.openroot-news__toggle.is-open .openroot-news__line:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
 
-.newsletter .xj-menu-toggle.xj-open .xj-menu-line:nth-child(1) { transform: translateY(7px)  rotate(45deg);  }
-.newsletter .xj-menu-toggle.xj-open .xj-menu-line:nth-child(2) { opacity: 0; transform: scaleX(0);            }
-.newsletter .xj-menu-toggle.xj-open .xj-menu-line:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
-
-
-
-/* ── MOBILE DROPDOWN ───────────────────────────────────────── */
-
-.newsletter .xj-menu-dropdown {
+/* mobile menu: full-width list under the header */
+.openroot-news__menu {
   position: fixed;
-  top: 72px;
-  right: 1rem;
-  left: auto;
-  width: 200px;
-  margin: 0;
-  padding: 0.6rem;
-  list-style: none;
-  background: rgba(4, 6, 22, 0.94);
-  backdrop-filter: blur(20px) saturate(160%);
-  -webkit-backdrop-filter: blur(20px) saturate(160%);
-  border: 1px solid rgba(0, 245, 255, 0.18);
-  border-radius: 16px;
-  box-shadow:
-    0 24px 56px rgba(0,0,0,0.55),
-    inset 0 1px 0 rgba(255,255,255,0.04),
-    0 0 30px rgba(0,245,255,0.06);
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 0.3rem;
-  z-index: 99999;
+  top: var(--nl-header);
+  left: 0;
+  right: 0;
+  z-index: 999;
 
-  /* Hidden state */
+  display: grid;
+  border-bottom: 1px solid var(--nl-line);
+  background-color: var(--nl-bg);
+
   opacity: 0;
   visibility: hidden;
   pointer-events: none;
-  transform: translateY(-10px) scale(0.97);
-  transform-origin: top right;
-  transition:
-    opacity     0.22s ease,
-    transform   0.22s ease,
-    visibility  0.22s ease;
+  transform: translateY(-8px);
+  transition: opacity 0.18s ease, transform 0.18s ease, visibility 0.18s;
 }
 
-
-/* Open state — React adds .xj-open class */
-.newsletter .xj-menu-dropdown.xj-open {
+.openroot-news__menu.is-open {
   opacity: 1;
   visibility: visible;
   pointer-events: auto;
-  transform: translateY(0) scale(1);
+  transform: none;
 }
 
-.newsletter .xj-menu-dropdown li {
-  margin: 0;
-}
-
-.newsletter .xj-menu-dropdown a {
+.openroot-news__menulink {
   display: flex;
   align-items: center;
-  justify-content: center;
-  min-height: 44px;
-  padding: 0.5rem 0.75rem;
-  color: var(--xj-white);
-  text-decoration: none;
-  font-weight: 500;
-  font-size: 0.92rem;
-  letter-spacing: 0.3px;
-  border-radius: 10px;
-  background: rgba(255,255,255,0.04);
-  border: 1px solid rgba(255,255,255,0.07);
-  transition:
-    color        0.18s ease,
-    background   0.18s ease,
-    border-color 0.18s ease,
-    transform    0.18s ease;
+
+  min-height: 52px;
+  padding: 0 1.25rem;
+
+  border-top: 1px solid var(--nl-line-soft);
+  border-left: 6px solid var(--nl-text);
+
+  font-size: 1rem;
+  font-weight: 600;
 }
 
-.newsletter .xj-menu-dropdown a:hover {
-  color: var(--xj-cyan);
-  background: rgba(0,245,255,0.08);
-  border-color: rgba(0,245,255,0.25);
-  transform: translateX(3px);
-}
+.openroot-news__menulink--blue { border-left-color: var(--nl-blue); }
+.openroot-news__menulink--cyan { border-left-color: var(--nl-cyan); }
+.openroot-news__menulink--green { border-left-color: var(--nl-green); }
+.openroot-news__menulink--purple { border-left-color: var(--nl-purple); }
+.openroot-news__menulink--gold { border-left-color: var(--nl-gold); }
+.openroot-news__menulink--pink { border-left-color: var(--nl-pink); }
 
-.newsletter .xj-menu-dropdown a:focus-visible {
-  outline: 2px solid var(--xj-cyan);
-  outline-offset: 2px;
-  border-radius: 10px;
-}
-
-/* ── RESPONSIVE BREAKPOINTS (single source: 900px) ────────── */
-
-/* Mobile — ≤899px */
-@media (max-width: 899px) {
-  .newsletter .xj-nav-links   { display: none; }
-  .newsletter .xj-menu-toggle { display: flex; }
-  .newsletter .xj-menu-dropdown {
-    top: 62px;
-    right: 0.75rem;
-    width: 190px;
+@media (hover: hover) {
+  .openroot-news__menulink:hover {
+    background-color: var(--nl-hover);
   }
 }
 
-/* Desktop — ≥900px */
-@media (min-width: 900px) {
-  .newsletter .xj-nav-links   { display: flex; }
-  .newsletter .xj-menu-toggle { display: none; }
-}
+/* ── CONTAINER ────────────────────────────────────────────── */
 
-/* ── MAIN CONTAINER ────────────────────────────────────────── */
-
-.newsletter .xj-container {
+.openroot-news__container {
   position: relative;
-  z-index: 1;
-  max-width: 1500px;
-  margin: 0 auto;
-  padding: calc(72px + 1.75rem) 1rem 0;
+
+  width: min(1360px, calc(100% - 2 * var(--ot-page-inline, 1.25rem)));
+  margin-inline: auto;
+  padding-top: calc(var(--nl-header) + 1.5rem);
 }
 
-@media (max-width: 899px) {
-  .newsletter .xj-container {
-    padding-top: calc(62px + 1.25rem);
-  }
+/* visually hidden SEO block */
+.openroot-news__sr {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
 }
 
-/* ── SECTION ───────────────────────────────────────────────── */
-.newsletter .xj-section-container {
-  margin-bottom: var(--xj-section-gap);
-  scroll-margin-top: 6rem;
-  animation: xj-fade-in 220ms ease-in-out;
+/* ── SECTIONS ─────────────────────────────────────────────── */
+
+.openroot-news__section {
+  padding-block: clamp(1.75rem, 4vw, 2.75rem);
+
+  border-top: 1px solid var(--nl-line-soft);
+
+  scroll-margin-top: calc(var(--nl-header) + 0.5rem);
 }
 
-@keyframes xj-fade-in {
-  from { opacity: 0; transform: translateY(8px); }
-  to   { opacity: 1; transform: translateY(0); }
+.openroot-news__section:first-of-type {
+  border-top: 0;
 }
 
-.newsletter .xj-section-title {
-  font-size: clamp(1.15rem, 2vw, 1.8rem);
-  color: var(--xj-white);
-  font-weight: 700;
-  margin-bottom: 1rem;
-  text-align: left;
+.openroot-news__head {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+
+  margin-bottom: 1.25rem;
 }
 
-/* ── CARD GRID ─────────────────────────────────────────────── */
-.newsletter .xj-card-grid {
+.openroot-news__h2 {
+  font-size: clamp(1.35rem, 2.6vw, 2rem);
+  font-weight: 800;
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+  text-wrap: balance;
+}
+
+/* coloured block showing how many links the section holds */
+.openroot-news__marker {
+  display: inline-grid;
+  place-items: center;
+
+  width: 40px;
+  height: 40px;
+  flex: 0 0 auto;
+
+  color: var(--nl-ink);
+  font-size: 0.95rem;
+  font-weight: 800;
+}
+
+.openroot-news__marker--blue { background: var(--nl-blue); color: var(--nl-on-accent); }
+.openroot-news__marker--cyan { background: var(--nl-cyan); }
+.openroot-news__marker--green { background: var(--nl-green); }
+.openroot-news__marker--purple { background: var(--nl-purple); color: var(--nl-on-accent); }
+.openroot-news__marker--gold { background: var(--nl-gold); }
+.openroot-news__marker--pink { background: var(--nl-pink); color: var(--nl-on-accent); }
+
+/* ── CARD GRID (separate, equal cards with gaps) ─────────── */
+
+.openroot-news__grid {
   display: grid;
-  gap: 0.75rem;
-  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
-  align-items: start;
-  justify-items: center;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 1rem;
 }
 
+@media (max-width: 1199px) {
+  .openroot-news__grid { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+}
 
-@media (min-width: 1200px) {
-  .newsletter .xj-card-grid { grid-template-columns: repeat(7, 1fr); gap: 1.25rem; }
+@media (max-width: 1023px) {
+  .openroot-news__grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
 }
-@media (min-width: 1024px) and (max-width: 1199px) {
-  .newsletter .xj-card-grid { grid-template-columns: repeat(5, 1fr); }
-}
-@media (min-width: 768px) and (max-width: 1023px) {
-  .newsletter .xj-card-grid { grid-template-columns: repeat(4, 1fr); }
-}
+
 @media (max-width: 767px) {
-  .newsletter .xj-card-grid { grid-template-columns: repeat(3, 1fr); }
-}
-@media (max-width: 420px) {
-  .newsletter .xj-card-grid { grid-template-columns: repeat(2, 1fr); }
-}
-
-/* ── CARD ──────────────────────────────────────────────────── */
-.newsletter .xj-card {
-  width: 100%;
-  max-height: 120px;
-  background: #34362c81;
-  border: 1px solid var(--xj-card-border);
-  border-radius: var(--xj-card-radius);
-  padding: var(--xj-card-pad);
-  display: flex;
-  flex-direction: column;
-  align-items: stretch;
-  position: relative;
-  cursor: pointer;
-  overflow: hidden;
-  transition: transform 220ms ease, box-shadow 220ms ease;
-}
-
-
-.newsletter .xj-job-card {
-  width: 100%;
-  max-height: 120px;
-  background: #ffffff;
-  border: 1px solid var(--xj-card-border);
-  border-radius: var(--xj-card-radius);
-  padding: 5px;
-  display: flex;
-  flex-direction: column;
-  align-items: stretch;
-  position: relative;
-  cursor: pointer;
-  overflow: hidden;
-  transition: transform 220ms ease, box-shadow 220ms ease;
-}
-
-
-@media (hover: hover) and (pointer: fine) {
-  .newsletter .xj-card:hover,
-  .newsletter .xj-job-card:hover {
-    transform: translateY(-6px);
-    box-shadow: 0 12px 30px rgba(0,0,0,0.42);
-    border-color: var(--xj-accent);
+  .openroot-news__grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0.75rem;
   }
 }
 
-.newsletter .xj-card:focus-visible,
-.newsletter .xj-job-card:focus-visible {
-  outline: 2px solid var(--xj-cyan);
-  outline-offset: 2px;
+@media (max-width: 479px) {
+  .openroot-news__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.6rem;
+  }
 }
 
-.newsletter .xj-hidden {
-  display: none !important;
-}
-
-/* ── IMAGE WRAPPER ─────────────────────────────────────────── */
-.newsletter .xj-img-wrapper {
-  margin-top: 0.4rem;
-  height: 140px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  overflow: hidden;
-  border-radius: 10px;
-  background: linear-gradient(180deg, rgba(255,255,255,0.02), transparent);
+/* every card is the same size, whatever the logo's own proportions */
+.openroot-news__card {
   position: relative;
+
+  min-width: 0;
+  aspect-ratio: 3 / 2;
+  overflow: hidden;
+
+  border: 1px solid var(--nl-line);
+
+  background-color: var(--nl-card);
 }
 
-.newsletter .xj-img-wrapper img {
+/* job logos are drawn for a white background */
+.openroot-news__card.is-job {
+  background-color: #ffffff;
+}
+
+.openroot-news__card.is-hidden {
+  display: none;
+}
+
+/* the link fills the card; the image is contained inside it with padding,
+   so nothing can overflow or stretch the card */
+.openroot-news__link {
+  position: absolute;
+  inset: 0;
+  display: block;
+  padding: 16px;
+}
+
+.openroot-news__link img {
+  display: block;
   width: 100%;
   height: 100%;
   object-fit: contain;
-  border-radius: 10px;
-  display: block;
 }
 
-/* ── LIVE BADGE ────────────────────────────────────────────── */
-.newsletter .xj-live {
-  position: absolute;
-  top: 4px; left: 9px;
-  padding: 4px 10px;
-  background: linear-gradient(135deg, #ff0040, #ff4060);
-  border-radius: 20px;
-  font-size: 0.65rem;
-  font-weight: 800;
-  letter-spacing: 1px;
-  color: var(--xj-white);
-  z-index: 10;
-  margin: 0;
-  animation: xj-live-pulse 2s ease-in-out infinite;
-  box-shadow: 0 0 20px rgba(255,0,64,0.5);
-}
-
-.newsletter .xj-live::before {
-  content: "";
-  position: absolute;
-  left: -4px; top: 50%;
-  transform: translateY(-50%);
-  width: 8px; height: 8px;
-  background: #fff;
-  border-radius: 50%;
-  animation: xj-live-dot 1s ease-in-out infinite;
-}
-
-@keyframes xj-live-pulse {
-  0%, 100% { transform: scale(1); }
-  50%       { transform: scale(1.05); }
-}
-
-@keyframes xj-live-dot {
-  0%, 100% { opacity: 1; box-shadow: 0 0 5px #fff; }
-  50%       { opacity: 0.5; box-shadow: 0 0 15px #fff; }
-}
-
-/* ── STAR BUTTON ───────────────────────────────────────────── */
-.newsletter .xj-star-btn {
-  position: absolute;
-  top: 0px; right: 9px;
-  width: 24px; height: 24px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: rgba(0,0,0,0.5);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255,255,255,0.1);
-  border-radius: 50%;
-  font-size: 1rem;
-  color: rgba(255,255,255,0.7);
-  cursor: pointer;
-  z-index: 10;
-  padding: 0;
-  line-height: 1;
-  transition:
-    transform     var(--xj-t-fast) ease,
-    background    var(--xj-t-fast) ease,
-    border-color  var(--xj-t-fast) ease,
-    color         var(--xj-t-fast) ease,
-    box-shadow    var(--xj-t-fast) ease;
-}
-
-.newsletter .xj-star-btn:hover {
-  background: rgba(255,200,0,0.2);
-  border-color: gold;
-  color: gold;
-  box-shadow: 0 0 20px rgba(255,200,0,0.4);
-}
-
-.newsletter .xj-star-btn.xj-starred {
-  background: rgba(255,200,0,0.3);
-  color: gold;
-  border-color: gold;
-  animation: xj-star-pulse 1.5s ease infinite;
-}
-
-@keyframes xj-star-pulse {
-  0%, 100% { box-shadow: 0 0 10px rgba(255,200,0,0.4); }
-  50%       { box-shadow: 0 0 25px rgba(255,200,0,0.8); }
-}
-
-/* ── JOB FILTERS ───────────────────────────────────────────── */
-.newsletter .xj-job-filters {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 0.75rem;
-  margin: 1.25rem auto;
-}
-
-.newsletter .xj-filter-btn {
-  background: rgba(255,255,255,0.04);
-  border: 1px solid var(--xj-card-border);
-  color: var(--xj-white);
-  padding: 8px 16px;
-  border-radius: 20px;
-  font-weight: 600;
-  font-size: 0.9rem;
-  cursor: pointer;
-  transition:
-    background   220ms ease,
-    transform    220ms ease,
-    border-color 220ms ease;
-}
-
-.newsletter .xj-filter-btn:hover,
-.newsletter .xj-filter-btn.xj-active {
-  background: linear-gradient(90deg, rgba(11,15,239,0.95), rgba(72,9,220,0.85));
-  border-color: transparent;
-  transform: translateY(-2px);
-}
-
-.newsletter .xj-filter-btn:focus-visible {
-  outline: 2px solid var(--xj-cyan);
-  outline-offset: 2px;
-}
-
-/* ── TOAST ─────────────────────────────────────────────────── */
-.newsletter .xj-toast {
-  position: fixed;
-  bottom: 24px;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 2000;
-  max-width: calc(100vw - 24px);
-  padding: 12px 18px;
-  border-radius: 12px;
-  background: rgba(6,10,30,0.94);
-  color: var(--xj-white);
-  font-size: 0.9rem;
-  font-weight: 500;
-  border: 1px solid rgba(0,245,255,0.2);
-  box-shadow:
-    0 20px 50px rgba(0,0,0,0.45),
-    0 0 20px rgba(0,245,255,0.1);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
-  animation: xj-toast-in 0.25s ease;
-}
-
-@keyframes xj-toast-in {
-  from { opacity: 0; transform: translateX(-50%) translateY(10px); }
-  to   { opacity: 1; transform: translateX(-50%) translateY(0); }
-}
-
-/* ── FOOTER ────────────────────────────────────────────────── */
-.newsletter .xj-site-footer {
-  position: relative;
-  z-index: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 2.5rem 1.25rem;
-  text-align: center;
-  color: var(--xj-white);
-  font-weight: bold;
-}
-
-.newsletter .xj-site-footer::before {
-  content: "";
-  position: absolute;
-  top: 0; left: 50%;
-  transform: translateX(-50%);
-  width: 60%; height: 2px;
-  background: linear-gradient(90deg, transparent, var(--xj-accent), #a855f7, transparent);
-  background-size: 200%;
-  animation: xj-glow-line 6s linear infinite;
-}
-
-@keyframes xj-glow-line {
-  0%   { background-position: 0% 0; }
-  100% { background-position: 200% 0; }
-}
-
-.newsletter .xj-footer-bottom {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 100%;
-}
-
-.newsletter .xj-footer-bottom p {
-  margin: 0.2rem 0;
-  font-size: 0.88rem;
-  opacity: 0.9;
-}
-
-.newsletter .xj-version-label {
-  margin-top: 0.75rem;
-  font-size: 0.75rem;
-  color: rgba(255,255,255,0.45);
-  pointer-events: none;
-}
-
-@media (min-width: 601px) {
-  .newsletter .xj-version-label {
-    position: absolute;
-    bottom: 10px; right: 14px;
-    margin-top: 0;
+@media (hover: hover) {
+  .openroot-news__card:hover {
+    outline: 2px solid var(--nl-cyan);
+    outline-offset: 2px;
   }
 }
 
-/* ── GLOBAL FOCUS RING ─────────────────────────────────────── */
-.newsletter :focus-visible {
-  outline: 2px solid var(--xj-accent);
-  outline-offset: 3px;
+.openroot-news__card:focus-within {
+  outline: 2px solid var(--nl-cyan);
+  outline-offset: 2px;
 }
 
-/* ── REDUCED MOTION ────────────────────────────────────────── */
+.openroot-news__link:focus-visible {
+  outline: none;
+}
+
+/* ── LIVE BADGE ───────────────────────────────────────────── */
+
+.openroot-news__live {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 2;
+
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+
+  min-height: 24px;
+  padding: 0 0.55rem;
+
+  background: var(--nl-red);
+  color: var(--nl-on-accent);
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  pointer-events: none;
+}
+
+.openroot-news__live-dot {
+  width: 6px;
+  height: 6px;
+  background: var(--nl-on-accent);
+  animation: openroot-news-blink 1.2s ease-in-out infinite;
+}
+
+@keyframes openroot-news-blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.25; }
+}
+
+/* ── STAR BUTTON ──────────────────────────────────────────── */
+
+.openroot-news__star {
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 2;
+
+  display: grid;
+  place-items: center;
+
+  width: 28px;
+  height: 28px;
+  padding: 0;
+
+  border: 0;
+  border-left: 1px solid var(--nl-line);
+  border-bottom: 1px solid var(--nl-line);
+
+  background: var(--nl-bg);
+  color: var(--nl-text);
+  font-size: 1rem;
+  line-height: 1;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.openroot-news__star.is-starred {
+  background: var(--nl-gold);
+  color: var(--nl-ink);
+}
+
+@media (hover: hover) {
+  .openroot-news__star:not(.is-starred):hover {
+    background: var(--nl-gold);
+    color: var(--nl-ink);
+  }
+}
+
+/* ── JOB FILTERS (segmented cells) ────────────────────────── */
+
+.openroot-news__filters {
+  display: flex;
+  flex-wrap: wrap;
+
+  width: fit-content;
+  max-width: 100%;
+  margin-bottom: 0.75rem;
+
+  border-top: 1px solid var(--nl-line);
+  border-left: 1px solid var(--nl-line);
+}
+
+.openroot-news__filter {
+  min-height: 44px;
+  padding: 0 1.25rem;
+
+  border: 0;
+  border-right: 1px solid var(--nl-line);
+  border-bottom: 1px solid var(--nl-line);
+
+  background-color: var(--nl-bg);
+  color: var(--nl-text);
+  font-size: 0.92rem;
+  font-weight: 700;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.openroot-news__filter.is-active {
+  background-color: var(--nl-pink);
+  color: var(--nl-on-accent);
+}
+
+@media (hover: hover) {
+  .openroot-news__filter:not(.is-active):hover {
+    background-color: var(--nl-hover);
+  }
+}
+
+/* ── TOAST ────────────────────────────────────────────────── */
+
+.openroot-news__toast {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  z-index: 2000;
+
+  max-width: calc(100vw - 24px);
+  padding: 0.8rem 1.1rem;
+
+  border: 1px solid var(--nl-line);
+  border-left: 6px solid var(--nl-gold);
+
+  background: var(--nl-bg);
+  color: var(--nl-text);
+  font-size: 0.92rem;
+  font-weight: 600;
+
+  transform: translateX(-50%);
+}
+
+/* ── FOOTER ───────────────────────────────────────────────── */
+
+.openroot-news__footer {
+  display: grid;
+  gap: 0.2rem;
+  justify-items: center;
+
+  margin-top: clamp(1.5rem, 4vw, 3rem);
+  padding: 2rem 1.25rem 2.5rem;
+
+  border-top: 1px solid var(--nl-line);
+
+  text-align: center;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.openroot-news__version {
+  margin-top: 0.5rem;
+  color: var(--nl-muted);
+  font-size: 0.78rem;
+  font-weight: 400;
+}
+
+/* ── BREAKPOINT 900px ─────────────────────────────────────── */
+
+@media (min-width: 900px) {
+  .openroot-news__links { display: flex; }
+  .openroot-news__toggle { display: none; }
+  .openroot-news__menu { display: none; }
+}
+
+@media (max-width: 899px) {
+  .openroot-news__toggle { display: flex; }
+}
+
+@media (max-width: 480px) {
+  .openroot-news {
+    --nl-header: 58px;
+  }
+
+  .openroot-news__filter {
+    flex: 1 1 50%;
+    padding: 0 0.75rem;
+  }
+
+  .openroot-news__filters {
+    width: 100%;
+  }
+}
+
+/* ── REDUCED MOTION ───────────────────────────────────────── */
+
 @media (prefers-reduced-motion: reduce) {
-  .newsletter *,
-  .newsletter *::before,
-  .newsletter *::after {
-    animation-duration:        0.001ms !important;
-    animation-iteration-count: 1       !important;
-    transition-duration:       0.001ms !important;
-    scroll-behavior:           auto    !important;
+  .openroot-news__live-dot {
+    animation: none;
+  }
+
+  .openroot-news__line,
+  .openroot-news__menu {
+    transition: none !important;
   }
 }

@@ -1,479 +1,520 @@
-/* =============================================================================
-   WEB EXTENSION SECTION
-   Minimal • Architectural • Responsive Navigation
-============================================================================= */
+/* ============================================================
+   OPENROOT GDRIVE / WEB EXTENSION SECTION
+   Matches the About page: textured square-grid background, square
+   framed cells, flat colour blocks, no gradients, shadows or glows.
 
-#web-extension-section {
+   Fully namespaced under .openroot-gdrive.
+   ============================================================ */
+
+@import url("https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&display=swap");
+
+/* ── ROOT + TOKENS ────────────────────────────────────────── */
+
+.openroot-gdrive {
+  --og-text: var(--color-text, var(--ot-text, #101319));
+  --og-muted: var(--color-text-muted, var(--ot-text-muted, rgba(16, 19, 25, 0.68)));
+  --og-bg: var(--ot-section-bg, var(--ot-bg, #f2f4f8));
+  --og-line: var(--og-text);
+  --og-line-soft: var(--og-text);
+
+  --og-blue: #4169e1;
+  --og-mint: #35d3a1;
+  --og-yellow: #ffc72c;
+  --og-coral: #ff6b4a;
+  --og-violet: #7a63f5;
+  --og-ink: #101319;
+  --og-white: #ffffff;
+
+  --og-max: var(--ot-max-w, 1240px);
+  --og-display: "Bricolage Grotesque", var(--ot-font, system-ui), sans-serif;
+
   position: relative;
-  overflow: hidden;
-  width: 100%;
-  padding:
-    var(--section-padding-top)
-    var(--section-padding-x)
-    var(--section-padding-bottom);
-  background: #afc2f9;
   isolation: isolate;
+
+  width: 100%;
+  margin: 0;
+  padding: clamp(3rem, 6vw, 5rem) 0 clamp(3.5rem, 7vw, 5.5rem);
+  overflow: clip;
+
+  border-top: 2px solid var(--og-text);
+
+  background-color: var(--og-bg);
+  color: var(--og-text);
+
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
 }
 
-/* =============================================================================
-   RESET
-============================================================================= */
+@supports (color: color-mix(in srgb, red, blue)) {
+  .openroot-gdrive {
+    --og-line: color-mix(in srgb, var(--og-text) 55%, transparent);
+    --og-line-soft: color-mix(in srgb, var(--og-text) 22%, transparent);
+  }
+}
 
-#web-extension-section * {
+/* texture: fine square grid */
+.openroot-gdrive::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background-image:
+    linear-gradient(to bottom, var(--og-text) 1px, transparent 1px),
+    linear-gradient(to right, var(--og-text) 1px, transparent 1px);
+  background-size: 26px 26px;
+  opacity: 0.09;
+}
+
+.openroot-gdrive *,
+.openroot-gdrive *::before,
+.openroot-gdrive *::after {
   box-sizing: border-box;
 }
 
-/* =============================================================================
-   CONTAINER
-============================================================================= */
+.openroot-gdrive :where(h2, h3, p, ol) {
+  margin: 0;
+  padding: 0;
+}
 
-#web-extension-section .we-container {
-  width: min(100%, var(--ot-container));
+.openroot-gdrive ol {
+  list-style: none;
+}
+
+.openroot-gdrive button:focus-visible,
+.openroot-gdrive a:focus-visible {
+  outline: 2px solid var(--og-text);
+  outline-offset: 3px;
+}
+
+.openroot-gdrive__container {
+  width: min(var(--og-max), calc(100% - 2 * var(--ot-page-inline, 1.5rem)));
   margin-inline: auto;
 }
 
-/* =============================================================================
-   HEADER
-============================================================================= */
+/* ── TYPE ─────────────────────────────────────────────────── */
 
-#web-extension-section .we-header {
-  text-align: center;
-  margin-bottom: clamp(2rem, 4vw, 3rem);
+.openroot-gdrive__label {
+  display: block;
+  color: var(--og-muted);
+  font-size: 0.92rem;
+  font-weight: 600;
+  line-height: 1.4;
 }
 
-#web-extension-section .we-title {
-  margin-top: 50px;
-  font-size: clamp(1.7rem, 3vw, 3.4rem);
-  font-weight: 900;
-  line-height: 0.96;
-  letter-spacing: -0.065em;
-  color: var(--color-text);
+.openroot-gdrive__h2,
+.openroot-gdrive__h3 {
+  font-family: var(--og-display);
+  letter-spacing: -0.04em;
   text-wrap: balance;
 }
 
-#web-extension-section .we-subtitle {
-  margin: 1rem auto 0;
-  max-width: 64ch;
-  font-size: clamp(0.96rem, 1.4vw, 1.04rem);
-  line-height: 1.9;
-  color: var(--color-text-muted);
+.openroot-gdrive__h2 {
+  margin-top: 0.8rem;
+  font-size: clamp(1.9rem, 4.2vw, 3.4rem);
+  font-weight: 700;
+  line-height: 1.04;
 }
 
-/* =============================================================================
-   MAIN GRID
-============================================================================= */
+.openroot-gdrive__h3 {
+  font-size: clamp(1.4rem, 2.6vw, 2.1rem);
+  font-weight: 700;
+  line-height: 1.1;
+}
 
-#web-extension-section .we-grid {
+.openroot-gdrive__text {
+  color: var(--og-muted);
+  font-size: 1rem;
+  line-height: 1.8;
+}
+
+.openroot-gdrive__body {
+  max-width: 52ch;
+  color: var(--og-muted);
+  font-size: 1rem;
+  line-height: 1.75;
+}
+
+/* ── HEAD ─────────────────────────────────────────────────── */
+
+.openroot-gdrive__head {
   display: grid;
-  grid-template-columns:
-    minmax(320px, 0.82fr)
-    minmax(0, 1.18fr);
-  gap: clamp(1rem, 2vw, 1.4rem);
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 1rem clamp(1.5rem, 4vw, 3rem);
+  align-items: end;
+  margin-bottom: clamp(1.75rem, 4vw, 3rem);
+}
+
+/* ── MAIN GRID ────────────────────────────────────────────── */
+
+.openroot-gdrive__grid {
+  display: grid;
+  grid-template-columns: minmax(300px, 0.8fr) minmax(0, 1.2fr);
+  gap: 0.6rem;
   align-items: stretch;
 }
 
-/* =============================================================================
-   SHARED SURFACES
-============================================================================= */
+/* ── RAIL ─────────────────────────────────────────────────── */
 
-#web-extension-section .we-step-rail,
-#web-extension-section .we-action-card {
-  background: var(--ot-card-bg);
-  border: 1px solid var(--ot-card-border);
-  border-radius: var(--ot-radius-lg);
-}
-
-/* =============================================================================
-   LEFT PANEL
-============================================================================= */
-
-#web-extension-section .we-step-rail {
+.openroot-gdrive__rail {
   display: flex;
   flex-direction: column;
-  gap: 1rem;
-  padding: clamp(1rem, 2vw, 1.3rem);
+  gap: 1.25rem;
+  padding: clamp(1.1rem, 2vw, 1.5rem);
+
+  border: 1px solid var(--og-line);
+  background-color: var(--og-bg);
 }
 
-/* =============================================================================
-   PROGRESS
-============================================================================= */
-
-#web-extension-section .we-progress-wrap {
-  display: flex;
-  flex-direction: column;
-  gap: 0.7rem;
-  padding-bottom: 0.5rem;
+.openroot-gdrive__progress {
+  display: grid;
+  gap: 0.6rem;
 }
 
-#web-extension-section .we-progress-top {
+.openroot-gdrive__progress-top {
   display: flex;
-  align-items: center;
   justify-content: space-between;
   gap: 1rem;
-  font-size: 0.74rem;
-  font-weight: 700;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: var(--color-text-muted);
+  color: var(--og-muted);
+  font-size: 0.85rem;
+  font-weight: 600;
 }
 
-#web-extension-section .we-progress-bar {
-  position: relative;
-  width: 100%;
-  height: 7px;
-  overflow: hidden;
-  border-radius: 999px;
-  background: rgba(88, 101, 242, 0.08);
-}
-
-#web-extension-section .we-progress-fill {
-  height: 100%;
-  border-radius: inherit;
-  background: linear-gradient(
-    90deg,
-    var(--ot-brand),
-    var(--ot-brand-2)
-  );
-  transition: width 0.3s ease;
-}
-
-/* =============================================================================
-   STEP LIST
-============================================================================= */
-
-#web-extension-section .we-step-list {
-  display: flex;
-  flex-direction: column;
-  gap: 0.8rem;
-}
-
-/* =============================================================================
-   STEP CARD
-============================================================================= */
-
-#web-extension-section .we-step-card,
-#web-extension-section .we-tutorial-card {
-  width: 100%;
-  display: flex;
-  align-items: flex-start;
-  gap: 0.95rem;
-  padding: 1rem;
-  border-radius: calc(var(--ot-radius-md) + 2px);
-  border: 1px solid transparent;
+.openroot-gdrive__bar {
+  height: 8px;
+  border: 1px solid var(--og-line);
   background: transparent;
+}
+
+.openroot-gdrive__bar-fill {
+  height: 100%;
+  transition: width 0.25s ease;
+}
+
+.openroot-gdrive__bar-fill--blue { background: var(--og-blue); }
+.openroot-gdrive__bar-fill--mint { background: var(--og-mint); }
+.openroot-gdrive__bar-fill--yellow { background: var(--og-yellow); }
+.openroot-gdrive__bar-fill--coral { background: var(--og-coral); }
+
+/* step list: framed cells */
+.openroot-gdrive__steps {
+  display: grid;
+  border-top: 1px solid var(--og-line);
+  border-left: 1px solid var(--og-line);
+}
+
+.openroot-gdrive__steps li {
+  display: grid;
+}
+
+.openroot-gdrive__step {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+
+  width: 100%;
+  min-height: 72px;
+  padding: 0.9rem 1rem;
+
+  border: 0;
+  border-right: 1px solid var(--og-line);
+  border-bottom: 1px solid var(--og-line);
+  border-radius: 0;
+
+  background-color: var(--og-bg);
+  color: var(--og-text);
+  font: inherit;
   text-align: left;
   cursor: pointer;
-  transition:
-    border-color 0.18s ease,
-    background 0.18s ease;
+
+  -webkit-tap-highlight-color: transparent;
 }
 
-#web-extension-section .we-step-card:hover,
-#web-extension-section .we-tutorial-card:hover {
-  background: rgba(88, 101, 242, 0.03);
-  border-color: rgba(88, 101, 242, 0.08);
+.openroot-gdrive__step-title {
+  font-size: 0.98rem;
+  font-weight: 600;
+  line-height: 1.35;
 }
 
-#web-extension-section .we-step-card.is-active,
-#web-extension-section .we-tutorial-card.is-active {
-  background: rgba(88, 101, 242, 0.05);
-  border-color: rgba(88, 101, 242, 0.12);
+.openroot-gdrive__step.is-active {
+  background-color: var(--og-text);
+  color: var(--og-bg);
 }
 
-/* =============================================================================
-   STEP NUMBER
-============================================================================= */
+@media (hover: hover) {
+  .openroot-gdrive__step:not(.is-active):hover {
+    background-color: color-mix(in srgb, var(--og-text) 7%, var(--og-bg));
+  }
+}
 
-#web-extension-section .we-step-number {
-  width: 52px;
-  height: 52px;
-  flex-shrink: 0;
-  display: grid;
+/* coloured number block */
+.openroot-gdrive__marker {
+  display: inline-grid;
   place-items: center;
-  border-radius: 16px;
-  background: linear-gradient(
-    135deg,
-    var(--ot-brand),
-    var(--ot-brand-2)
-  );
-  color: #ffffff;
-  font-size: 0.92rem;
-  font-weight: 900;
-  letter-spacing: -0.02em;
-}
 
-/* =============================================================================
-   STEP CONTENT
-============================================================================= */
+  width: 40px;
+  height: 40px;
+  flex: 0 0 auto;
 
-#web-extension-section .we-step-content,
-#web-extension-section .we-tutorial-copy {
-  min-width: 0;
-}
-
-#web-extension-section .we-step-content h4,
-#web-extension-section .we-tutorial-copy h4 {
-  margin: 0;
-  font-size: clamp(0.95rem, 1.3vw, 1rem);
-  font-weight: 800;
-  line-height: 1.5;
-  color: var(--color-text);
-}
-
-#web-extension-section .we-tutorial-copy p {
-  margin: 0.45rem 0 0;
-  font-size: 0.86rem;
-  line-height: 1.7;
-  color: var(--color-text-muted);
-}
-
-/* =============================================================================
-   RAIL NOTE
-============================================================================= */
-
-#web-extension-section .we-rail-note {
-  margin-top: auto;
-  padding-top: 1rem;
-  border-top: 1px solid rgba(120, 120, 140, 0.1);
+  color: var(--og-ink);
+  font-family: var(--og-display);
   font-size: 0.9rem;
-  line-height: 1.8;
-  color: var(--color-text-muted);
+  font-weight: 700;
 }
 
-/* =============================================================================
-   RIGHT PANEL
-============================================================================= */
+.openroot-gdrive__marker--blue { background: var(--og-blue); color: var(--og-white); }
+.openroot-gdrive__marker--mint { background: var(--og-mint); }
+.openroot-gdrive__marker--yellow { background: var(--og-yellow); }
+.openroot-gdrive__marker--coral { background: var(--og-coral); }
 
-#web-extension-section .we-action-card {
+.openroot-gdrive__note {
+  margin-top: auto;
+  padding: 0.9rem 1rem;
+
+  border-left: 6px solid var(--og-blue);
+  border-top: 1px solid var(--og-line);
+  border-right: 1px solid var(--og-line);
+  border-bottom: 1px solid var(--og-line);
+
+  font-size: 0.95rem;
+  line-height: 1.7;
+}
+
+/* ── PANEL ────────────────────────────────────────────────── */
+
+.openroot-gdrive__panel {
   display: flex;
   flex-direction: column;
   min-width: 0;
-  padding: clamp(1.2rem, 2vw, 1.8rem);
+
+  border: 1px solid var(--og-line);
+  background-color: var(--og-bg);
 }
 
-/* =============================================================================
-   ACTION TOP
-============================================================================= */
-
-#web-extension-section .we-action-top {
+.openroot-gdrive__panel-head {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 1rem;
-  margin-bottom: 1rem;
-}
 
-#web-extension-section .we-action-badge {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0.48rem 0.9rem;
-  border-radius: 999px;
-  background: rgba(88, 101, 242, 0.06);
-  border: 1px solid rgba(88, 101, 242, 0.1);
-  color: var(--ot-brand);
-  font-size: 0.72rem;
-  font-weight: 800;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-}
+  padding: 0.85rem clamp(1.1rem, 2.5vw, 1.75rem);
 
-#web-extension-section .we-step-counter {
-  font-size: 0.76rem;
+  color: var(--og-ink);
+  font-size: 0.9rem;
   font-weight: 700;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--color-text-muted);
 }
 
-/* =============================================================================
-   PREVIEW
-============================================================================= */
+.openroot-gdrive__panel-head--blue { background: var(--og-blue); color: var(--og-white); }
+.openroot-gdrive__panel-head--mint { background: var(--og-mint); }
+.openroot-gdrive__panel-head--yellow { background: var(--og-yellow); }
+.openroot-gdrive__panel-head--coral { background: var(--og-coral); }
 
-#web-extension-section .we-preview {
+.openroot-gdrive__counter {
+  font-weight: 600;
+  opacity: 0.85;
+}
+
+.openroot-gdrive__panel-body {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.9rem;
+
+  padding: clamp(1.1rem, 2.5vw, 1.75rem);
+}
+
+.openroot-gdrive__preview {
   position: relative;
   width: 100%;
-  min-height: 320px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  overflow: hidden;
-  padding: clamp(0.8rem, 1.5vw, 1rem);
-  border-radius: calc(var(--ot-radius-md) + 4px);
-  background: rgba(88, 101, 242, 0.02);
-  border: 1px solid rgba(120, 120, 140, 0.1);
+  min-height: 260px;
+
+  display: grid;
+  place-items: center;
+
+  margin-bottom: 0.6rem;
+  padding: clamp(0.6rem, 1.5vw, 1rem);
+
+  border: 1px solid var(--og-line);
+  background-color: color-mix(in srgb, var(--og-text) 4%, var(--og-bg));
 }
 
-#web-extension-section .we-preview-link {
+.openroot-gdrive__preview-link {
+  position: relative;
   display: block;
   width: 100%;
-  height: 100%;
 }
 
-#web-extension-section .we-preview-image {
+.openroot-gdrive__img {
+  display: block;
   width: 100%;
-  height: 100%;
-  max-height: 360px;
+  height: auto;
+  max-height: 380px;
   object-fit: contain;
-  display: block;
-  border-radius: 14px;
   user-select: none;
 }
 
-/* =============================================================================
-   CONTENT
-============================================================================= */
-
-#web-extension-section .we-content-block {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-  padding-top: 1.2rem;
+/* flat play marker on the tutorial preview */
+.openroot-gdrive__play {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 72px;
+  height: 72px;
+  transform: translate(-50%, -50%);
+  background: var(--og-coral);
+  border: 2px solid var(--og-ink);
 }
 
-#web-extension-section .we-main-description {
-  margin: 0;
-  max-width: 58ch;
-  font-size: clamp(1rem, 1.4vw, 1.12rem);
-  font-weight: 500;
-  line-height: 1.8;
-  color: var(--color-text);
+.openroot-gdrive__play::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 52%;
+  transform: translate(-50%, -50%);
+  border-style: solid;
+  border-width: 12px 0 12px 20px;
+  border-color: transparent transparent transparent var(--og-ink);
 }
 
-/* =============================================================================
-   TOOLBAR
-============================================================================= */
+/* ── BUTTONS ──────────────────────────────────────────────── */
 
-#web-extension-section .we-toolbar {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.85rem;
-  margin-top: auto;
-  padding-top: 1.6rem;
-}
-
-/* =============================================================================
-   MOBILE NAVIGATION
-============================================================================= */
-
-#web-extension-section .we-mobile-nav {
-  display: none;
-}
-
-/* =============================================================================
-   BUTTONS
-============================================================================= */
-
-#web-extension-section .we-button,
-#web-extension-section .we-secondary-button {
-  min-height: 48px;
+.openroot-gdrive__button {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 0.9rem 1.25rem;
-  border-radius: calc(var(--ot-radius-md) + 2px);
-  font-size: 0.9rem;
+
+  min-height: 52px;
+  padding: 0.8rem 1.4rem;
+
+  border: 1px solid transparent;
+  border-radius: 0;
+
+  font: inherit;
+  font-size: 0.95rem;
   font-weight: 700;
+  white-space: nowrap;
   cursor: pointer;
-  transition:
-    background 0.18s ease,
-    border-color 0.18s ease,
-    opacity 0.18s ease;
+
+  -webkit-tap-highlight-color: transparent;
+  transition: opacity 0.2s ease;
 }
 
-#web-extension-section .we-button {
-  border: none;
-  background: linear-gradient(
-    135deg,
-    var(--ot-brand),
-    var(--ot-brand-2)
-  );
-  color: #ffffff;
+.openroot-gdrive__button--blue {
+  background: var(--og-blue);
+  color: var(--og-white);
 }
 
-#web-extension-section .we-button:hover {
-  opacity: 0.96;
+.openroot-gdrive__button--ink {
+  background: var(--og-text);
+  color: var(--og-bg);
 }
 
-#web-extension-section .we-secondary-button {
-  border: 1px solid #111111;
-  background: var(--ot-card-bg);
-  color: var(--color-text);
+.openroot-gdrive__button--line {
+  border-color: var(--og-text);
+  background-color: var(--og-bg);
+  color: var(--og-text);
 }
 
-#web-extension-section .we-secondary-button:hover {
-  background: rgba(88, 101, 242, 0.03);
+.openroot-gdrive__button:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
 }
 
-/* =============================================================================
-   TABLET / SMALLER SCREENS
-============================================================================= */
+@media (hover: hover) {
+  .openroot-gdrive__button:not(:disabled):hover {
+    opacity: 0.88;
+  }
+}
+
+.openroot-gdrive__button:not(:disabled):active {
+  opacity: 0.8;
+}
+
+/* ── PANEL NAV ────────────────────────────────────────────── */
+
+.openroot-gdrive__nav {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.6rem;
+
+  padding: 1rem clamp(1.1rem, 2.5vw, 1.75rem);
+  border-top: 1px solid var(--og-line);
+}
+
+/* ── RESPONSIVE ───────────────────────────────────────────── */
 
 @media (max-width: 980px) {
-  #web-extension-section .we-grid {
+  .openroot-gdrive__head,
+  .openroot-gdrive__grid {
     grid-template-columns: 1fr;
   }
 
-  #web-extension-section .we-step-rail {
+  /* rail becomes a compact 4-up strip of numbered blocks */
+  .openroot-gdrive__steps {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .openroot-gdrive__step {
+    flex-direction: column;
+    justify-content: center;
+    gap: 0.5rem;
+    min-height: 0;
+    padding: 0.8rem 0.4rem;
+    text-align: center;
+  }
+
+  .openroot-gdrive__step-title {
     display: none;
   }
 
-  #web-extension-section .we-mobile-nav {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 1rem;
-    margin-top: 1.5rem;
-    padding-top: 1.25rem;
-    border-top: 1px solid rgba(120, 120, 140, 0.1);
+  .openroot-gdrive__note {
+    margin-top: 0;
   }
 
-  #web-extension-section .we-mobile-nav:has(button:only-child) {
-    justify-content: flex-end;
+  .openroot-gdrive__panel {
+    order: -1;
+  }
+
+  .openroot-gdrive__rail {
+    order: 1;
   }
 }
 
-/* =============================================================================
-   MOBILE
-============================================================================= */
-
 @media (max-width: 640px) {
-  #web-extension-section .we-action-card {
-    padding: 1rem;
+  .openroot-gdrive__preview {
+    min-height: 180px;
   }
 
-  #web-extension-section .we-action-top {
-    flex-direction: column;
-    align-items: flex-start;
+  .openroot-gdrive__play {
+    width: 56px;
+    height: 56px;
   }
 
-  #web-extension-section .we-preview {
-    min-height: 220px;
+  .openroot-gdrive__play::after {
+    border-width: 9px 0 9px 15px;
   }
 
-  #web-extension-section .we-main-description {
-    font-size: 1rem;
-    line-height: 1.85;
+  .openroot-gdrive__panel-body > .openroot-gdrive__button {
+    width: 100%;
   }
 
-  #web-extension-section .we-mobile-nav {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 1rem;
-    flex-wrap: nowrap;
+  .openroot-gdrive__nav .openroot-gdrive__button {
+    flex: 1 1 0;
+    padding-inline: 0.8rem;
   }
+}
 
-  #web-extension-section .we-mobile-nav:has(button:only-child) {
-    justify-content: flex-end;
-  }
+/* ── REDUCED MOTION ───────────────────────────────────────── */
 
-  #web-extension-section .we-button,
-  #web-extension-section .we-secondary-button {
-    flex: 0 0 auto;
-    width: auto;
-    white-space: nowrap;
+@media (prefers-reduced-motion: reduce) {
+  .openroot-gdrive__bar-fill,
+  .openroot-gdrive__button {
+    transition: none !important;
   }
+}
+
+#web-extension-section.openroot-gdrive {
+  padding-top: clamp(1.5rem, 3vw, 2.5rem);
+  margin-top: 0;
 }

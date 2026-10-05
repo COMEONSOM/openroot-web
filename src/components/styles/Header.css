@@ -1,743 +1,489 @@
-/**
- * ============================================================
- * HEADER.CSS — OPENROOT
- * Fixed visual system for Header.tsx
- * VERSION: 2026.10 — mobile sheet fixed + controlled modal close
- *
- * Philosophy:
- *   - Header background is always dark (#070707) — theme-agnostic
- *   - All spacing, radius, easing + brand tokens from app.css
- *   - Glass, shimmer, aurora, glow upgrades throughout
- *   - Login choice modal matches the cert-modal glass system
- *   - Mobile bottom-sheet handle is truly centered
- *   - Clicking outside does NOT close the modal
- * ============================================================
- */
+/* ============================================================
+   OPENROOT HEADER + LOGIN CHOOSER
+   Same base design as About, GDrive and the login modals:
+   flat surfaces, square framed cells, textured grid in the modal.
+   No gradients, shadows, glows or rounded corners.
 
-/* ────────────────────────────────────────────────────────────
-   Scoped Reset
-──────────────────────────────────────────────────────────── */
-.header,
-.login-choice-overlay,
-.login-choice-modal,
-.login-modal-close,
-.login-button,
-.profile-button,
-.choice-btn,
-.avatar-fallback,
-.profile-avatar {
+   Namespaced under .openroot-header and .openroot-choice.
+   Colours follow the theme: the header is light in light mode and
+   dark in dark mode (it used to be always dark).
+   ============================================================ */
+
+@import url("https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&display=swap");
+
+/* ── TOKENS (shared by header and chooser) ────────────────── */
+
+.openroot-header,
+.openroot-choice {
+  --oh-text: var(--color-text, var(--ot-text, #101319));
+  --oh-muted: var(--color-text-muted, var(--ot-text-muted, rgba(16, 19, 25, 0.68)));
+  --oh-bg: var(--ot-section-bg, var(--ot-bg, #f2f4f8));
+  --oh-line: var(--oh-text);
+  --oh-hover: rgba(128, 128, 140, 0.14);
+
+  --oh-blue: #4169e1;
+  --oh-ink: #101319;
+  --oh-white: #ffffff;
+
+  --oh-display: "Bricolage Grotesque", var(--ot-font, system-ui), sans-serif;
+}
+
+@supports (color: color-mix(in srgb, red, blue)) {
+  .openroot-header,
+  .openroot-choice {
+    --oh-line: color-mix(in srgb, var(--oh-text) 55%, transparent);
+    --oh-hover: color-mix(in srgb, var(--oh-text) 8%, transparent);
+  }
+}
+
+.openroot-header *,
+.openroot-header *::before,
+.openroot-header *::after,
+.openroot-choice *,
+.openroot-choice *::before,
+.openroot-choice *::after {
   box-sizing: border-box;
 }
 
-.header *,
-.header *::before,
-.header *::after,
-.login-choice-overlay *,
-.login-choice-overlay *::before,
-.login-choice-overlay *::after {
-  box-sizing: border-box;
+.openroot-header :where(h2, p),
+.openroot-choice :where(h2, p) {
+  margin: 0;
+  padding: 0;
 }
 
-/* ────────────────────────────────────────────────────────────
-   HEADER SHELL
-──────────────────────────────────────────────────────────── */
-.header {
+.openroot-header button,
+.openroot-choice button {
+  font: inherit;
+}
+
+.openroot-choice button {
+  border-radius: 0;
+}
+
+.openroot-header__login {
+  border-radius: 0;
+}
+
+.openroot-header a:focus-visible,
+.openroot-header button:focus-visible,
+.openroot-choice button:focus-visible {
+  outline: 2px solid var(--oh-text);
+  outline-offset: -4px;
+}
+
+/* ── HEADER BAR ───────────────────────────────────────────── */
+
+.openroot-header {
   position: sticky;
   top: 0;
   z-index: 1000;
-  width: 100%;
-  min-height: 78px;
-  padding: 0 var(--ot-page-inline);
+
   display: flex;
-  align-items: center;
+  align-items: stretch;
   justify-content: space-between;
-  background: rgba(7, 7, 7, 0.88);
-  backdrop-filter: blur(20px) saturate(1.4);
-  -webkit-backdrop-filter: blur(20px) saturate(1.4);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
-  box-shadow:
-    0 1px 0 rgba(255, 255, 255, 0.04),
-    0 2px 6px rgba(0, 0, 0, 0.22),
-    0 8px 24px rgba(0, 0, 0, 0.18),
-    0 0 80px rgba(67, 97, 238, 0.06);
-  overflow: visible;
-  isolation: isolate;
+
+  width: 100%;
+  min-height: 72px;
+  padding-left: var(--ot-page-inline, 1.5rem);
+
+  border-bottom: 1px solid var(--oh-line);
+  background-color: var(--oh-bg);
+  color: var(--oh-text);
+
+  -webkit-font-smoothing: antialiased;
 }
 
-.header::before {
-  content: "";
-  position: absolute;
-  inset: 0 0 auto 0;
-  height: 1px;
-  z-index: 2;
-  pointer-events: none;
-  background: linear-gradient(
-    90deg,
-    transparent 0%,
-    rgba(255, 255, 255, 0.10) 15%,
-    rgba(255, 255, 255, 0.26) 40%,
-    var(--ot-brand) 50%,
-    rgba(255, 255, 255, 0.26) 60%,
-    rgba(255, 255, 255, 0.10) 85%,
-    transparent 100%
-  );
-  opacity: 0.55;
-}
+/* ── LOGO (two files, one per theme) ──────────────────────── */
 
-.header::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  z-index: 0;
-  pointer-events: none;
-  background:
-    radial-gradient(ellipse 55% 120% at 15% 50%, rgba(67, 97, 238, 0.07) 0%, transparent 100%),
-    radial-gradient(ellipse 40% 100% at 85% 50%, rgba(63, 55, 201, 0.05) 0%, transparent 100%);
-  filter: blur(18px);
-  opacity: 0.8;
-}
-
-.header > * { position: relative; z-index: 1; }
-
-/* ────────────────────────────────────────────────────────────
-   LOGO AREA
-──────────────────────────────────────────────────────────── */
-.header-logo {
-  display: flex;
-  align-items: center;
-  flex-shrink: 0;
-  min-width: 0;
-}
-
-.header-logo a {
+.openroot-header__logo {
   display: inline-flex;
   align-items: center;
+  align-self: center;
+
+  line-height: 0;
   text-decoration: none;
-  outline: none;
-  border-radius: var(--ot-radius-md);
   -webkit-tap-highlight-color: transparent;
-  transition: opacity var(--ot-transition-fast), transform var(--ot-transition-fast);
 }
 
-.header-logo a:focus-visible {
-  box-shadow: 0 0 0 3px var(--ot-brand-mid);
-  border-radius: var(--ot-radius-md);
-}
-
-.header-logo-img {
+.openroot-header__logo img {
   display: block;
   width: auto;
   height: 36px;
   max-width: min(260px, 46vw);
-  object-fit: contain;
-  user-select: none;
-  pointer-events: none;
-  filter: none;
-  transition:
-    opacity var(--ot-transition-fast),
-    transform var(--ot-transition-fast),
-    filter var(--ot-transition-fast);
 }
 
-@media (hover: hover) and (pointer: fine) {
-  .header-logo a:hover .header-logo-img {
-    opacity: 0.9;
-    transform: translateY(-1px);
-    filter: drop-shadow(0 0 8px var(--ot-brand-mid));
+/* The selectors below are deliberately more specific than
+   ".openroot-header__logo img" above, otherwise its display:block wins
+   and both logos show at once. */
+
+/* light theme (default): black logo only */
+.openroot-header__logo .openroot-header__logo-img--dark {
+  display: none;
+}
+
+/* dark theme (manual toggle): white logo only */
+[data-theme="dark"] .openroot-header__logo .openroot-header__logo-img--light {
+  display: none;
+}
+
+[data-theme="dark"] .openroot-header__logo .openroot-header__logo-img--dark {
+  display: block;
+}
+
+/* dark theme (system setting, when no manual theme is set): white logo only */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme]) .openroot-header__logo .openroot-header__logo-img--light {
+    display: none;
+  }
+
+  :root:not([data-theme]) .openroot-header__logo .openroot-header__logo-img--dark {
+    display: block;
   }
 }
 
-/* ────────────────────────────────────────────────────────────
-   RIGHT SIDE
-──────────────────────────────────────────────────────────── */
-.header-right {
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  gap: 10px;
-  flex-shrink: 0;
+.openroot-header__logo:focus-visible {
+  outline: 2px solid var(--oh-text);
+  outline-offset: 6px;
+}
+
+/* ── LOGIN + PROFILE (full-height cells on the right) ─────── */
+
+.openroot-header__login,
+.openroot-header__profile {
+  align-self: stretch;
+  border: 0;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+
+/* text-only login: same background as the header, so only the word shows */
+.openroot-header__login {
   min-width: 0;
-}
+  padding: 0 clamp(1.25rem, 3vw, 2rem);
 
-/* ────────────────────────────────────────────────────────────
-   SIGN IN BUTTON
-──────────────────────────────────────────────────────────── */
-.login-button {
-  appearance: none;
-  border: 1px solid transparent;
-  outline: none;
-  -webkit-tap-highlight-color: transparent;
-  user-select: none;
-  cursor: pointer;
-  height: 42px;
-  padding: 0 22px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  background: #ffffff;
-  color: #0a0a0a;
-  border-radius: var(--ot-radius-md);
-  font-family: var(--ot-font);
-  font-size: 0.82rem;
+  background: transparent;
+  color: var(--oh-text);
+  font-size: 1rem;
   font-weight: 800;
-  letter-spacing: 0.07em;
-  text-transform: uppercase;
-  line-height: 1;
   white-space: nowrap;
-  position: relative;
-  overflow: hidden;
-  isolation: isolate;
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.9),
-    inset 0 -1px 0 rgba(0, 0, 0, 0.06),
-    0 2px 6px rgba(0, 0, 0, 0.22),
-    0 8px 20px rgba(0, 0, 0, 0.18);
-  transition:
-    transform var(--t-spring-fast),
-    box-shadow var(--ot-transition-fast),
-    background var(--ot-transition-fast);
+
+  transition: opacity 0.2s ease;
 }
 
-.login-button::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  background: linear-gradient(140deg, rgba(255,255,255,0.35) 0%, transparent 55%);
-  pointer-events: none;
-  z-index: 1;
-}
-
-.login-button::after {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: -80%;
-  width: 55%;
-  height: 100%;
-  background: linear-gradient(
-    90deg,
-    transparent 0%,
-    rgba(255, 255, 255, 0.50) 50%,
-    transparent 100%
-  );
-  transform: skewX(-18deg);
-  transition: left 0.52s cubic-bezier(0.16, 1, 0.3, 1);
-  z-index: 2;
-  pointer-events: none;
-}
-
-.login-button:hover::after { left: 140%; }
-
-.login-button:hover {
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.95),
-    inset 0 -1px 0 rgba(0, 0, 0, 0.06),
-    0 4px 12px rgba(0, 0, 0, 0.28),
-    0 14px 32px rgba(0, 0, 0, 0.22);
-}
-
-.login-button:active {
-  transform: translateY(0) scale(0.97);
-  transition-duration: 0.08s;
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.8),
-    0 2px 8px rgba(0, 0, 0, 0.18);
-}
-
-.login-button:focus-visible {
-  outline: none;
-  box-shadow:
-    0 0 0 2px #070707,
-    0 0 0 4px var(--ot-brand),
-    0 8px 24px rgba(0, 0, 0, 0.22);
-}
-
-/* ────────────────────────────────────────────────────────────
-   PROFILE BUTTON
-──────────────────────────────────────────────────────────── */
-.profile-button {
-  appearance: none;
-  border: 1.5px solid rgba(255, 255, 255, 0.18);
-  outline: none;
-  padding: 0;
-  cursor: pointer;
-  -webkit-tap-highlight-color: transparent;
-  user-select: none;
-  width: 42px;
-  height: 42px;
+/* profile: a single round button (no square box around it) */
+.openroot-header .openroot-header__profile {
   display: grid;
   place-items: center;
-  background: rgba(255, 255, 255, 0.10);
+
+  align-self: center;
+  width: 42px;
+  height: 42px;
+  margin-right: var(--ot-page-inline, 1.5rem);
+  padding: 0;
+
+  border: 2px solid var(--oh-line);
   border-radius: 50%;
   overflow: hidden;
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.22),
-    0 2px 8px rgba(0, 0, 0, 0.28),
-    0 0 0 0px var(--ot-brand-mid);
+
+  background: transparent;
+  box-shadow: none;
+
   transition:
-    transform var(--t-spring-fast),
-    box-shadow var(--ot-transition-fast),
-    border-color var(--ot-transition-fast);
+    transform var(--t-spring-fast, 0.28s cubic-bezier(0.34, 1.56, 0.64, 1)),
+    border-color 0.2s ease;
 }
 
-.profile-button:hover {
-  transform: translateY(-1px) scale(1.04);
-  border-color: var(--ot-brand-border);
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.28),
-    0 4px 14px rgba(0, 0, 0, 0.32),
-    0 0 0 3px var(--ot-brand-dim),
-    0 0 20px var(--ot-brand-glow);
+@media (hover: hover) {
+  .openroot-header .openroot-header__profile:hover {
+    transform: translateY(-1px) scale(1.06);
+    border-color: var(--oh-text); /* black in light mode, white in dark mode */
+  }
 }
 
-.profile-button:active {
+.openroot-header .openroot-header__profile:active {
   transform: scale(0.95);
   transition-duration: 0.08s;
 }
 
-.profile-button:focus-visible {
-  outline: none;
-  box-shadow:
-    0 0 0 2px #070707,
-    0 0 0 4px var(--ot-brand),
-    0 6px 16px rgba(0, 0, 0, 0.28);
+.openroot-header .openroot-header__profile:focus-visible {
+  outline: 2px solid var(--oh-text);
+  outline-offset: 3px;
 }
 
-/* ────────────────────────────────────────────────────────────
-   AVATAR STATES
-──────────────────────────────────────────────────────────── */
-.profile-avatar {
+/* ── AVATAR ───────────────────────────────────────────────── */
+
+.openroot-header__avatar {
+  display: block;
   width: 100%;
   height: 100%;
   object-fit: cover;
-  display: block;
   border-radius: 50%;
+  image-rendering: auto;
 }
 
-.avatar-fallback {
-  width: 100%;
-  height: 100%;
+/* initial: white on dark theme, black on light theme (same as the original look) */
+.openroot-header__avatar--fallback {
   display: grid;
   place-items: center;
-  color: #0a0a0a;
-  font-family: var(--ot-font);
+
+  background: var(--oh-text);
+  color: var(--oh-bg);
+  font-family: var(--ot-font, system-ui, sans-serif);
   font-size: 0.88rem;
   font-weight: 800;
   letter-spacing: 0.02em;
-  background: linear-gradient(145deg, #ffffff 0%, #e8e8e8 100%);
-  border-radius: 50%;
 }
 
-/* ────────────────────────────────────────────────────────────
-   LOGIN CHOICE OVERLAY
-──────────────────────────────────────────────────────────── */
-.login-choice-overlay {
+/* ── CHOOSER OVERLAY ──────────────────────────────────────── */
+
+.openroot-choice {
   position: fixed;
   inset: 0;
   z-index: 9999;
+
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: clamp(16px, 4vw, 40px);
-  background:
-    url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.92' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.045'/%3E%3C/svg%3E"),
-    radial-gradient(ellipse 70% 60% at 50% 42%, rgba(255,255,255,0.06) 0%, transparent 100%),
-    radial-gradient(ellipse 100% 100% at 50% 50%, transparent 40%, rgba(0,0,0,0.35) 100%),
-    rgba(0, 0, 0, 0.68);
-  backdrop-filter: blur(12px) saturate(0.75);
-  -webkit-backdrop-filter: blur(12px) saturate(0.75);
-  animation: lc-overlay-in 0.22s ease both;
+
+  padding: clamp(0.75rem, 3vw, 1.5rem);
+  overflow-y: auto;
+
+  /* fully opaque: the page behind must never show through */
+  background-color: var(--oh-bg);
+  color: var(--oh-text);
+
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
 }
 
-/* ────────────────────────────────────────────────────────────
-   LOGIN CHOICE MODAL
-──────────────────────────────────────────────────────────── */
-.login-choice-modal {
+.openroot-choice__card {
   position: relative;
-  width: min(420px, 100%);
-  padding: clamp(24px, 5vw, 36px) clamp(20px, 5vw, 32px) clamp(20px, 4vw, 28px);
-  border-radius: var(--ot-radius-xl);
-  overflow: hidden;
   isolation: isolate;
-  background: rgba(255, 255, 255, 0.94);
-  backdrop-filter: blur(24px) saturate(1.8);
-  -webkit-backdrop-filter: blur(24px) saturate(1.8);
-  color: #0a0a0a;
-  border: 1px solid rgba(0, 0, 0, 0.10);
-  box-shadow:
-    0 0 0 1px rgba(255, 255, 255, 0.6),
-    inset 0 1px 0 rgba(255, 255, 255, 0.95),
-    inset 0 -1px 0 rgba(0, 0, 0, 0.04),
-    0 4px 12px rgba(0, 0, 0, 0.08),
-    0 20px 50px rgba(0, 0, 0, 0.28),
-    0 50px 100px rgba(0, 0, 0, 0.22);
-  animation: lc-modal-in 0.36s cubic-bezier(.21, 1.02, .73, 1) both;
+
+  width: min(460px, 100%);
+  margin: auto;
+
+  border: 1px solid var(--oh-line);
+  border-top: 2px solid var(--oh-text);
+
+  background-color: var(--oh-bg);
 }
 
-.login-choice-modal::before {
+/* texture: fine square grid */
+.openroot-choice__card::before {
   content: "";
   position: absolute;
   inset: 0;
-  z-index: 0;
+  z-index: -1;
   pointer-events: none;
-  border-radius: inherit;
-  background:
-    radial-gradient(circle at 14% 8%, rgba(255,255,255,0.55), transparent 50%),
-    radial-gradient(circle at 88% 92%, rgba(255,255,255,0.18), transparent 42%),
-    linear-gradient(180deg, rgba(255,255,255,0.22) 0%, transparent 30%);
+
+  background-image:
+    linear-gradient(to bottom, var(--oh-text) 1px, transparent 1px),
+    linear-gradient(to right, var(--oh-text) 1px, transparent 1px);
+  background-size: 26px 26px;
+  opacity: 0.09;
 }
 
-.login-choice-modal::after {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 1.5px;
-  z-index: 2;
-  pointer-events: none;
-  background: linear-gradient(
-    90deg,
-    transparent 0%,
-    var(--ot-brand-border) 15%,
-    var(--ot-brand) 50%,
-    var(--ot-brand-border) 85%,
-    transparent 100%
-  );
-  border-radius: var(--ot-radius-xl) var(--ot-radius-xl) 0 0;
+/* top bar */
+.openroot-choice__bar {
+  display: flex;
+  align-items: stretch;
+  justify-content: space-between;
+
+  min-height: 56px;
+
+  border-bottom: 1px solid var(--oh-line);
+  background-color: var(--oh-bg);
 }
 
-.login-choice-modal > * { position: relative; z-index: 1; }
-
-.login-choice-modal h2 {
-  margin: 6px 0 clamp(16px, 3vw, 22px);
-  font-family: var(--ot-font);
-  font-size: clamp(1.2rem, 2.5vw, 1.45rem);
-  line-height: 1.15;
-  font-weight: 800;
-  letter-spacing: -0.025em;
-  color: #0a0a0a;
-  text-align: center;
+.openroot-choice__bar-title {
+  align-self: center;
+  margin-left: clamp(1rem, 3vw, 1.5rem);
+  font-size: 0.95rem;
+  font-weight: 700;
 }
 
-/* ────────────────────────────────────────────────────────────
-   CLOSE BUTTON
-──────────────────────────────────────────────────────────── */
-.login-modal-close {
-  position: absolute;
-  top: 14px;
-  right: 14px;
-  z-index: 10;
-  width: 36px;
-  height: 36px;
-  border-radius: 999px;
-  border: 1px solid rgba(0, 0, 0, 0.08);
-  display: grid;
-  place-items: center;
-  background: rgba(0, 0, 0, 0.05);
-  color: #555555;
-  font-size: 1rem;
+.openroot-choice__close {
+  width: 56px;
+  border: 0;
+  border-left: 1px solid var(--oh-line);
+  background-color: var(--oh-bg);
+  color: var(--oh-text);
+  font-size: 1.6rem;
   line-height: 1;
   cursor: pointer;
-  user-select: none;
   -webkit-tap-highlight-color: transparent;
-  transition:
-    background 0.22s ease,
-    border-color 0.22s ease,
-    color 0.22s ease,
-    transform 0.28s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
-.login-modal-close:hover {
-  background: rgba(0, 0, 0, 0.10);
-  border-color: rgba(0, 0, 0, 0.15);
-  color: #0a0a0a;
-  transform: rotate(90deg) scale(1.08);
+@media (hover: hover) {
+  .openroot-choice__close:hover {
+    background-color: var(--oh-text);
+    color: var(--oh-bg);
+  }
 }
 
-.login-modal-close:active { transform: rotate(90deg) scale(0.94); }
-
-.login-modal-close:focus-visible {
-  outline: 2px solid var(--ot-brand);
-  outline-offset: 3px;
+/* body */
+.openroot-choice__body {
+  display: grid;
+  gap: 1.5rem;
+  padding: clamp(1.5rem, 5vw, 2.25rem);
 }
 
-/* ────────────────────────────────────────────────────────────
-   CHOICE BUTTONS
-──────────────────────────────────────────────────────────── */
-.choice-btn {
-  width: 100%;
-  height: 50px;
-  margin-top: 10px;
-  border: 1px solid transparent;
-  border-radius: var(--ot-radius-md);
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  font-family: var(--ot-font);
+.openroot-choice__label {
+  display: block;
+  color: var(--oh-muted);
   font-size: 0.92rem;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+.openroot-choice__h2 {
+  margin-top: 0.7rem;
+
+  font-family: var(--oh-display);
+  font-size: clamp(1.7rem, 4.2vw, 2.2rem);
   font-weight: 700;
-  letter-spacing: 0.02em;
+  line-height: 1.06;
+  letter-spacing: -0.04em;
+  text-wrap: balance;
+}
+
+/* options: framed cells with a coloured icon block */
+.openroot-choice__options {
+  display: grid;
+  border-top: 1px solid var(--oh-line);
+  border-left: 1px solid var(--oh-line);
+}
+
+.openroot-choice__option {
+  display: grid;
+  grid-template-columns: 64px minmax(0, 1fr);
+  align-items: stretch;
+
+  width: 100%;
+  min-height: 72px;
+  padding: 0;
+
+  border: 0;
+  border-right: 1px solid var(--oh-line);
+  border-bottom: 1px solid var(--oh-line);
+
+  background-color: var(--oh-bg);
+  color: var(--oh-text);
+  text-align: left;
   cursor: pointer;
+
   -webkit-tap-highlight-color: transparent;
-  user-select: none;
-  background: #0a0a0a;
-  color: #ffffff;
-  position: relative;
-  overflow: hidden;
-  isolation: isolate;
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.12),
-    0 2px 6px rgba(0, 0, 0, 0.18),
-    0 8px 20px rgba(0, 0, 0, 0.14);
-  transition:
-    background var(--ot-transition-fast),
-    box-shadow var(--t-spring-fast),
-    transform var(--t-spring-fast),
-    border-color var(--ot-transition-fast);
 }
 
-.choice-btn::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  background: linear-gradient(140deg, rgba(255,255,255,0.10) 0%, transparent 55%);
-  pointer-events: none;
-  z-index: 1;
+.openroot-choice__icon {
+  display: grid;
+  place-items: center;
+  border-right: 1px solid var(--oh-line);
 }
 
-.choice-btn::after {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: -80%;
-  width: 55%;
-  height: 100%;
-  background: linear-gradient(
-    90deg,
-    transparent 0%,
-    rgba(255, 255, 255, 0.18) 50%,
-    transparent 100%
-  );
-  transform: skewX(-18deg);
-  transition: left 0.52s cubic-bezier(0.16, 1, 0.3, 1);
-  z-index: 2;
-  pointer-events: none;
+.openroot-choice__icon--blue { background: var(--oh-blue); color: var(--oh-white); }
+.openroot-choice__icon--ink { background: var(--oh-text); color: var(--oh-bg); }
+
+.openroot-choice__copy {
+  display: grid;
+  align-content: center;
+  gap: 0.15rem;
+  padding: 0.85rem 1.1rem;
 }
 
-.choice-btn:hover::after { left: 140%; }
-
-.choice-btn:hover {
-  transform: translateY(-2px);
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.18),
-    0 4px 12px rgba(0, 0, 0, 0.22),
-    0 12px 28px rgba(0, 0, 0, 0.18);
+.openroot-choice__copy strong {
+  font-size: 1rem;
+  font-weight: 700;
 }
 
-.choice-btn:active {
-  transform: translateY(0) scale(0.97);
-  transition-duration: 0.08s;
+.openroot-choice__copy span {
+  color: var(--oh-muted);
+  font-size: 0.88rem;
+  line-height: 1.45;
 }
 
-.choice-btn:focus-visible {
-  outline: 2px solid var(--ot-brand);
-  outline-offset: 3px;
+@media (hover: hover) {
+  .openroot-choice__option:not(:disabled):hover {
+    background-image: linear-gradient(var(--oh-hover), var(--oh-hover));
+  }
 }
 
-.choice-btn.admin {
-  background: rgba(67, 97, 238, 0.06);
-  color: #0a0a0a;
-  border-color: var(--ot-brand-border);
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.55),
-    0 2px 6px rgba(63, 55, 201, 0.08);
+.openroot-choice__option:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 
-.choice-btn.admin::after {
-  background: linear-gradient(
-    90deg,
-    transparent 0%,
-    rgba(67, 97, 238, 0.22) 50%,
-    transparent 100%
-  );
+/* the option that was chosen turns solid while the next screen opens */
+.openroot-choice__option[aria-busy="true"] {
+  opacity: 1;
+  background-color: var(--oh-text);
+  color: var(--oh-bg);
 }
 
-.choice-btn.admin:hover {
-  background: rgba(67, 97, 238, 0.10);
-  border-color: var(--ot-brand);
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.65),
-    0 0 0 3px var(--ot-brand-dim),
-    0 4px 14px rgba(63, 55, 201, 0.14),
-    0 0 24px var(--ot-brand-glow);
+.openroot-choice__option[aria-busy="true"] .openroot-choice__copy span {
+  color: inherit;
+  opacity: 0.8;
 }
 
-/* ────────────────────────────────────────────────────────────
-   RESPONSIVE
-──────────────────────────────────────────────────────────── */
+.openroot-choice__option:not(:disabled):active {
+  background-image: linear-gradient(var(--oh-hover), var(--oh-hover));
+}
+
+/* ── RESPONSIVE ───────────────────────────────────────────── */
+
 @media (max-width: 640px) {
-  .header {
-    min-height: 64px;
-    padding: 0 14px;
+  .openroot-header {
+    min-height: 60px;
+    padding-left: 14px;
   }
 
-  .header-logo-img {
-    height: 30px;
-    max-width: 42vw;
+  .openroot-header__logo img {
+    height: 28px;
   }
 
-  .login-button {
-    height: 38px;
-    padding: 0 16px;
-    font-size: 0.76rem;
-    letter-spacing: 0.06em;
-    border-radius: var(--ot-radius-sm);
+  .openroot-header__login {
+    padding: 0 1.25rem;
+    font-size: 0.95rem;
   }
 
-  .profile-button {
+  .openroot-header__profile {
     width: 38px;
     height: 38px;
+    margin-right: 14px;
   }
+}
 
-  .login-choice-overlay {
+@media (max-width: 480px) {
+  .openroot-choice {
     align-items: flex-end;
-    justify-content: center;
     padding: 0;
-    background: rgba(0, 0, 0, 0.62);
   }
 
-  .login-choice-modal {
-    position: relative;
+  .openroot-choice__card {
     width: 100%;
-    max-width: 100%;
-    margin: 0;
-    border-radius: 26px 26px 0 0;
-    padding: 34px 20px 32px;
-    padding-top: 78px; /* makes room for handle + close button */
-    padding-bottom: calc(32px + env(safe-area-inset-bottom, 0px));
-    border: none;
-    box-shadow:
-      0 -8px 40px rgba(0, 0, 0, 0.22),
-      0 -24px 64px rgba(0, 0, 0, 0.18);
-  }
-
-  .login-choice-modal::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    z-index: 0;
-    border-radius: inherit;
-    pointer-events: none;
-    background:
-      linear-gradient(180deg, rgba(255,255,255,0.16) 0%, transparent 26%),
-      radial-gradient(circle at 18% 8%, rgba(255,255,255,0.14), transparent 42%);
-  }
-
-  /* Replace desktop top hairline with a truly centered drag handle */
-  .login-choice-modal::after {
-    content: "";
-    position: absolute;
-    top: 14px;
-    left: 50%;
-    width: 54px;
-    height: 6px;
-    transform: translateX(-50%);
-    border-radius: 999px;
-    background: rgba(0, 0, 0, 0.16);
-    pointer-events: none;
-    z-index: 6;
-  }
-
-  .login-choice-modal > * {
-    position: relative;
-    z-index: 1;
-  }
-
-  .login-choice-modal h2 {
-    margin-top: 0;
-    font-size: 1.15rem;
-  }
-
-  .choice-btn {
-    height: 48px;
-    font-size: 0.9rem;
-  }
-
-  .login-modal-close {
-    position: absolute;
-    top: 18px;
-    right: 18px;
-    left: auto;
-    width: 40px;
-    height: 40px;
-    z-index: 12;
   }
 }
 
-@media (max-width: 420px) {
-  .header-logo-img {
-    height: 26px;
-  }
-
-  .login-button {
-    min-width: 100px;
-    padding: 0 12px;
+@media (max-width: 380px) {
+  .openroot-header__logo img {
+    height: 24px;
   }
 }
 
-/* ────────────────────────────────────────────────────────────
-   HEADER — LOCAL KEYFRAMES
-──────────────────────────────────────────────────────────── */
-@keyframes lc-overlay-in {
-  from { opacity: 0; }
-  to   { opacity: 1; }
-}
+/* ── REDUCED MOTION ───────────────────────────────────────── */
 
-@keyframes lc-modal-in {
-  from {
-    opacity: 0;
-    transform: translateY(14px) scale(0.96);
-    filter: blur(5px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-    filter: blur(0);
-  }
-}
-
-@keyframes lc-sheet-in {
-  from {
-    transform: translateY(100%);
-    opacity: 0.6;
-  }
-  to {
-    transform: translateY(0);
-    opacity: 1;
-  }
-}
-
-/* ────────────────────────────────────────────────────────────
-   REDUCED MOTION
-──────────────────────────────────────────────────────────── */
 @media (prefers-reduced-motion: reduce) {
-  .header,
-  .header-logo-img,
-  .login-button,
-  .login-button::after,
-  .profile-button,
-  .avatar-fallback,
-  .login-choice-overlay,
-  .login-choice-modal,
-  .login-modal-close,
-  .choice-btn,
-  .choice-btn::after {
+  .openroot-header__login,
+  .openroot-header__profile {
     transition: none !important;
-    animation: none !important;
-    filter: none !important;
+    transform: none !important;
+  }
+}
+
+@supports (color: color-mix(in srgb, red, blue)) {
+  .openroot-choice {
+    background-color: color-mix(in srgb, var(--oh-text) 7%, var(--oh-bg));
   }
 }
