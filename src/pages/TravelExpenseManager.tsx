@@ -190,6 +190,18 @@ function isFiniteMoney(value: number): boolean {
   return Number.isFinite(value) && value >= 0 && value <= MAX_AMOUNT;
 }
 
+/**
+ * Signed rupee amount with the sign always first: +₹3115.33 / -₹1557.67.
+ * (toFixed() on a negative number would otherwise give "₹-1557.67".)
+ * The value is rounded to paise first, so a tiny leftover such as -0.004
+ * shows as +₹0.00 instead of a red -₹0.00.
+ */
+function formatSignedRupees(value: number): string {
+  const rounded = Math.round(value * 100) / 100;
+  const sign = rounded < 0 ? "-" : "+";
+  return `${sign}₹${Math.abs(rounded).toFixed(2)}`;
+}
+
 function generateSettlements(netContributions: NetContribution[]): string[] {
   const debtors = netContributions
     .filter((u) => u.net_balance < -0.005)
@@ -513,9 +525,8 @@ const SummaryView: React.FC<SummaryViewProps> = ({ summary, onOpenEdit }) => {
                 <td>{u.person}</td>
                 <td>₹{u.paid.toFixed(2)}</td>
                 <td>₹{u.should_pay.toFixed(2)}</td>
-                <td className={u.net_balance >= 0 ? "tem-pos" : "tem-neg"}>
-                  {u.net_balance >= 0 ? "+" : ""}
-                  ₹{u.net_balance.toFixed(2)}
+                <td className={Math.round(u.net_balance * 100) >= 0 ? "tem-pos" : "tem-neg"}>
+                  {formatSignedRupees(u.net_balance)}
                 </td>
               </tr>
             ))}
@@ -1283,7 +1294,13 @@ const TravelExpenseManager: React.FC = () => {
     <div className="tem-root">
       <header className="tem-header">
         <div className="tem-header-left">
-          <img src="/openroot-white-nobg.avif" alt="Openroot Logo" className="tem-logo" />
+          <img
+            src="/assets/openroot-white-nobg.png"
+            alt="Openroot"
+            className="tem-logo"
+            width={130}
+            height={30}
+          />
           <h1>{t.main_title}</h1>
         </div>
       </header>

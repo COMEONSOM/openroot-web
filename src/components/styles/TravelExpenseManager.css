@@ -1,109 +1,80 @@
-/* TravelExpenseManager.css
-   Fully scoped styles for TravelExpenseManager.tsx
-   All rules prefixed with .tem-root to avoid clashes
+/* ============================================================
+   OPENROOT TRAVEL EXPENSE MANAGER
+   Same base design as About, GDrive, the modals, the header and the
+   newsletter: textured square-grid surface, square framed cells, flat
+   colour blocks. No gradients, shadows, glows or rounded corners.
 
-   ─────────────────────────────────────────────────────────────────────────
-   CHANGE LOG (this pass)
-   ─────────────────────────────────────────────────────────────────────────
-   1. FIXED: mobile layout-breaking bug. `.tem-main` lost `minmax(0, ...)`
-      inside its <900px override, so once the table had real rows its
-      `min-width: 700px` became the grid track's floor and pushed the
-      whole page wider than the viewport. Restored `minmax(0, 1fr)` +
-      added `min-width: 0` safety nets on cards/table-wrap + a root-level
-      `overflow-x: hidden` belt-and-suspenders.
-   2. Accessibility: stronger, consistent `:focus-visible` rings on every
-      interactive element (buttons, pills, delete rows, table sort/edit
-      affordances), 44px+ touch targets on mobile, `prefers-reduced-motion`
-      support, `prefers-contrast: more` bump.
-   3. Scan-ability: amount values (`.tem-pos` / `.tem-neg` / settlement
-      amounts) are now soft-tinted pills instead of plain coloured text —
-      much faster to scan a table of who-owes-who at a glance.
-   4. Mobile tables: sticky first column + edge fade affordance, so users
-      always know which row they're scrolling and that more content
-      exists off-screen.
-   5. Thin, themed scrollbars on table/list/modal containers (instead of
-      bulky OS-default bars eating into the rounded corners).
-   6. Motion: refined toast in/out, modal enter/exit, button press
-      feedback — all respecting reduced-motion.
-   7. Forms: added `.is-invalid` state for inputs/selects so the component
-      can surface validation errors inline (red border + helper text +
-      a subtle shake that's skipped under reduced motion).
-   8. Small interaction touches: removable-pill affordance, focus-within
-      highlight on delete-list rows (so keyboard users tabbing into the
-      checkbox see the whole row light up, not just the tiny checkbox),
-      `-webkit-tap-highlight-color` removed for a native-app feel on iOS.
-   9. Print: toasts/modals are hidden in print output (they'd never be
-      relevant on a printed/exported page).
-   ───────────────────────────────────────────────────────────────────────── */
+   Scoped under .tem-root; every existing class name is kept, so the
+   TSX only needs the logo change. Colours follow the site theme
+   (--ot-bg / --ot-text from the global CSS); royal blue is used only
+   on primary buttons, as in the rest of the site.
+   ============================================================ */
 
-/* ─────────────────────────────────────────────────────────────────────────────
-   ROOT & TOKENS
-───────────────────────────────────────────────────────────────────────────── */
+@import url("https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&display=swap");
+
+/* ── ROOT + TOKENS ────────────────────────────────────────── */
 
 .tem-root {
-  --tem-bg: #f0f2f8;
-  --tem-surface: #ffffff;
-  --tem-surface-alt: #f9fafc;
-  --tem-text: #111827;
-  --tem-text-muted: #6b7280;
-  --tem-border: rgba(17, 24, 39, 0.1);
-  --tem-border-strong: rgba(17, 24, 39, 0.18);
+  --tem-bg: var(--ot-bg, #ffffff);
+  --tem-text: var(--ot-text, #000000);
+  --tem-muted: color-mix(in srgb, var(--tem-text) 68%, var(--tem-bg));
+  --tem-tint: color-mix(in srgb, var(--tem-text) 5%, var(--tem-bg));
+  --tem-line: color-mix(in srgb, var(--tem-text) 55%, transparent);
+  --tem-line-soft: color-mix(in srgb, var(--tem-text) 22%, transparent);
+  --tem-hover: color-mix(in srgb, var(--tem-text) 8%, transparent);
 
-  /* Accent */
-  --tem-accent: #4f46e5;
-  --tem-accent-hover: #4338ca;
-  --tem-accent-active: #3730a3;
-  --tem-accent-soft: rgba(79, 70, 229, 0.08);
-  --tem-accent-soft-2: rgba(79, 70, 229, 0.16);
+  --tem-blue: var(--ot-button-blue, #4169e1);
+  --tem-mint: #35d3a1;
+  --tem-yellow: #ffc72c;
+  --tem-coral: #ff6b4a;
+  --tem-ink: #101319;
+  --tem-white: #ffffff;
 
-  /* Status colours */
-  --tem-red: #ef4444;
-  --tem-red-hover: #dc2626;
-  --tem-red-soft: rgba(239, 68, 68, 0.1);
-  --tem-green: #22c55e;
-  --tem-green-hover: #16a34a;
-  --tem-green-soft: rgba(34, 197, 94, 0.12);
-  --tem-blue: #3b82f6;
-  --tem-blue-hover: #2563eb;
-
-  --tem-shadow: 0 8px 24px rgba(15, 23, 42, 0.08);
-  --tem-shadow-soft: 0 2px 10px rgba(15, 23, 42, 0.05);
-  --tem-shadow-lift: 0 14px 32px rgba(15, 23, 42, 0.12);
-  --tem-radius-lg: 16px;
-  --tem-radius-md: 12px;
-  --tem-radius-sm: 8px;
-  --tem-radius-pill: 999px;
+  --tem-display: "Bricolage Grotesque", var(--ot-font, system-ui), sans-serif;
   --tem-max-w: 1240px;
 
-  /* New: motion + scrollbar tokens, kept separate so they're easy to
-     tune (or strip) without touching the colour system above */
-  --tem-ease: cubic-bezier(0.2, 0.7, 0.2, 1);
-  --tem-dur-fast: 130ms;
-  --tem-dur-base: 200ms;
-  --tem-dur-slow: 320ms;
-  --tem-scrollbar-track: transparent;
-  --tem-scrollbar-thumb: rgba(17, 24, 39, 0.18);
-  --tem-scrollbar-thumb-hover: rgba(17, 24, 39, 0.32);
-
-  font-family: "Inter", system-ui, -apple-system, sans-serif;
-  color: var(--tem-text);
-  background: var(--tem-bg);
-  min-height: 100vh;
-  width: 100%;
+  position: relative;
   isolation: isolate;
-  -webkit-tap-highlight-color: transparent;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
 
-  /* Safety net: nothing inside .tem-root should ever force the page
-     itself to scroll horizontally. Individual scroll containers
-     (.tem-table-wrap, .tem-delete-list, .tem-modal) opt back in. */
-  overflow-x: hidden;
+  width: 100%;
+  min-height: 100vh;
+  /* clip (not hidden) so the sticky header keeps working */
+  overflow-x: clip;
+
+  background-color: var(--tem-bg);
+  color: var(--tem-text);
+  font-family: var(--ot-font, "Inter", system-ui, sans-serif);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* texture: fine square grid */
+.tem-root::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+
+  background-image:
+    linear-gradient(to bottom, var(--tem-text) 1px, transparent 1px),
+    linear-gradient(to right, var(--tem-text) 1px, transparent 1px);
+  background-size: 26px 26px;
+  opacity: 0.07;
 }
 
 .tem-root,
-.tem-root * {
+.tem-root *,
+.tem-root *::before,
+.tem-root *::after {
   box-sizing: border-box;
+  border-radius: 0;
+}
+
+.tem-root :where(h1, h2, h3, p, ul, table) {
+  margin: 0;
+  padding: 0;
 }
 
 .tem-root button,
@@ -118,257 +89,214 @@
   cursor: pointer;
 }
 
+.tem-root :focus-visible {
+  outline: 2px solid var(--tem-text);
+  outline-offset: 2px;
+}
+
+.tem-root ::selection {
+  background: var(--tem-text);
+  color: var(--tem-bg);
+}
+
+/* ── HEADER (always dark, so the white logo is always visible) ── */
+
+.tem-root .tem-header {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+
+  display: flex;
+  align-items: center;
+
+  height: 64px;
+  padding: 0 clamp(0.85rem, 3vw, 1.75rem);
+
+  background: #000000;
+  color: #ffffff;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.55);
+}
+
+.tem-root .tem-header-left {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+
+  width: 100%;
+  max-width: var(--tem-max-w);
+  min-width: 0;
+  margin: 0 auto;
+}
+
+.tem-root .tem-logo {
+  display: block;
+  width: auto;
+  height: 30px;
+  flex: 0 0 auto;
+  object-fit: contain;
+}
+
+.tem-root .tem-header h1 {
+  min-width: 0;
+  padding-left: 1rem;
+
+  border-left: 1px solid rgba(255, 255, 255, 0.35);
+
+  color: #ffffff;
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ── TOPBAR ───────────────────────────────────────────────── */
+
+.tem-root .tem-topbar {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+
+  width: 100%;
+  max-width: var(--tem-max-w);
+  margin: 0 auto;
+  padding: 1.25rem clamp(0.85rem, 3vw, 1.75rem) 0;
+}
+
+.tem-root .tem-topbar select {
+  width: auto;
+  min-width: 140px;
+}
+
+/* ── MAIN GRID ────────────────────────────────────────────── */
+
+.tem-root .tem-main {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr);
+  gap: 1.25rem;
+  align-items: start;
+
+  width: 100%;
+  max-width: var(--tem-max-w);
+  margin: 0 auto;
+  padding: 1.25rem clamp(0.85rem, 3vw, 1.75rem) 3.5rem;
+}
+
+/* ── CARD ─────────────────────────────────────────────────── */
+
+.tem-root .tem-card {
+  min-width: 0;
+  padding: clamp(1.1rem, 2.5vw, 1.75rem);
+
+  border: 1px solid var(--tem-line);
+  border-top: 2px solid var(--tem-text);
+
+  background-color: var(--tem-bg);
+}
+
+.tem-root .tem-card h2 {
+  margin-bottom: 1.25rem;
+  padding-bottom: 0.9rem;
+
+  border-bottom: 1px solid var(--tem-line-soft);
+
+  font-family: var(--tem-display);
+  font-size: clamp(1.35rem, 2.4vw, 1.75rem);
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: -0.04em;
+}
+
+/* ── FORM ─────────────────────────────────────────────────── */
+
+.tem-root form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
 .tem-root input,
 .tem-root select {
   width: 100%;
-  border: 1px solid var(--tem-border);
-  border-radius: var(--tem-radius-sm);
-  background: var(--tem-surface);
-  outline: none;
-  transition: border-color var(--tem-dur-fast) var(--tem-ease),
-    box-shadow var(--tem-dur-fast) var(--tem-ease);
+  min-height: 48px;
+  padding: 0.7rem 0.9rem;
+
+  border: 1px solid var(--tem-line);
+
+  background-color: var(--tem-bg);
+  color: var(--tem-text);
+  font-size: 0.95rem;
+}
+
+.tem-root input::placeholder {
+  color: var(--tem-muted);
+  opacity: 0.85;
+}
+
+.tem-root input:focus,
+.tem-root select:focus {
+  outline: 2px solid var(--tem-text);
+  outline-offset: 1px;
+  border-color: var(--tem-text);
+}
+
+.tem-root input:disabled,
+.tem-root select:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* auto-distributed amounts are read-only */
+.tem-root input[readonly] {
+  background-color: var(--tem-tint);
 }
 
 .tem-root input[type="number"] {
   appearance: textfield;
   -moz-appearance: textfield;
 }
+
 .tem-root input[type="number"]::-webkit-outer-spin-button,
 .tem-root input[type="number"]::-webkit-inner-spin-button {
   -webkit-appearance: none;
   margin: 0;
 }
 
-.tem-root input:hover,
-.tem-root select:hover {
-  border-color: var(--tem-border-strong);
-}
-
-.tem-root input:focus,
-.tem-root select:focus {
-  border-color: var(--tem-accent);
-  box-shadow: 0 0 0 3px var(--tem-accent-soft);
-}
-
-.tem-root input:disabled,
-.tem-root select:disabled {
-  background: var(--tem-surface-alt);
-  color: var(--tem-text-muted);
-  cursor: not-allowed;
-  opacity: 0.75;
-}
-
-/* Inline validation state. Add `is-invalid` alongside .tem-input /
-   .tem-select from the TSX (e.g. when a required field is empty or an
-   amount fails to parse) to get a clear, non-ambiguous error affordance. */
-.tem-root .is-invalid {
-  border-color: var(--tem-red) !important;
-  background: var(--tem-red-soft);
-}
-.tem-root .is-invalid:focus {
-  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.16);
-}
-.tem-root .tem-field-error {
-  margin: -2px 0 0;
-  font-size: 0.78rem;
-  font-weight: 600;
-  color: var(--tem-red);
-}
-
-.tem-root button:focus-visible,
-.tem-root a:focus-visible,
-.tem-root input:focus-visible,
-.tem-root select:focus-visible,
-.tem-root [tabindex]:focus-visible {
-  outline: 2px solid var(--tem-accent);
-  outline-offset: 2px;
-  border-radius: var(--tem-radius-sm);
-}
-
-.tem-root ::selection {
-  background: var(--tem-accent-soft-2);
-}
-
-/* ─────────────────────────────────────────────────────────────────────────────
-   HEADER
-───────────────────────────────────────────────────────────────────────────── */
-
-.tem-root .tem-header {
-  position: sticky;
-  top: 0;
-  z-index: 50;
-  display: flex;
-  align-items: center;
-  padding: 0 28px;
-  height: 56px;
-  background: #0a0a0a;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-}
-
-.tem-root .tem-header-left {
-  width: 100%;
-  max-width: var(--tem-max-w);
-  margin: 0 auto;
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  min-width: 0;
-}
-
-.tem-root .tem-logo {
-  height: 30px;
-  width: auto;
-  object-fit: contain;
-  display: block;
+.tem-root input[type="checkbox"] {
+  width: 18px;
+  min-height: 0;
+  height: 18px;
+  padding: 0;
+  accent-color: var(--tem-text);
   flex: 0 0 auto;
 }
 
-.tem-root .tem-header h1 {
-  margin: 0;
-  font-size: 17px;
-  font-weight: 600;
-  color: #ffffff;
-  letter-spacing: -0.01em;
-  position: relative;
-  display: inline-block;
-  padding-bottom: 5px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  max-width: 100%;
+.tem-root .is-invalid {
+  border-color: var(--tem-coral) !important;
+  outline: 2px solid var(--tem-coral);
+  outline-offset: 1px;
 }
 
-/* Green underline accent */
-.tem-root .tem-header h1::after {
-  content: "";
-  position: absolute;
-  left: 0;
-  bottom: 0;
-  height: 2px;
-  width: 110px;
-  background: linear-gradient(
-    90deg,
-    #22c55e 0%,
-    rgba(34, 197, 94, 0.55) 50%,
-    transparent 100%
-  );
-  border-radius: 999px;
-}
-
-/* ─────────────────────────────────────────────────────────────────────────────
-   TOPBAR
-───────────────────────────────────────────────────────────────────────────── */
-
-.tem-root .tem-topbar {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 12px;
-  padding: 18px 20px 10px;
-  width: 100%;
-  max-width: var(--tem-max-w);
-  margin: 0 auto;
-}
-
-.tem-root .tem-topbar select {
-  width: auto;
-  min-width: 130px;
-  padding: 9px 14px;
-  font-size: 0.9rem;
-  border-radius: var(--tem-radius-sm);
-  background: var(--tem-surface);
-  border: 1px solid var(--tem-border);
-  color: var(--tem-text);
-}
-
-/* ─────────────────────────────────────────────────────────────────────────────
-   MAIN GRID
-───────────────────────────────────────────────────────────────────────────── */
-
-.tem-root .tem-main {
-  width: 100%;
-  max-width: var(--tem-max-w);
-  margin: 0 auto;
-  padding: 18px 20px 60px;
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr);
-  gap: 20px;
-  align-items: start;
-}
-
-/* ─────────────────────────────────────────────────────────────────────────────
-   CARD
-───────────────────────────────────────────────────────────────────────────── */
-
-.tem-root .tem-card {
-  /* min-width: 0 stops a grid/flex item from ever growing past its
-     track based on the natural width of content (tables, long text)
-     inside it — the same family of bug as the .tem-main fix above. */
-  min-width: 0;
-  background: var(--tem-surface);
-  border: 1px solid var(--tem-border);
-  border-radius: var(--tem-radius-lg);
-  box-shadow: var(--tem-shadow-soft);
-  padding: 26px 24px;
-  transition: box-shadow var(--tem-dur-base) var(--tem-ease);
-}
-
-.tem-root .tem-card:hover {
-  box-shadow: var(--tem-shadow);
-}
-
-.tem-root .tem-card h2 {
-  margin: 0 0 20px;
-  font-size: 1.15rem;
+.tem-root .tem-field-error {
+  font-size: 0.82rem;
   font-weight: 700;
-  letter-spacing: -0.02em;
-  color: var(--tem-accent);
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding-bottom: 10px;
-  border-bottom: 2px solid var(--tem-accent);
-  width: 100%;
-}
-
-/* ─────────────────────────────────────────────────────────────────────────────
-   FORM
-───────────────────────────────────────────────────────────────────────────── */
-
-.tem-root form {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-
-.tem-root .tem-input,
-.tem-root .tem-select,
-.tem-root .tem-delete-search {
-  min-height: 46px;
-  padding: 11px 14px;
-  font-size: 0.92rem;
-  background: var(--tem-surface);
   color: var(--tem-text);
-  border-radius: var(--tem-radius-sm);
-  border: 1px solid var(--tem-border);
-}
-
-.tem-root .tem-input::placeholder,
-.tem-root .tem-delete-search::placeholder {
-  color: #9ca3af;
+  padding-left: 0.6rem;
+  border-left: 4px solid var(--tem-coral);
 }
 
 .tem-root .tem-input-compact {
-  width: 160px;
   flex: 0 0 160px;
+  width: 160px;
   text-align: right;
 }
 
-/* Add Member inline row */
+/* add-member row */
 .tem-root .tem-inline {
   display: flex;
-  gap: 10px;
-  align-items: center;
+  gap: 0.6rem;
+  align-items: stretch;
 }
 
 .tem-root .tem-inline .tem-input {
@@ -376,871 +304,672 @@
   min-width: 0;
 }
 
-/* Member pills */
+/* member chips */
 .tem-root .tem-member-list {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
-  padding: 4px 0 2px;
+  gap: 0.5rem;
 }
 
 .tem-root .tem-pill {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  padding: 5px 12px;
-  border-radius: var(--tem-radius-pill);
-  background: var(--tem-accent-soft);
-  color: var(--tem-accent);
-  border: 1px solid rgba(79, 70, 229, 0.18);
-  font-size: 0.8rem;
-  font-weight: 600;
+  gap: 0.4rem;
+
+  min-height: 32px;
+  padding: 0.2rem 0.8rem;
+
+  border: 1px solid var(--tem-line);
+  border-left: 6px solid var(--tem-blue);
+
+  background-color: var(--tem-bg);
+  font-size: 0.85rem;
+  font-weight: 700;
   white-space: nowrap;
-  transition: background var(--tem-dur-fast) var(--tem-ease),
-    transform var(--tem-dur-fast) var(--tem-ease);
 }
 
-.tem-root .tem-pill:hover {
-  background: var(--tem-accent-soft-2);
-}
-
-/* If a pill contains a remove/close control (e.g. an "×" button to
-   delete a member), this gives it a clear, separable hit target
-   without needing a TSX change — purely additive, harmless if unused. */
 .tem-root .tem-pill button {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 16px;
-  height: 16px;
-  border-radius: 50%;
+  display: inline-grid;
+  place-items: center;
+  width: 20px;
+  height: 20px;
+  border: 0;
   background: transparent;
-  color: inherit;
-  opacity: 0.65;
-  transition: opacity var(--tem-dur-fast) var(--tem-ease),
-    background var(--tem-dur-fast) var(--tem-ease);
-}
-.tem-root .tem-pill button:hover {
-  opacity: 1;
-  background: rgba(79, 70, 229, 0.18);
+  line-height: 1;
 }
 
-/* User-amount rows */
+.tem-root .tem-pill button:hover {
+  background-color: var(--tem-hover);
+}
+
+/* per-person amount rows */
 .tem-root .tem-user-row {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 12px;
-  padding: 4px 0;
+  gap: 0.75rem;
+
+  padding: 0.3rem 0;
 }
 
 .tem-root .tem-user-row label {
-  font-size: 0.9rem;
-  font-weight: 600;
-  color: var(--tem-text);
+  font-size: 0.95rem;
+  font-weight: 700;
 }
 
 .tem-root .tem-stack {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 0.6rem;
+  padding: 1rem;
+
+  border: 1px solid var(--tem-line-soft);
+  background-color: var(--tem-tint);
 }
 
-/* Split expense label */
+.tem-root .tem-section-title,
 .tem-root .tem-dist-label {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  font-size: 0.88rem;
-  font-weight: 700;
-  color: var(--tem-accent);
-  margin-top: 2px;
-}
-
-.tem-root .tem-dist-buttons {
-  display: flex;
-  gap: 10px;
-  flex-wrap: wrap;
+  font-size: 0.95rem;
+  font-weight: 800;
 }
 
 .tem-root .tem-distribution-error {
-  margin: 2px 0 0;
-  font-size: 0.85rem;
-  font-weight: 600;
-  color: var(--tem-red);
+  padding: 0.6rem 0.8rem;
+
+  border: 1px solid var(--tem-line);
+  border-left: 6px solid var(--tem-coral);
+
+  background-color: var(--tem-bg);
+  font-size: 0.88rem;
+  font-weight: 700;
 }
 
-/* ─────────────────────────────────────────────────────────────────────────────
-   BUTTONS
-───────────────────────────────────────────────────────────────────────────── */
+/* split mode: two joined cells */
+.tem-root .tem-dist-buttons {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+
+  border-top: 1px solid var(--tem-line);
+  border-left: 1px solid var(--tem-line);
+}
+
+.tem-root .tem-dist-buttons .tem-btn {
+  min-height: 48px;
+  border: 0;
+  border-right: 1px solid var(--tem-line);
+  border-bottom: 1px solid var(--tem-line);
+  background-color: var(--tem-bg);
+  color: var(--tem-text);
+  white-space: normal;
+  text-align: center;
+}
+
+.tem-root .tem-dist-buttons .tem-btn.active {
+  background-color: var(--tem-text);
+  color: var(--tem-bg);
+}
+
+/* ── BUTTONS ──────────────────────────────────────────────── */
 
 .tem-root .tem-btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 7px;
-  min-height: 42px;
-  padding: 0 18px;
-  border: 1px solid transparent;
-  border-radius: var(--tem-radius-sm);
-  font-size: 0.88rem;
-  font-weight: 600;
-  line-height: 1;
-  white-space: nowrap;
-  background: var(--tem-surface);
-  color: var(--tem-text);
-  transition:
-    background var(--tem-dur-fast) var(--tem-ease),
-    border-color var(--tem-dur-fast) var(--tem-ease);
-}
+  gap: 0.5rem;
 
-.tem-root .tem-btn:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-  transform: none;
-  box-shadow: none;
+  min-height: 44px;
+  padding: 0 1.1rem;
+
+  border: 1px solid var(--tem-text);
+
+  background-color: var(--tem-bg);
+  color: var(--tem-text);
+  font-size: 0.9rem;
+  font-weight: 700;
+  line-height: 1.2;
+  white-space: nowrap;
+
+  transition: opacity 0.18s ease, background-color 0.18s ease;
 }
 
 .tem-root .tem-btn-sm {
-  min-height: 36px;
-  padding: 0 13px;
-  font-size: 0.82rem;
+  min-height: 38px;
+  padding: 0 0.9rem;
+  font-size: 0.85rem;
 }
-
-/* Split buttons */
-.tem-root .tem-btn-split,
-.tem-root .tem-dist-buttons .tem-btn {
-  background: var(--tem-surface);
-  color: var(--tem-text);
-  border: 1px solid var(--tem-border);
-  font-size: 0.86rem;
-}
-.tem-root .tem-btn-split:hover,
-.tem-root .tem-dist-buttons .tem-btn:hover,
-.tem-root .tem-dist-buttons .tem-btn.active {
-  background: var(--tem-accent-soft);
-  border-color: var(--tem-accent);
-  color: var(--tem-accent);
-}
-
-/* Generic variants used in TSX */
 
 .tem-root .tem-btn-primary {
-  background: var(--tem-accent);
-  color: #fff;
-}
-.tem-root .tem-btn-primary:hover {
-  background: var(--tem-accent-hover);
-}
-.tem-root .tem-btn-primary:active {
-  background: var(--tem-accent-active);
+  border-color: var(--tem-blue);
+  background-color: var(--tem-blue);
+  color: var(--tem-white);
 }
 
 .tem-root .tem-btn-secondary {
-  background: #111827;
-  color: #fff;
-}
-.tem-root .tem-btn-secondary:hover {
-  background: #1f2937;
-}
-.tem-root .tem-btn-secondary:active {
-  background: #0a0a0a;
+  border-color: var(--tem-text);
+  background-color: var(--tem-text);
+  color: var(--tem-bg);
 }
 
 .tem-root .tem-btn-outline {
-  background: #fff;
-  border-color: var(--tem-border);
+  background-color: var(--tem-bg);
   color: var(--tem-text);
-}
-.tem-root .tem-btn-outline:hover {
-  border-color: var(--tem-accent);
-  background: var(--tem-accent-soft);
-  color: var(--tem-accent);
 }
 
 .tem-root .tem-btn-danger {
-  background: var(--tem-red);
-  color: #fff;
-}
-.tem-root .tem-btn-danger:hover {
-  background: var(--tem-red-hover);
-}
-.tem-root .tem-btn-danger:active {
-  background: #b91c1c;
+  border-color: var(--tem-coral);
+  background-color: var(--tem-coral);
+  color: var(--tem-ink);
 }
 
-/* Export PDF / topbar buttons */
-
-.tem-root .tem-topbar .tem-btn-outline {
-  background: #fff;
-  border: 1px solid var(--tem-border);
-  color: var(--tem-text);
-  font-size: 0.88rem;
-}
-.tem-root .tem-topbar .tem-btn-outline:hover {
-  border-color: var(--tem-accent);
-  color: var(--tem-accent);
-}
-
-/* Save (full-width) */
-.tem-root .tem-btn.tem-btn-full {
+.tem-root .tem-btn-full {
   width: 100%;
-  min-height: 48px;
-  margin-top: 4px;
-  background: var(--tem-accent);
-  color: #fff;
-  font-size: 0.95rem;
-  font-weight: 700;
-  border-radius: var(--tem-radius-sm);
-}
-.tem-root .tem-btn.tem-btn-full:hover {
-  background: var(--tem-accent-hover);
-}
-.tem-root .tem-btn.tem-btn-full:active {
-  background: var(--tem-accent-active);
-}
-.tem-root .tem-btn.tem-btn-full:disabled {
-  opacity: 0.55;
+  min-height: 52px;
+  margin-top: 0.25rem;
 }
 
-/* ─────────────────────────────────────────────────────────────────────────────
-   SUMMARY CARD
-───────────────────────────────────────────────────────────────────────────── */
+@media (hover: hover) {
+  .tem-root .tem-btn:not(:disabled):hover {
+    opacity: 0.88;
+  }
+
+  .tem-root .tem-btn-outline:not(:disabled):hover {
+    background-image: linear-gradient(var(--tem-hover), var(--tem-hover));
+    opacity: 1;
+  }
+}
+
+.tem-root .tem-btn:not(:disabled):active {
+  opacity: 0.78;
+}
+
+.tem-root .tem-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* ── SUMMARY ──────────────────────────────────────────────── */
 
 .tem-root .tem-summary-header {
   display: flex;
+  flex-wrap: wrap;
   align-items: flex-start;
   justify-content: space-between;
-  gap: 14px;
-  margin-bottom: 18px;
-  padding-bottom: 14px;
-  border-bottom: 1px solid var(--tem-border);
-  flex-wrap: wrap;
+  gap: 1rem;
+
+  margin-bottom: 1.25rem;
+  padding-bottom: 1rem;
+
+  border-bottom: 1px solid var(--tem-line-soft);
 }
 
-.tem-root .tem-section-title {
+.tem-root .tem-summary-header h2 {
   margin: 0;
-  font-size: 1.15rem;
-  font-weight: 700;
-  letter-spacing: -0.02em;
-  color: var(--tem-accent);
-  padding-bottom: 10px;
-  border-bottom: 2px solid var(--tem-accent);
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
+  padding: 0;
+  border: 0;
 }
 
-.tem-root .tem-summary-actions {
+.tem-root .tem-summary-actions,
+.tem-root .tem-modal-actions,
+.tem-root .tem-delete-toolbar {
   display: flex;
-  gap: 10px;
   flex-wrap: wrap;
+  gap: 0.6rem;
   align-items: center;
-}
-
-/* Total badge */
-.tem-root .tem-total {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 9px 16px;
-  border-radius: var(--tem-radius-pill);
-  background: #111827;
-  color: #fff;
-  font-size: 0.94rem;
-  font-weight: 700;
-  margin-bottom: 16px;
 }
 
 .tem-root .tem-summary-section {
   display: flex;
   flex-direction: column;
-  gap: 18px;
+  gap: 1.25rem;
+}
+
+.tem-root .tem-total {
+  align-self: flex-start;
+  padding: 0.7rem 1.1rem;
+
+  background-color: var(--tem-mint);
+  color: var(--tem-ink);
+  font-family: var(--tem-display);
+  font-size: 1.15rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
 }
 
 .tem-root .tem-section-head {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 12px;
+  gap: 0.75rem;
 }
 
 .tem-root .tem-section-head h3 {
-  margin: 0;
-  font-size: 0.98rem;
+  font-family: var(--tem-display);
+  font-size: 1.2rem;
   font-weight: 700;
-  color: var(--tem-text);
+  letter-spacing: -0.03em;
 }
 
-/* ─────────────────────────────────────────────────────────────────────────────
-   TABLES
-───────────────────────────────────────────────────────────────────────────── */
+/* ── TABLES ───────────────────────────────────────────────── */
 
 .tem-root .tem-table-wrap {
-  position: relative; /* anchors the scroll-fade affordance below */
   overflow: auto;
-  border: 1px solid var(--tem-border);
-  border-radius: var(--tem-radius-md);
-  background: var(--tem-surface);
+
+  border: 1px solid var(--tem-line);
+
+  background-color: var(--tem-bg);
 }
 
 .tem-root .tem-table {
   width: 100%;
-  border-collapse: collapse;
   min-width: 700px;
+  border-collapse: collapse;
 }
 
 .tem-root .tem-table th,
 .tem-root .tem-table td {
-  padding: 11px 14px;
+  padding: 0.7rem 0.9rem;
+
+  border-right: 1px solid var(--tem-line-soft);
+  border-bottom: 1px solid var(--tem-line-soft);
+
   text-align: left;
   vertical-align: top;
-  border-bottom: 1px solid var(--tem-border);
+  font-size: 0.9rem;
+}
+
+.tem-root .tem-table th:last-child,
+.tem-root .tem-table td:last-child {
+  border-right: 0;
+}
+
+.tem-root .tem-table tr:last-child td {
+  border-bottom: 0;
 }
 
 .tem-root .tem-table th {
   position: sticky;
   top: 0;
   z-index: 2;
-  background: #f3f4f8;
-  color: #374151;
-  font-size: 0.72rem;
+
+  border-bottom: 1px solid var(--tem-line);
+
+  background-color: var(--tem-tint);
+  font-size: 0.78rem;
   font-weight: 800;
-  letter-spacing: 0.07em;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
 }
 
-.tem-root .tem-table tr:last-child td {
-  border-bottom: none;
-}
-
 .tem-root .tem-edit-badge {
-  margin-top: 4px;
-  font-size: 0.72rem;
+  margin-top: 0.3rem;
+  color: var(--tem-muted);
+  font-size: 0.78rem;
   font-weight: 700;
-  color: var(--tem-accent);
 }
 
-/* Amounts as soft pills instead of plain coloured text — a glance at a
-   dense table of who-owes-who is much faster when the sign is encoded
-   in a shape (pill background), not just a colour. Still fully usable
-   for colour-blind users since the +/- sign remains in the text. */
+/* amounts as flat chips: colour and sign together */
 .tem-root .tem-pos,
-.tem-root .tem-neg {
-  display: inline-flex;
-  align-items: center;
-  padding: 3px 10px;
-  font-weight: 700;
-  font-size: 0.85rem;
+.tem-root .tem-neg,
+.tem-root .tem-settlement-amt {
+  display: inline-block;
+  padding: 0.15rem 0.6rem;
+
+  color: var(--tem-ink);
+  font-weight: 800;
   white-space: nowrap;
 }
-.tem-root .tem-pos {
-  color: #15803d;
-}
-.tem-root .tem-neg {
-  color: #b91c1c;
-}
+
+.tem-root .tem-pos { background-color: var(--tem-mint); }
+.tem-root .tem-neg { background-color: var(--tem-coral); }
+.tem-root .tem-settlement-amt { background-color: var(--tem-yellow); }
 
 .tem-root .tem-settlement-row td {
-  font-weight: 600;
+  font-weight: 700;
 }
 
-.tem-root .tem-settlement-amt {
-  display: inline-flex;
-  align-items: center;
-  padding: 3px 10px;
-  color: var(--tem-accent);
-  font-weight: 800;
-}
-
-/* ─────────────────────────────────────────────────────────────────────────────
-   EMPTY STATE
-───────────────────────────────────────────────────────────────────────────── */
+/* ── EMPTY STATE ──────────────────────────────────────────── */
 
 .tem-root .tem-empty {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  text-align: center;
-  gap: 10px;
+  gap: 0.5rem;
+
   min-height: 260px;
-  border-radius: var(--tem-radius-md);
-  border: 1px dashed var(--tem-border-strong);
-  background: #fafbff;
-  color: var(--tem-text-muted);
+  padding: 1.5rem;
+
+  border: 1px dashed var(--tem-line);
+
+  text-align: center;
 }
 
 .tem-root .tem-empty-icon {
-  font-size: 2.6rem;
+  font-size: 2.4rem;
   line-height: 1;
 }
 
 .tem-root .tem-empty-title {
-  font-size: 1.05rem;
-  font-weight: 800;
-  color: var(--tem-text);
+  font-family: var(--tem-display);
+  font-size: 1.35rem;
+  font-weight: 700;
+  letter-spacing: -0.03em;
 }
 
 .tem-root .tem-empty-sub,
 .tem-root .tem-modal-note {
-  margin: 0;
-  color: var(--tem-text-muted);
-  font-size: 0.9rem;
-  line-height: 1.55;
+  color: var(--tem-muted);
+  font-size: 0.95rem;
 }
 
-/* ─────────────────────────────────────────────────────────────────────────────
-   MODALS
-───────────────────────────────────────────────────────────────────────────── */
+/* ── MODALS (opaque, like the other modals) ───────────────── */
 
 .tem-root .tem-overlay {
   position: fixed;
   inset: 0;
   z-index: 1000;
+
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 22px;
-  background: rgba(10, 10, 10, 0.55);
-  backdrop-filter: blur(6px);
-  animation: tem-overlay-in var(--tem-dur-base) var(--tem-ease);
+
+  padding: clamp(0.75rem, 3vw, 1.5rem);
+  overflow-y: auto;
+
+  background-color: color-mix(in srgb, var(--tem-text) 7%, var(--tem-bg));
 }
 
 .tem-root .tem-modal {
+  position: relative;
+  isolation: isolate;
+
   width: min(720px, 100%);
-  max-height: min(88vh, 840px);
+  max-height: min(90vh, 860px);
+  margin: auto;
+  padding: clamp(1.1rem, 3vw, 1.75rem);
   overflow: auto;
-  background: var(--tem-surface);
-  border: 1px solid var(--tem-border);
-  border-radius: 20px;
-  padding: 24px;
-  animation: tem-modal-in var(--tem-dur-base) var(--tem-ease);
-}
 
-@keyframes tem-overlay-in {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
+  border: 1px solid var(--tem-line);
+  border-top: 2px solid var(--tem-text);
 
-@keyframes tem-modal-in {
-  from {
-    opacity: 0;
-    transform: translateY(8px) scale(0.98);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-  }
+  background-color: var(--tem-bg);
 }
 
 .tem-root .tem-modal h3 {
-  margin: 0 0 16px;
-  font-size: 1.1rem;
-  font-weight: 800;
-  letter-spacing: -0.02em;
+  margin-bottom: 1rem;
+  padding-bottom: 0.8rem;
+
+  border-bottom: 1px solid var(--tem-line-soft);
+
+  font-family: var(--tem-display);
+  font-size: 1.5rem;
+  font-weight: 700;
+  letter-spacing: -0.04em;
 }
 
-.tem-root .tem-edit-card {
-  padding: 16px;
-  border-radius: var(--tem-radius-md);
-  border: 1px solid var(--tem-border);
-  background: #fafbff;
-  margin-bottom: 12px;
-  transition: border-color var(--tem-dur-fast) var(--tem-ease);
+.tem-root .tem-modal-actions {
+  margin-top: 1.1rem;
+  justify-content: flex-end;
 }
-.tem-root .tem-edit-card:focus-within {
-  border-color: var(--tem-accent);
+
+/* edit cards */
+.tem-root .tem-edit-card {
+  margin-bottom: 0.75rem;
+  padding: 1rem;
+
+  border: 1px solid var(--tem-line);
+  border-left: 6px solid var(--tem-blue);
+
+  background-color: var(--tem-bg);
 }
 
 .tem-root .tem-edit-card-meta {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 12px;
-  margin-bottom: 12px;
-}
-
-.tem-root .tem-edit-card-meta strong {
-  font-size: 0.96rem;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
 }
 
 .tem-root .tem-edit-count {
-  font-size: 0.72rem;
-  font-weight: 800;
-  color: var(--tem-accent);
-  background: var(--tem-accent-soft);
-  border: 1px solid rgba(79, 70, 229, 0.18);
-  padding: 3px 10px;
-  border-radius: var(--tem-radius-pill);
+  padding: 0.1rem 0.6rem;
+
+  border: 1px solid var(--tem-line);
+
+  font-size: 0.78rem;
+  font-weight: 700;
   white-space: nowrap;
 }
 
 .tem-root .tem-edit-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 12px;
-}
-
-.tem-root .tem-edit-grid input {
-  min-height: 42px;
-  padding: 10px 12px;
+  gap: 0.6rem;
 }
 
 .tem-root .tem-flex-end {
   display: flex;
   justify-content: flex-end;
-  margin-top: 12px;
+  margin-top: 0.75rem;
 }
 
-.tem-root .tem-modal-actions,
-.tem-root .tem-delete-toolbar,
-.tem-root .tem-summary-actions {
-  display: flex;
-  gap: 10px;
-  flex-wrap: wrap;
-}
-
-.tem-root .tem-modal-actions {
-  margin-top: 16px;
-}
-
+/* delete flow */
 .tem-root .tem-delete-search {
-  margin-bottom: 12px;
+  margin-bottom: 0.75rem;
 }
 
 .tem-root .tem-delete-toolbar {
-  margin-bottom: 14px;
+  margin-bottom: 0.75rem;
 }
 
 .tem-root .tem-delete-list {
   max-height: 300px;
+  margin-bottom: 0.75rem;
   overflow: auto;
-  border: 1px solid var(--tem-border);
-  border-radius: var(--tem-radius-md);
-  background: var(--tem-surface);
-  margin-bottom: 14px;
+
+  border: 1px solid var(--tem-line);
 }
 
 .tem-root .tem-delete-item {
   display: flex;
-  gap: 12px;
   align-items: flex-start;
-  padding: 12px 14px;
-  border-bottom: 1px solid var(--tem-border);
+  gap: 0.8rem;
+
+  padding: 0.8rem 1rem;
+
+  border-bottom: 1px solid var(--tem-line-soft);
+
   cursor: pointer;
-  transition: background var(--tem-dur-fast) var(--tem-ease);
 }
 
 .tem-root .tem-delete-item:last-child {
-  border-bottom: none;
+  border-bottom: 0;
 }
 
-.tem-root .tem-delete-item:hover {
-  background: var(--tem-accent-soft);
-}
-
-/* Lights up the whole row (not just the 16px checkbox) when a keyboard
-   user tabs onto the checkbox inside it — much easier to track focus
-   in a long scrollable list. */
 .tem-root .tem-delete-item:focus-within {
-  background: var(--tem-accent-soft-2);
-  outline: 2px solid var(--tem-accent);
+  outline: 2px solid var(--tem-text);
   outline-offset: -2px;
 }
 
-.tem-root .tem-delete-item input[type="checkbox"] {
-  width: 16px;
-  height: 16px;
-  margin-top: 2px;
-  accent-color: var(--tem-accent);
-  flex: 0 0 auto;
-}
-
-.tem-root .tem-delete-item strong {
-  display: block;
-  font-size: 0.92rem;
-  font-weight: 700;
-}
-
-.tem-root .tem-delete-item small {
-  display: block;
-  margin-top: 2px;
-  color: var(--tem-text-muted);
-  font-size: 0.8rem;
+@media (hover: hover) {
+  .tem-root .tem-delete-item:hover {
+    background-color: var(--tem-hover);
+  }
 }
 
 .tem-root .tem-delete-item span {
   min-width: 0;
 }
 
+.tem-root .tem-delete-item strong {
+  display: block;
+  font-size: 0.95rem;
+}
+
+.tem-root .tem-delete-item small {
+  display: block;
+  color: var(--tem-muted);
+  font-size: 0.85rem;
+}
+
 .tem-root .tem-preview-list {
   list-style: none;
-  margin: 12px 0 0;
-  padding: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
+  margin-top: 0.75rem;
+
+  border-top: 1px solid var(--tem-line);
+  border-left: 1px solid var(--tem-line);
 }
 
 .tem-root .tem-preview-list li {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 12px;
-  padding: 10px 0;
-  border-bottom: 1px solid var(--tem-border);
-  font-size: 0.9rem;
+  gap: 0.75rem;
+
+  max-width: none;
+  padding: 0.7rem 1rem;
+
+  border-right: 1px solid var(--tem-line);
+  border-bottom: 1px solid var(--tem-line);
 }
 
-.tem-root .tem-preview-list li:last-child {
-  border-bottom: none;
-}
-
-/* ─────────────────────────────────────────────────────────────────────────────
-   TOASTS
-───────────────────────────────────────────────────────────────────────────── */
+/* ── TOASTS ───────────────────────────────────────────────── */
 
 .tem-root .tem-toast-container {
   position: fixed;
-  right: 20px;
-  bottom: 20px;
+  right: 1.25rem;
+  bottom: 1.25rem;
   z-index: 1100;
+
   display: flex;
   flex-direction: column;
-  gap: 10px;
-  width: min(360px, calc(100vw - 40px));
+  gap: 0.6rem;
+
+  width: min(380px, calc(100vw - 2.5rem));
   pointer-events: none;
 }
 
 .tem-root .tem-toast {
-  pointer-events: auto;
   display: flex;
   align-items: center;
-  gap: 10px;
   justify-content: space-between;
-  padding: 12px 16px;
-  border-radius: 12px;
-  color: #fff;
-  animation: tem-toast-in var(--tem-dur-base) var(--tem-ease);
+  gap: 0.75rem;
+
+  padding: 0.8rem 1rem;
+
+  border: 1px solid var(--tem-line);
+  border-left: 6px solid var(--tem-mint);
+
+  background-color: var(--tem-bg);
+  color: var(--tem-text);
+
+  pointer-events: auto;
 }
 
-.tem-root .tem-toast.success {
-  background: #111827;
-}
 .tem-root .tem-toast.error {
-  background: var(--tem-red);
+  border-left-color: var(--tem-coral);
 }
 
 .tem-root .tem-toast-message {
   flex: 1;
   min-width: 0;
-  font-size: 0.9rem;
-  font-weight: 600;
+  font-size: 0.92rem;
+  font-weight: 700;
   word-break: break-word;
 }
 
 .tem-root .tem-undo-btn {
   flex: 0 0 auto;
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  background: rgba(255, 255, 255, 0.12);
-  color: #fff;
-  border-radius: var(--tem-radius-pill);
-  min-height: 30px;
-  padding: 0 12px;
-  font-size: 0.78rem;
+  min-height: 34px;
+  padding: 0 0.9rem;
+
+  border: 1px solid var(--tem-text);
+
+  background-color: var(--tem-text);
+  color: var(--tem-bg);
+  font-size: 0.82rem;
   font-weight: 700;
-  transition: background var(--tem-dur-fast) var(--tem-ease);
-}
-.tem-root .tem-undo-btn:hover {
-  background: rgba(255, 255, 255, 0.22);
 }
 
-@keyframes tem-toast-in {
-  from {
-    opacity: 0;
-    transform: translateY(10px) scale(0.98);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-  }
-}
-
-/* Apply this class from the TSX just before unmounting a toast (e.g. on
-   a short setTimeout) to get a matching exit animation instead of a
-   hard cut. Purely additive — toasts work exactly as before without it. */
-.tem-root .tem-toast.tem-toast-out {
-  animation: tem-toast-out var(--tem-dur-base) var(--tem-ease) forwards;
-}
-@keyframes tem-toast-out {
-  from {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-  }
-  to {
-    opacity: 0;
-    transform: translateY(6px) scale(0.97);
-  }
-}
-
-/* ─────────────────────────────────────────────────────────────────────────────
-   FOOTER
-───────────────────────────────────────────────────────────────────────────── */
+/* ── FOOTER ───────────────────────────────────────────────── */
 
 .tem-root .tem-footer {
   width: 100%;
   max-width: var(--tem-max-w);
   margin: 0 auto;
-  padding: 18px 20px 28px;
-  border-top: 1px solid var(--tem-border);
-  color: var(--tem-text-muted);
+  padding: 1.5rem clamp(0.85rem, 3vw, 1.75rem) 2.25rem;
+
+  border-top: 1px solid var(--tem-line);
+
+  color: var(--tem-muted);
   text-align: center;
-  line-height: 1.7;
-  font-size: 0.88rem;
+  font-size: 0.9rem;
+  font-weight: 600;
 }
 
-.tem-root .tem-footer p {
-  margin: 0;
-}
-
-/* ─────────────────────────────────────────────────────────────────────────────
-   SCROLLBARS
-   Thin, themed scrollbars for internal scroll containers — the bulky
-   OS-default bar otherwise eats into rounded corners and looks dated.
-   Firefox via `scrollbar-width`/`scrollbar-color`, WebKit via pseudo-els.
-───────────────────────────────────────────────────────────────────────────── */
+/* ── SCROLLBARS ───────────────────────────────────────────── */
 
 .tem-root .tem-table-wrap,
 .tem-root .tem-delete-list,
 .tem-root .tem-modal {
   scrollbar-width: thin;
-  scrollbar-color: var(--tem-scrollbar-thumb) var(--tem-scrollbar-track);
+  scrollbar-color: var(--tem-line) transparent;
 }
 
-.tem-root .tem-table-wrap::-webkit-scrollbar,
-.tem-root .tem-delete-list::-webkit-scrollbar,
-.tem-root .tem-modal::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
-}
-.tem-root .tem-table-wrap::-webkit-scrollbar-track,
-.tem-root .tem-delete-list::-webkit-scrollbar-track,
-.tem-root .tem-modal::-webkit-scrollbar-track {
-  background: var(--tem-scrollbar-track);
-}
-.tem-root .tem-table-wrap::-webkit-scrollbar-thumb,
-.tem-root .tem-delete-list::-webkit-scrollbar-thumb,
-.tem-root .tem-modal::-webkit-scrollbar-thumb {
-  background: var(--tem-scrollbar-thumb);
-  border-radius: var(--tem-radius-pill);
-}
-.tem-root .tem-table-wrap::-webkit-scrollbar-thumb:hover,
-.tem-root .tem-delete-list::-webkit-scrollbar-thumb:hover,
-.tem-root .tem-modal::-webkit-scrollbar-thumb:hover {
-  background: var(--tem-scrollbar-thumb-hover);
-}
-
-/* ─────────────────────────────────────────────────────────────────────────────
-   RESPONSIVE
-───────────────────────────────────────────────────────────────────────────── */
+/* ── RESPONSIVE ───────────────────────────────────────────── */
 
 @media (max-width: 899px) {
   .tem-root .tem-main {
-    /* FIX: was bare `1fr`, which falls back to the min-content width of
-       everything inside (here, the 700px-wide .tem-table) and breaks
-       the whole page layout once the table has real rows. */
     grid-template-columns: minmax(0, 1fr);
-    padding-bottom: 48px;
+    padding-bottom: 3rem;
   }
 
   .tem-root .tem-summary-header {
-    align-items: flex-start;
     flex-direction: column;
-  }
-
-  .tem-root .tem-summary-actions {
-    width: 100%;
-    justify-content: flex-start;
   }
 
   .tem-root .tem-table {
     min-width: 680px;
   }
 
-  /* Sticky first column: as the table scrolls horizontally, the row's
-     label stays put so the user never loses track of which row they're
-     reading. Needs an explicit background since sticky cells sit above
-     their siblings and would otherwise show content scrolling through. */
+  /* first column stays visible while the table scrolls sideways */
   .tem-root .tem-table th:first-child,
   .tem-root .tem-table td:first-child {
     position: sticky;
     left: 0;
     z-index: 1;
-  }
-  .tem-root .tem-table th:first-child {
-    z-index: 3;
-    background: #f3f4f8;
-  }
-  .tem-root .tem-table td:first-child {
-    background: var(--tem-surface);
-  }
-  .tem-root .tem-table tbody tr:hover td:first-child {
-    background: #f5f4ff;
+    background-color: var(--tem-bg);
   }
 
-  /* A quiet, constant hint that the table scrolls further right —
-     cheap to add in pure CSS, doesn't require JS scroll-position
-     tracking, and disappears naturally once a screen is wide enough
-     not to need it. */
-  .tem-root .tem-table-wrap::after {
-    content: "";
-    position: sticky;
-    top: 0;
-    right: 0;
-    display: block;
-    float: right;
-    width: 28px;
-    height: 100%;
-    margin-left: -28px;
-    pointer-events: none;
-    background: linear-gradient(
-      to right,
-      rgba(255, 255, 255, 0),
-      rgba(255, 255, 255, 0.95)
-    );
+  .tem-root .tem-table th:first-child {
+    z-index: 3;
+    background-color: var(--tem-tint);
   }
 }
 
 @media (max-width: 720px) {
-  .tem-root .tem-header,
-  .tem-root .tem-topbar,
-  .tem-root .tem-main,
-  .tem-root .tem-footer {
-    padding-left: 14px;
-    padding-right: 14px;
+  .tem-root .tem-header {
+    height: 58px;
   }
 
-  .tem-root .tem-card,
-  .tem-root .tem-modal {
-    padding: 18px 16px;
-    border-radius: 14px;
+  .tem-root .tem-logo {
+    height: 24px;
+  }
+
+  .tem-root .tem-header h1 {
+    padding-left: 0.75rem;
+    font-size: 0.9rem;
   }
 
   .tem-root .tem-user-row,
-  .tem-root .tem-edit-card-meta,
-  .tem-root .tem-preview-list li {
+  .tem-root .tem-edit-card-meta {
     flex-direction: column;
     align-items: stretch;
   }
 
   .tem-root .tem-input-compact {
-    width: 100%;
     flex: 1 1 auto;
+    width: 100%;
     text-align: left;
   }
 
@@ -1248,142 +977,53 @@
     grid-template-columns: 1fr;
   }
 
-  .tem-root .tem-logo {
-    height: 22px;
-  }
-
-  .tem-root .tem-header h1 {
-    font-size: 14px;
-  }
-
-  /* Comfortable, unambiguous tap targets on touch devices — 44px is
-     the de-facto accessible minimum (Apple HIG / WCAG 2.5.5). */
-  .tem-root .tem-btn,
-  .tem-root .tem-input,
-  .tem-root .tem-select,
-  .tem-root .tem-delete-search,
-  .tem-root .tem-topbar select {
-    min-height: 44px;
-  }
-
   .tem-root .tem-delete-item input[type="checkbox"] {
-    width: 20px;
-    height: 20px;
+    width: 22px;
+    height: 22px;
   }
 }
 
-/* Stack only on very small screens (< 360px) */
+@media (max-width: 480px) {
+  .tem-root .tem-overlay {
+    align-items: flex-end;
+    padding: 0;
+  }
+
+  .tem-root .tem-modal {
+    width: 100%;
+    max-height: 92vh;
+  }
+
+  .tem-root .tem-modal-actions .tem-btn,
+  .tem-root .tem-summary-actions .tem-btn {
+    flex: 1 1 auto;
+  }
+
+  .tem-root .tem-toast-container {
+    right: 0.75rem;
+    bottom: 0.75rem;
+    width: calc(100vw - 1.5rem);
+  }
+}
+
 @media (max-width: 359px) {
   .tem-root .tem-topbar {
     flex-direction: column;
     align-items: stretch;
   }
 
-  .tem-root .tem-topbar select,
-  .tem-root .tem-topbar .tem-btn,
-  .tem-root .tem-summary-actions .tem-btn,
-  .tem-root .tem-modal-actions .tem-btn,
-  .tem-root .tem-delete-toolbar .tem-btn,
-  .tem-root .tem-dist-buttons .tem-btn {
+  .tem-root .tem-topbar select {
     width: 100%;
-    justify-content: center;
-  }
-
-  .tem-root .tem-dist-buttons,
-  .tem-root .tem-summary-actions,
-  .tem-root .tem-modal-actions,
-  .tem-root .tem-delete-toolbar {
-    flex-direction: column;
-    align-items: stretch;
   }
 }
 
-/* 360px–720px: side‑by‑side with wrap (same as big screens) */
-@media (min-width: 360px) and (max-width: 720px) {
-  .tem-root .tem-topbar {
-    flex-direction: row;
-    align-items: center;
-  }
-
-  .tem-root .tem-topbar select,
-  .tem-root .tem-topbar .tem-btn,
-  .tem-root .tem-summary-actions .tem-btn,
-  .tem-root .tem-modal-actions .tem-btn,
-  .tem-root .tem-delete-toolbar .tem-btn,
-  .tem-root .tem-dist-buttons .tem-btn {
-    width: auto;
-  }
-
-  .tem-root .tem-dist-buttons,
-  .tem-root .tem-summary-actions,
-  .tem-root .tem-modal-actions,
-  .tem-root .tem-delete-toolbar {
-    flex-direction: row;
-    align-items: center;
-  }
-}
-
-@media (min-width: 900px) {
-  .tem-root .tem-logo {
-    height: 30px;
-  }
-  .tem-root .tem-header h1 {
-    font-size: 17px;
-  }
-}
-
-/* ─────────────────────────────────────────────────────────────────────────────
-   ACCESSIBILITY: MOTION & CONTRAST
-───────────────────────────────────────────────────────────────────────────── */
+/* ── REDUCED MOTION + PRINT ───────────────────────────────── */
 
 @media (prefers-reduced-motion: reduce) {
-  .tem-root *,
-  .tem-root *::before,
-  .tem-root *::after {
-    animation-duration: 0.001ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.001ms !important;
-    scroll-behavior: auto !important;
-  }
-  .tem-root .tem-btn:hover,
-  .tem-root .tem-card:hover {
-    transform: none;
+  .tem-root .tem-btn {
+    transition: none !important;
   }
 }
-
-@media (prefers-contrast: more) {
-  .tem-root {
-    --tem-border: rgba(17, 24, 39, 0.32);
-    --tem-border-strong: rgba(17, 24, 39, 0.5);
-    --tem-text-muted: #374151;
-  }
-  .tem-root .tem-btn,
-  .tem-root .tem-input,
-  .tem-root .tem-select {
-    border-width: 1.5px;
-  }
-}
-
-/* Validation shake — only plays when motion is allowed. Add `.tem-shake`
-   alongside `.is-invalid` for one run (e.g. via a brief setTimeout/class
-   toggle in the TSX) to draw the eye to a field that just failed to
-   submit. Optional; nothing breaks if it's never used. */
-@media (prefers-reduced-motion: no-preference) {
-  .tem-root .tem-shake {
-    animation: tem-shake 320ms var(--tem-ease);
-  }
-}
-@keyframes tem-shake {
-  0%, 100% { transform: translateX(0); }
-  25% { transform: translateX(-4px); }
-  75% { transform: translateX(4px); }
-}
-
-/* ─────────────────────────────────────────────────────────────────────────────
-   PRINT
-   Toasts and modals should never appear in a printed/exported page —
-   they're transient UI chrome, not document content.
-───────────────────────────────────────────────────────────────────────────── */
 
 @media print {
   .tem-root .tem-toast-container,

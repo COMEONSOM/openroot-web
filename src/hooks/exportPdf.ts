@@ -145,7 +145,11 @@ function buildInvoiceHTML(summary: SummaryData): string {
   // Net contribution rows mapped to net_balance / should_pay
   const contribRows = summary.net_contributions
     .map((u: NetContribution, idx: number) => {
-      const isPos = u.net_balance >= 0;
+      // Round to paise first: a tiny leftover such as -0.004 is treated as
+      // zero (green "+₹0.00") instead of a red "−₹0.00". The sign always
+      // comes before the rupee symbol, matching the on-screen summary.
+      const roundedNet = Math.round(u.net_balance * 100) / 100;
+      const isPos = roundedNet >= 0;
       const rowBg = idx % 2 === 0 ? "#ffffff" : "#f8fafc";
       return `
         <tr style="background:${rowBg};">
@@ -163,7 +167,7 @@ function buildInvoiceHTML(summary: SummaryData): string {
               display:inline-block;padding:3px 10px;border-radius:999px;font-size:11px;font-weight:700;white-space:nowrap;
               background:${isPos ? "#dcfce7" : "#fee2e2"};
               color:${isPos ? "#166534" : "#991b1b"};
-            ">${isPos ? "+" : "−"}₹${Math.abs(u.net_balance).toFixed(2)}</span>
+            ">${isPos ? "+" : "−"}₹${Math.abs(roundedNet).toFixed(2)}</span>
           </td>
         </tr>
       `;

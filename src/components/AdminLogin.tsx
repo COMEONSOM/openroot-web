@@ -121,17 +121,7 @@ const getAdminUsername = (email: string): string => {
 
 // ── Icons ─────────────────────────────────────────────────────
 const LogoutIcon = memo(() => (
-  <svg
-    width="14"
-    height="14"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2.2"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-    aria-hidden="true"
-  >
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
     <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
     <polyline points="16 17 21 12 16 7" />
     <line x1="21" y1="12" x2="9" y2="12" />
@@ -140,17 +130,7 @@ const LogoutIcon = memo(() => (
 LogoutIcon.displayName = "LogoutIcon";
 
 const RetryIcon = memo(() => (
-  <svg
-    width="14"
-    height="14"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2.2"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-    aria-hidden="true"
-  >
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
     <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" />
     <path d="M3 3v5h5" />
   </svg>
@@ -158,18 +138,9 @@ const RetryIcon = memo(() => (
 RetryIcon.displayName = "RetryIcon";
 
 const ShieldIcon = memo(() => (
-  <svg
-    width="14"
-    height="14"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2.2"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-    aria-hidden="true"
-  >
+  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
     <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+    <path d="M9 12l2 2 4-4" />
   </svg>
 ));
 ShieldIcon.displayName = "ShieldIcon";
@@ -192,6 +163,7 @@ export default memo(function AdminLogin({
   const cardRef = useRef<HTMLDivElement | null>(null);
   const successTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const mountedRef = useRef(true);
+  const firstStepRef = useRef(true);
 
   const clearSuccessTimer = useCallback(() => {
     if (successTimerRef.current) {
@@ -258,16 +230,36 @@ export default memo(function AdminLogin({
     });
   }, []);
 
-  // GSAP card entrance on each step change
+  // GSAP entrance on each step change (skipped for reduced motion)
   useEffect(() => {
-    if (cardRef.current) {
-      gsap.fromTo(
-        cardRef.current,
-        { opacity: 0, y: 36 },
-        { opacity: 1, y: 0, duration: 0.42, ease: "power2.out" }
-      );
+    // no entrance animation on first mount: the chooser hands over seamlessly
+    if (firstStepRef.current) {
+      firstStepRef.current = false;
+      return;
     }
+    if (!cardRef.current) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+    gsap.fromTo(
+      cardRef.current,
+      { opacity: 0, y: 24 },
+      { opacity: 1, y: 0, duration: 0.35, ease: "power2.out" }
+    );
   }, [step]);
+
+  // Tell the header chooser this modal is on screen
+  useEffect(() => {
+    window.dispatchEvent(new Event("openroot-auth-modal-ready"));
+  }, []);
+
+  // Close with Escape (not while the success screen is showing)
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape" && step !== "success") onClose?.();
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [step, onClose]);
 
   // Auto-advance success → profile
   useEffect(() => {
@@ -348,7 +340,7 @@ export default memo(function AdminLogin({
     } finally {
       if (mountedRef.current) setLoading(false);
     }
-  }, [clearAdminSession, email, password, onLogin]);
+  }, [email, password, onLogin]);
 
   // ── Logout: clear session only — no Firebase signOut ───────
   const handleLogout = useCallback(() => {
@@ -376,211 +368,235 @@ export default memo(function AdminLogin({
   );
 
   return (
-    <div className="admin-overlay" role="presentation">
+    <div className="openroot-admin" role="presentation">
       <div
-        className="admin-card"
+        className="openroot-admin__card"
         ref={cardRef}
         role="dialog"
         aria-modal="true"
         aria-labelledby="admin-title"
         onKeyDown={handleKeyDown}
       >
-        {step !== "success" && (
-          <button
-            type="button"
-            className="admin-close"
-            onClick={onClose}
-            aria-label="Close modal"
-          >
-            ✕
-          </button>
-        )}
-
-        {/* ── Initial: credential form ── */}
-        {step === "initial" && (
-          <div className="admin-body">
-            <div className="admin-brand-section">
-              <h2 id="admin-title" className="admin-title">
-                Admin Portal
-              </h2>
-              <p className="admin-subtitle">
-                Authorised personnel only. Enter your email and password to
-                proceed.
-              </p>
-            </div>
-
-            <div className="admin-divider" />
-
-            <div className="admin-fields">
-              <div className="admin-field">
-                <label htmlFor="admin-email" className="admin-label">
-                  Email Address
-                </label>
-                <input
-                  id="admin-email"
-                  type="email"
-                  className="admin-input"
-                  placeholder="example@gmail.com"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  autoComplete="email"
-                  disabled={loading}
-                  aria-required="true"
-                />
-              </div>
-
-              <div className="admin-field">
-                <label htmlFor="admin-password" className="admin-label">
-                  Password
-                </label>
-                <input
-                  id="admin-password"
-                  type="password"
-                  className="admin-input"
-                  placeholder="Enter your password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  autoComplete="current-password"
-                  disabled={loading}
-                  aria-required="true"
-                />
-              </div>
-            </div>
-
-            {!!errorMessage && (
-              <div className="admin-error" role="alert">
-                <span>{errorMessage}</span>
-              </div>
-            )}
-
+        {/* TOP BAR */}
+        <header className="openroot-admin__bar">
+          <span className="openroot-admin__bar-title">Openroot admin</span>
+          {step !== "success" && (
             <button
               type="button"
-              className="admin-submit"
-              onClick={() => void handleLogin()}
-              disabled={loading}
-              aria-busy={loading}
+              className="openroot-admin__close"
+              onClick={onClose}
+              aria-label="Close"
             >
-              {loading ? "Verifying…" : "Continue →"}
+              ×
             </button>
-          </div>
-        )}
+          )}
+        </header>
 
-        {/* ── Verifying intermediate ── */}
-        {step === "verifying" && (
-          <div className="admin-state">
-            <p className="admin-state-heading">Verifying credentials…</p>
-            <p className="admin-state-msg">Please wait.</p>
-          </div>
-        )}
+        <div className="openroot-admin__body">
+          {/* ── Initial: credential form ── */}
+          {step === "initial" && (
+            <div className="openroot-admin__stack">
+              <div>
+                <span className="openroot-admin__label">
+                  Authorised personnel only
+                </span>
+                <h2 id="admin-title" className="openroot-admin__h2">
+                  Sign in to the admin portal.
+                </h2>
+                <p className="openroot-admin__text">
+                  Enter your email and password to continue.
+                </p>
+              </div>
 
-        {/* ── Success ── */}
-        {step === "success" && (
-          <div className="admin-state">
-            <div className="admin-state-lottie">
-              {successAnimation && (
-                <Suspense fallback={null}>
-                  <Lottie animationData={successAnimation} loop={false} />
-                </Suspense>
+              <div className="openroot-admin__fields">
+                <div className="openroot-admin__field">
+                  <label htmlFor="admin-email" className="openroot-admin__field-label">
+                    Email address
+                  </label>
+                  <input
+                    id="admin-email"
+                    type="email"
+                    className="openroot-admin__input"
+                    placeholder="example@gmail.com"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    autoComplete="email"
+                    disabled={loading}
+                    aria-required="true"
+                  />
+                </div>
+
+                <div className="openroot-admin__field">
+                  <label htmlFor="admin-password" className="openroot-admin__field-label">
+                    Password
+                  </label>
+                  <input
+                    id="admin-password"
+                    type="password"
+                    className="openroot-admin__input"
+                    placeholder="Enter your password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    autoComplete="current-password"
+                    disabled={loading}
+                    aria-required="true"
+                  />
+                </div>
+              </div>
+
+              {!!errorMessage && (
+                <p className="openroot-admin__alert" role="alert">
+                  {errorMessage}
+                </p>
               )}
-            </div>
-            <p className="admin-state-heading">Access granted</p>
-            <p className="admin-state-msg">Welcome back, admin.</p>
-          </div>
-        )}
 
-        {/* ── Error ── */}
-        {step === "error" && (
-          <div className="admin-state">
-            <div className="admin-state-lottie">
-              {failedAnimation && (
-                <Suspense fallback={null}>
-                  <Lottie animationData={failedAnimation} loop={false} />
-                </Suspense>
-              )}
-            </div>
-            <p className="admin-state-heading">Authentication failed</p>
-            <p className="admin-state-msg">{errorMessage}</p>
-            <div className="admin-state-actions">
               <button
                 type="button"
-                className="admin-state-btn admin-state-btn--primary"
+                className="openroot-admin__button openroot-admin__button--ink openroot-admin__button--full"
+                onClick={() => void handleLogin()}
+                disabled={loading}
+                aria-busy={loading}
+              >
+                {loading ? "Verifying…" : "Continue"}
+              </button>
+            </div>
+          )}
+
+          {/* ── Verifying ── */}
+          {step === "verifying" && (
+            <div className="openroot-admin__status" role="status">
+              <h3 id="admin-title" className="openroot-admin__h3">
+                Verifying credentials…
+              </h3>
+              <p className="openroot-admin__text">Please wait a moment.</p>
+              <div className="openroot-admin__track" aria-hidden="true">
+                <span className="openroot-admin__track-fill" />
+              </div>
+            </div>
+          )}
+
+          {/* ── Success ── */}
+          {step === "success" && (
+            <div className="openroot-admin__status" role="status">
+              <div className="openroot-admin__lottie-box">
+                {successAnimation && (
+                  <Suspense fallback={null}>
+                    <Lottie
+                      className="openroot-admin__lottie"
+                      animationData={successAnimation}
+                      loop={false}
+                    />
+                  </Suspense>
+                )}
+              </div>
+              <h3 id="admin-title" className="openroot-admin__h3">
+                Access granted
+              </h3>
+              <p className="openroot-admin__text">Welcome back, admin.</p>
+            </div>
+          )}
+
+          {/* ── Error ── */}
+          {step === "error" && (
+            <div className="openroot-admin__status" role="alert">
+              <div className="openroot-admin__lottie-box">
+                {failedAnimation && (
+                  <Suspense fallback={null}>
+                    <Lottie
+                      className="openroot-admin__lottie"
+                      animationData={failedAnimation}
+                      loop={false}
+                    />
+                  </Suspense>
+                )}
+              </div>
+              <h3 id="admin-title" className="openroot-admin__h3">
+                Authentication failed
+              </h3>
+              <p className="openroot-admin__text">{errorMessage}</p>
+              <button
+                type="button"
+                className="openroot-admin__button openroot-admin__button--ink"
                 onClick={() => setStep("initial")}
               >
                 <RetryIcon />
-                Try Again
+                Try again
               </button>
             </div>
-          </div>
-        )}
+          )}
 
-        {/* ── Profile ── */}
-        {step === "profile" && adminData && (
-          <div className="admin-profile">
-            <div className="admin-avatar">A</div>
-
-            <span className="admin-verified-badge">
-              <ShieldIcon />
-              Verified Admin
-            </span>
-
-            <p className="admin-profile-name">{adminData.username}</p>
-
-            <div className="admin-profile-meta">
-              <div className="admin-profile-row">
-                <span className="admin-profile-row-label">Role</span>
-                <span className="admin-profile-row-value">{adminData.role}</span>
+          {/* ── Profile ── */}
+          {step === "profile" && adminData && (
+            <div className="openroot-admin__stack">
+              <div className="openroot-admin__identity">
+                <div className="openroot-admin__avatar" aria-hidden="true">
+                  A
+                </div>
+                <div className="openroot-admin__identity-copy">
+                  <span className="openroot-admin__chip">
+                    <ShieldIcon />
+                    Verified admin
+                  </span>
+                  <h3 id="admin-title" className="openroot-admin__h3">
+                    {adminData.username}
+                  </h3>
+                </div>
               </div>
-              <div className="admin-profile-row">
-                <span className="admin-profile-row-label">Status</span>
-                <span
-                  className="admin-profile-row-value"
-                  style={{ color: "var(--ot-brand)" }}
-                >
-                  Active
-                </span>
-              </div>
-            </div>
 
-            <div className="admin-profile-actions">
+              <dl className="openroot-admin__rows">
+                <div className="openroot-admin__row">
+                  <dt>Role</dt>
+                  <dd>{adminData.role}</dd>
+                </div>
+                <div className="openroot-admin__row">
+                  <dt>Status</dt>
+                  <dd>
+                    <span className="openroot-admin__dot" aria-hidden="true" />
+                    Active
+                  </dd>
+                </div>
+              </dl>
+
               <button
                 type="button"
-                className="admin-logout-btn"
+                className="openroot-admin__button openroot-admin__button--line"
                 onClick={() => setStep("confirmLogout")}
               >
                 <LogoutIcon />
-                Sign Out
+                Sign out
               </button>
             </div>
-          </div>
-        )}
+          )}
 
-        {/* ── Confirm logout ── */}
-        {step === "confirmLogout" && (
-          <div className="admin-state">
-            <p className="admin-state-heading">Sign out?</p>
-            <p className="admin-state-msg">
-              Admin session will be terminated. You'll need to re-authenticate.
-            </p>
-            <div className="admin-state-actions">
-              <button
-                type="button"
-                className="admin-state-btn admin-state-btn--primary"
-                onClick={handleLogout}
-              >
-                <LogoutIcon />
-                Yes, Sign Out
-              </button>
-              <button
-                type="button"
-                className="admin-state-btn"
-                onClick={() => setStep("profile")}
-              >
-                <RetryIcon />
-                Cancel
-              </button>
+          {/* ── Confirm logout ── */}
+          {step === "confirmLogout" && (
+            <div className="openroot-admin__status">
+              <h3 id="admin-title" className="openroot-admin__h3">
+                Sign out?
+              </h3>
+              <p className="openroot-admin__text">
+                The admin session will end. You will need to sign in again.
+              </p>
+              <div className="openroot-admin__pair">
+                <button
+                  type="button"
+                  className="openroot-admin__button openroot-admin__button--coral"
+                  onClick={handleLogout}
+                >
+                  <LogoutIcon />
+                  Yes, sign out
+                </button>
+                <button
+                  type="button"
+                  className="openroot-admin__button openroot-admin__button--line"
+                  onClick={() => setStep("profile")}
+                >
+                  Cancel
+                </button>
+              </div>
             </div>
-          </div>
-        )}
+          )}
+        </div>
       </div>
     </div>
   );

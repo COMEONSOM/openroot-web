@@ -28,7 +28,7 @@
   isolation: isolate;
 
   min-height: 100vh;
-  padding: clamp(5rem, 8vw, 6.5rem) var(--ot-page-inline) clamp(3rem, 6vw, 5rem);
+  padding: clamp(3.5rem, 5vw, 4.5rem) var(--ot-page-inline) clamp(3rem, 6vw, 5rem);
 
   background-color: var(--ss-bg);
   color: var(--ss-text);
@@ -238,7 +238,7 @@
   display: grid;
   grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
   gap: clamp(1.5rem, 4vw, 3.5rem);
-  align-items: center;
+  align-items: start; /* text lines up with the top of the animation */
 }
 
 .ss-hero-grid--single {
@@ -699,5 +699,26 @@
 @media (prefers-reduced-motion: reduce) {
   .ss-btn {
     transition: none !important;
+  }
+}
+
+.ss-steps {
+  border: 0;
+}
+
+.ss-step {
+  border: 1px solid var(--ss-line);
+  margin-top: -1px; /* neighbouring borders overlap instead of doubling */
+}
+
+.ss-process-grid {
+  align-items: start; /* the visual must NOT stretch to the table's height */
+}
+
+@media (min-width: 981px) {
+  .ss-process-visual {
+    position: sticky;
+    top: 6rem;          /* gap from the top while sliding; match your navbar height */
+    align-self: start;  /* required, otherwise it has no room to move */
   }
 }
