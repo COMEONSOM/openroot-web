@@ -1,89 +1,144 @@
 /* ============================================================
-   STUDY MATERIAL STYLES — SCOPED VERSION
-   SAME LOOK, NO GLOBAL CSS CONFLICTS
+   STUDY MATERIAL — OPENROOT
+   Same base design as the rest of the site: textured square-grid
+   surface, square framed cards, flat colour. No gradients, shadows,
+   glows or rounded corners.
+
+   Scoped under .study-material; every class name is kept, so the TSX
+   does not change. Colours follow the global theme tokens, so light
+   and dark mode work like the rest of the site.
    ============================================================ */
 
+@import url("https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&display=swap");
+
+/* ── TOKENS ───────────────────────────────────────────────── */
+
 .study-material {
-  --study-bg: #f8fafc;
-  --study-card-bg: #ffffff;
-  --study-text: #1a202c;
-  --study-hover: #7c3aed;
-  --study-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+  --sm-bg: var(--ot-bg, #ffffff);
+  --sm-text: var(--ot-text, #000000);
+  --sm-muted: color-mix(in srgb, var(--sm-text) 68%, var(--sm-bg));
+  --sm-line: color-mix(in srgb, var(--sm-text) 55%, transparent);
+  --sm-soft: color-mix(in srgb, var(--sm-text) 22%, transparent);
 
-  --border-radius-lg: 20px;
+  --sm-display: "Bricolage Grotesque", var(--ot-font, system-ui), sans-serif;
+}
 
-  --font-size-md: 1rem;
-  --font-size-lg: 1.1rem;
-
-  --spacing-md: 12px;
-  --spacing-lg: 20px;
-  --spacing-xl: 32px;
-
-  --font: "Poppins", "Segoe UI", system-ui, -apple-system, sans-serif;
-
-  background: var(--study-bg);
-  padding: var(--spacing-xl);
-  text-align: center;
+.study-material,
+.study-material *,
+.study-material *::before,
+.study-material *::after {
   box-sizing: border-box;
 }
 
-.study-material .study-title {
-  font-family: var(--font);
-  font-weight: 900;
-  margin-bottom: 40px;
-  color: #7c3aed;
-  font-size: 2rem;
-  letter-spacing: 0.3px;
+.study-material *,
+.study-material *::before,
+.study-material *::after {
+  border-radius: 0;
 }
 
-/* ============ GRID ============ */
+.study-material :focus-visible {
+  outline: 2px solid var(--sm-text);
+  outline-offset: 3px;
+  border-radius: 0;
+}
+
+/* ── SECTION ──────────────────────────────────────────────── */
+
+.study-material {
+  position: relative;
+  isolation: isolate;
+
+  padding: clamp(1.5rem, 4vw, 2.5rem) clamp(1rem, 3vw, 2rem);
+
+  border-top: 2px solid var(--sm-text);
+  border-bottom: 1px solid var(--sm-soft);
+
+  background-color: var(--sm-bg);
+  color: var(--sm-text);
+  font-family: var(--ot-font, "Inter", system-ui, sans-serif);
+  text-align: center;
+}
+
+/* texture: fine square grid */
+.study-material::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+
+  background-image:
+    linear-gradient(to bottom, var(--sm-text) 1px, transparent 1px),
+    linear-gradient(to right, var(--sm-text) 1px, transparent 1px);
+  background-size: 26px 26px;
+  opacity: 0.07;
+}
+
+.study-material .study-title {
+  margin-bottom: clamp(1.5rem, 4vw, 2.5rem);
+
+  font-family: var(--sm-display);
+  font-size: clamp(1.6rem, 3.6vw, 2.4rem);
+  font-weight: 700;
+  line-height: 1.08;
+  letter-spacing: -0.04em;
+  text-wrap: balance;
+  color: var(--sm-text);
+}
+
+/* ── GRID ─────────────────────────────────────────────────── */
+
 .study-material .study-grid {
   display: grid;
-  gap: 28px;
+  /* default columns; the TSX can still override them inline */
+  grid-template-columns: repeat(auto-fit, minmax(170px, 230px));
+  gap: 1rem;
   justify-content: center;
   justify-items: center;
   align-items: stretch;
 }
 
-/* ============ CARD BASE ============ */
+/* ── CARD ─────────────────────────────────────────────────── */
+
 .study-material .study-card {
-  background: var(--study-card-bg);
-  border-radius: var(--border-radius-lg);
-  width: 100%;
-  max-width: 230px;
-  height: 200px;
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  box-shadow: var(--study-shadow);
-  cursor: pointer;
-  border: none;
-  transition: all 0.25s ease;
-  padding: 16px;
-  position: relative;
+
+  width: 100%;
+  max-width: 230px;
+  height: 200px;
+  padding: 1rem;
   overflow: hidden;
-  box-sizing: border-box;
+
+  border: 1px solid var(--sm-line);
+
+  background-color: var(--sm-bg);
+  color: var(--sm-text);
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
 }
 
-.study-material .study-card:hover {
-  transform: translateY(-8px) scale(1.02);
+@media (hover: hover) {
+  .study-material .study-card:hover {
+    outline: 2px solid var(--sm-text);
+    outline-offset: 2px;
+  }
 }
 
-.study-material .study-card:focus-visible {
-  outline: 2px solid rgba(124, 58, 237, 0.35);
-  outline-offset: 3px;
-}
+/* ── LOTTIE NORMALISER ────────────────────────────────────── */
 
-/* ============ LOTTIE NORMALIZER ============ */
 .study-material .study-animation {
-  width: 140px;
-  height: 110px;
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-bottom: 10px;
   flex: 0 0 auto;
+
+  width: 140px;
+  height: 110px;
+  margin-bottom: 0.6rem;
 }
 
 .study-material .study-animation > * {
@@ -93,42 +148,47 @@
   max-height: 110px;
 }
 
-/* ============ TEXT ============ */
+/* ── TEXT ─────────────────────────────────────────────────── */
+
 .study-material .study-label {
-  font-size: var(--font-size-lg);
+  margin-top: 0.35rem;
+
+  font-family: var(--sm-display);
+  font-size: 1.1rem;
   font-weight: 700;
-  color: var(--study-text);
-  pointer-events: none;
-  text-align: center;
   line-height: 1.2;
-  margin-top: 6px;
+  letter-spacing: -0.02em;
+  text-align: center;
+  color: var(--sm-text);
+  pointer-events: none;
 }
 
-/* ============ VIEW MORE TILE ============ */
+/* ── VIEW MORE TILE (solid, inverted) ─────────────────────── */
+
 .study-material #view-more-card {
-  background: linear-gradient(135deg, #7c3aed, #5b21b6);
-  color: white;
-  font-size: var(--font-size-md);
-  font-weight: 700;
-}
-
-.study-material #view-more-card:hover {
-  background: linear-gradient(135deg, #6d28d9, #4c1d95);
+  border-color: var(--sm-text);
+  background-color: var(--sm-text);
+  color: var(--sm-bg);
 }
 
 .study-material #view-more-card .study-label {
-  color: white;
+  color: var(--sm-bg);
 }
 
-/* ============ RESPONSIVE ============ */
+/* ── RESPONSIVE ───────────────────────────────────────────── */
 
-/* Mobile */
 @media (max-width: 640px) {
   .study-material {
-    padding: 24px 16px;
+    padding: 1.5rem 1rem;
+  }
+
+  .study-material .study-grid {
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 0.75rem;
   }
 
   .study-material .study-card {
+    max-width: none;
     height: 180px;
   }
 
@@ -137,36 +197,13 @@
     height: 95px;
   }
 
-  .study-material .study-title {
-    font-size: 1.6rem;
-  }
-
   .study-material .study-label {
-    font-size: 0.875rem;
+    font-size: 0.98rem;
   }
 }
 
-/* Tablet */
 @media (min-width: 641px) and (max-width: 1024px) {
   .study-material .study-card {
     height: 190px;
-  }
-}
-
-/* Desktop */
-@media (min-width: 1025px) {
-  .study-material .study-card {
-    height: 200px;
-  }
-}
-
-/* ============ REDUCED MOTION ============ */
-@media (prefers-reduced-motion: reduce) {
-  .study-material .study-card {
-    transition: none;
-  }
-
-  .study-material .study-card:hover {
-    transform: none;
   }
 }

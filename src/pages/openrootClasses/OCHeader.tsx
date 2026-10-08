@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import "../openrootClasses/OCStyle/OCHeader.css";
-import logo from "../../assets-oc/openroot-white-nobg.png";
+import logo from "/assets/openroot-white-nobg.png";
 
 const HeaderNavbar = (): React.JSX.Element => {
   const [menuOpen, setMenuOpen] = useState(false);

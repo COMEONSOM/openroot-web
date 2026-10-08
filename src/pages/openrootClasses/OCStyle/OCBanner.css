@@ -1,124 +1,115 @@
 /* ============================================================
-   BANNER STYLES — VERSION 2025.8
-   SCOPED UNDER .home-banner — NO GLOBAL CONFLICTS
+   BANNER — OPENROOT
+   Same base design as the rest of the site: textured square-grid
+   surface, square framed cells, flat controls. No gradients, shadows,
+   glows or rounded corners.
+
+   Scoped under .home-banner; every class name is kept, so the TSX does
+   not change. Colours follow the global theme tokens (--ot-bg /
+   --ot-text), so light and dark mode work like the rest of the site.
    ============================================================ */
 
-/* ───────────────────────────────────────────────
-   Scoped Theme Tokens
-   (moved from :root so they don't leak globally)
-────────────────────────────────────────────── */
+/* ── TOKENS ───────────────────────────────────────────────── */
+
 .home-banner {
-  /* Colors */
-  --banner-bg: #f3f4f6;
-  --text-color: #ffffff;
-  --text-hover: #111827;
-  --arrow-bg: rgba(0, 0, 0, 0.6);
-  --arrow-bg-hover: rgba(255, 255, 255, 0.9);
-  --dot-color: rgba(0, 0, 0, 0.4);
-  --dot-active-color: #2563eb;
+  --hb-bg: var(--ot-bg, #ffffff);
+  --hb-text: var(--ot-text, #000000);
+  --hb-muted: color-mix(in srgb, var(--hb-text) 68%, var(--hb-bg));
+  --hb-tint: color-mix(in srgb, var(--hb-text) 5%, var(--hb-bg));
+  --hb-line: color-mix(in srgb, var(--hb-text) 55%, transparent);
+  --hb-soft: color-mix(in srgb, var(--hb-text) 22%, transparent);
 
-  /* Sizes */
-  --arrow-size: 42px;
-  --dot-size: 12px;
-  --banner-max-height: 75vh;
-
-  /* Spacing */
-  --banner-margin-lg: 40px;
-  --banner-padding-lg: 20px;
-  --spacing-md: 15px;
-  --spacing-sm: 10px;
-
-  /* Radius & Shadows */
-  --border-radius-sm: 6px;
-  --border-radius-md: 12px;
-  --shadow-md: 0 6px 18px rgba(0, 0, 0, 0.15);
-
-  /* Transitions */
-  --transition-speed: 0.6s;
-  --hover-speed: 0.3s;
-
-  /* Z-index */
-  --z-arrows: 10;
-  --z-dots: 5;
+  --hb-arrow: 48px;
+  --hb-transition: 0.6s;
 }
 
-/* ───────────────────────────────────────────────
-   Banner Wrapper
-────────────────────────────────────────────── */
+.home-banner *,
+.home-banner *::before,
+.home-banner *::after {
+  box-sizing: border-box;
+  border-radius: 0;
+}
+
+.home-banner :focus-visible {
+  outline: 2px solid var(--hb-text);
+  outline-offset: 2px;
+  border-radius: 0;
+}
+
+/* ── WRAPPER ──────────────────────────────────────────────── */
+
 .home-banner {
   position: relative;
+  isolation: isolate;
   overflow: hidden;
+
   margin-top: 76px;
-  padding: var(--banner-padding-lg);
-  background: var(--banner-bg);
-  box-sizing: border-box;
+  padding: clamp(0.75rem, 2vw, 1.25rem);
+
+  border-bottom: 1px solid var(--hb-line);
+
+  background-color: var(--hb-bg);
+  color: var(--hb-text);
 }
 
-/* ───────────────────────────────────────────────
-   Decorative Background Layer
-   (aria-hidden, purely visual fill)
-────────────────────────────────────────────── */
+/* decorative layer: the square-grid texture */
 .home-banner .hero-bg {
   position: absolute;
   inset: 0;
-  background: var(--banner-bg);
-  pointer-events: none;
   z-index: 0;
+  pointer-events: none;
+
+  background-image:
+    linear-gradient(to bottom, var(--hb-text) 1px, transparent 1px),
+    linear-gradient(to right, var(--hb-text) 1px, transparent 1px);
+  background-size: 26px 26px;
+  opacity: 0.07;
 }
 
-/* ───────────────────────────────────────────────
-   16:9 Safe Center Frame
-   (wraps the sliding banner-container)
-────────────────────────────────────────────── */
+/* ── FRAME + SLIDES ───────────────────────────────────────── */
+
 .home-banner .hero-center-frame {
   position: relative;
   z-index: 1;
+
   width: 100%;
   overflow: hidden;
+
+  border: 1px solid var(--hb-line);
+  border-top: 2px solid var(--hb-text);
+
+  background-color: var(--hb-bg);
 }
 
-/* ───────────────────────────────────────────────
-   Banner Slide Container
-────────────────────────────────────────────── */
 .home-banner .banner-container {
   display: flex;
-  width: 95%;
+  width: 100%;
   height: auto;
-  transition: transform var(--transition-speed) ease-in-out;
+
+  transition: transform var(--hb-transition) ease-in-out;
   will-change: transform;
 }
 
-/* ───────────────────────────────────────────────
-   Individual Slide
-────────────────────────────────────────────── */
 .home-banner .banner-slide {
   flex: 0 0 100%;
   display: flex;
-  justify-content: center;
   align-items: center;
-  padding: 0 var(--spacing-md);
+  justify-content: center;
+
   height: auto;
-  box-sizing: border-box;
+  padding: clamp(0.5rem, 1.5vw, 1rem);
 }
 
 .home-banner .banner-image {
+  display: block;
   width: 100%;
   height: auto;
-  max-height: var(--banner-max-height);
+  max-height: 75vh;
   object-fit: contain;
-  border-radius: var(--border-radius-md);
-  box-shadow: var(--shadow-md);
-  transition: transform var(--hover-speed) ease,
-              box-shadow var(--hover-speed) ease;
 }
 
-.home-banner .banner-image:hover {
-  transform: scale(1.02);
-}
+/* ── EMPTY STATE ──────────────────────────────────────────── */
 
-/* ───────────────────────────────────────────────
-   Empty / Placeholder State
-────────────────────────────────────────────── */
 .home-banner.placeholder {
   display: flex;
   align-items: center;
@@ -127,109 +118,150 @@
 }
 
 .home-banner .banner-placeholder {
+  padding: 1rem 1.5rem;
+
+  border: 1px dashed var(--hb-line);
+
+  color: var(--hb-muted);
   font-size: 1rem;
-  color: #6b7280;
-  font-weight: 600;
-  letter-spacing: 0.05em;
+  font-weight: 700;
+  letter-spacing: 0.04em;
 }
 
-/* ───────────────────────────────────────────────
-   Arrow Buttons
-────────────────────────────────────────────── */
+/* ── ARROWS (square cells) ────────────────────────────────── */
+
 .home-banner .arrow {
   position: absolute;
   top: 50%;
-  transform: translateY(-50%);
-  width: 52px;
-  height: 52px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border: none;
-  border-radius: 50%;
-  background: rgba(15, 23, 42, 0.8);
-  color: #e5e7eb;
-  font-size: 1.8rem;
+  z-index: 10;
+
+  display: grid;
+  place-items: center;
+
+  width: var(--hb-arrow);
+  height: var(--hb-arrow);
+  padding: 0;
+
+  border: 1px solid var(--hb-text);
+
+  background-color: var(--hb-bg);
+  color: var(--hb-text);
+  font-size: 1.6rem;
+  line-height: 1;
   cursor: pointer;
-  z-index: var(--z-arrows);
-  transition: background  0.25s cubic-bezier(0.22, 1, 0.36, 1),
-              transform   0.25s cubic-bezier(0.22, 1, 0.36, 1),
-              opacity     0.25s cubic-bezier(0.22, 1, 0.36, 1);
+
+  transform: translateY(-50%);
+  transition: background-color 0.18s ease, color 0.18s ease;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .home-banner .left-arrow {
-  left: 16px;
+  left: clamp(0.75rem, 2vw, 1.25rem);
 }
 
 .home-banner .right-arrow {
-  right: 16px;
+  right: clamp(0.75rem, 2vw, 1.25rem);
 }
 
-.home-banner .arrow:hover {
-  background: #7c3aed;
-  transform: translateY(-50%) scale(1.08);
+@media (hover: hover) {
+  .home-banner .arrow:hover {
+    background-color: var(--hb-text);
+    color: var(--hb-bg);
+  }
 }
 
-/* ───────────────────────────────────────────────
-   Dots Navigation
-────────────────────────────────────────────── */
+.home-banner .arrow:active {
+  background-color: var(--hb-text);
+  color: var(--hb-bg);
+}
+
+/* ── DOTS (square, on a small framed strip so they stay visible) ── */
+
 .home-banner .dots-container {
   position: absolute;
   left: 50%;
-  bottom: 16px;
-  transform: translateX(-50%);
+  bottom: clamp(0.75rem, 2vw, 1.25rem);
+  z-index: 5;
+
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 10px;
-  z-index: var(--z-dots);
+  gap: 0.5rem;
+
+  padding: 0.5rem 0.75rem;
+
+  border: 1px solid var(--hb-line);
+
+  background-color: var(--hb-bg);
+  transform: translateX(-50%);
 }
 
 .home-banner .dot {
-  width: 9px;
-  height: 8px;
-  border-radius: 999px;
-  border: none;
+  width: 10px;
+  height: 10px;
+  padding: 0;
+
+  border: 1px solid var(--hb-text);
+
+  background-color: var(--hb-bg);
   cursor: pointer;
-  background: rgba(148, 163, 184, 0.7);
-  transition: all 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+
+  transition: width 0.25s ease, background-color 0.25s ease;
 }
 
 .home-banner .dot.active {
-  width: 26px;
-  background: #7c3aed;
+  width: 28px;
+  background-color: var(--hb-text);
 }
 
-.home-banner .dot:hover {
-  transform: scale(1.15);
+@media (hover: hover) {
+  .home-banner .dot:not(.active):hover {
+    background-color: var(--hb-soft);
+  }
 }
 
-/* ───────────────────────────────────────────────
-   Responsive Design
-────────────────────────────────────────────── */
+/* ── RESPONSIVE ───────────────────────────────────────────── */
+
 @media (max-width: 1024px) {
   .home-banner {
-    --arrow-size: 38px;
-    --dot-size: 10px;
-    --banner-margin-lg: 30px;
-    --banner-padding-lg: 15px;
+    --hb-arrow: 44px;
   }
 }
 
 @media (max-width: 768px) {
   .home-banner {
-    --arrow-size: 34px;
-    --dot-size: 10px;
-    --banner-margin-lg: 20px;
-    --banner-padding-lg: 12px;
+    --hb-arrow: 40px;
+  }
+
+  .home-banner .arrow {
+    font-size: 1.4rem;
   }
 }
 
 @media (max-width: 480px) {
   .home-banner {
-    --arrow-size: 30px;
-    --dot-size: 8px;
-    --banner-margin-lg: 10px;
-    --banner-padding-lg: 8px;
+    --hb-arrow: 36px;
+  }
+
+  .home-banner .dots-container {
+    padding: 0.4rem 0.6rem;
+    gap: 0.4rem;
+  }
+
+  .home-banner .dot {
+    width: 8px;
+    height: 8px;
+  }
+
+  .home-banner .dot.active {
+    width: 22px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .home-banner .banner-container,
+  .home-banner .arrow,
+  .home-banner .dot {
+    transition: none !important;
   }
 }
