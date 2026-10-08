@@ -8,8 +8,8 @@ import { motion, AnimatePresence } from "framer-motion";
 import Lottie from "lottie-react";
 import "../openrootClasses/OCStyle/OCAvailableCourses.css";
 
-import logo from "../../assets-oc/open-root-light.png";
-import msmeLogo from "../../assets-oc/msme-logo.png";
+import logo from "../../assets-oc/openroot-white-nobg.png";
+import msmeLogo from "../../assets-oc/msme-logo.avif";
 
 const API_URL =
   import.meta.env.VITE_API_URL || "https://openroot-systems.onrender.com";
