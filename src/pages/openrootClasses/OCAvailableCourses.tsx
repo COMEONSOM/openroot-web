@@ -732,6 +732,30 @@ export default function AvailableCourses() {
       <div id="available-courses" className="courses-container">
         <h2>🚀 Available Courses</h2>
 
+        <aside className="enrollment-notice" role="note" aria-label="Enrollment notice">
+          <h3 className="enrollment-notice__title">Important Notice: Invitation-Only Courses</h3>
+
+          <p>
+            The courses below are advanced, in-depth programs and are{" "}
+            <strong>not open for direct enrollment</strong>. They are offered by
+            invitation only, to students who have completed our foundational short
+            courses and whom we have approached directly.
+          </p>
+
+          <p>
+            Because this content is updated regularly to reflect market conditions and
+            new technology, we begin with our short courses. Please follow our banner
+            section for the latest offerings, and contact us via WhatsApp or email to
+            get started.
+          </p>
+
+          <p className="enrollment-notice__refund">
+            If you have already made a payment without an invitation, we will verify it
+            against our records. If you are not eligible, your payment will be{" "}
+            <strong>fully refunded within 7 days</strong>.
+          </p>
+        </aside>
+
         <div className="course-stepper">
           <div className={viewState === "list" ? "step active" : "step"}>
             Explore

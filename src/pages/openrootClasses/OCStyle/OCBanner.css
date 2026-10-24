@@ -7,6 +7,12 @@
    Scoped under .home-banner; every class name is kept, so the TSX does
    not change. Colours follow the global theme tokens (--ot-bg /
    --ot-text), so light and dark mode work like the rest of the site.
+
+   v1.3.0: added `.banner-slide picture` so the <picture> wrapper
+   (mobile / laptop images) fills the slide.
+   v1.5.0: arrows have no border or background, so they no longer hide
+   the banner. The arrow symbol inverts against whatever is behind it
+   (dark on light areas, light on dark areas), so it stays visible.
    ============================================================ */
 
 /* ── TOKENS ───────────────────────────────────────────────── */
@@ -100,6 +106,12 @@
   padding: clamp(0.5rem, 1.5vw, 1rem);
 }
 
+/* <picture> wrapper: mobile / laptop image switching */
+.home-banner .banner-slide picture {
+  display: block;
+  width: 100%;
+}
+
 .home-banner .banner-image {
   display: block;
   width: 100%;
@@ -128,7 +140,10 @@
   letter-spacing: 0.04em;
 }
 
-/* ── ARROWS (square cells) ────────────────────────────────── */
+/* ── ARROWS (symbol only: no border, no background) ───────── */
+/* White symbol + "difference" blending: it shows as dark on light
+   areas and light on dark areas, whatever the banner looks like.
+   The button itself stays 48px so it is still easy to tap. */
 
 .home-banner .arrow {
   position: absolute;
@@ -142,37 +157,43 @@
   height: var(--hb-arrow);
   padding: 0;
 
-  border: 1px solid var(--hb-text);
+  border: 0;
+  background: transparent;
 
-  background-color: var(--hb-bg);
-  color: var(--hb-text);
-  font-size: 1.6rem;
+  color: #ffffff;
+  mix-blend-mode: difference;
+
+  font-size: 2.4rem;
+  font-weight: 700;
   line-height: 1;
   cursor: pointer;
 
   transform: translateY(-50%);
-  transition: background-color 0.18s ease, color 0.18s ease;
+  transition: transform 0.18s ease;
   -webkit-tap-highlight-color: transparent;
 }
 
 .home-banner .left-arrow {
-  left: clamp(0.75rem, 2vw, 1.25rem);
+  left: clamp(0.25rem, 1vw, 0.75rem);
 }
 
 .home-banner .right-arrow {
-  right: clamp(0.75rem, 2vw, 1.25rem);
+  right: clamp(0.25rem, 1vw, 0.75rem);
 }
 
+/* hover / press: the symbol nudges in its direction */
 @media (hover: hover) {
-  .home-banner .arrow:hover {
-    background-color: var(--hb-text);
-    color: var(--hb-bg);
+  .home-banner .left-arrow:hover {
+    transform: translateY(-50%) translateX(-4px);
+  }
+
+  .home-banner .right-arrow:hover {
+    transform: translateY(-50%) translateX(4px);
   }
 }
 
 .home-banner .arrow:active {
-  background-color: var(--hb-text);
-  color: var(--hb-bg);
+  transform: translateY(-50%) scale(0.92);
 }
 
 /* ── DOTS (square, on a small framed strip so they stay visible) ── */
@@ -234,13 +255,17 @@
   }
 
   .home-banner .arrow {
-    font-size: 1.4rem;
+    font-size: 2rem;
   }
 }
 
 @media (max-width: 480px) {
   .home-banner {
     --hb-arrow: 36px;
+  }
+
+  .home-banner .arrow {
+    font-size: 1.8rem;
   }
 
   .home-banner .dots-container {

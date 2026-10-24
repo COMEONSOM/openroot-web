@@ -40,17 +40,21 @@ By organizing trusted websites into structured categories, the platform helps us
 
   "openroot-classes": {
     features: [
-      "Prompt Engineering training for AI workflows",
-      "Financial investing and financial literacy education",
-      "Practical skill development for real-world applications",
-      "Affordable courses designed for students and beginners",
-      "Ad-free learning environment",
-      "Focus on future-ready digital skills"
+      "Prompt Engineering training for AI workflows: learn to write clear, effective prompts and use AI tools for research, writing, coding, and daily productivity",
+      "Financial investing and financial literacy education: understand saving, budgeting, investing basics, and risk, so you can make confident money decisions",
+      "Practical skill development for real-world applications: real-life skills you can use at work and in projects, not just theory",
+      "Affordable courses designed for students and beginners: high-quality learning with honest, budget-friendly pricing",
+      "Beginner-friendly from zero: no prior knowledge needed, and every topic starts from the basics",
+      "Step-by-step guidance: a clear roadmap with one concept taught at a time, so there is no confusion about what to learn next",
+      "Multilingual live interaction: classes and doubt-clearing in English, Hindi, and Bengali",
+      "Ad-free learning environment: no distractions, so you can focus fully on learning",
+      "Focus on future-ready digital skills: AI literacy, digital productivity, and money skills that stay useful as technology changes"
     ],
 
     purpose: `Openroot Classes aims to help individuals become future-ready by combining technology learning with financial literacy and practical skill development.
-
-The programs are designed to help learners understand AI tools, improve productivity, and build long-term financial awareness so they can make better career and investment decisions.`
+The programs are designed to help learners understand AI tools, improve productivity, and build long-term financial awareness so they can make better career and investment decisions.
+Our approach is simple, practical, and result-oriented. Whether you are a student, a working professional, or a complete beginner, we teach step by step, in the language you are most comfortable with, so you gain skills you can apply immediately.
+Your growth is our mission.`
   },
 
   "nior-ai": {

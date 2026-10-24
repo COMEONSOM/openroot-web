@@ -85,7 +85,7 @@ const FreeContent = (): React.JSX.Element => {
       <section id="free-content" className="free-content-container">
         {!expanded ? (
           <>
-            <h2>💎 Free Contents</h2>
+            <h2>💎 Limited Contents</h2>
 
             <div className="scroll-wrapper">
               <div className="video-scroll-container" ref={scrollRef}>

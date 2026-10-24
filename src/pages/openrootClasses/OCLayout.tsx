@@ -1,17 +1,8 @@
-import Header from "./OCHeader";
-import Banner from "./OCBanner";
-import AvailableCourses from "./OCAvailableCourses";
-import FreeContent from "./OCFreeContent";
-import StudyMaterial from "./OCStudyMaterial";
+import { Outlet } from "react-router-dom";
 
+// Shared wrapper for every page under /openroot-classes.
+// It renders no header: the header belongs to the main Openroot Classes
+// page only (see OCHome.tsx). Banner pages open without it.
 export default function OCLayout() {
-  return (
-    <>
-      <Header />
-      <Banner />
-      <AvailableCourses />
-      <StudyMaterial />
-      <FreeContent />
-    </>
-  );
+  return <Outlet />;
 }

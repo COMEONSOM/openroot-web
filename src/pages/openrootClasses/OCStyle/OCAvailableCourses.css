@@ -796,3 +796,48 @@
     transition: none !important;
   }
 }
+
+/* ── Enrollment Notice ─────────────────────────────── */
+.enrollment-notice {
+  width: 100%;            /* fills the parent container */
+  box-sizing: border-box; /* padding/border stay inside the width */
+  margin: 16px 0 24px;
+  padding: 18px 22px;
+  text-align: left;
+  border: 1px solid rgba(124, 58, 237, 0.35);
+  border-left: 4px solid #7c3aed;
+  border-radius: 12px;
+  background: rgba(124, 58, 237, 0.08);
+  line-height: 1.6;
+  font-size: 0.95rem;
+}
+
+.enrollment-notice__title {
+  margin: 0 0 8px;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #7c3aed;
+}
+
+.enrollment-notice p {
+  max-width: none;   /* overrides any inherited max-width */
+  width: 100%;
+  margin: 0 0 10px;  /* no auto-centering */
+}
+
+.enrollment-notice p:last-child {
+  margin-bottom: 0;
+}
+
+.enrollment-notice__refund {
+  padding-top: 10px;
+  border-top: 1px dashed rgba(124, 58, 237, 0.35);
+}
+
+@media (max-width: 600px) {
+  .enrollment-notice {
+    margin: 12px 12px 20px;
+    padding: 14px 16px;
+    font-size: 0.9rem;
+  }
+}

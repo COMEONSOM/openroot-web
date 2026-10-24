@@ -1,0 +1,481 @@
+/* ============================================================
+   BANNER DETAIL PAGE — OPENROOT
+   VERSION 2.0 — WIDE-SCREEN GRID LAYOUT
+
+   Layout
+   - Top row  : hero (left) + quick-facts panel (right) on large screens
+   - Middle   : sections in an auto-fit grid (1 / 2 / 3 columns)
+   - Bottom   : full-width call-to-action band
+
+   Palette (from app.css)
+   - Strict black / white via --ot-bg / --ot-text (light + dark mode)
+   - Royal Blue (--ot-button-blue) is used for the CTA button only
+   - No gradients, shadows, glows or rounded corners
+   ============================================================ */
+
+/* ── TOKENS ───────────────────────────────────────────────── */
+
+.oc-detail {
+  --d-bg: var(--ot-bg, #ffffff);
+  --d-text: var(--ot-text, #000000);
+  --d-muted: color-mix(in srgb, var(--d-text) 68%, var(--d-bg));
+  --d-faint: color-mix(in srgb, var(--d-text) 45%, var(--d-bg));
+  --d-tint: color-mix(in srgb, var(--d-text) 4%, var(--d-bg));
+  --d-tint-2: color-mix(in srgb, var(--d-text) 8%, var(--d-bg));
+  --d-line: color-mix(in srgb, var(--d-text) 55%, transparent);
+  --d-hair: color-mix(in srgb, var(--d-text) 18%, transparent);
+
+  --d-btn: var(--ot-button-blue, #4169e1);
+  --d-btn-text: #ffffff;
+
+  --d-gap: clamp(0.75rem, 1.6vw, 1.25rem);
+  --d-pad: clamp(1.1rem, 2.4vw, 2rem);
+}
+
+.oc-detail *,
+.oc-detail *::before,
+.oc-detail *::after {
+  box-sizing: border-box;
+  border-radius: 0;
+}
+
+/* app.css limits p / li to 72ch; inside cards we want full width */
+.oc-detail p,
+.oc-detail li {
+  max-width: none;
+}
+
+.oc-detail :focus-visible {
+  outline: 2px solid var(--d-text);
+  outline-offset: 2px;
+}
+
+/* ── PAGE WRAPPER ─────────────────────────────────────────── */
+
+.oc-detail {
+  position: relative;
+  isolation: isolate;
+
+  min-height: 100vh;
+  margin-top: 0; /* no header on banner pages */
+  padding: var(--d-gap) clamp(0.75rem, 2.5vw, 2.5rem) 3.5rem;
+
+  background-color: var(--d-bg);
+  color: var(--d-text);
+}
+
+/* decorative square-grid texture */
+.oc-detail::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+
+  background-image:
+    linear-gradient(to bottom, var(--d-text) 1px, transparent 1px),
+    linear-gradient(to right, var(--d-text) 1px, transparent 1px);
+  background-size: 26px 26px;
+  opacity: 0.06;
+}
+
+.oc-detail__inner {
+  display: flex;
+  flex-direction: column;
+  gap: var(--d-gap);
+
+  width: 100%;
+  max-width: 1480px;
+  margin: 0 auto;
+}
+
+/* ── BACK LINK ────────────────────────────────────────────── */
+
+.oc-detail__back {
+  align-self: flex-start;
+
+  padding: 0.5rem 0.95rem;
+
+  border: 1px solid var(--d-text);
+
+  background-color: var(--d-bg);
+  color: var(--d-text);
+  font-size: 0.95rem;
+  font-weight: 600;
+  text-decoration: none;
+
+  transition: background-color 0.18s ease, color 0.18s ease;
+}
+
+@media (hover: hover) {
+  .oc-detail__back:hover {
+    background-color: var(--d-text);
+    color: var(--d-bg);
+  }
+}
+
+/* ── TOP ROW: HERO + FACTS ────────────────────────────────── */
+
+.oc-detail__top {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--d-gap);
+  align-items: stretch;
+}
+
+@media (min-width: 1024px) {
+  .oc-detail__top--with-facts {
+    grid-template-columns: minmax(0, 2fr) minmax(280px, 1fr);
+  }
+}
+
+/* ── HERO ─────────────────────────────────────────────────── */
+
+.oc-detail__hero {
+  display: grid;
+  gap: clamp(1rem, 3vw, 2.5rem);
+  align-items: center;
+
+  padding: var(--d-pad);
+
+  border: 1px solid var(--d-line);
+  border-top: 3px solid var(--d-text);
+
+  background-color: var(--d-bg);
+}
+
+@media (min-width: 900px) {
+  .oc-detail__hero--with-image {
+    grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+  }
+}
+
+.oc-detail__hero-text {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1rem;
+}
+
+/* inverted label: solid block, reads as a stamp */
+.oc-detail__badge {
+  margin: 0;
+  padding: 0.35rem 0.75rem;
+
+  border: 1px solid var(--d-text);
+
+  background-color: var(--d-text);
+  color: var(--d-bg);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.oc-detail__title {
+  margin: 0;
+
+  font-size: clamp(1.9rem, 4.2vw, 3.6rem);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1.08;
+}
+
+.oc-detail__tagline {
+  margin: 0;
+  max-width: 62ch;
+
+  color: var(--d-muted);
+  font-size: clamp(1rem, 1.6vw, 1.2rem);
+  line-height: 1.65;
+}
+
+.oc-detail__notice {
+  margin: 0;
+  padding: 0.8rem 1rem;
+
+  border: 1px dashed var(--d-line);
+
+  background-color: var(--d-tint);
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+.oc-detail__hero-image {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-height: 460px;
+  object-fit: contain;
+}
+
+/* ── CALL TO ACTION BUTTON (Royal Blue, as in app.css) ───── */
+
+.oc-detail__cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+
+  padding: 0.85rem 1.6rem;
+
+  border: 1px solid var(--d-btn);
+
+  background-color: var(--d-btn);
+  color: var(--d-btn-text);
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  text-decoration: none;
+
+  transition: transform 0.18s ease, filter 0.18s ease;
+}
+
+.oc-detail__cta::after {
+  content: "→";
+  transition: transform 0.18s ease;
+}
+
+@media (hover: hover) {
+  .oc-detail__cta:hover {
+    filter: brightness(1.06);
+  }
+
+  .oc-detail__cta:hover::after {
+    transform: translateX(4px);
+  }
+}
+
+.oc-detail__cta:active {
+  transform: scale(0.98);
+}
+
+/* ── QUICK FACTS PANEL ────────────────────────────────────── */
+
+.oc-detail__highlights {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  align-content: start;
+
+  border: 1px solid var(--d-line);
+  border-top: 3px solid var(--d-text);
+
+  background-color: var(--d-tint);
+}
+
+.oc-detail__highlight {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+
+  padding: 1rem 1.15rem;
+
+  border-right: 1px solid var(--d-hair);
+  border-bottom: 1px solid var(--d-hair);
+}
+
+.oc-detail__highlight-label {
+  color: var(--d-muted);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.oc-detail__highlight-value {
+  font-size: 1.15rem;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+}
+
+/* beside the hero: one fact per row, label left, value right */
+@media (min-width: 1024px) {
+  .oc-detail__top--with-facts .oc-detail__highlights {
+    grid-template-columns: 1fr;
+  }
+
+  .oc-detail__top--with-facts .oc-detail__highlight {
+    flex-direction: row;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1rem;
+
+    padding: 1.05rem 1.35rem;
+
+    border-right: none;
+  }
+
+  .oc-detail__top--with-facts .oc-detail__highlight:last-child {
+    border-bottom: none;
+  }
+
+  .oc-detail__top--with-facts .oc-detail__highlight-value {
+    text-align: right;
+  }
+}
+
+/* ── SECTIONS GRID ────────────────────────────────────────── */
+
+.oc-detail__sections {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 340px), 1fr));
+  gap: var(--d-gap);
+  align-items: stretch;
+
+  counter-reset: oc-section;
+}
+
+.oc-detail__section {
+  display: grid;
+  gap: clamp(1rem, 2.5vw, 2rem);
+  align-content: start;
+
+  padding: var(--d-pad);
+
+  border: 1px solid var(--d-line);
+  border-top: 2px solid var(--d-text);
+
+  background-color: var(--d-bg);
+}
+
+/* sections that carry an image take the full row */
+.oc-detail__section--with-image {
+  grid-column: 1 / -1;
+  align-items: center;
+}
+
+@media (min-width: 768px) {
+  .oc-detail__section--with-image {
+    grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr);
+  }
+}
+
+/* numbered eyebrow: 01, 02, 03 ... */
+.oc-detail__sections .oc-detail__section-title::before {
+  counter-increment: oc-section;
+  content: counter(oc-section, decimal-leading-zero);
+
+  display: block;
+  margin-bottom: 0.6rem;
+  padding-bottom: 0.6rem;
+
+  border-bottom: 1px solid var(--d-hair);
+
+  color: var(--d-faint);
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+}
+
+.oc-detail__section-title {
+  margin: 0 0 0.9rem;
+
+  font-size: clamp(1.25rem, 2.2vw, 1.75rem);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+}
+
+.oc-detail__paragraph {
+  margin: 0 0 0.8rem;
+
+  color: var(--d-muted);
+  font-size: 1.02rem;
+  line-height: 1.7;
+}
+
+.oc-detail__paragraph:last-child {
+  margin-bottom: 0;
+}
+
+.oc-detail__list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+
+  margin: 0;
+  padding: 0;
+
+  list-style: none;
+}
+
+.oc-detail__list li {
+  position: relative;
+
+  padding-left: 1.5rem;
+
+  font-size: 1.02rem;
+  line-height: 1.5;
+}
+
+/* square bullet, matching the square design */
+.oc-detail__list li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.5em;
+
+  width: 8px;
+  height: 8px;
+
+  background-color: var(--d-text);
+}
+
+.oc-detail__section-image {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-height: 380px;
+  object-fit: contain;
+}
+
+/* ── BOTTOM CTA BAND ──────────────────────────────────────── */
+
+.oc-detail__footer-cta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem 2rem;
+
+  padding: var(--d-pad);
+
+  border: 1px solid var(--d-line);
+  border-left: 4px solid var(--d-text);
+
+  background-color: var(--d-tint);
+}
+
+.oc-detail__footer-cta .oc-detail__section-title {
+  margin: 0;
+
+  font-size: clamp(1.3rem, 2.6vw, 2rem);
+}
+
+/* no number on the closing heading */
+.oc-detail__footer-cta .oc-detail__section-title::before {
+  content: none;
+}
+
+/* ── RESPONSIVE ───────────────────────────────────────────── */
+
+@media (max-width: 600px) {
+  .oc-detail__cta,
+  .oc-detail__back {
+    width: 100%;
+    text-align: center;
+  }
+
+  .oc-detail__footer-cta {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .oc-detail__cta,
+  .oc-detail__cta::after,
+  .oc-detail__back {
+    transition: none !important;
+  }
+}

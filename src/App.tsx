@@ -49,6 +49,8 @@ const CoevasTerms = lazy(() => import("./pages/Legal/coevas-legal-terms"));
 const Makaut = lazy(() => import("./pages/makaut"));
 const TravelExpenseManager = lazy(() => import("./pages/TravelExpenseManager"));
 const OCLayout = lazy(() => import("./pages/openrootClasses/OCLayout"));
+const OCHome = lazy(() => import("./pages/openrootClasses/OCHome"));
+const OCBannerDetail = lazy(() => import("./pages/openrootClasses/OCBannerDetail"));
 const GDrive = lazy(() => import("./pages/GDrive"));
 
 // ── SEO constants ──────────────────────────────────────────────
@@ -511,6 +513,13 @@ function AppContent() {
               </RequireAuth>
             }
           />
+
+          {/* ── OPENROOT CLASSES (nested) ────────────────────────
+              /openroot-classes         -> OCHome (banner + sections)
+              /openroot-classes/:slug   -> OCBannerDetail (banner page)
+              OCLayout renders the header and an <Outlet />.
+              RequireAuth + default SEO tags apply to both pages;
+              the banner page overrides the title/description. */}
           <Route
             path="/openroot-classes"
             element={
@@ -524,7 +533,11 @@ function AppContent() {
                 <OCLayout />
               </RequireAuth>
             }
-          />
+          >
+            <Route index element={<OCHome />} />
+            <Route path=":slug" element={<OCBannerDetail />} />
+          </Route>
+
           <Route
             path="/gdrive-web-extension"
             element={

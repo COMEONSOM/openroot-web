@@ -72,7 +72,7 @@ const HeaderNavbar = (): React.JSX.Element => {
               className="nav-button"
               onClick={() => handleSectionJump("free-content")}
             >
-              Free Contents
+              Limited Contents
             </button>
 
             <button
@@ -140,7 +140,7 @@ const HeaderNavbar = (): React.JSX.Element => {
                 className="mobile-menu-link"
                 onClick={() => handleSectionJump("free-content")}
               >
-                Free Contents
+                Limited Contents
               </button>
 
               <button

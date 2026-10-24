@@ -1,5 +1,10 @@
 // ============================================================
-// BANNER COMPONENT — PRODUCTION-READY -- VERSION 1.2.0
+// BANNER COMPONENT — PRODUCTION-READY -- VERSION 1.4.0
+// - CLICKING A BANNER OPENS ITS OWN PAGE (/openroot-classes/<slug>)
+// - SWIPING DOES NOT TRIGGER THE LINK
+// - SEPARATE MOBILE / LAPTOP IMAGE PER BANNER (<picture>)
+// - MOBILE + TABLET  -> *_mobile.avif
+// - LAPTOP + LARGER  -> *_laptop.avif
 // - 24:9 CINEMATIC CONTAINER + 16:9 SAFE CENTER FRAME
 // - NO CROPPING, NO STRETCHING OF ORIGINAL BANNERS
 // - DECORATIVE BACKGROUND LAYER
@@ -9,26 +14,39 @@
 // ============================================================
 
 import React, { useCallback, useEffect, useRef, useState } from "react";
-import banner1 from "../../assets-oc/banner_openroot_classes_1.avif";
-import banner2 from "../../assets-oc/banner_openroot_classes_2.avif";
-import banner3 from "../../assets-oc/banner_openroot_classes_3.avif";
-import banner4 from "../../assets-oc/banner_openroot_classes_4.avif";
-import "../openrootClasses/OCStyle/OCBanner.css";
+import { Link } from "react-router-dom";
+
+import {
+  BANNER_BASE_PATH,
+  BANNER_ENTRIES,
+  type BannerEntry,
+} from "./data/bannerData";
+
+import "./OCStyle/OCBanner.css";
 
 // ============================================================
 // TYPES
 // ============================================================
 
-interface BannerSlide {
-  id: string | number;
-  image: string;
-  alt?: string;
-}
-
 interface BannerProps {
-  banners?: BannerSlide[];
+  banners?: BannerEntry[];
   autoRotateMs?: number;
 }
+
+// ============================================================
+// CONSTANTS
+// ============================================================
+
+// Screens at least this wide (px) use the laptop banner.
+// Anything smaller (mobile, tablet) uses the mobile banner.
+const LAPTOP_MIN_WIDTH = 1024;
+
+// Makes the whole banner image clickable.
+const LINK_STYLE: React.CSSProperties = {
+  display: "block",
+  width: "100%",
+  cursor: "pointer",
+};
 
 // ============================================================
 // UTILITY: SLEEP
@@ -47,22 +65,11 @@ const clampIndex = (index: number, length: number): number => {
 };
 
 // ============================================================
-// DEFAULT BANNERS
-// ============================================================
-
-const DEFAULT_BANNERS: BannerSlide[] = [
-  { id: 1, image: banner1, alt: "Banner 1" },
-  { id: 2, image: banner2, alt: "Banner 2" },
-  { id: 3, image: banner3, alt: "Banner 3" },
-  { id: 4, image: banner4, alt: "Banner 4" },
-];
-
-// ============================================================
 // COMPONENT
 // ============================================================
 
 export default function Banner({
-  banners = DEFAULT_BANNERS,
+  banners = BANNER_ENTRIES,
   autoRotateMs = 10000,
 }: BannerProps) {
   if (!Array.isArray(banners)) {
@@ -89,6 +96,7 @@ export default function Banner({
 
   const pointerStartX = useRef<number | null>(null);
   const pointerLastX = useRef<number | null>(null);
+  const draggedRef = useRef<boolean>(false); // true after a swipe, blocks the link click
   const SWIPE_THRESHOLD = 50;
 
   // ============================================================
@@ -180,6 +188,7 @@ export default function Banner({
         : (e as React.TouchEvent).touches?.[0]?.clientX ?? 0;
     pointerStartX.current = clientX;
     pointerLastX.current = clientX;
+    draggedRef.current = false;
     pauseAfterInteraction();
   };
 
@@ -189,7 +198,9 @@ export default function Banner({
     const clientX =
       "clientX" in e
         ? e.clientX
-        : (e as React.TouchEvent).touches?.[0]?.clientX ?? pointerLastX.current ?? 0;
+        : (e as React.TouchEvent).touches?.[0]?.clientX ??
+          pointerLastX.current ??
+          0;
     pointerLastX.current = clientX;
   };
 
@@ -199,6 +210,7 @@ export default function Banner({
     const delta = start - end;
 
     if (Math.abs(delta) > SWIPE_THRESHOLD) {
+      draggedRef.current = true; // it was a swipe, not a click
       if (delta > 0) goNext();
       else goPrev();
     }
@@ -206,6 +218,14 @@ export default function Banner({
     pointerStartX.current = null;
     pointerLastX.current = null;
     await sleep(0);
+  };
+
+  // Stops the page from opening when the user swiped.
+  const handleSlideClick = (e: React.MouseEvent<HTMLAnchorElement>): void => {
+    if (draggedRef.current) {
+      e.preventDefault();
+    }
+    draggedRef.current = false;
   };
 
   // ============================================================
@@ -292,20 +312,41 @@ export default function Banner({
           onTouchEnd={handlePointerUp}
           aria-live="polite"
         >
-          {banners.map(({ id, image, alt }, idx) => (
-            <div
-              key={`${id}-${idx}`}
-              className="banner-slide"
-              aria-hidden={current !== idx}
-            >
-              <img
-                src={image}
-                alt={alt ?? `Banner ${idx + 1}`}
-                className="banner-image"
-                draggable={false}
-              />
-            </div>
-          ))}
+          {banners.map(
+            ({ number, slug, mobileImage, laptopImage, alt }, idx) => (
+              <div
+                key={`${number}-${idx}`}
+                className="banner-slide"
+                aria-hidden={current !== idx}
+              >
+                <Link
+                  to={`${BANNER_BASE_PATH}/${slug}`}
+                  style={LINK_STYLE}
+                  onClick={handleSlideClick}
+                  tabIndex={current === idx ? 0 : -1}
+                  aria-label={`Open page: ${alt}`}
+                  draggable={false}
+                >
+                  <picture>
+                    {/* LAPTOP AND LARGER SCREENS */}
+                    <source
+                      media={`(min-width: ${LAPTOP_MIN_WIDTH}px)`}
+                      srcSet={laptopImage}
+                      type="image/avif"
+                    />
+                    {/* MOBILE + TABLET (DEFAULT) */}
+                    <img
+                      src={mobileImage}
+                      alt={alt}
+                      className="banner-image"
+                      draggable={false}
+                      loading={idx === 0 ? "eager" : "lazy"}
+                    />
+                  </picture>
+                </Link>
+              </div>
+            )
+          )}
         </div>
       </div>
 

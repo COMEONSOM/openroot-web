@@ -12,7 +12,6 @@ export interface Software {
 }
 
 export interface SoftwareContent {
-  overview: string;
   features: string[];
   purpose: string;
 }
