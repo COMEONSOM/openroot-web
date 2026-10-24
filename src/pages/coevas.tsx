@@ -12,6 +12,25 @@ interface Release {
 type TabName = 'releases' | 'about';
 
 const releases: Release[] = [
+  
+  {
+    version: '1.4.0',
+    date: '2026-10-24',
+    downloadLink:
+      'https://github.com/COMEONSOM/openroot-web/releases/download/v1.4.0/CoevasTerminalSetup-1.4.0.exe',
+    features: [
+      'Improved YouTube download reliability with enhanced highest-quality video selection and recovery',
+      'Fixed unintended video resolution downgrades during failed YouTube downloads',
+      'Enhanced retry mechanisms and partial-download recovery for more consistent performance',
+      'Updated yt-dlp for improved YouTube compatibility and stability',
+      'Resolved Instagram authentication issues affecting photo and carousel downloads',
+      'Updated gallery-dl to improve Instagram media extraction and compatibility',
+      'Introduced updated Coevas branding across Windows executable, installer, and application icons',
+      'Preserved the original user interface, existing features, and familiar workflows',
+      'Automatic update system continues to deliver future updates directly inside the app',
+    ],
+  },
+
   {
     version: '1.3.0',
     date: '2026-04-11',
