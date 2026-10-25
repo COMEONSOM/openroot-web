@@ -100,11 +100,14 @@
     linear-gradient(var(--ot-border) 1px, transparent 1px),
     linear-gradient(90deg, var(--ot-border) 1px, transparent 1px);
   background-size: 40px 40px;
-  opacity: 0.3;
+  opacity: 0.18;
   pointer-events: none;
   z-index: 0;
-  mask-image: radial-gradient(ellipse 70% 60% at 30% 40%, black 0%, transparent 100%);
-  -webkit-mask-image: radial-gradient(ellipse 70% 60% at 30% 40%, black 0%, transparent 100%);
+  /* The grid is kept as decoration on the right-hand side only (around the
+     video). It fades out completely before the text, so no lines run
+     behind the title, description or button. */
+  mask-image: linear-gradient(to right, transparent 0%, transparent 50%, #000 85%);
+  -webkit-mask-image: linear-gradient(to right, transparent 0%, transparent 50%, #000 85%);
   grid-area: unset !important;
 }
 
@@ -845,6 +848,8 @@
 /* ── RESPONSIVE ───────────────────────────────────────── */
 
 @media (max-width: 860px) {
+  .sp-hero-grid { display: none !important; }
+
   .sp-hero--split {
     grid-template-columns: 1fr;
     padding-right: clamp(1.25rem, 8vw, 5rem);
@@ -914,4 +919,380 @@
 /* keep the three window dots round: they read as a browser window */
 .sp-video-dot {
   border-radius: 50%;
+}
+
+/* ==========================================================================
+   HERO v5 — GRAPHIC BAND, THEME-AWARE
+   Pure CSS graphics, no extra markup, no images to load.
+   Every colour comes from the theme tokens (--ot-bg / --ot-text), so the
+   hero follows the light / dark toggle:
+     light mode -> white band with black graphics
+     dark mode  -> black band with white graphics
+   - Concentric diamonds behind the video (SVG used as a mask)
+   - Dot-matrix block in the top-right corner
+   - Hatched strips along the left and right edges
+   - Viewfinder corner brackets on the video panel
+   - Short bar under the title
+   The Launch button keeps Royal Blue in both themes.
+   Placed last on purpose: it overrides the earlier hero rules.
+   ========================================================================== */
+
+/* ── BAND ─────────────────────────────────────────────── */
+
+.sp-hero {
+  --hero-edge: max(
+    clamp(1.25rem, 5vw, 3.5rem),
+    calc((100% - var(--sp-max)) / 2 + var(--sp-gutter))
+  );
+  --hero-ink: var(--ot-text);
+  --hero-ink-soft: color-mix(in srgb, var(--ot-text) 72%, var(--ot-bg));
+  --hero-line: color-mix(in srgb, var(--ot-text) 30%, transparent);
+
+  padding-top: clamp(2.25rem, 5vw, 4rem);
+  padding-bottom: clamp(2.25rem, 5vw, 4rem);
+
+  background: var(--ot-bg);
+  color: var(--hero-ink);
+  border-bottom: 1px solid var(--ot-border);
+}
+
+.sp-hero--split {
+  grid-template-columns: minmax(0, 1.2fr) minmax(0, 0.8fr);
+  align-items: start;
+  gap: clamp(1.5rem, 4vw, 4rem);
+}
+
+/* ── GRAPHIC 1: concentric diamonds (right side) ──────── */
+/* The SVG is used as a mask, so its shape is filled with the theme's
+   text colour: black in light mode, white in dark mode. */
+
+.sp-hero-grid {
+  display: block !important;
+  position: absolute !important;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+
+  background: var(--ot-text);
+  opacity: 1;
+
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='800' height='800' viewBox='0 0 800 800' fill='none' stroke='white' stroke-opacity='0.22'%3E%3Cg transform='rotate(45 400 400)'%3E%3Crect x='140' y='140' width='520' height='520'/%3E%3Crect x='190' y='190' width='420' height='420'/%3E%3Crect x='240' y='240' width='320' height='320'/%3E%3Crect x='290' y='290' width='220' height='220'/%3E%3Crect x='340' y='340' width='120' height='120'/%3E%3C/g%3E%3Cpath d='M400 20V780M20 400H780' stroke-opacity='0.1'/%3E%3C/svg%3E");
+  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='800' height='800' viewBox='0 0 800 800' fill='none' stroke='white' stroke-opacity='0.22'%3E%3Cg transform='rotate(45 400 400)'%3E%3Crect x='140' y='140' width='520' height='520'/%3E%3Crect x='190' y='190' width='420' height='420'/%3E%3Crect x='240' y='240' width='320' height='320'/%3E%3Crect x='290' y='290' width='220' height='220'/%3E%3Crect x='340' y='340' width='120' height='120'/%3E%3C/g%3E%3Cpath d='M400 20V780M20 400H780' stroke-opacity='0.1'/%3E%3C/svg%3E");
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-position: 76% 50%;
+  mask-position: 76% 50%;
+  -webkit-mask-size: clamp(520px, 48vw, 860px);
+  mask-size: clamp(520px, 48vw, 860px);
+}
+
+/* ── GRAPHIC 2: dot-matrix block (top-right) ──────────── */
+
+.sp-hero-glow {
+  display: block !important;
+  position: absolute !important;
+  top: 20px;
+  left: auto;
+  right: calc(var(--hero-edge) - 10px);
+  width: 170px;
+  height: 170px;
+  z-index: 0;
+  pointer-events: none;
+
+  border-radius: 0;
+  filter: none;
+
+  background-image: radial-gradient(
+    color-mix(in srgb, var(--ot-text) 55%, transparent) 1.6px,
+    transparent 1.8px
+  );
+  background-size: 16px 16px;
+}
+
+/* ── GRAPHIC 3: hatched strips on the left and right edges ─ */
+
+.sp-hero::before,
+.sp-hero::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: clamp(12px, 1.8vw, 26px);
+  z-index: 0;
+  pointer-events: none;
+
+  background-image: repeating-linear-gradient(
+    135deg,
+    var(--hero-line) 0,
+    var(--hero-line) 1px,
+    transparent 1px,
+    transparent 8px
+  );
+}
+
+.sp-hero::before {
+  left: 0;
+  border-right: 1px solid var(--hero-line);
+}
+
+.sp-hero::after {
+  right: 0;
+  border-left: 1px solid var(--hero-line);
+}
+
+/* ── TEXT SIDE ────────────────────────────────────────── */
+
+.sp-hero-text {
+  align-self: start;
+  padding-top: 0;
+}
+
+.sp-hero-title,
+.sp-hero-title span {
+  background: none;
+  -webkit-background-clip: border-box;
+  background-clip: border-box;
+  color: var(--ot-text);
+  -webkit-text-fill-color: var(--ot-text);
+}
+
+/* short bar under the title */
+.sp-hero-title::after {
+  content: "";
+  display: block;
+  width: 56px;
+  height: 4px;
+  margin-top: 1.1rem;
+  background: var(--ot-text);
+}
+
+.sp-hero-desc {
+  color: var(--hero-ink-soft);
+  max-width: 50ch;
+}
+
+.sp-launch-note {
+  color: var(--hero-ink-soft);
+}
+
+/* ── LAUNCH BUTTON (Royal Blue, both themes) ──────────── */
+
+.sp-launch-btn {
+  height: 50px;
+  padding: 0 1.75rem 0 0.75rem;
+
+  border: 1px solid var(--ot-button-blue);
+  border-radius: 0;
+
+  background: var(--ot-button-blue);
+  color: #ffffff;
+}
+
+.sp-launch-btn-icon {
+  border-radius: 0;
+  border-color: transparent;
+
+  background: #ffffff;
+  color: var(--ot-button-blue);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .sp-launch-btn:hover {
+    filter: brightness(1.1);
+    box-shadow: none;
+  }
+}
+
+/* ── VIDEO PANEL: fits the video, no wasted space ─────── */
+
+.sp-hero-video-desktop {
+  position: relative;
+  align-self: start;
+  justify-self: center;
+  align-items: center;
+  justify-content: center;
+
+  padding: clamp(0.75rem, 1.6vw, 1.25rem);
+
+  border: 1px solid var(--hero-line);
+
+  background: color-mix(in srgb, var(--ot-text) 5%, var(--ot-bg));
+}
+
+/* viewfinder corner brackets */
+.sp-hero-video-desktop::before,
+.sp-hero-video-desktop::after {
+  content: "";
+  position: absolute;
+  width: 24px;
+  height: 24px;
+  border: 2px solid var(--ot-text);
+  pointer-events: none;
+}
+
+.sp-hero-video-desktop::before {
+  top: -9px;
+  left: -9px;
+  border-right: 0;
+  border-bottom: 0;
+}
+
+.sp-hero-video-desktop::after {
+  bottom: -9px;
+  right: -9px;
+  border-left: 0;
+  border-top: 0;
+}
+
+/* smaller video window */
+.sp-video-wrap {
+  width: clamp(320px, 28vw, 460px);
+  max-width: 100%;
+}
+
+/* flat, straight frame: no tilt, no glow */
+.sp-video-frame {
+  transform: none;
+  box-shadow: 0 0 0 1px var(--hero-line);
+}
+
+.sp-video {
+  max-height: clamp(190px, 18vw, 280px);
+}
+
+.sp-video-chrome::after {
+  display: none;
+}
+
+.sp-video-caption {
+  color: var(--hero-ink-soft);
+}
+
+/* ── BREADCRUMB ───────────────────────────────────────── */
+/* same left edge as the hero text and the page body */
+
+.sp-breadcrumb {
+  padding: 0.9rem
+    max(clamp(1.25rem, 8vw, 5rem), calc((100% - var(--sp-max)) / 2 + var(--sp-gutter)));
+}
+
+/* ── SMALL SCREENS ────────────────────────────────────── */
+
+@media (max-width: 860px) {
+  .sp-hero--split {
+    grid-template-columns: 1fr;
+  }
+
+  .sp-hero-text {
+    align-self: start;
+  }
+
+  /* smaller diamonds, no dot block */
+  .sp-hero-grid {
+    -webkit-mask-position: 100% 12%;
+    mask-position: 100% 12%;
+    -webkit-mask-size: 460px;
+    mask-size: 460px;
+  }
+
+  .sp-hero-glow {
+    display: none !important;
+  }
+
+  /* video below the text, same theme colours as the band */
+  .sp-hero-video-mobile {
+    background: var(--ot-bg);
+    border-bottom: 1px solid var(--ot-border);
+  }
+
+  .sp-hero-video-mobile .sp-video-wrap {
+    width: 100%;
+  }
+
+  .sp-hero-video-mobile .sp-video-frame {
+    box-shadow: 0 0 0 1px var(--hero-line);
+  }
+
+  .sp-hero-video-mobile .sp-video-caption {
+    color: color-mix(in srgb, var(--ot-text) 72%, var(--ot-bg));
+  }
+}
+
+/* ==========================================================================
+   HERO v5 ADD-ONS
+   - Play / pause button on the video: always visible, also on hover
+   - Yellow highlighter marker on the tagline under the title
+   ========================================================================== */
+
+/* ── PLAY / PAUSE BUTTON ──────────────────────────────── */
+/* Dark square with a white icon; on hover it flips to white with a black
+   icon. (Before, hover set the icon and the background to the same
+   colour, so the button disappeared.) */
+
+.sp-video-toggle {
+  width: 34px;
+  height: 34px;
+  border-radius: 0;
+
+  background: rgba(0, 0, 0, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.85);
+  color: #ffffff;
+}
+
+.sp-video-toggle svg {
+  display: block;
+}
+
+.sp-video-toggle:hover,
+.sp-video-toggle:focus-visible,
+.sp-video-toggle--paused:hover {
+  background: #ffffff;
+  border-color: #ffffff;
+  color: #000000;
+}
+
+.sp-video-toggle:focus-visible {
+  outline: 2px solid var(--ot-button-blue);
+  outline-offset: 2px;
+}
+
+/* ── YELLOW MARKER ON THE TAGLINE ─────────────────────── */
+
+.sp-hero-mark {
+  /* hand-drawn highlighter stroke, repeated on every line of text */
+  padding: 0.12em 0.4em;
+  margin-left: -0.4em;
+
+  background-image: linear-gradient(
+    104deg,
+    rgba(255, 230, 0, 0) 0.9%,
+    #ffe600 2.4%,
+    #ffe100 5.8%,
+    #ffe600 93%,
+    #ffdc00 96%,
+    rgba(255, 230, 0, 0) 98%
+  );
+  background-color: transparent; /* cancels the browser's default <mark> yellow */
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+
+  /* each wrapped line gets its own full stroke */
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+
+  /* dark text on yellow, in light and dark mode */
+  color: #111111;
+  -webkit-text-fill-color: #111111;
+
+  border-radius: 0.2em 0.7em 0.3em 0.6em;
+
+  animation: sp-mark-in 0.7s ease-out 0.3s both;
+}
+
+/* Simple fade-in of the whole highlight (every line together).
+   The earlier left-to-right reveal used clip-path, which only covers the
+   first line of wrapped inline text. */
+@keyframes sp-mark-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
 }

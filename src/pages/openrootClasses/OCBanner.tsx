@@ -1,5 +1,5 @@
 // ============================================================
-// BANNER COMPONENT — PRODUCTION-READY -- VERSION 1.4.0
+// BANNER COMPONENT — PRODUCTION-READY -- VERSION 1.4.1
 // - CLICKING A BANNER OPENS ITS OWN PAGE (/openroot-classes/<slug>)
 // - SWIPING DOES NOT TRIGGER THE LINK
 // - SEPARATE MOBILE / LAPTOP IMAGE PER BANNER (<picture>)
@@ -11,6 +11,8 @@
 // - ES2023+ FEATURES
 // - ACCESSIBILITY + KEYBOARD SUPPORT
 // - OPTIMIZED TIMERS + REDUCED-MOTION SUPPORT
+// - SCROLL TARGET: id="banner-section" (used by the link in
+//   AvailableCourses for smooth scrolling to this section)
 // ============================================================
 
 import React, { useCallback, useEffect, useRef, useState } from "react";
@@ -36,6 +38,9 @@ interface BannerProps {
 // ============================================================
 // CONSTANTS
 // ============================================================
+
+// Must match BANNER_SECTION_ID in AvailableCourses.tsx.
+const BANNER_SECTION_ID = "banner-section";
 
 // Screens at least this wide (px) use the laptop banner.
 // Anything smaller (mobile, tablet) uses the mobile banner.
@@ -274,7 +279,11 @@ export default function Banner({
 
   if (slideCount === 0) {
     return (
-      <section className="home-banner placeholder" aria-live="polite">
+      <section
+        id={BANNER_SECTION_ID}
+        className="home-banner placeholder"
+        aria-live="polite"
+      >
         <div className="banner-placeholder">NO BANNERS AVAILABLE</div>
       </section>
     );
@@ -286,6 +295,7 @@ export default function Banner({
 
   return (
     <section
+      id={BANNER_SECTION_ID}
       className="home-banner"
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}

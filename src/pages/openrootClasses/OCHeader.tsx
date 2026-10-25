@@ -70,16 +70,16 @@ const HeaderNavbar = (): React.JSX.Element => {
 
             <button
               className="nav-button"
-              onClick={() => handleSectionJump("free-content")}
+              onClick={() => handleSectionJump("study-material")}
             >
-              Limited Contents
+              Study Material
             </button>
 
             <button
               className="nav-button"
-              onClick={() => handleSectionJump("study-material")}
+              onClick={() => handleSectionJump("free-content")}
             >
-              Study Material
+              Limited Contents
             </button>
           </div>
         </nav>

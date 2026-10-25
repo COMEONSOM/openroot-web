@@ -4,9 +4,10 @@
    surface, square framed cards, flat colour. No gradients, shadows,
    glows or rounded corners.
 
-   Scoped under .study-material; every class name is kept, so the TSX
-   does not change. Colours follow the global theme tokens, so light
-   and dark mode work like the rest of the site.
+   Scoped under .study-material. The TSX has no inline styles: the
+   grid columns, loading state and "+" tile are all styled here.
+   Colours follow the global theme tokens, so light and dark mode
+   work like the rest of the site.
    ============================================================ */
 
 @import url("https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&display=swap");
@@ -87,15 +88,28 @@
 }
 
 /* ── GRID ─────────────────────────────────────────────────── */
+/* Column counts match useMaxPerRow() in the TSX:
+   under 640px = 3, under 1024px = 4, otherwise 5. */
 
 .study-material .study-grid {
   display: grid;
-  /* default columns; the TSX can still override them inline */
-  grid-template-columns: repeat(auto-fit, minmax(170px, 230px));
+  grid-template-columns: repeat(5, 1fr);
   gap: 1rem;
   justify-content: center;
   justify-items: center;
   align-items: stretch;
+}
+
+@media (max-width: 1023.98px) {
+  .study-material .study-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+@media (max-width: 639.98px) {
+  .study-material .study-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
 }
 
 /* ── CARD ─────────────────────────────────────────────────── */
@@ -148,6 +162,22 @@
   max-height: 110px;
 }
 
+/* loading placeholder (was inline) */
+.study-material .study-loading {
+  display: grid;
+  place-items: center;
+
+  font-size: 0.875rem;
+  font-weight: 600;
+  opacity: 0.7;
+}
+
+/* "+" glyph on the View More tile (was inline) */
+.study-material .study-animation--plus {
+  font-size: 1.75rem;
+  font-weight: 800;
+}
+
 /* ── TEXT ─────────────────────────────────────────────────── */
 
 .study-material .study-label {
@@ -183,22 +213,25 @@
   }
 
   .study-material .study-grid {
-    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
     gap: 0.75rem;
   }
 
   .study-material .study-card {
     max-width: none;
     height: 180px;
+    padding: 0.75rem 0.5rem;
   }
 
+  /* three columns on a phone: let the animation shrink to the card */
   .study-material .study-animation {
-    width: 120px;
+    width: 100%;
+    max-width: 120px;
     height: 95px;
   }
 
   .study-material .study-label {
-    font-size: 0.98rem;
+    font-size: 0.85rem;
+    overflow-wrap: anywhere;
   }
 }
 

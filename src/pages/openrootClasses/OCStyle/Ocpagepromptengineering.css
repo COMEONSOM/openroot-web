@@ -1,0 +1,843 @@
+/* ============================================================
+   BANNER 1 PAGE — OPENROOT
+   "BECOME A CERTIFIED PROMPT ENGINEER" — dedicated stylesheet
+
+   Direction: a dark "prompt console" hero, then bright flat tiles.
+   Flat, square, no shadows, no glows. Depth comes from stacked
+   surface colours (ink -> console -> output lines), not effects.
+
+   Palette
+     ink     #0E1116   hero, text on colour
+     panel   #171C26   console surface
+     line    #262F40   console output lines
+     mint    #5CF2B6   buttons, accents      (ink text)
+     blue    #7C9BFF   tiles                 (ink text)
+     amber   #FFB938   tiles                 (ink text)
+     pink    #FF7AB2   tiles                 (ink text)
+
+   The page surface follows the site theme (--ot-bg / --ot-text).
+   Coloured tiles use fixed colours + fixed ink text, so contrast
+   is the same in light and dark mode.
+
+   Every selector is namespaced under .pe (this page only).
+   ============================================================ */
+
+@import url("https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&display=swap");
+
+/* ── TOKENS ───────────────────────────────────────────────── */
+
+.pe {
+  --pe-bg: var(--ot-bg, #ffffff);
+  --pe-text: var(--ot-text, #000000);
+
+  --pe-ink: #0e1116;
+  --pe-panel: #171c26;
+  --pe-line: #262f40;
+  --pe-mint: #5cf2b6;
+  --pe-blue: #7c9bff;
+  --pe-amber: #ffb938;
+  --pe-pink: #ff7ab2;
+  --pe-paper: #ffffff;
+
+  --pe-display: "Bricolage Grotesque", var(--ot-font, system-ui), sans-serif;
+
+  --pe-gap: clamp(0.75rem, 1.6vw, 1.25rem);
+  --pe-pad: clamp(1.15rem, 2.6vw, 2.1rem);
+  --pe-border: 2px;
+}
+
+.pe *,
+.pe *::before,
+.pe *::after {
+  box-sizing: border-box;
+  border-radius: 0;
+}
+
+.pe p,
+.pe li {
+  max-width: none;
+}
+
+.pe :focus-visible {
+  outline: 3px solid var(--pe-text);
+  outline-offset: 3px;
+}
+
+/* ── PAGE ─────────────────────────────────────────────────── */
+
+.pe {
+  position: relative;
+  isolation: isolate;
+  overflow-x: clip;
+
+  min-height: 100vh;
+  margin-top: 0;
+  padding: var(--pe-gap) clamp(0.75rem, 2.5vw, 2.5rem) 3.5rem;
+
+  background-color: var(--pe-bg);
+  color: var(--pe-text);
+  font-family: var(--ot-font, "Inter", system-ui, sans-serif);
+}
+
+.pe::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+
+  background-image:
+    linear-gradient(to bottom, var(--pe-text) 1px, transparent 1px),
+    linear-gradient(to right, var(--pe-text) 1px, transparent 1px);
+  background-size: 26px 26px;
+  opacity: 0.06;
+}
+
+.pe__inner {
+  display: flex;
+  flex-direction: column;
+  gap: var(--pe-gap);
+
+  width: 100%;
+  max-width: 1480px;
+  margin: 0 auto;
+}
+
+.pe__back {
+  align-self: flex-start;
+
+  padding: 0.5rem 0.95rem;
+
+  border: var(--pe-border) solid var(--pe-text);
+
+  background-color: var(--pe-bg);
+  color: var(--pe-text);
+  font-size: 0.95rem;
+  font-weight: 700;
+  text-decoration: none;
+
+  transition: background-color 0.18s ease, color 0.18s ease;
+}
+
+@media (hover: hover) {
+  .pe__back:hover {
+    background-color: var(--pe-text);
+    color: var(--pe-bg);
+  }
+}
+
+/* ── HERO ─────────────────────────────────────────────────── */
+
+.pe__hero {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+
+  display: grid;
+  gap: clamp(1.5rem, 4vw, 3.5rem);
+  align-items: center;
+
+  padding: clamp(1.5rem, 4.5vw, 3.75rem);
+
+  border: var(--pe-border) solid var(--pe-ink);
+
+  background-color: var(--pe-ink);
+  color: var(--pe-paper);
+}
+
+/* fine grid texture inside the hero */
+.pe__hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+
+  background-image:
+    linear-gradient(to bottom, var(--pe-mint) 1px, transparent 1px),
+    linear-gradient(to right, var(--pe-mint) 1px, transparent 1px);
+  background-size: 32px 32px;
+  opacity: 0.07;
+}
+
+@media (min-width: 1000px) {
+  .pe__hero {
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+  }
+}
+
+.pe__hero-text {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1.15rem;
+}
+
+.pe__badge {
+  margin: 0;
+  padding: 0.4rem 0.85rem;
+
+  border: var(--pe-border) solid var(--pe-mint);
+
+  color: var(--pe-mint);
+  font-size: 0.85rem;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+}
+
+.pe__title {
+  margin: 0;
+  max-width: 13ch;
+
+  font-family: var(--pe-display);
+  font-size: clamp(2.5rem, 6.4vw, 5.2rem);
+  font-weight: 800;
+  letter-spacing: -0.045em;
+  line-height: 0.98;
+  text-wrap: balance;
+}
+
+.pe__tagline {
+  margin: 0;
+  max-width: 50ch;
+
+  color: color-mix(in srgb, var(--pe-paper) 82%, var(--pe-ink));
+  font-size: clamp(1.02rem, 1.6vw, 1.25rem);
+  line-height: 1.6;
+}
+
+/* ── CTA ──────────────────────────────────────────────────── */
+
+.pe__cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.7rem;
+
+  padding: 0.95rem 1.7rem;
+
+  border: var(--pe-border) solid var(--pe-ink);
+
+  background-color: var(--pe-mint);
+  color: var(--pe-ink);
+  font-family: var(--pe-display);
+  font-size: 1.1rem;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  text-decoration: none;
+
+  transition: background-color 0.18s ease, color 0.18s ease;
+}
+
+.pe__cta-arrow {
+  transition: transform 0.18s ease;
+}
+
+@media (hover: hover) {
+  .pe__cta:hover {
+    background-color: var(--pe-paper);
+  }
+
+  .pe__cta:hover .pe__cta-arrow {
+    transform: translateX(5px);
+  }
+}
+
+.pe__cta:active {
+  transform: scale(0.98);
+}
+
+/* on the mint footer band the button flips to ink */
+.pe__cta--ink {
+  background-color: var(--pe-ink);
+  color: var(--pe-mint);
+}
+
+@media (hover: hover) {
+  .pe__cta--ink:hover {
+    background-color: var(--pe-paper);
+    color: var(--pe-ink);
+  }
+}
+
+/* ── PROMPT CONSOLE (decorative) ──────────────────────────── */
+
+.pe__console {
+  border: var(--pe-border) solid var(--pe-mint);
+
+  background-color: var(--pe-panel);
+  color: var(--pe-paper);
+}
+
+.pe__console-bar {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+
+  padding: 0.65rem 0.9rem;
+
+  border-bottom: var(--pe-border) solid var(--pe-mint);
+
+  background-color: var(--pe-ink);
+}
+
+.pe__console-dot {
+  width: 11px;
+  height: 11px;
+
+  background-color: var(--pe-line);
+}
+
+.pe__console-dot:first-child {
+  background-color: var(--pe-pink);
+}
+
+.pe__console-dot:nth-child(2) {
+  background-color: var(--pe-amber);
+}
+
+.pe__console-dot:nth-child(3) {
+  background-color: var(--pe-mint);
+}
+
+.pe__console-name {
+  margin-left: 0.6rem;
+
+  color: color-mix(in srgb, var(--pe-paper) 60%, var(--pe-ink));
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.pe__console-body {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+
+  padding: clamp(1rem, 2.4vw, 1.6rem);
+}
+
+.pe__console-prompt {
+  margin: 0;
+
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Courier New", monospace;
+  font-size: clamp(0.95rem, 1.5vw, 1.1rem);
+  line-height: 1.6;
+}
+
+.pe__console-mark {
+  margin-right: 0.6rem;
+
+  color: var(--pe-mint);
+  font-weight: 800;
+}
+
+.pe__caret {
+  display: inline-block;
+
+  width: 0.6em;
+  height: 1.1em;
+  margin-left: 0.2rem;
+
+  background-color: var(--pe-mint);
+  vertical-align: text-bottom;
+
+  animation: pe-blink 1.1s steps(1) infinite;
+}
+
+@keyframes pe-blink {
+  50% {
+    opacity: 0;
+  }
+}
+
+.pe__console-out {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+
+  padding: 1rem;
+
+  background-color: var(--pe-ink);
+}
+
+.pe__out-line {
+  display: block;
+  height: 12px;
+
+  background-color: var(--pe-line);
+}
+
+.pe__out-line--long {
+  width: 94%;
+}
+
+.pe__out-line--mid {
+  width: 68%;
+}
+
+.pe__out-line--short {
+  width: 40%;
+  background-color: var(--pe-mint);
+}
+
+.pe__console-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.pe__console-tag {
+  padding: 0.3rem 0.8rem;
+
+  background-color: var(--pe-mint);
+  color: var(--pe-ink);
+  font-size: 0.85rem;
+  font-weight: 800;
+}
+
+/* ── FACT TILES ───────────────────────────────────────────── */
+
+.pe__facts {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 190px), 1fr));
+  gap: var(--pe-gap);
+}
+
+.pe__fact {
+  --tile: var(--pe-paper);
+
+  position: relative;
+  overflow: hidden;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 1.1rem;
+
+  min-height: 150px;
+  padding: 1.1rem 1.2rem;
+
+  border: var(--pe-border) solid var(--pe-ink);
+
+  background-color: var(--tile);
+  color: var(--pe-ink);
+}
+
+.pe__fact[data-tone="mint"] {
+  --tile: var(--pe-mint);
+}
+
+.pe__fact[data-tone="blue"] {
+  --tile: var(--pe-blue);
+}
+
+.pe__fact[data-tone="amber"] {
+  --tile: var(--pe-amber);
+}
+
+.pe__fact[data-tone="pink"] {
+  --tile: var(--pe-pink);
+}
+
+.pe__fact-label {
+  font-size: 0.9rem;
+  font-weight: 700;
+  opacity: 0.75;
+}
+
+.pe__fact-value {
+  font-family: var(--pe-display);
+  font-size: clamp(1.2rem, 2vw, 1.5rem);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1.12;
+}
+
+/* the price is the loudest number on the page */
+.pe__fact--fees .pe__fact-value {
+  font-size: clamp(2.4rem, 4.4vw, 3.4rem);
+  letter-spacing: -0.04em;
+  line-height: 1;
+}
+
+/* "no coding needed": a code glyph with a slash through it */
+.pe__nocode {
+  position: absolute;
+  top: 0.9rem;
+  right: 1rem;
+
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 1.5rem;
+  font-weight: 800;
+}
+
+.pe__nocode::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: -6%;
+
+  width: 112%;
+  height: 3px;
+
+  background-color: var(--pe-ink);
+  transform: rotate(-24deg);
+}
+
+/* ── BLOCKS ───────────────────────────────────────────────── */
+
+.pe__heading {
+  margin: 0 0 1rem;
+
+  font-family: var(--pe-display);
+  font-size: clamp(1.6rem, 3.6vw, 2.8rem);
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  line-height: 1.05;
+  text-wrap: balance;
+}
+
+/* ── LEARN BENTO ──────────────────────────────────────────── */
+
+.pe__learn {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: var(--pe-gap);
+}
+
+.pe__tile {
+  --tile: var(--pe-paper);
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 1.4rem;
+
+  min-height: 210px;
+  padding: var(--pe-pad);
+
+  border: var(--pe-border) solid var(--pe-ink);
+
+  background-color: var(--tile);
+  color: var(--pe-ink);
+
+  grid-column: span 2;
+}
+
+.pe__tile:nth-child(1),
+.pe__tile:nth-child(2) {
+  grid-column: span 3;
+}
+
+.pe__tile[data-tone="mint"] {
+  --tile: var(--pe-mint);
+}
+
+.pe__tile[data-tone="blue"] {
+  --tile: var(--pe-blue);
+}
+
+.pe__tile[data-tone="amber"] {
+  --tile: var(--pe-amber);
+}
+
+.pe__tile[data-tone="pink"] {
+  --tile: var(--pe-pink);
+}
+
+.pe__learn-icon {
+  width: 56px;
+  height: 56px;
+
+  fill: none;
+  stroke: var(--pe-ink);
+  stroke-width: 3;
+  stroke-linecap: square;
+  stroke-linejoin: miter;
+}
+
+.pe__learn-icon .pe__fill {
+  fill: var(--pe-ink);
+}
+
+.pe__tile-title {
+  margin: 0;
+
+  font-family: var(--pe-display);
+  font-size: clamp(1.3rem, 2.4vw, 1.85rem);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+}
+
+.pe__tile-sub {
+  margin: -0.9rem 0 0;
+
+  font-size: 1.02rem;
+  font-weight: 600;
+  opacity: 0.8;
+}
+
+/* ── WORKFLOW TRACK ───────────────────────────────────────── */
+
+.pe__block--track {
+  padding: var(--pe-pad);
+
+  border: var(--pe-border) solid var(--pe-text);
+}
+
+.pe__track {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+
+  margin: 0;
+  padding: 0;
+
+  list-style: none;
+}
+
+.pe__track-step {
+  position: relative;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.85rem;
+
+  text-align: center;
+}
+
+/* the line between nodes */
+.pe__track-step:not(:last-child)::after {
+  content: "";
+  position: absolute;
+  top: 26px;
+  left: 50%;
+  z-index: 0;
+
+  width: 100%;
+  height: 4px;
+
+  background-color: var(--pe-text);
+}
+
+.pe__node {
+  position: relative;
+  z-index: 1;
+
+  display: grid;
+  place-items: center;
+
+  width: 56px;
+  height: 56px;
+
+  background-color: var(--pe-mint);
+  clip-path: circle(50%);
+  color: var(--pe-ink);
+  font-family: var(--pe-display);
+  font-size: 1.4rem;
+  font-weight: 800;
+}
+
+.pe__track-label {
+  font-family: var(--pe-display);
+  font-size: clamp(1.05rem, 2vw, 1.5rem);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+/* ── WHO THIS IS FOR ──────────────────────────────────────── */
+
+.pe__who {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 210px), 1fr));
+  gap: var(--pe-gap);
+
+  margin: 0;
+  padding: 0;
+
+  list-style: none;
+}
+
+.pe__who-card {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+
+  padding: 1.2rem 1.3rem;
+
+  border: var(--pe-border) solid var(--pe-ink);
+
+  background-color: var(--pe-paper);
+  color: var(--pe-ink);
+}
+
+.pe__who-shape {
+  flex: 0 0 auto;
+
+  width: 46px;
+  height: 46px;
+
+  background-color: var(--pe-ink);
+}
+
+.pe__who-card--circle .pe__who-shape {
+  background-color: var(--pe-mint);
+  clip-path: circle(50%);
+}
+
+.pe__who-card--square .pe__who-shape {
+  background-color: var(--pe-blue);
+}
+
+.pe__who-card--triangle .pe__who-shape {
+  background-color: var(--pe-pink);
+  clip-path: polygon(50% 0, 100% 100%, 0 100%);
+}
+
+.pe__who-card--plus .pe__who-shape {
+  background-color: var(--pe-amber);
+  clip-path: polygon(
+    35% 0,
+    65% 0,
+    65% 35%,
+    100% 35%,
+    100% 65%,
+    65% 65%,
+    65% 100%,
+    35% 100%,
+    35% 65%,
+    0 65%,
+    0 35%,
+    35% 35%
+  );
+}
+
+.pe__who-label {
+  font-family: var(--pe-display);
+  font-size: 1.25rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+}
+
+/* ── CLOSING BAND ─────────────────────────────────────────── */
+
+.pe__footer-cta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.25rem 2rem;
+
+  padding: clamp(1.5rem, 4vw, 3rem);
+
+  border: var(--pe-border) solid var(--pe-ink);
+
+  background-color: var(--pe-mint);
+  color: var(--pe-ink);
+}
+
+.pe__footer-title {
+  margin: 0;
+  max-width: 18ch;
+
+  font-family: var(--pe-display);
+  font-size: clamp(1.9rem, 5vw, 3.6rem);
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  line-height: 1;
+  text-wrap: balance;
+}
+
+/* ── ENTRANCE (hero text only) ────────────────────────────── */
+
+@keyframes pe-rise {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.pe__hero-text > * {
+  animation: pe-rise 0.55s ease-out both;
+}
+
+.pe__hero-text > :nth-child(2) {
+  animation-delay: 0.06s;
+}
+
+.pe__hero-text > :nth-child(3) {
+  animation-delay: 0.12s;
+}
+
+.pe__hero-text > :nth-child(4) {
+  animation-delay: 0.18s;
+}
+
+/* ── RESPONSIVE ───────────────────────────────────────────── */
+
+@media (max-width: 760px) {
+  .pe__tile,
+  .pe__tile:nth-child(1),
+  .pe__tile:nth-child(2) {
+    grid-column: 1 / -1;
+    min-height: 170px;
+  }
+}
+
+@media (max-width: 700px) {
+  /* track becomes vertical */
+  .pe__track {
+    grid-template-columns: 1fr;
+    gap: 1.1rem;
+  }
+
+  .pe__track-step {
+    flex-direction: row;
+    gap: 1rem;
+
+    text-align: left;
+  }
+
+  .pe__track-step:not(:last-child)::after {
+    top: 56px;
+    left: 26px;
+
+    width: 4px;
+    height: calc(100% + 1.1rem - 56px);
+  }
+}
+
+@media (max-width: 600px) {
+  .pe__cta,
+  .pe__back {
+    width: 100%;
+    text-align: center;
+  }
+
+  .pe__footer-cta {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}
+
+/* ── REDUCED MOTION ───────────────────────────────────────── */
+
+@media (prefers-reduced-motion: reduce) {
+  .pe__caret,
+  .pe__hero-text > * {
+    animation: none;
+  }
+
+  .pe__cta,
+  .pe__cta-arrow,
+  .pe__back {
+    transition: none !important;
+  }
+}

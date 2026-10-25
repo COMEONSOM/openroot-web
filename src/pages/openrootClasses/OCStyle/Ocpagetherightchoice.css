@@ -1,0 +1,983 @@
+/* ============================================================
+   BANNER 2 PAGE — OPENROOT
+   "THE RIGHT CHOICE" — dedicated stylesheet
+
+   Direction (from 2026 design research: bold saturated "dopamine"
+   colour, oversized type, bento grids, a simple layout lit up by
+   vivid colour, strong contrast, light + dark support):
+   - Keeps the site's flat, square, no-shadow, no-glow language.
+     Depth comes from colour blocks and thick ink outlines only.
+   - Page surface follows the site theme (--ot-bg / --ot-text), so
+     light and dark mode still work. The colour cards are fixed
+     colours with fixed ink text, so contrast holds in both modes.
+
+   Palette
+     ink     #14112B   text on colour, outlines
+     violet  #5B3DF5   hero            (white text, 6.1:1)
+     lime    #C8F542   buttons, ticker (ink text)
+     sky     #5CD4FF   card            (ink text)
+     coral   #FF6B6B   card            (ink text, 6.6:1)
+     sun     #FFD84A   pass, card      (ink text)
+
+   Every selector is namespaced under .trc.
+   ============================================================ */
+
+@import url("https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&display=swap");
+
+/* ── TOKENS ───────────────────────────────────────────────── */
+
+.trc {
+  --d-bg: var(--ot-bg, #ffffff);
+  --d-text: var(--ot-text, #000000);
+  --d-muted: color-mix(in srgb, var(--d-text) 68%, var(--d-bg));
+  --d-hair: color-mix(in srgb, var(--d-text) 18%, transparent);
+
+  --c-ink: #14112b;
+  --c-violet: #5b3df5;
+  --c-lime: #c8f542;
+  --c-sky: #5cd4ff;
+  --c-coral: #ff6b6b;
+  --c-sun: #ffd84a;
+  --c-paper: #ffffff;
+
+  --d-display: "Bricolage Grotesque", var(--ot-font, system-ui), sans-serif;
+
+  --d-gap: clamp(0.75rem, 1.6vw, 1.25rem);
+  --d-pad: clamp(1.15rem, 2.6vw, 2.1rem);
+  --d-line: 2px;
+}
+
+.trc *,
+.trc *::before,
+.trc *::after {
+  box-sizing: border-box;
+  border-radius: 0;
+}
+
+/* app.css limits p / li to 72ch; inside cards we want full width */
+.trc p,
+.trc li {
+  max-width: none;
+}
+
+.trc :focus-visible {
+  outline: 3px solid var(--d-text);
+  outline-offset: 3px;
+}
+
+/* ── PAGE WRAPPER ─────────────────────────────────────────── */
+
+.trc {
+  position: relative;
+  isolation: isolate;
+  overflow-x: clip;
+
+  min-height: 100vh;
+  margin-top: 0; /* no header on banner pages */
+  padding: var(--d-gap) clamp(0.75rem, 2.5vw, 2.5rem) 3.5rem;
+
+  background-color: var(--d-bg);
+  color: var(--d-text);
+  font-family: var(--ot-font, "Inter", system-ui, sans-serif);
+}
+
+/* decorative square-grid texture */
+.trc::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+
+  background-image:
+    linear-gradient(to bottom, var(--d-text) 1px, transparent 1px),
+    linear-gradient(to right, var(--d-text) 1px, transparent 1px);
+  background-size: 26px 26px;
+  opacity: 0.06;
+}
+
+.trc__inner {
+  display: flex;
+  flex-direction: column;
+  gap: var(--d-gap);
+
+  width: 100%;
+  max-width: 1480px;
+  margin: 0 auto;
+}
+
+/* ── BACK LINK ────────────────────────────────────────────── */
+
+.trc__back {
+  align-self: flex-start;
+
+  padding: 0.5rem 0.95rem;
+
+  border: var(--d-line) solid var(--d-text);
+
+  background-color: var(--d-bg);
+  color: var(--d-text);
+  font-size: 0.95rem;
+  font-weight: 700;
+  text-decoration: none;
+
+  transition: background-color 0.18s ease, color 0.18s ease;
+}
+
+@media (hover: hover) {
+  .trc__back:hover {
+    background-color: var(--d-text);
+    color: var(--d-bg);
+  }
+}
+
+/* ── TOP ROW: HERO + PASS ─────────────────────────────────── */
+
+.trc__top {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--d-gap);
+  align-items: stretch;
+}
+
+@media (min-width: 1024px) {
+  .trc__top--with-facts {
+    grid-template-columns: minmax(0, 1.75fr) minmax(310px, 1fr);
+  }
+}
+
+/* ── HERO (violet block) ──────────────────────────────────── */
+
+.trc__hero {
+  position: relative;
+  overflow: hidden;
+
+  display: grid;
+  gap: clamp(1rem, 3vw, 2.5rem);
+  align-items: center;
+
+  align-content: center;
+
+  min-height: clamp(360px, 46vw, 560px);
+  padding: clamp(1.5rem, 4.5vw, 3.75rem);
+
+  border: var(--d-line) solid var(--c-ink);
+
+  background-color: var(--c-violet);
+  color: var(--c-paper);
+}
+
+@media (min-width: 900px) {
+  .trc__hero--with-image {
+    grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+  }
+}
+
+.trc__hero-text {
+  position: relative;
+  z-index: 1;
+
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1.15rem;
+}
+
+/* sticker label */
+.trc__badge {
+  margin: 0;
+  padding: 0.4rem 0.85rem;
+
+  border: var(--d-line) solid var(--c-ink);
+
+  background-color: var(--c-lime);
+  color: var(--c-ink);
+  font-size: 0.85rem;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+
+  transform: rotate(-2.5deg);
+}
+
+.trc__title {
+  margin: 0;
+  max-width: 14ch;
+
+  font-family: var(--d-display);
+  font-size: clamp(2.5rem, 7vw, 5.6rem);
+  font-weight: 800;
+  letter-spacing: -0.045em;
+  line-height: 0.98;
+  text-wrap: balance;
+}
+
+.trc__tagline {
+  margin: 0;
+  max-width: 52ch;
+
+  color: color-mix(in srgb, var(--c-paper) 90%, var(--c-violet));
+  font-size: clamp(1.02rem, 1.7vw, 1.3rem);
+  line-height: 1.6;
+}
+
+.trc__notice {
+  margin: 0;
+  padding: 0.8rem 1rem;
+
+  border: var(--d-line) solid var(--c-ink);
+
+  background-color: var(--c-sun);
+  color: var(--c-ink);
+  font-size: 0.95rem;
+  font-weight: 600;
+  line-height: 1.5;
+}
+
+.trc__hero-image {
+  position: relative;
+  z-index: 1;
+
+  display: block;
+  width: 100%;
+  height: auto;
+  max-height: 460px;
+  object-fit: contain;
+}
+
+/* decorative flat shapes: their own row at the bottom-right of the hero,
+   pulled up beside the button so they never sit under the text */
+.trc__shapes {
+  position: relative;
+  z-index: 0;
+
+  grid-column: 1 / -1;
+  justify-self: end;
+
+  width: min(34%, 190px);
+  height: auto;
+  margin: -3.4rem calc(-1 * clamp(1.5rem, 4.5vw, 3.75rem)) calc(-1 * clamp(1.5rem, 4.5vw, 3.75rem)) 0;
+  pointer-events: none;
+}
+
+.trc__shape-lime {
+  fill: var(--c-lime);
+}
+
+.trc__shape-coral {
+  fill: var(--c-coral);
+}
+
+.trc__shape-sun {
+  fill: var(--c-sun);
+}
+
+.trc__shape-ring {
+  fill: none;
+  stroke: var(--c-paper);
+  stroke-width: 14;
+}
+
+/* ── CALL TO ACTION BUTTON ────────────────────────────────── */
+
+.trc__cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.7rem;
+
+  padding: 0.95rem 1.7rem;
+
+  border: var(--d-line) solid var(--c-ink);
+
+  background-color: var(--c-lime);
+  color: var(--c-ink);
+  font-family: var(--d-display);
+  font-size: 1.1rem;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  text-decoration: none;
+
+  transition: background-color 0.18s ease;
+}
+
+.trc__cta-arrow {
+  width: 1.3em;
+  height: 1.3em;
+
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2.4;
+  stroke-linecap: square;
+  stroke-linejoin: miter;
+
+  transition: transform 0.18s ease;
+}
+
+@media (hover: hover) {
+  .trc__cta:hover {
+    background-color: var(--c-paper);
+  }
+
+  .trc__cta:hover .trc__cta-arrow {
+    transform: translateX(5px);
+  }
+}
+
+.trc__cta:active {
+  transform: scale(0.98);
+}
+
+/* ── COURSE PASS (ticket) ─────────────────────────────────── */
+
+.trc__pass {
+  display: flex;
+  flex-direction: column;
+
+  padding: 1.25rem 1.35rem 1.35rem;
+
+  border: var(--d-line) solid var(--c-ink);
+
+  background-color: var(--c-sun);
+  color: var(--c-ink);
+}
+
+@media (min-width: 1024px) {
+  .trc__pass {
+    transform: rotate(1deg);
+  }
+}
+
+.trc__pass-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+
+  padding-bottom: 0.7rem;
+
+  border-bottom: var(--d-line) solid var(--c-ink);
+
+  font-family: var(--d-display);
+  font-size: 1.05rem;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+}
+
+.trc__pass-list {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+}
+
+.trc__pass-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+
+  padding: 0.8rem 0;
+
+  border-bottom: 1px dashed color-mix(in srgb, var(--c-ink) 55%, transparent);
+}
+
+.trc__pass-label {
+  margin: 0;
+
+  font-size: 0.9rem;
+  font-weight: 600;
+  opacity: 0.75;
+}
+
+.trc__pass-value {
+  margin: 0;
+
+  font-family: var(--d-display);
+  font-size: 1.2rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  text-align: right;
+}
+
+/* perforation with side notches */
+.trc__pass-tear {
+  position: relative;
+
+  margin: auto -1.35rem 0;
+  padding-top: 1.1rem;
+
+  border-top: var(--d-line) dashed var(--c-ink);
+}
+
+.trc .trc__pass-tear::before,
+.trc .trc__pass-tear::after {
+  content: "";
+  position: absolute;
+  top: -12px;
+
+  width: 22px;
+  height: 22px;
+
+  background-color: var(--d-bg);
+  border-radius: 50%;
+}
+
+.trc .trc__pass-tear::before {
+  left: -12px;
+}
+
+.trc .trc__pass-tear::after {
+  right: -12px;
+}
+
+.trc__pass-foot {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  padding-top: 0.5rem;
+}
+
+.trc__barcode {
+  display: block;
+  width: 100%;
+  height: 44px;
+
+  fill: var(--c-ink);
+}
+
+.trc__pass-code {
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+}
+
+/* ── TICKER (scrolling facts) ─────────────────────────────── */
+
+.trc__ticker {
+  overflow: hidden;
+
+  border: var(--d-line) solid var(--c-ink);
+
+  background-color: var(--c-lime);
+  color: var(--c-ink);
+}
+
+.trc__ticker-track {
+  display: flex;
+  width: max-content;
+
+  animation: trc-ticker 32s linear infinite;
+}
+
+.trc__ticker-group {
+  display: flex;
+  flex: 0 0 auto;
+}
+
+.trc__ticker-item {
+  display: inline-flex;
+  align-items: center;
+
+  padding: 0.75rem 0 0.75rem 1.6rem;
+
+  font-family: var(--d-display);
+  font-size: clamp(1.15rem, 2.4vw, 1.7rem);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  white-space: nowrap;
+}
+
+/* four-point star separator, drawn with clip-path */
+.trc__ticker-item::after {
+  content: "";
+  display: inline-block;
+
+  width: 0.8em;
+  height: 0.8em;
+  margin-left: 1.6rem;
+
+  background-color: var(--c-ink);
+  clip-path: polygon(
+    50% 0%,
+    62% 38%,
+    100% 50%,
+    62% 62%,
+    50% 100%,
+    38% 62%,
+    0% 50%,
+    38% 38%
+  );
+}
+
+@keyframes trc-ticker {
+  from {
+    transform: translateX(0);
+  }
+
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+/* ── CONTENT BENTO ────────────────────────────────────────── */
+
+.trc__sections {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 330px), 1fr));
+  gap: var(--d-gap);
+  align-items: stretch;
+}
+
+.trc__section {
+  --tone-bg: var(--c-paper);
+
+  position: relative;
+  overflow: hidden;
+
+  display: grid;
+  gap: clamp(1rem, 2.5vw, 2rem);
+  align-content: start;
+
+  padding: var(--d-pad);
+
+  border: var(--d-line) solid var(--c-ink);
+
+  background-color: var(--tone-bg);
+  color: var(--c-ink);
+}
+
+.trc__section[data-tone="sky"] {
+  --tone-bg: var(--c-sky);
+}
+
+.trc__section[data-tone="coral"] {
+  --tone-bg: var(--c-coral);
+}
+
+.trc__section[data-tone="lime"] {
+  --tone-bg: var(--c-lime);
+}
+
+.trc__section[data-tone="sun"] {
+  --tone-bg: var(--c-sun);
+}
+
+.trc__section[data-tone="ink"] {
+  --tone-bg: var(--c-ink);
+
+  color: var(--c-paper);
+}
+
+/* corner mark: a flat shape per card tone, purely decorative */
+.trc__section::after {
+  content: "";
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+
+  width: 2.4rem;
+  height: 2.4rem;
+
+  background-color: var(--c-ink);
+  opacity: 0.9;
+  pointer-events: none;
+}
+
+.trc__section[data-tone="sky"]::after {
+  clip-path: circle(50%);
+}
+
+.trc__section[data-tone="coral"]::after {
+  clip-path: polygon(50% 0, 100% 100%, 0 100%);
+}
+
+.trc__section[data-tone="lime"]::after {
+  clip-path: polygon(
+    35% 0,
+    65% 0,
+    65% 35%,
+    100% 35%,
+    100% 65%,
+    65% 65%,
+    65% 100%,
+    35% 100%,
+    35% 65%,
+    0 65%,
+    0 35%,
+    35% 35%
+  );
+}
+
+.trc__section[data-tone="sun"]::after {
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+  transform: rotate(45deg) scale(0.78);
+}
+
+.trc__section[data-tone="ink"]::after {
+  background-color: var(--c-lime);
+  clip-path: polygon(
+    50% 0%,
+    62% 38%,
+    100% 50%,
+    62% 62%,
+    50% 100%,
+    38% 62%,
+    0% 50%,
+    38% 38%
+  );
+}
+
+/* the flow card and any image card take the whole row */
+.trc__section--flow,
+.trc__section--with-image {
+  grid-column: 1 / -1;
+}
+
+.trc__section--with-image {
+  align-items: center;
+}
+
+@media (min-width: 768px) {
+  .trc__section--with-image {
+    grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr);
+  }
+}
+
+.trc__section-title {
+  margin: 0 0 1rem;
+  padding-right: 3.2rem; /* clear the corner mark */
+
+  font-family: var(--d-display);
+  font-size: clamp(1.45rem, 2.8vw, 2.2rem);
+  font-weight: 800;
+  letter-spacing: -0.035em;
+  line-height: 1.08;
+  text-wrap: balance;
+}
+
+.trc__paragraph {
+  margin: 0 0 0.8rem;
+
+  color: color-mix(in srgb, currentColor 86%, var(--tone-bg));
+  font-size: 1.05rem;
+  line-height: 1.65;
+}
+
+.trc__paragraph:last-child {
+  margin-bottom: 0;
+}
+
+.trc__section-image {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-height: 380px;
+  object-fit: contain;
+}
+
+/* ── CHIPS (short bullets) ────────────────────────────────── */
+
+.trc__chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+
+  margin: 0;
+  padding: 0;
+
+  list-style: none;
+}
+
+.trc__chip {
+  padding: 0.55rem 1.05rem;
+
+  border: var(--d-line) solid var(--c-ink);
+
+  background-color: var(--c-paper);
+  color: var(--c-ink);
+  font-family: var(--d-display);
+  font-size: 1.05rem;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+}
+
+/* a slight tilt on every other chip, like loose stickers */
+.trc__chip:nth-child(odd) {
+  transform: rotate(-1.5deg);
+}
+
+.trc__chip:nth-child(even) {
+  transform: rotate(1.2deg);
+}
+
+/* ── SKILL PATH (longer bullets) ──────────────────────────── */
+
+.trc__path {
+  margin: 0;
+  padding: 0;
+
+  list-style: none;
+}
+
+.trc__path-item {
+  position: relative;
+
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+
+  padding: 0 0 1.15rem 2.1rem;
+}
+
+/* node */
+.trc__path-item::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.28em;
+
+  width: 16px;
+  height: 16px;
+
+  border: var(--d-line) solid var(--c-ink);
+
+  background-color: var(--c-paper);
+}
+
+/* line to the next node */
+.trc__path-item::after {
+  content: "";
+  position: absolute;
+  left: 7px;
+  top: calc(0.28em + 16px);
+  bottom: 0;
+
+  width: 2px;
+
+  background-color: var(--c-ink);
+}
+
+.trc__path-item:last-child {
+  padding-bottom: 0;
+}
+
+.trc__path-item:last-child::after {
+  content: none;
+}
+
+.trc__path-head {
+  font-family: var(--d-display);
+  font-size: 1.15rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1.25;
+}
+
+.trc__path-detail {
+  color: color-mix(in srgb, var(--c-ink) 82%, var(--tone-bg));
+  font-size: 1rem;
+  line-height: 1.5;
+}
+
+/* ── STEP FLOW (graphic for "A, then B, then C") ──────────── */
+
+.trc__flow {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+  gap: 0.9rem;
+
+  margin: 0;
+  padding: 0;
+
+  list-style: none;
+}
+
+.trc__flow-step {
+  position: relative;
+
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+
+  padding: 1rem;
+
+  border: var(--d-line) solid var(--c-lime);
+}
+
+/* arrow to the next step */
+.trc__flow-step:not(:last-child)::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  right: -0.9rem;
+  z-index: 1;
+
+  width: 0.9rem;
+  height: 1.1rem;
+  margin-top: -0.55rem;
+
+  background-color: var(--c-lime);
+  clip-path: polygon(0 0, 100% 50%, 0 100%);
+}
+
+.trc__flow-num {
+  display: grid;
+  place-items: center;
+
+  width: 2.4rem;
+  height: 2.4rem;
+
+  background-color: var(--c-lime);
+  color: var(--c-ink);
+  font-family: var(--d-display);
+  font-size: 1.3rem;
+  font-weight: 800;
+}
+
+.trc__flow-label {
+  font-family: var(--d-display);
+  font-size: clamp(1.15rem, 2vw, 1.5rem);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+}
+
+/* ── CLOSING CALL TO ACTION ───────────────────────────────── */
+
+.trc__footer-cta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.25rem 2rem;
+
+  padding: clamp(1.5rem, 4vw, 3rem);
+
+  border: var(--d-line) solid var(--c-ink);
+
+  background-color: var(--c-ink);
+  color: var(--c-paper);
+}
+
+.trc__footer-title {
+  margin: 0;
+
+  font-family: var(--d-display);
+  font-size: clamp(2rem, 5.5vw, 4rem);
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  line-height: 1;
+}
+
+/* in dark mode the page is near black: keep the band visible */
+@media (prefers-color-scheme: dark) {
+  .trc__footer-cta {
+    border-color: var(--c-paper);
+  }
+}
+
+/* ── ENTRANCE (one orchestrated moment: the hero text) ────── */
+
+@keyframes trc-rise {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.trc__hero-text > * {
+  animation: trc-rise 0.55s ease-out both;
+}
+
+.trc__hero-text > :nth-child(2) {
+  animation-delay: 0.06s;
+}
+
+.trc__hero-text > :nth-child(3) {
+  animation-delay: 0.12s;
+}
+
+.trc__hero-text > :nth-child(4) {
+  animation-delay: 0.18s;
+}
+
+.trc__hero-text > :nth-child(5) {
+  animation-delay: 0.24s;
+}
+
+/* ── RESPONSIVE ───────────────────────────────────────────── */
+
+@media (max-width: 700px) {
+  /* flow steps stack, arrows point down */
+  .trc__flow {
+    grid-template-columns: 1fr;
+    gap: 1.1rem;
+  }
+
+  .trc__flow-step {
+    flex-direction: row;
+    align-items: center;
+  }
+
+  .trc__flow-step:not(:last-child)::after {
+    top: auto;
+    right: auto;
+    bottom: -1.05rem;
+    left: 1.7rem;
+
+    width: 1.1rem;
+    height: 0.9rem;
+    margin-top: 0;
+
+    clip-path: polygon(0 0, 100% 0, 50% 100%);
+  }
+}
+
+@media (max-width: 600px) {
+  .trc__cta,
+  .trc__back {
+    width: 100%;
+    text-align: center;
+  }
+
+  .trc__footer-cta {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .trc__shapes {
+    width: 46%;
+    margin-top: -1rem;
+  }
+}
+
+/* ── REDUCED MOTION ───────────────────────────────────────── */
+
+@media (prefers-reduced-motion: reduce) {
+  .trc__ticker-track {
+    width: auto;
+    animation: none;
+  }
+
+  .trc__ticker-group {
+    flex-wrap: wrap;
+  }
+
+  /* the second copy only exists for the loop */
+  .trc__ticker-group:nth-child(2) {
+    display: none;
+  }
+
+  .trc__hero-text > * {
+    animation: none;
+  }
+
+  .trc__cta,
+  .trc__cta-arrow,
+  .trc__back {
+    transition: none !important;
+  }
+}

@@ -21,6 +21,10 @@ const RAZORPAY_KEY_ID = import.meta.env.VITE_RAZORPAY_KEY_ID as
 const RAZORPAY_SCRIPT_URL = "https://checkout.razorpay.com/v1/checkout.js";
 const RAZORPAY_SCRIPT_TIMEOUT_MS = 15000;
 
+// Put this same id on your banner section's root element, e.g.
+// <section id="banner-section"> ... </section>
+const BANNER_SECTION_ID = "banner-section";
+
 // ─── Types ───────────────────────────────────────────────────────────────────
 
 interface Course {
@@ -323,6 +327,31 @@ export default function AvailableCourses() {
   const { animations, loading } = useCourseAnimations();
   const receiptRef = useRef<HTMLDivElement>(null);
   const paymentLockRef = useRef(false);
+
+  const handleScrollToBanner = useCallback(
+    (e: React.MouseEvent<HTMLAnchorElement>) => {
+      const target = document.getElementById(BANNER_SECTION_ID);
+
+      // If the banner section is not on this page, fall back to the
+      // normal hash navigation instead of doing nothing.
+      if (!target) return;
+
+      e.preventDefault();
+
+      const reduceMotion = window.matchMedia(
+        "(prefers-reduced-motion: reduce)"
+      ).matches;
+
+      target.scrollIntoView({
+        behavior: reduceMotion ? "auto" : "smooth",
+        block: "start",
+      });
+
+      // Keep the URL hash in sync without jumping the page.
+      window.history.replaceState(null, "", `#${BANNER_SECTION_ID}`);
+    },
+    []
+  );
 
   const handleBackToCourses = useCallback(() => {
     setIsDetailsOpen(false);
@@ -730,7 +759,7 @@ export default function AvailableCourses() {
   return (
     <div className="courses-section-wrapper">
       <div id="available-courses" className="courses-container">
-        <h2>🚀 Available Courses</h2>
+        <h2>Specialized Programs</h2>
 
         <aside className="enrollment-notice" role="note" aria-label="Enrollment notice">
           <h3 className="enrollment-notice__title">Important Notice: Invitation-Only Courses</h3>
@@ -744,9 +773,14 @@ export default function AvailableCourses() {
 
           <p>
             Because this content is updated regularly to reflect market conditions and
-            new technology, we begin with our short courses. Please follow our banner
-            section for the latest offerings, and contact us via WhatsApp or email to
-            get started.
+            new technology, we begin with our short courses. Please follow our{" "}
+            <a
+              href={`#${BANNER_SECTION_ID}`}
+              className="enrollment-notice__link"
+              onClick={handleScrollToBanner}
+            >
+              banner section for the latest offerings.
+            </a>
           </p>
 
           <p className="enrollment-notice__refund">

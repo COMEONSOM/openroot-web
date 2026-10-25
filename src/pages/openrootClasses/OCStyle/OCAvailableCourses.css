@@ -52,6 +52,26 @@
   border-radius: 0;
 }
 
+/* ── SMOOTH SCROLL TARGET ─────────────────────────────────── */
+
+/* Smooth anchor scrolling site-wide (respects reduced motion below). */
+html {
+  scroll-behavior: smooth;
+}
+
+/* The banner section is the target of the "banner section" link.
+   Offset keeps it clear of the fixed site header (z-index 9999).
+   Adjust the value to match your header height. */
+#banner-section {
+  scroll-margin-top: 90px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
 /* ── SECTION WRAPPER + CONTAINER ──────────────────────────── */
 
 .courses-section-wrapper {
@@ -832,6 +852,35 @@
 .enrollment-notice__refund {
   padding-top: 10px;
   border-top: 1px dashed rgba(124, 58, 237, 0.35);
+}
+
+/* Link to the banner section: blue + underlined, smooth scroll via TSX */
+.enrollment-notice .enrollment-notice__link {
+  color: var(--av-blue, #4169e1);
+  font-weight: 600;
+  text-decoration: underline;
+  text-decoration-thickness: 1.5px;
+  text-underline-offset: 3px;
+  cursor: pointer;
+
+  transition: opacity 0.2s ease;
+}
+
+@media (hover: hover) {
+  .enrollment-notice .enrollment-notice__link:hover {
+    opacity: 0.8;
+    text-decoration-thickness: 2px;
+  }
+}
+
+.enrollment-notice .enrollment-notice__link:visited {
+  color: var(--av-blue, #4169e1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .enrollment-notice .enrollment-notice__link {
+    transition: none;
+  }
 }
 
 @media (max-width: 600px) {

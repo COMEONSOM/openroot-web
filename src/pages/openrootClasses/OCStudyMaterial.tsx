@@ -1,11 +1,17 @@
 // ============================================================
 // STUDY MATERIAL COMPONENT — BUNDLE-OPTIMIZED VERSION
 // JSON ANIMATIONS LOADED FROM /public/lotties
+// ALL STYLING LIVES IN CSS FILES (NO INLINE STYLES)
 // ============================================================
 
 import { useEffect, useMemo, useState } from "react";
 import Lottie from "lottie-react";
 import "../openrootClasses/OCStyle/OCStudyMaterial.css";
+
+// Styles for the "View More" popup window, loaded as a plain string
+// (Vite "?inline") because the popup is a separate document that
+// cannot see the site's stylesheet.
+import popupCss from "../openrootClasses/OCStyle/OCStudyMaterialPopup.css?inline";
 
 // ============================================================
 // TYPES
@@ -60,6 +66,9 @@ const STUDY_MATERIALS: StudyMaterialItem[] = [
 
 // ============================================================
 // RESPONSIVE COLS HOOK
+// Only used to decide how many cards fit in two rows.
+// The grid columns themselves are set in OCStudyMaterial.css
+// using the same breakpoints (<640 = 3, <1024 = 4, else 5).
 // ============================================================
 
 function useMaxPerRow(): number {
@@ -141,11 +150,15 @@ function useStudyMaterialAnimations(materials: StudyMaterialItem[]) {
 // ============================================================
 
 function openViewMoreWindow(materials: StudyMaterialItem[]): void {
-  const win = window.open("", "_blank", "noopener,noreferrer");
+  // NOTE: passing "noopener" here makes window.open() return null,
+  // which would always trigger the popup-blocked alert. So we open a
+  // normal window and cut the opener link manually instead.
+  const win = window.open("", "_blank");
   if (!win) {
     alert("Please allow popups to view all materials.");
     return;
   }
+  win.opener = null;
 
   const doc = win.document;
   doc.documentElement.lang = "en";
@@ -167,66 +180,34 @@ function openViewMoreWindow(materials: StudyMaterialItem[]): void {
   viewport.content = "width=device-width, initial-scale=1";
 
   const style = doc.createElement("style");
-  style.textContent = `
-    :root {
-      --bg: #f8fafc;
-      --card: #ffffff;
-      --text: #111827;
-      --shadow: 0 6px 18px rgba(0,0,0,0.1);
-      --radius: 16px;
-    }
-    * { box-sizing: border-box; }
-    body { margin: 0; font-family: Inter, system-ui, sans-serif; background: var(--bg); color: var(--text); }
-    header { padding: 20px; text-align: center; position: sticky; top: 0; background: var(--bg); }
-    h1 { margin: 0; font-size: 24px; }
-    .wrap { padding: 24px; max-width: 1280px; margin: 0 auto; }
-    .grid { display: grid; gap: 24px; grid-template-columns: repeat(5, 1fr); }
-    @media (max-width: 1023.98px) { .grid { grid-template-columns: repeat(4, 1fr); } }
-    @media (max-width: 639.98px)  { .grid { grid-template-columns: repeat(3, 1fr); } }
-    .card {
-      background: var(--card);
-      border-radius: var(--radius);
-      min-height: 160px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      padding: 16px;
-      box-shadow: var(--shadow);
-      cursor: pointer;
-      transition: transform .2s ease, box-shadow .2s ease;
-      border: 0;
-      width: 100%;
-      color: inherit;
-      font: inherit;
-    }
-    .card:hover { transform: translateY(-4px); box-shadow: 0 10px 25px rgba(0,0,0,.15); }
-    .title { font-weight: 700; }
-  `;
+  style.textContent = popupCss;
 
   doc.head.append(charset, viewport, style);
+  doc.body.className = "sm-popup";
 
   const header = doc.createElement("header");
+  header.className = "sm-popup__header";
   const heading = doc.createElement("h1");
+  heading.className = "sm-popup__heading";
   heading.textContent = "All Study Materials";
   header.appendChild(heading);
 
   const wrap = doc.createElement("div");
-  wrap.className = "wrap";
+  wrap.className = "sm-popup__wrap";
 
   const grid = doc.createElement("div");
-  grid.className = "grid";
+  grid.className = "sm-popup__grid";
 
   materials.forEach((material) => {
     const card = doc.createElement("button");
     card.type = "button";
-    card.className = "card";
+    card.className = "sm-popup__card";
     card.addEventListener("click", () => {
       win.open(material.link, "_blank", "noopener,noreferrer");
     });
 
     const title = doc.createElement("div");
-    title.className = "title";
+    title.className = "sm-popup__title";
     title.textContent = material.title;
 
     card.appendChild(title);
@@ -260,12 +241,9 @@ function StudyMaterial(): React.JSX.Element {
 
   return (
     <section id="study-material" className="study-material">
-      <h2 className="study-title">📚 Study Materials</h2>
+      <h2 className="study-title">Study Materials</h2>
 
-      <div
-        className="study-grid"
-        style={{ gridTemplateColumns: `repeat(${maxPerRow}, 1fr)` }}
-      >
+      <div className="study-grid">
         {visibleCards.map((item, idx) => {
           const animationData = animations[item.animationFile];
 
@@ -280,19 +258,7 @@ function StudyMaterial(): React.JSX.Element {
                 {!loading && animationData ? (
                   <Lottie animationData={animationData} loop />
                 ) : (
-                  <div
-                    style={{
-                      width: "100%",
-                      height: "100%",
-                      display: "grid",
-                      placeItems: "center",
-                      fontSize: 14,
-                      fontWeight: 600,
-                      opacity: 0.7,
-                    }}
-                  >
-                    Loading...
-                  </div>
+                  <div className="study-loading">Loading...</div>
                 )}
               </div>
               <span className="study-label">{item.title}</span>
@@ -307,12 +273,7 @@ function StudyMaterial(): React.JSX.Element {
             onClick={() => openViewMoreWindow(STUDY_MATERIALS)}
             type="button"
           >
-            <div
-              className="study-animation"
-              style={{ fontSize: 28, fontWeight: 800 }}
-            >
-              ＋
-            </div>
+            <div className="study-animation study-animation--plus">＋</div>
             <span className="study-label">View More</span>
           </button>
         )}

@@ -1,0 +1,133 @@
+/* ============================================================
+   STUDY MATERIAL — "VIEW MORE" POPUP WINDOW
+   Loaded into the popup as text via `?inline` (the popup is a
+   separate document, so it cannot use the site stylesheet).
+
+   Every selector is namespaced under .sm-popup (BEM-style
+   .sm-popup__*), with no bare element, :root or * selectors, so
+   this file is safe even if it is ever imported as a normal
+   stylesheet and can never clash with global CSS.
+
+   Matches the site look: flat, square, framed. No shadows or
+   rounded corners. Follows the device light/dark setting.
+   ============================================================ */
+
+/* ── TOKENS (on the popup body, not :root) ────────────────── */
+
+.sm-popup {
+  --sm-popup-bg: #ffffff;
+  --sm-popup-text: #000000;
+  --sm-popup-line: rgba(0, 0, 0, 0.55);
+  --sm-popup-soft: rgba(0, 0, 0, 0.22);
+}
+
+@media (prefers-color-scheme: dark) {
+  .sm-popup {
+    --sm-popup-bg: #0f1115;
+    --sm-popup-text: #ffffff;
+    --sm-popup-line: rgba(255, 255, 255, 0.55);
+    --sm-popup-soft: rgba(255, 255, 255, 0.22);
+  }
+}
+
+/* ── BASE ─────────────────────────────────────────────────── */
+
+.sm-popup,
+.sm-popup *,
+.sm-popup *::before,
+.sm-popup *::after {
+  box-sizing: border-box;
+  border-radius: 0;
+}
+
+.sm-popup {
+  margin: 0;
+  background-color: var(--sm-popup-bg);
+  color: var(--sm-popup-text);
+  font-family: Inter, system-ui, sans-serif;
+}
+
+/* ── HEADER ───────────────────────────────────────────────── */
+
+.sm-popup__header {
+  position: sticky;
+  top: 0;
+  padding: 1.25rem;
+
+  border-top: 2px solid var(--sm-popup-text);
+  border-bottom: 1px solid var(--sm-popup-soft);
+
+  background-color: var(--sm-popup-bg);
+  text-align: center;
+}
+
+.sm-popup__heading {
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+}
+
+/* ── LAYOUT ───────────────────────────────────────────────── */
+
+.sm-popup__wrap {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 1.5rem;
+}
+
+.sm-popup__grid {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(5, 1fr);
+}
+
+@media (max-width: 1023.98px) {
+  .sm-popup__grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+@media (max-width: 639.98px) {
+  .sm-popup__grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.75rem;
+  }
+}
+
+/* ── CARD ─────────────────────────────────────────────────── */
+
+.sm-popup__card {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 100%;
+  min-height: 160px;
+  padding: 1rem;
+
+  border: 1px solid var(--sm-popup-line);
+
+  background-color: var(--sm-popup-bg);
+  color: inherit;
+  font: inherit;
+  text-align: center;
+  cursor: pointer;
+}
+
+@media (hover: hover) {
+  .sm-popup__card:hover {
+    outline: 2px solid var(--sm-popup-text);
+    outline-offset: 2px;
+  }
+}
+
+.sm-popup__card:focus-visible {
+  outline: 2px solid var(--sm-popup-text);
+  outline-offset: 2px;
+}
+
+.sm-popup__title {
+  font-weight: 700;
+  overflow-wrap: anywhere;
+}

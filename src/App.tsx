@@ -50,7 +50,8 @@ const Makaut = lazy(() => import("./pages/makaut"));
 const TravelExpenseManager = lazy(() => import("./pages/TravelExpenseManager"));
 const OCLayout = lazy(() => import("./pages/openrootClasses/OCLayout"));
 const OCHome = lazy(() => import("./pages/openrootClasses/OCHome"));
-const OCBannerDetail = lazy(() => import("./pages/openrootClasses/OCBannerDetail"));
+// Opens the dedicated page of a banner (prompt-engineering, the-right-choice, ...)
+const BannerPageRouter = lazy(() => import("./pages/openrootClasses/Bannerpagerouter"));
 const GDrive = lazy(() => import("./pages/GDrive"));
 
 // ── SEO constants ──────────────────────────────────────────────
@@ -516,10 +517,12 @@ function AppContent() {
 
           {/* ── OPENROOT CLASSES (nested) ────────────────────────
               /openroot-classes         -> OCHome (banner + sections)
-              /openroot-classes/:slug   -> OCBannerDetail (banner page)
-              OCLayout renders the header and an <Outlet />.
+              /openroot-classes/:slug   -> BannerPageRouter, which opens
+                                           the dedicated page of that banner
+                                           (see Bannerpagerouter.tsx)
+              OCLayout renders no header, just an <Outlet />.
               RequireAuth + default SEO tags apply to both pages;
-              the banner page overrides the title/description. */}
+              each banner page overrides the title/description. */}
           <Route
             path="/openroot-classes"
             element={
@@ -535,7 +538,7 @@ function AppContent() {
             }
           >
             <Route index element={<OCHome />} />
-            <Route path=":slug" element={<OCBannerDetail />} />
+            <Route path=":slug" element={<BannerPageRouter />} />
           </Route>
 
           <Route

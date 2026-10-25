@@ -352,7 +352,9 @@ export default function SoftwarePage() {
             <span>{tool.name}</span>
             <span className="sr-only"> – Free Tool by Openroot Systems</span>
           </h1>
-          <p className="sp-hero-desc">{tool.description}</p>
+          <p className="sp-hero-desc">
+            <mark className="sp-hero-mark">{tool.description}</mark>
+          </p>
           <div className="sp-hero-actions">
             <button
               className="sp-launch-btn ot-active-scale ot-focus-brand"
