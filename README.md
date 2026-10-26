@@ -44,7 +44,7 @@ Openroot Systems is a product-focused software company that builds **clean, scal
 ## Technology Stack
 
 ### Frontend
-- **React 18** with **TypeScript** — component-driven architecture
+- **React 19** with **TypeScript** — component-driven architecture
 - **Vite** — fast build tooling and HMR
 - **Modular CSS + plain CSS** — scoped and global styles side by side
 - **Framer Motion** — page transitions and entrance animations
@@ -124,6 +124,27 @@ Backend confirms signature
 
 ---
 
+## Openroot Classes Course Flow
+
+The protected `/openroot-classes` area has a shared course list and separate, directly addressable pages for each enrollment step. Course pages are lazy-loaded and use a shared flow shell with a back link and a three-step progress indicator.
+
+| Page | Route | Purpose |
+|---|---|---|
+| Course list | `/openroot-classes` | Lottie course cards and the invitation-only enrollment notice |
+| Course overview | `/openroot-classes/courses/:courseSlug` | Course duration, highlights, fee, and enrollment link |
+| Enrollment | `/openroot-classes/courses/:courseSlug/enroll` | Student details and Razorpay checkout popup |
+| Payment receipt | `/openroot-classes/courses/:courseSlug/payment-success` | Verified payment receipt, PDF download, and WhatsApp sharing |
+
+The `:courseSlug` value includes the `-details` suffix. Current examples are `investing-finance-details` and `prompt-engineering-details`.
+
+Checkout remains on the enrollment route. The browser opens Razorpay after the form validates; the frontend creates an order and verifies the returned payment with the backend. On success, a receipt record is saved to session storage under `openroot:payment:<courseId>` before navigating to the payment-success route. This allows the receipt page to survive refreshes in the same browser session. The record includes the student and payment identifiers and the order amount converted from paise to rupees. Older records without a stored amount use the course fee as a fallback.
+
+Receipt PDFs are generated on demand with a dynamic `jspdf` import. The Openroot dark logo is used against the white PDF page, and image assets are decoded and converted to PNG before embedding. If either logo cannot be loaded or converted, the PDF is still generated without it. PDF errors are shown inline on the success page, with the full error logged to the console.
+
+Course metadata and route helpers live in `src/pages/openrootClasses/courses/data/courseData.ts`. Razorpay behavior, session receipt storage, and PDF generation live in the course flow hook and library files. The notice and course card load their own CSS; the flow pages use `OCStyle/OCCourseFlow.css` for shared page and receipt styling.
+
+---
+
 ## Project Structure
 
 ```
@@ -168,7 +189,19 @@ openroot-web/
     ├── pages/
     │   ├── SoftwareHub.tsx     # Software listing page
     │   ├── SoftwarePage.tsx    # Individual product page with video player
-    │   └── SoftwareSolutions.tsx
+    │   ├── SoftwareSolutions.tsx
+    │   └── openrootClasses/
+    │       ├── OCHome.tsx          # Openroot Classes home and course list
+    │       ├── OCLayout.tsx        # Shared route outlet
+    │       ├── OCStyle/            # Classes, banner, and course-flow styles
+    │       └── courses/
+    │           ├── data/           # Course metadata and route helpers
+    │           ├── hooks/          # Lottie loading and Razorpay checkout
+    │           ├── lib/            # Session receipt storage and PDF generation
+    │           ├── components/     # Cards, notice, flow shell, and receipt
+    │           ├── CourseDetailsPage.tsx
+    │           ├── CourseEnrollPage.tsx
+    │           └── CoursePaymentSuccessPage.tsx
     ├── types/
     │   ├── software.ts         # Software and SoftwareContent interfaces
     │   └── types.ts            # Shared TypeScript types
@@ -289,8 +322,6 @@ PORT=5000
 ---
 
 ## What Recruiters Should Know
-
-This is **not a demo-only project** — it ships real products used by real users.
 
 Evaluating this codebase demonstrates:
 
