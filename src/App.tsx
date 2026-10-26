@@ -50,6 +50,9 @@ const Makaut = lazy(() => import("./pages/makaut"));
 const TravelExpenseManager = lazy(() => import("./pages/TravelExpenseManager"));
 const OCLayout = lazy(() => import("./pages/openrootClasses/OCLayout"));
 const OCHome = lazy(() => import("./pages/openrootClasses/OCHome"));
+const CourseDetailsPage = lazy(() => import("./pages/openrootClasses/courses/CourseDetailsPage"));
+const CourseEnrollPage = lazy(() => import("./pages/openrootClasses/courses/CourseEnrollPage"));
+const CoursePaymentSuccessPage = lazy(() => import("./pages/openrootClasses/courses/CoursePaymentSuccessPage"));
 // Opens the dedicated page of a banner (prompt-engineering, the-right-choice, ...)
 const BannerPageRouter = lazy(() => import("./pages/openrootClasses/Bannerpagerouter"));
 const GDrive = lazy(() => import("./pages/GDrive"));
@@ -538,6 +541,9 @@ function AppContent() {
             }
           >
             <Route index element={<OCHome />} />
+            <Route path="courses/:courseSlug" element={<Suspense fallback={<PageLoader />}><CourseDetailsPage /></Suspense>} />
+            <Route path="courses/:courseSlug/enroll" element={<Suspense fallback={<PageLoader />}><CourseEnrollPage /></Suspense>} />
+            <Route path="courses/:courseSlug/payment-success" element={<Suspense fallback={<PageLoader />}><CoursePaymentSuccessPage /></Suspense>} />
             <Route path=":slug" element={<BannerPageRouter />} />
           </Route>
 

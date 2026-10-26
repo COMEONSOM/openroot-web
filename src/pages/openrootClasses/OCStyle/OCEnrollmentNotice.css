@@ -1,0 +1,67 @@
+/* ============================================================
+   INVITATION-ONLY ENROLLMENT NOTICE
+   ============================================================ */
+
+.enrollment-notice {
+  --notice-bg: var(--ot-bg, #fff);
+  --notice-text: var(--ot-text, #000);
+  --notice-blue: var(--ot-button-blue, #4169e1);
+  --notice-line: color-mix(in srgb, var(--notice-blue) 36%, transparent);
+
+  width: 100%;
+  box-sizing: border-box;
+  margin: 16px 0 24px;
+  padding: 18px 22px;
+  border: 1px solid var(--notice-line);
+  border-left: 4px solid var(--notice-blue);
+  background: color-mix(in srgb, var(--notice-blue) 7%, var(--notice-bg));
+  color: var(--notice-text);
+  font-size: 0.95rem;
+  line-height: 1.6;
+  text-align: left;
+}
+
+.enrollment-notice__title {
+  margin: 0 0 8px;
+  color: var(--notice-text);
+  font-size: 1.05rem;
+  font-weight: 700;
+}
+
+.enrollment-notice p {
+  width: 100%;
+  max-width: none;
+  margin: 0 0 10px;
+}
+
+.enrollment-notice p:last-child { margin-bottom: 0; }
+
+.enrollment-notice__refund {
+  padding-top: 10px;
+  border-top: 1px dashed var(--notice-line);
+}
+
+.enrollment-notice .enrollment-notice__link {
+  color: var(--notice-blue);
+  font-weight: 600;
+  text-decoration: underline;
+  text-decoration-thickness: 1.5px;
+  text-underline-offset: 3px;
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+}
+
+.enrollment-notice .enrollment-notice__link:visited { color: var(--notice-blue); }
+.enrollment-notice .enrollment-notice__link:focus-visible { outline: 2px solid var(--notice-text); outline-offset: 2px; }
+
+@media (hover: hover) {
+  .enrollment-notice .enrollment-notice__link:hover { opacity: 0.8; text-decoration-thickness: 2px; }
+}
+
+@media (max-width: 600px) {
+  .enrollment-notice { margin: 12px 0 20px; padding: 14px 16px; font-size: 0.9rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .enrollment-notice .enrollment-notice__link { transition: none; }
+}
