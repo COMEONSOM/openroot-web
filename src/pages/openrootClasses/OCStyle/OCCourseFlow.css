@@ -1,0 +1,105 @@
+/* ============================================================
+   OPENROOT CLASSES COURSE FLOW
+   ============================================================ */
+
+@import url("https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&display=swap");
+
+.oc-course-flow {
+  --av-bg: var(--ot-bg, #fff);
+  --av-text: var(--ot-text, #000);
+  --av-muted: color-mix(in srgb, var(--av-text) 68%, var(--av-bg));
+  --av-line: color-mix(in srgb, var(--av-text) 35%, transparent);
+  --av-soft: color-mix(in srgb, var(--av-text) 22%, transparent);
+  --av-blue: var(--ot-button-blue, #4169e1);
+  --av-mint: #35d3a1;
+  --av-yellow: #ffc72c;
+  --av-ink: #101319;
+  --av-white: #fff;
+  --av-display: "Bricolage Grotesque", var(--ot-font, system-ui), sans-serif;
+  box-sizing: border-box;
+  min-height: 100vh;
+  padding: clamp(1rem, 3vw, 2rem);
+  background: var(--av-bg);
+  color: var(--av-text);
+  font-family: var(--ot-font, "Inter", system-ui, sans-serif);
+}
+
+.oc-course-flow *, .oc-course-flow *::before, .oc-course-flow *::after { box-sizing: border-box; border-radius: 0; }
+.oc-course-flow :focus-visible { outline: 2px solid var(--av-text); outline-offset: 2px; }
+.oc-course-flow__inner { width: 100%; max-width: 1320px; margin: 0 auto; }
+.oc-course-flow .back-button { display: inline-flex; align-items: center; min-height: 44px; margin: 0 0 1rem; padding: 0 1.1rem; border: 1px solid var(--av-text); background: var(--av-bg); color: var(--av-text); font-size: .92rem; font-weight: 700; text-decoration: none; cursor: pointer; }
+.oc-course-flow .back-button:hover { background: var(--av-text); color: var(--av-bg); }
+.oc-course-flow .course-stepper { display: flex; flex-wrap: nowrap; width: fit-content; max-width: 100%; margin-block: 0 1.5rem; margin-inline: auto; border: 1px solid var(--av-line); }
+.oc-course-flow .step { flex: 1 1 auto; min-width: 0; padding: .6rem 1.15rem; background: var(--av-bg); color: var(--av-muted); font-size: .9rem; font-weight: 700; white-space: nowrap; }
+.oc-course-flow .step:not(:last-child) { border-right: 1px solid var(--av-line); }
+.oc-course-flow .step.active { background: var(--av-text); color: var(--av-bg); }
+.oc-course-flow h1, .oc-course-flow h2, .oc-course-flow h3, .oc-course-flow h4 { font-family: var(--av-display); }
+.oc-course-flow .course-details { width: 100%; padding: clamp(1.25rem, 4vw, 2.25rem); border: 1px solid var(--av-line); border-top: 2px solid var(--av-text); background: var(--av-bg); }
+.oc-course-flow .course-details h1 { margin: 0; font-size: clamp(1.5rem, 3vw, 2rem); font-weight: 700; line-height: 1.1; letter-spacing: -.04em; }
+.oc-course-flow .duration { margin: .6rem 0 1.4rem; color: var(--av-muted); font-size: .98rem; font-weight: 600; }
+.oc-course-flow .highlights-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr)); margin-bottom: 1.5rem; border-top: 1px solid var(--av-line); border-left: 1px solid var(--av-line); }
+.oc-course-flow .highlight-card { padding: .9rem 1rem; border-right: 1px solid var(--av-line); border-bottom: 1px solid var(--av-line); background: var(--av-bg); font-size: .95rem; font-weight: 600; }
+.oc-course-flow .price-and-pay { display: flex; flex-wrap: wrap; align-items: stretch; gap: .6rem; }
+.oc-course-flow .price { display: inline-flex; align-items: center; min-height: 48px; padding: .7rem 1.25rem; border: 1px solid var(--av-text); background: var(--av-bg); color: var(--av-text); font-family: var(--av-display); font-size: 1.15rem; font-weight: 800; }
+.oc-course-flow .pay-button, .oc-course-flow .modal-primary { display: inline-flex; align-items: center; justify-content: center; min-height: 48px; padding: .7rem 1.5rem; border: 1px solid var(--av-blue); background: var(--av-blue); color: var(--av-white); font-size: 1rem; font-weight: 700; text-decoration: none; cursor: pointer; }
+.oc-course-flow .pay-button:hover, .oc-course-flow .modal-primary:hover { opacity: .88; }
+.oc-course-flow .trust-badges { flex: 1 0 100%; margin-top: .6rem; color: var(--av-muted); font-size: .88rem; }
+.oc-course-flow .enroll-panel { display: grid; grid-template-columns: minmax(0, 1.3fr) minmax(260px, .7fr); grid-template-areas: "heading heading" "fields actions" "error error"; gap: clamp(1rem, 3vw, 2.5rem); padding: clamp(1.25rem, 4vw, 2.5rem); border: 1px solid var(--av-line); border-top: 2px solid var(--av-text); }
+.oc-course-flow .enroll-heading { display: flex; grid-area: heading; justify-content: space-between; align-items: flex-start; gap: 1rem; padding-bottom: 1rem; border-bottom: 1px solid var(--av-soft); }
+.oc-course-flow .enroll-heading h1 { margin: 0 0 .5rem; font-size: clamp(1.5rem, 3vw, 2rem); }
+.oc-course-flow .enroll-heading p { max-width: 650px; margin: 0; color: var(--av-muted); }
+.oc-course-flow .enroll-course-summary { display: flex; flex-direction: column; gap: .35rem; min-width: 180px; padding: .8rem 1rem; border: 1px solid var(--av-line); }
+.oc-course-flow .enroll-fields { display: grid; grid-area: fields; grid-template-columns: repeat(2, minmax(0, 1fr)); align-content: start; gap: 1rem; }
+.oc-course-flow .field { display: flex; flex-direction: column; gap: .35rem; }
+.oc-course-flow .field:last-child { grid-column: 1 / -1; }
+.oc-course-flow .field label { font-size: .92rem; font-weight: 700; }
+.oc-course-flow .field input { width: 100%; min-height: 48px; padding: .7rem .9rem; border: 1px solid var(--av-line); background: var(--av-bg); color: var(--av-text); font-size: 1rem; }
+.oc-course-flow .field input:focus { outline: 2px solid var(--av-text); outline-offset: 1px; }
+.oc-course-flow .field-error { padding: .4rem .7rem; border-left: 4px solid #ff6b4a; font-size: .85rem; font-weight: 700; }
+.oc-course-flow .payment-error { grid-area: error; margin: 0; padding: .8rem 1rem; border: 1px solid #ff6b4a; border-left-width: 4px; font-weight: 700; }
+.oc-course-flow .enroll-actions { display: flex; grid-area: actions; align-items: flex-start; justify-content: flex-end; }
+.oc-course-flow .modal-primary:disabled { opacity: .55; cursor: not-allowed; }
+.oc-course-flow .qr-section { display: flex; flex-direction: column; gap: 1.1rem; width: 100%; margin: 1.5rem auto 0; padding: clamp(1.25rem, 4vw, 2rem); border: 1px solid var(--av-line); border-top: 2px solid var(--av-text); background: var(--av-bg); }
+.oc-course-flow .qr-section h1 { margin: 0; font-size: clamp(1.4rem, 3vw, 1.9rem); line-height: 1.1; }
+.oc-course-flow .qr-section > p { margin: 0; color: var(--av-muted); }
+.oc-course-flow .qr-section strong { color: var(--av-text); font-weight: 800; }
+.oc-course-flow .motivator { padding: .6rem 1rem; border: 1px solid var(--av-line); border-left: 6px solid var(--av-yellow); font-weight: 700; }
+.oc-course-flow .qr-section-inner { display: flex; flex-direction: column; gap: 1rem; }
+.oc-course-flow .receipt-card { padding: 1.1rem 1.25rem; border: 1px solid var(--av-line); background: var(--av-bg); }
+.oc-course-flow .receipt-header { display: flex; align-items: center; justify-content: space-between; gap: .75rem; margin-bottom: .75rem; }
+.oc-course-flow .receipt-header h2 { margin: 0; font-size: 1.15rem; font-weight: 700; }
+.oc-course-flow .receipt-header span { color: var(--av-muted); font-size: .85rem; }
+.oc-course-flow .receipt-badge { padding: .15rem .6rem; background: var(--av-mint); color: var(--av-ink); font-size: .72rem; font-weight: 800; letter-spacing: .08em; }
+.oc-course-flow .receipt-section { margin-top: .7rem; padding-top: .7rem; border-top: 1px solid var(--av-soft); }
+.oc-course-flow .receipt-section:first-of-type { margin-top: 0; padding-top: 0; border-top: 0; }
+.oc-course-flow .receipt-section-row { display: flex; justify-content: space-between; gap: .75rem; margin-bottom: .4rem; font-size: .92rem; }
+.oc-course-flow .receipt-section-row span { color: var(--av-muted); }
+.oc-course-flow .receipt-section-row strong { overflow-wrap: anywhere; text-align: right; }
+.oc-course-flow .receipt-section-row code { padding: .1rem .5rem; border: 1px solid var(--av-line); font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Courier New", monospace; font-size: .82rem; overflow-wrap: anywhere; }
+.oc-course-flow .receipt-footer { margin-top: .8rem; padding-top: .8rem; border-top: 1px solid var(--av-line); color: var(--av-muted); font-size: .88rem; font-weight: 600; text-align: center; }
+.oc-course-flow .receipt-actions { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: .6rem; margin-top: .5rem; }
+.oc-course-flow .receipt-actions button { display: inline-flex; align-items: center; justify-content: center; min-height: 46px; padding: 0 1.1rem; border: 1px solid var(--av-text); background: var(--av-bg); color: var(--av-text); font-size: .92rem; font-weight: 700; cursor: pointer; }
+.oc-course-flow .receipt-actions button:nth-child(2) { border-color: var(--av-blue); background: var(--av-blue); color: var(--av-white); }
+.oc-course-flow .receipt-actions button:hover { opacity: .88; }
+.oc-course-flow .receipt-error { margin: 0; padding: .8rem 1rem; border: 1px solid #ff6b4a; border-left-width: 4px; font-weight: 700; }
+
+@media (max-width: 760px) {
+  .oc-course-flow .enroll-panel { grid-template-columns: 1fr; grid-template-areas: "heading" "fields" "actions" "error"; }
+  .oc-course-flow .enroll-heading { flex-direction: column; }
+  .oc-course-flow .enroll-course-summary { width: 100%; }
+  .oc-course-flow .enroll-actions { justify-content: stretch; }
+  .oc-course-flow .enroll-actions button { width: 100%; }
+}
+@media (max-width: 520px) {
+  .oc-course-flow { padding: .75rem; }
+  .oc-course-flow .enroll-fields { grid-template-columns: 1fr; }
+  .oc-course-flow .field:last-child { grid-column: auto; }
+  .oc-course-flow .receipt-section-row { flex-direction: column; align-items: flex-start; gap: .1rem; }
+  .oc-course-flow .receipt-section-row strong { text-align: left; }
+  .oc-course-flow .receipt-actions { flex-direction: column; }
+  .oc-course-flow .receipt-actions button { width: 100%; }
+}
+@media (max-width: 380px) {
+  .oc-course-flow .step { padding: .5rem .65rem; font-size: .82rem; }
+}
+@media (prefers-reduced-motion: reduce) { .oc-course-flow .pay-button, .oc-course-flow .back-button, .oc-course-flow .receipt-actions button { transition: none !important; } }
